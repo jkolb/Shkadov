@@ -6,9 +6,7 @@
 //  Copyright © 2015 Justin Kolb. All rights reserved.
 //
 
-import CoreServices
 import Darwin
-import Foundation
 
 public class Timer {
     private enum State {

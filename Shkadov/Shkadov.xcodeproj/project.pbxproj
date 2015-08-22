@@ -107,25 +107,11 @@
 		E581CF701B892C6900D7174F /* Shkadov */ = {
 			isa = PBXGroup;
 			children = (
-				E581CF8C1B892C9F00D7174F /* Camera.swift */,
-				E581CF8D1B892C9F00D7174F /* DispatchQueue.swift */,
-				E581CF8E1B892C9F00D7174F /* DispatchSource.swift */,
-				E581CF8F1B892C9F00D7174F /* Engine.swift */,
-				E581CF901B892C9F00D7174F /* EngineApplicationDelegate.swift */,
-				E581CF911B892C9F00D7174F /* EngineView.swift */,
-				E581CF921B892C9F00D7174F /* EngineWindowDelegate.swift */,
+				E581CFB41B89361100D7174F /* Engine */,
+				E581CFB31B8935F500D7174F /* OpenGL */,
+				E581CFB61B89367100D7174F /* OS X */,
+				E581CFB51B89363500D7174F /* Utility */,
 				E581CF931B892C9F00D7174F /* main.swift */,
-				E581CF941B892C9F00D7174F /* Math.swift */,
-				E581CF951B892C9F00D7174F /* Object3D.swift */,
-				E581CF961B892C9F00D7174F /* OpenGL.swift */,
-				E581CF971B892C9F00D7174F /* OpenGLRenderer.swift */,
-				E581CF981B892C9F00D7174F /* Renderer.swift */,
-				E581CF991B892C9F00D7174F /* RenderObject.swift */,
-				E581CF9A1B892C9F00D7174F /* RenderState.swift */,
-				E581CF9B1B892C9F00D7174F /* Shader.fsh */,
-				E581CF9C1B892C9F00D7174F /* Shader.vsh */,
-				E581CF9D1B892C9F00D7174F /* Timer.swift */,
-				E581CF9E1B892C9F00D7174F /* Viewport.swift */,
 				E581CF731B892C6900D7174F /* Assets.xcassets */,
 				E581CF781B892C6900D7174F /* Info.plist */,
 			);
@@ -139,6 +125,60 @@
 				E581CF831B892C6900D7174F /* Info.plist */,
 			);
 			path = ShkadovTests;
+			sourceTree = "<group>";
+		};
+		E581CFB21B8935E100D7174F /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				E581CF9B1B892C9F00D7174F /* Shader.fsh */,
+				E581CF9C1B892C9F00D7174F /* Shader.vsh */,
+			);
+			name = Shaders;
+			sourceTree = "<group>";
+		};
+		E581CFB31B8935F500D7174F /* OpenGL */ = {
+			isa = PBXGroup;
+			children = (
+				E581CFB21B8935E100D7174F /* Shaders */,
+				E581CF961B892C9F00D7174F /* OpenGL.swift */,
+				E581CF971B892C9F00D7174F /* OpenGLRenderer.swift */,
+			);
+			name = OpenGL;
+			sourceTree = "<group>";
+		};
+		E581CFB41B89361100D7174F /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				E581CF8C1B892C9F00D7174F /* Camera.swift */,
+				E581CF8F1B892C9F00D7174F /* Engine.swift */,
+				E581CF941B892C9F00D7174F /* Math.swift */,
+				E581CF951B892C9F00D7174F /* Object3D.swift */,
+				E581CF981B892C9F00D7174F /* Renderer.swift */,
+				E581CF991B892C9F00D7174F /* RenderObject.swift */,
+				E581CF9A1B892C9F00D7174F /* RenderState.swift */,
+				E581CF9D1B892C9F00D7174F /* Timer.swift */,
+				E581CF9E1B892C9F00D7174F /* Viewport.swift */,
+			);
+			name = Engine;
+			sourceTree = "<group>";
+		};
+		E581CFB51B89363500D7174F /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				E581CF8D1B892C9F00D7174F /* DispatchQueue.swift */,
+				E581CF8E1B892C9F00D7174F /* DispatchSource.swift */,
+			);
+			name = Utility;
+			sourceTree = "<group>";
+		};
+		E581CFB61B89367100D7174F /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+				E581CF901B892C9F00D7174F /* EngineApplicationDelegate.swift */,
+				E581CF911B892C9F00D7174F /* EngineView.swift */,
+				E581CF921B892C9F00D7174F /* EngineWindowDelegate.swift */,
+			);
+			name = "OS X";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

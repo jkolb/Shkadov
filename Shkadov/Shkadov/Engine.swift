@@ -6,14 +6,11 @@
 //  Copyright © 2015 Justin Kolb. All rights reserved.
 //
 
-import AppKit
-import Foundation
 import simd
 
 public final class Engine {
     private let renderer: Renderer
-    private let updateQueue: DispatchQueue
-    private let renderQueue: DispatchQueue
+    private let queue: DispatchQueue
     private let timer: Timer
     public var viewport = Viewport(x: 0, y: 0, width: 800, height: 600)
     var camera: Camera!
@@ -29,18 +26,13 @@ public final class Engine {
 
     public init(renderer: Renderer) {
         self.renderer = renderer
-        self.updateQueue = DispatchQueue.queueWithName("net.franticapparatus.engine.update", attribute: .Serial)
-        self.renderQueue = DispatchQueue.main() //DispatchQueue.queueWithName("net.franticapparatus.engine.render", attribute: .Serial)
-        self.timer = Timer(name: "net.franticapparatus.engine.timer", nanosecondsPerTick: UInt64(1.0 / 60.0 * 1_000_000_000.0), callbackQueue: self.updateQueue)
+        self.queue = DispatchQueue.queueWithName("net.franticapparatus.engine.update", attribute: .Serial)
+        self.timer = Timer(name: "net.franticapparatus.engine.timer", nanosecondsPerTick: UInt64(1.0 / 60.0 * 1_000_000_000.0), callbackQueue: self.queue)
         self.camera = Camera(viewport: viewport, fovy: Angle(degrees: 65.0))
     }
     
     public func beginSimulation() {
-        renderQueue.dispatchSerialized { [weak self] in
-            guard let strongSelf = self else { return }
-            
-            strongSelf.renderer.configure()
-        }
+        renderer.configure()
         
         timer.updateHandler { [weak self] (tickCount, nanosecondsPerTick) in
             guard let strongSelf = self else { return }
@@ -69,14 +61,6 @@ public final class Engine {
         }
 
         // Pass data to render queue for processing
-        renderState(RenderState(objects: renderObjects))
-    }
-    
-    private func renderState(state: RenderState) {
-        renderQueue.dispatchSerialized { [weak self] in
-            guard let strongSelf = self else { return }
-            
-            strongSelf.renderer.renderState(state)
-        }
+        renderer.renderState(RenderState(objects: renderObjects))
     }
 }

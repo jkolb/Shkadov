@@ -69,7 +69,8 @@ var gCubeVertexData: [GLfloat] = [
 ]
 
 public final class OpenGLRenderer : Renderer {
-    private var context: NSOpenGLContext
+    private let context: NSOpenGLContext
+    private let queue: DispatchQueue
     
     var program: OpenGL.Program!
     
@@ -79,6 +80,7 @@ public final class OpenGLRenderer : Renderer {
     
     public init(context: NSOpenGLContext) {
         self.context = context
+        self.queue = DispatchQueue.queueWithName("net.franticapparatus.engine.render", attribute: .Serial)
     }
     
     deinit {
@@ -88,36 +90,40 @@ public final class OpenGLRenderer : Renderer {
     }
     
     public func configure() {
-        context.makeCurrentContext()
-        
-        do {
-            try loadShaders()
+        queue.dispatchSerialized { [weak self] in
+            guard let strongSelf = self else { return }
+            
+            strongSelf.context.makeCurrentContext()
+            
+            do {
+                try strongSelf.loadShaders()
+            }
+            catch {
+                NSLog("Error")
+            }
+            
+            var swapInt: GLint = 1
+            strongSelf.context.setValues(&swapInt, forParameter: .GLCPSwapInterval)
+            
+            OpenGL.viewport(0, y: 0, width: 800, height: 600)
+            
+            OpenGL.enableCapability(GL_DEPTH_TEST)
+            
+            strongSelf.vertexArray = OpenGL.VertexArray()
+            strongSelf.vertexArray.bind()
+            
+            strongSelf.vertexBuffer = OpenGL.VertexBuffer()
+            strongSelf.vertexBuffer.bindToTarget(GL_ARRAY_BUFFER)
+            OpenGL.bufferDataForTarget(GL_ARRAY_BUFFER, size: sizeof(GLfloat) * gCubeVertexData.count, data: &gCubeVertexData, usage: GL_STATIC_DRAW)
+            
+            OpenGL.enableVertexAttributeArrayAtIndex(VertexAttribute.Position)
+            OpenGL.vertexAttribPointerForIndex(VertexAttribute.Position, size: 3, type: GL_FLOAT, normalized: false, stride: 24, offset: 0)
+            
+            OpenGL.enableVertexAttributeArrayAtIndex(VertexAttribute.Normal)
+            OpenGL.vertexAttribPointerForIndex(VertexAttribute.Normal, size: 3, type: GL_FLOAT, normalized: false, stride: 24, offset: 3 * sizeof(GLfloat))
+            
+            OpenGL.unbindVertexArray()
         }
-        catch {
-            NSLog("Error")
-        }
-        
-        var swapInt: GLint = 1
-        context.setValues(&swapInt, forParameter: .GLCPSwapInterval)
-
-        OpenGL.viewport(0, y: 0, width: 800, height: 600)
-
-        OpenGL.enableCapability(GL_DEPTH_TEST)
-        
-        vertexArray = OpenGL.VertexArray()
-        vertexArray.bind()
-        
-        vertexBuffer = OpenGL.VertexBuffer()
-        vertexBuffer.bindToTarget(GL_ARRAY_BUFFER)
-        OpenGL.bufferDataForTarget(GL_ARRAY_BUFFER, size: sizeof(GLfloat) * gCubeVertexData.count, data: &gCubeVertexData, usage: GL_STATIC_DRAW)
-        
-        OpenGL.enableVertexAttributeArrayAtIndex(VertexAttribute.Position)
-        OpenGL.vertexAttribPointerForIndex(VertexAttribute.Position, size: 3, type: GL_FLOAT, normalized: false, stride: 24, offset: 0)
-        
-        OpenGL.enableVertexAttributeArrayAtIndex(VertexAttribute.Normal)
-        OpenGL.vertexAttribPointerForIndex(VertexAttribute.Normal, size: 3, type: GL_FLOAT, normalized: false, stride: 24, offset: 3 * sizeof(GLfloat))
-        
-        OpenGL.unbindVertexArray()
     }
     
     func loadShaders() throws {
@@ -197,21 +203,25 @@ public final class OpenGLRenderer : Renderer {
     }
 
     public func renderState(state: RenderState) {
-        context.makeCurrentContext()
-        
-        OpenGL.clearColor(ColorRGBA8(red: 255, green: 165, blue: 165))
-        OpenGL.clearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        
-        program.use()
-        
-        vertexArray.bind()
-        
-        for object in state.objects {
-            OpenGL.setUniformMatrix(object.modelViewProjectionMatrix, atLocation: uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX])
-            OpenGL.setUniformMatrix(object.normalMatrix, atLocation: uniforms[UNIFORM_NORMAL_MATRIX])
-            OpenGL.drawArraysWithMode(GL_TRIANGLES, first: 0, count: 36)
+        queue.dispatchSerialized { [weak self] in
+            guard let strongSelf = self else { return }
+            
+            strongSelf.context.makeCurrentContext()
+            
+            OpenGL.clearColor(ColorRGBA8(red: 255, green: 165, blue: 165))
+            OpenGL.clearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+            
+            strongSelf.program.use()
+            
+            strongSelf.vertexArray.bind()
+            
+            for object in state.objects {
+                OpenGL.setUniformMatrix(object.modelViewProjectionMatrix, atLocation: uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX])
+                OpenGL.setUniformMatrix(object.normalMatrix, atLocation: uniforms[UNIFORM_NORMAL_MATRIX])
+                OpenGL.drawArraysWithMode(GL_TRIANGLES, first: 0, count: 36)
+            }
+            
+            CGLFlushDrawable(strongSelf.context.CGLContextObj)
         }
-        
-        CGLFlushDrawable(context.CGLContextObj)
     }
 }
