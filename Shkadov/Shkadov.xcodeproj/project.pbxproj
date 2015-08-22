@@ -1,0 +1,448 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E581CF741B892C6900D7174F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E581CF731B892C6900D7174F /* Assets.xcassets */; };
+		E581CF821B892C6900D7174F /* ShkadovTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF811B892C6900D7174F /* ShkadovTests.swift */; };
+		E581CF9F1B892C9F00D7174F /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8C1B892C9F00D7174F /* Camera.swift */; };
+		E581CFA01B892C9F00D7174F /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8D1B892C9F00D7174F /* DispatchQueue.swift */; };
+		E581CFA11B892C9F00D7174F /* DispatchSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8E1B892C9F00D7174F /* DispatchSource.swift */; };
+		E581CFA21B892C9F00D7174F /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8F1B892C9F00D7174F /* Engine.swift */; };
+		E581CFA31B892C9F00D7174F /* EngineApplicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF901B892C9F00D7174F /* EngineApplicationDelegate.swift */; };
+		E581CFA41B892C9F00D7174F /* EngineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF911B892C9F00D7174F /* EngineView.swift */; };
+		E581CFA51B892C9F00D7174F /* EngineWindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF921B892C9F00D7174F /* EngineWindowDelegate.swift */; };
+		E581CFA61B892C9F00D7174F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF931B892C9F00D7174F /* main.swift */; };
+		E581CFA71B892C9F00D7174F /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF941B892C9F00D7174F /* Math.swift */; };
+		E581CFA81B892C9F00D7174F /* Object3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF951B892C9F00D7174F /* Object3D.swift */; };
+		E581CFA91B892C9F00D7174F /* OpenGL.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF961B892C9F00D7174F /* OpenGL.swift */; };
+		E581CFAA1B892C9F00D7174F /* OpenGLRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF971B892C9F00D7174F /* OpenGLRenderer.swift */; };
+		E581CFAB1B892C9F00D7174F /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF981B892C9F00D7174F /* Renderer.swift */; };
+		E581CFAC1B892C9F00D7174F /* RenderObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF991B892C9F00D7174F /* RenderObject.swift */; };
+		E581CFAD1B892C9F00D7174F /* RenderState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF9A1B892C9F00D7174F /* RenderState.swift */; };
+		E581CFAE1B892C9F00D7174F /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = E581CF9B1B892C9F00D7174F /* Shader.fsh */; };
+		E581CFAF1B892C9F00D7174F /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = E581CF9C1B892C9F00D7174F /* Shader.vsh */; };
+		E581CFB01B892C9F00D7174F /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF9D1B892C9F00D7174F /* Timer.swift */; };
+		E581CFB11B892C9F00D7174F /* Viewport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF9E1B892C9F00D7174F /* Viewport.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E581CF7E1B892C6900D7174F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E581CF661B892C6900D7174F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E581CF6D1B892C6900D7174F;
+			remoteInfo = Shkadov;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		E581CF6E1B892C6900D7174F /* Shkadov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shkadov.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E581CF731B892C6900D7174F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E581CF781B892C6900D7174F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E581CF7D1B892C6900D7174F /* ShkadovTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShkadovTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E581CF811B892C6900D7174F /* ShkadovTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShkadovTests.swift; sourceTree = "<group>"; };
+		E581CF831B892C6900D7174F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E581CF8C1B892C9F00D7174F /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		E581CF8D1B892C9F00D7174F /* DispatchQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueue.swift; sourceTree = "<group>"; };
+		E581CF8E1B892C9F00D7174F /* DispatchSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchSource.swift; sourceTree = "<group>"; };
+		E581CF8F1B892C9F00D7174F /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
+		E581CF901B892C9F00D7174F /* EngineApplicationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineApplicationDelegate.swift; sourceTree = "<group>"; };
+		E581CF911B892C9F00D7174F /* EngineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineView.swift; sourceTree = "<group>"; };
+		E581CF921B892C9F00D7174F /* EngineWindowDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineWindowDelegate.swift; sourceTree = "<group>"; };
+		E581CF931B892C9F00D7174F /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		E581CF941B892C9F00D7174F /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
+		E581CF951B892C9F00D7174F /* Object3D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Object3D.swift; sourceTree = "<group>"; };
+		E581CF961B892C9F00D7174F /* OpenGL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGL.swift; sourceTree = "<group>"; };
+		E581CF971B892C9F00D7174F /* OpenGLRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGLRenderer.swift; sourceTree = "<group>"; };
+		E581CF981B892C9F00D7174F /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		E581CF991B892C9F00D7174F /* RenderObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderObject.swift; sourceTree = "<group>"; };
+		E581CF9A1B892C9F00D7174F /* RenderState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderState.swift; sourceTree = "<group>"; };
+		E581CF9B1B892C9F00D7174F /* Shader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
+		E581CF9C1B892C9F00D7174F /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
+		E581CF9D1B892C9F00D7174F /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
+		E581CF9E1B892C9F00D7174F /* Viewport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Viewport.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E581CF6B1B892C6900D7174F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E581CF7A1B892C6900D7174F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E581CF651B892C6900D7174F = {
+			isa = PBXGroup;
+			children = (
+				E581CF701B892C6900D7174F /* Shkadov */,
+				E581CF801B892C6900D7174F /* ShkadovTests */,
+				E581CF6F1B892C6900D7174F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E581CF6F1B892C6900D7174F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E581CF6E1B892C6900D7174F /* Shkadov.app */,
+				E581CF7D1B892C6900D7174F /* ShkadovTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E581CF701B892C6900D7174F /* Shkadov */ = {
+			isa = PBXGroup;
+			children = (
+				E581CF8C1B892C9F00D7174F /* Camera.swift */,
+				E581CF8D1B892C9F00D7174F /* DispatchQueue.swift */,
+				E581CF8E1B892C9F00D7174F /* DispatchSource.swift */,
+				E581CF8F1B892C9F00D7174F /* Engine.swift */,
+				E581CF901B892C9F00D7174F /* EngineApplicationDelegate.swift */,
+				E581CF911B892C9F00D7174F /* EngineView.swift */,
+				E581CF921B892C9F00D7174F /* EngineWindowDelegate.swift */,
+				E581CF931B892C9F00D7174F /* main.swift */,
+				E581CF941B892C9F00D7174F /* Math.swift */,
+				E581CF951B892C9F00D7174F /* Object3D.swift */,
+				E581CF961B892C9F00D7174F /* OpenGL.swift */,
+				E581CF971B892C9F00D7174F /* OpenGLRenderer.swift */,
+				E581CF981B892C9F00D7174F /* Renderer.swift */,
+				E581CF991B892C9F00D7174F /* RenderObject.swift */,
+				E581CF9A1B892C9F00D7174F /* RenderState.swift */,
+				E581CF9B1B892C9F00D7174F /* Shader.fsh */,
+				E581CF9C1B892C9F00D7174F /* Shader.vsh */,
+				E581CF9D1B892C9F00D7174F /* Timer.swift */,
+				E581CF9E1B892C9F00D7174F /* Viewport.swift */,
+				E581CF731B892C6900D7174F /* Assets.xcassets */,
+				E581CF781B892C6900D7174F /* Info.plist */,
+			);
+			path = Shkadov;
+			sourceTree = "<group>";
+		};
+		E581CF801B892C6900D7174F /* ShkadovTests */ = {
+			isa = PBXGroup;
+			children = (
+				E581CF811B892C6900D7174F /* ShkadovTests.swift */,
+				E581CF831B892C6900D7174F /* Info.plist */,
+			);
+			path = ShkadovTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E581CF6D1B892C6900D7174F /* Shkadov */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E581CF861B892C6900D7174F /* Build configuration list for PBXNativeTarget "Shkadov" */;
+			buildPhases = (
+				E581CF6A1B892C6900D7174F /* Sources */,
+				E581CF6B1B892C6900D7174F /* Frameworks */,
+				E581CF6C1B892C6900D7174F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Shkadov;
+			productName = Shkadov;
+			productReference = E581CF6E1B892C6900D7174F /* Shkadov.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E581CF7C1B892C6900D7174F /* ShkadovTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E581CF891B892C6900D7174F /* Build configuration list for PBXNativeTarget "ShkadovTests" */;
+			buildPhases = (
+				E581CF791B892C6900D7174F /* Sources */,
+				E581CF7A1B892C6900D7174F /* Frameworks */,
+				E581CF7B1B892C6900D7174F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E581CF7F1B892C6900D7174F /* PBXTargetDependency */,
+			);
+			name = ShkadovTests;
+			productName = ShkadovTests;
+			productReference = E581CF7D1B892C6900D7174F /* ShkadovTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E581CF661B892C6900D7174F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = "Justin Kolb";
+				TargetAttributes = {
+					E581CF6D1B892C6900D7174F = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					E581CF7C1B892C6900D7174F = {
+						CreatedOnToolsVersion = 7.0;
+						TestTargetID = E581CF6D1B892C6900D7174F;
+					};
+				};
+			};
+			buildConfigurationList = E581CF691B892C6900D7174F /* Build configuration list for PBXProject "Shkadov" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E581CF651B892C6900D7174F;
+			productRefGroup = E581CF6F1B892C6900D7174F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E581CF6D1B892C6900D7174F /* Shkadov */,
+				E581CF7C1B892C6900D7174F /* ShkadovTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E581CF6C1B892C6900D7174F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E581CFAE1B892C9F00D7174F /* Shader.fsh in Resources */,
+				E581CF741B892C6900D7174F /* Assets.xcassets in Resources */,
+				E581CFAF1B892C9F00D7174F /* Shader.vsh in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E581CF7B1B892C6900D7174F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E581CF6A1B892C6900D7174F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E581CFA31B892C9F00D7174F /* EngineApplicationDelegate.swift in Sources */,
+				E581CF9F1B892C9F00D7174F /* Camera.swift in Sources */,
+				E581CFA71B892C9F00D7174F /* Math.swift in Sources */,
+				E581CFA61B892C9F00D7174F /* main.swift in Sources */,
+				E581CFA41B892C9F00D7174F /* EngineView.swift in Sources */,
+				E581CFAB1B892C9F00D7174F /* Renderer.swift in Sources */,
+				E581CFA21B892C9F00D7174F /* Engine.swift in Sources */,
+				E581CFB01B892C9F00D7174F /* Timer.swift in Sources */,
+				E581CFB11B892C9F00D7174F /* Viewport.swift in Sources */,
+				E581CFA01B892C9F00D7174F /* DispatchQueue.swift in Sources */,
+				E581CFAA1B892C9F00D7174F /* OpenGLRenderer.swift in Sources */,
+				E581CFA91B892C9F00D7174F /* OpenGL.swift in Sources */,
+				E581CFAD1B892C9F00D7174F /* RenderState.swift in Sources */,
+				E581CFA11B892C9F00D7174F /* DispatchSource.swift in Sources */,
+				E581CFA51B892C9F00D7174F /* EngineWindowDelegate.swift in Sources */,
+				E581CFAC1B892C9F00D7174F /* RenderObject.swift in Sources */,
+				E581CFA81B892C9F00D7174F /* Object3D.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E581CF791B892C6900D7174F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E581CF821B892C6900D7174F /* ShkadovTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E581CF7F1B892C6900D7174F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E581CF6D1B892C6900D7174F /* Shkadov */;
+			targetProxy = E581CF7E1B892C6900D7174F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		E581CF841B892C6900D7174F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E581CF851B892C6900D7174F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		E581CF871B892C6900D7174F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Shkadov/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = franticapparatus.net.Shkadov;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E581CF881B892C6900D7174F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Shkadov/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = franticapparatus.net.Shkadov;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		E581CF8A1B892C6900D7174F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = ShkadovTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = franticapparatus.net.ShkadovTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shkadov.app/Contents/MacOS/Shkadov";
+			};
+			name = Debug;
+		};
+		E581CF8B1B892C6900D7174F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = ShkadovTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = franticapparatus.net.ShkadovTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shkadov.app/Contents/MacOS/Shkadov";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E581CF691B892C6900D7174F /* Build configuration list for PBXProject "Shkadov" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E581CF841B892C6900D7174F /* Debug */,
+				E581CF851B892C6900D7174F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E581CF861B892C6900D7174F /* Build configuration list for PBXNativeTarget "Shkadov" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E581CF871B892C6900D7174F /* Debug */,
+				E581CF881B892C6900D7174F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		E581CF891B892C6900D7174F /* Build configuration list for PBXNativeTarget "ShkadovTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E581CF8A1B892C6900D7174F /* Debug */,
+				E581CF8B1B892C6900D7174F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E581CF661B892C6900D7174F /* Project object */;
+}
