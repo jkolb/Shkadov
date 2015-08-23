@@ -13,9 +13,7 @@
 		E581CFA01B892C9F00D7174F /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8D1B892C9F00D7174F /* DispatchQueue.swift */; };
 		E581CFA11B892C9F00D7174F /* DispatchSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8E1B892C9F00D7174F /* DispatchSource.swift */; };
 		E581CFA21B892C9F00D7174F /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8F1B892C9F00D7174F /* Engine.swift */; };
-		E581CFA31B892C9F00D7174F /* EngineApplicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF901B892C9F00D7174F /* EngineApplicationDelegate.swift */; };
-		E581CFA41B892C9F00D7174F /* EngineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF911B892C9F00D7174F /* EngineView.swift */; };
-		E581CFA51B892C9F00D7174F /* EngineWindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF921B892C9F00D7174F /* EngineWindowDelegate.swift */; };
+		E581CFA41B892C9F00D7174F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF911B892C9F00D7174F /* ContentView.swift */; };
 		E581CFA61B892C9F00D7174F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF931B892C9F00D7174F /* main.swift */; };
 		E581CFA71B892C9F00D7174F /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF941B892C9F00D7174F /* Math.swift */; };
 		E581CFA81B892C9F00D7174F /* Object3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF951B892C9F00D7174F /* Object3D.swift */; };
@@ -28,6 +26,8 @@
 		E581CFAF1B892C9F00D7174F /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = E581CF9C1B892C9F00D7174F /* Shader.vsh */; };
 		E581CFB01B892C9F00D7174F /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF9D1B892C9F00D7174F /* Timer.swift */; };
 		E581CFB11B892C9F00D7174F /* Viewport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF9E1B892C9F00D7174F /* Viewport.swift */; };
+		E581CFB81B893D7400D7174F /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CFB71B893D7400D7174F /* Event.swift */; };
+		E581CFBA1B894E6400D7174F /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CFB91B894E6400D7174F /* Platform.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,9 +51,7 @@
 		E581CF8D1B892C9F00D7174F /* DispatchQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueue.swift; sourceTree = "<group>"; };
 		E581CF8E1B892C9F00D7174F /* DispatchSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchSource.swift; sourceTree = "<group>"; };
 		E581CF8F1B892C9F00D7174F /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
-		E581CF901B892C9F00D7174F /* EngineApplicationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineApplicationDelegate.swift; sourceTree = "<group>"; };
-		E581CF911B892C9F00D7174F /* EngineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineView.swift; sourceTree = "<group>"; };
-		E581CF921B892C9F00D7174F /* EngineWindowDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineWindowDelegate.swift; sourceTree = "<group>"; };
+		E581CF911B892C9F00D7174F /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E581CF931B892C9F00D7174F /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		E581CF941B892C9F00D7174F /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		E581CF951B892C9F00D7174F /* Object3D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Object3D.swift; sourceTree = "<group>"; };
@@ -66,6 +64,8 @@
 		E581CF9C1B892C9F00D7174F /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 		E581CF9D1B892C9F00D7174F /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		E581CF9E1B892C9F00D7174F /* Viewport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Viewport.swift; sourceTree = "<group>"; };
+		E581CFB71B893D7400D7174F /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		E581CFB91B894E6400D7174F /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +158,7 @@
 				E581CF9A1B892C9F00D7174F /* RenderState.swift */,
 				E581CF9D1B892C9F00D7174F /* Timer.swift */,
 				E581CF9E1B892C9F00D7174F /* Viewport.swift */,
+				E581CFB71B893D7400D7174F /* Event.swift */,
 			);
 			name = Engine;
 			sourceTree = "<group>";
@@ -174,9 +175,8 @@
 		E581CFB61B89367100D7174F /* OS X */ = {
 			isa = PBXGroup;
 			children = (
-				E581CF901B892C9F00D7174F /* EngineApplicationDelegate.swift */,
-				E581CF911B892C9F00D7174F /* EngineView.swift */,
-				E581CF921B892C9F00D7174F /* EngineWindowDelegate.swift */,
+				E581CF911B892C9F00D7174F /* ContentView.swift */,
+				E581CFB91B894E6400D7174F /* Platform.swift */,
 			);
 			name = "OS X";
 			sourceTree = "<group>";
@@ -282,21 +282,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E581CFA31B892C9F00D7174F /* EngineApplicationDelegate.swift in Sources */,
 				E581CF9F1B892C9F00D7174F /* Camera.swift in Sources */,
 				E581CFA71B892C9F00D7174F /* Math.swift in Sources */,
+				E581CFBA1B894E6400D7174F /* Platform.swift in Sources */,
 				E581CFA61B892C9F00D7174F /* main.swift in Sources */,
-				E581CFA41B892C9F00D7174F /* EngineView.swift in Sources */,
+				E581CFA41B892C9F00D7174F /* ContentView.swift in Sources */,
 				E581CFAB1B892C9F00D7174F /* Renderer.swift in Sources */,
 				E581CFA21B892C9F00D7174F /* Engine.swift in Sources */,
 				E581CFB01B892C9F00D7174F /* Timer.swift in Sources */,
 				E581CFB11B892C9F00D7174F /* Viewport.swift in Sources */,
 				E581CFA01B892C9F00D7174F /* DispatchQueue.swift in Sources */,
+				E581CFB81B893D7400D7174F /* Event.swift in Sources */,
 				E581CFAA1B892C9F00D7174F /* OpenGLRenderer.swift in Sources */,
 				E581CFA91B892C9F00D7174F /* OpenGL.swift in Sources */,
 				E581CFAD1B892C9F00D7174F /* RenderState.swift in Sources */,
 				E581CFA11B892C9F00D7174F /* DispatchSource.swift in Sources */,
-				E581CFA51B892C9F00D7174F /* EngineWindowDelegate.swift in Sources */,
 				E581CFAC1B892C9F00D7174F /* RenderObject.swift in Sources */,
 				E581CFA81B892C9F00D7174F /* Object3D.swift in Sources */,
 			);

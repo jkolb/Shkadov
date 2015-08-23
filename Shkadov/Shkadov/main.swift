@@ -1,114 +1,25 @@
-//
-//  main.swift
-//  OSXOpenGLTemplate
-//
-//  Created by Justin Kolb on 8/16/15.
-//  Copyright © 2015 Justin Kolb. All rights reserved.
-//
+/*
+The MIT License (MIT)
 
-import AppKit
+Copyright (c) 2015 Justin Kolb
 
-private var mainWindow: NSWindow!
-private var openGLContext: NSOpenGLContext!
-private var windowDelegate: EngineWindowDelegate!
-private var applicationDelegate: EngineApplicationDelegate!
-private var engine: Engine!
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-func main() {
-    let application = NSApplication.sharedApplication()
-    application.setActivationPolicy(.Regular)
-    application.mainMenu = createMainMenu()
-    
-    applicationDelegate = EngineApplicationDelegate()
-    
-    application.delegate = applicationDelegate
-    
-    openGLContext = createOpenGLContext()
-    
-    windowDelegate = EngineWindowDelegate()
-    
-    mainWindow = createMainWindow()
-    mainWindow.delegate = windowDelegate
-    mainWindow.title = "Test"
-    mainWindow.collectionBehavior = .FullScreenPrimary
-    mainWindow.contentMinSize = CGSize(width: 800.0, height: 600.0)
-    
-    let view = EngineView()
-    let options: NSTrackingAreaOptions =  [NSTrackingAreaOptions.MouseEnteredAndExited, NSTrackingAreaOptions.MouseMoved, NSTrackingAreaOptions.InVisibleRect, NSTrackingAreaOptions.ActiveInKeyWindow]
-    let trackingArea = NSTrackingArea(rect: mainWindow.contentView!.frame, options: options, owner: view, userInfo: nil)
-    view.addTrackingArea(trackingArea)
-    
-    mainWindow.contentView = view
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-    mainWindow.makeKeyAndOrderFront(nil)
-    
-    application.run()
-}
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 
-public func EngineMain() {
-    openGLContext.makeCurrentContext()
-    openGLContext.view = mainWindow.contentView
-    openGLContext.update()
-
-    let renderer = OpenGLRenderer(context: openGLContext)
-    engine = Engine(renderer: renderer)
-    
-    engine.beginSimulation()
-}
-
-public func EngineShutdown() {
-    mainWindow = nil
-    openGLContext = nil
-    windowDelegate = nil
-    NSApplication.sharedApplication().terminate(nil)
-}
-
-private func createMainMenu() -> NSMenu {
-    let mainMenu = NSMenu()
-    
-    let applicationMenuItem = NSMenuItem()
-    mainMenu.addItem(applicationMenuItem)
-    
-    let applicationMenu = NSMenu()
-    applicationMenuItem.submenu = applicationMenu
-    
-    applicationMenu.addItemWithTitle("Quit", action: "terminate:", keyEquivalent: "q")
-    
-    let viewMenuItem = NSMenuItem()
-    mainMenu.addItem(viewMenuItem)
-    
-    let viewMenu = NSMenu(title: "View")
-    viewMenuItem.submenu = viewMenu
-    
-    viewMenu.addItemWithTitle("Toggle Full Screen", action: "toggleFullScreen:", keyEquivalent: "f")
-    
-    return mainMenu
-}
-
-private func createMainWindow() -> NSWindow {
-    let mainScreen = NSScreen.mainScreen()!
-    let screenFrame = mainScreen.frame
-    var contentFrame = CGRectZero
-    contentFrame.size.width = 800.0
-    contentFrame.size.height = 600.0
-    contentFrame.origin.x = (screenFrame.size.width - contentFrame.size.width) * 0.5
-    contentFrame.origin.y = (screenFrame.size.height - contentFrame.size.height) * 0.5
-    
-    return NSWindow(contentRect: contentFrame, styleMask: NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask, backing: .Buffered, `defer`: false)
-}
-
-private func createOpenGLContext() -> NSOpenGLContext {
-    let attributes: [NSOpenGLPixelFormatAttribute] = [
-        NSOpenGLPixelFormatAttribute(NSOpenGLPFADoubleBuffer),
-        NSOpenGLPixelFormatAttribute(NSOpenGLPFAAccelerated),
-        NSOpenGLPixelFormatAttribute(NSOpenGLPFADepthSize), NSOpenGLPixelFormatAttribute(24),
-        NSOpenGLPixelFormatAttribute(NSOpenGLPFAOpenGLProfile), NSOpenGLPixelFormatAttribute(NSOpenGLProfileVersion3_2Core),
-    ]
-    
-    let pixelFormat = NSOpenGLPixelFormat(attributes: attributes)
-    let openGLContext = NSOpenGLContext(format: pixelFormat!, shareContext: nil)
-    
-    return openGLContext!
-}
-
-main()
+Platform().main()

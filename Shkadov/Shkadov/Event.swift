@@ -22,14 +22,3 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
-public struct RenderObject {
-    public let modelViewProjectionMatrix: float4x4
-    public let normalMatrix: float4x4
-    
-    public init(modelViewProjectionMatrix: float4x4, normalMatrix: float4x4) {
-        self.modelViewProjectionMatrix = modelViewProjectionMatrix
-        self.normalMatrix = normalMatrix
-    }
-}

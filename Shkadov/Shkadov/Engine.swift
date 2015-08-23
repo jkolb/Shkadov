@@ -1,19 +1,34 @@
-//
-//  Engine.swift
-//  OSXOpenGLTemplate
-//
-//  Created by Justin Kolb on 8/20/15.
-//  Copyright © 2015 Justin Kolb. All rights reserved.
-//
+/*
+The MIT License (MIT)
+
+Copyright (c) 2015 Justin Kolb
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 
 import simd
 
 public final class Engine {
-    private let renderer: Renderer
+    private var renderer: Renderer
     private let queue: DispatchQueue
     private let timer: Timer
-    public var viewport = Viewport(x: 0, y: 0, width: 800, height: 600)
-    var camera: Camera!
+    var camera: Camera
     var cubes: [Object3D] = [
         Object3D(position: float3(0.0, 0.0, 0.0)),
         Object3D(position: float3(1.5, 0.0, 0.0)),
@@ -28,7 +43,7 @@ public final class Engine {
         self.renderer = renderer
         self.queue = DispatchQueue.queueWithName("net.franticapparatus.engine.update", attribute: .Serial)
         self.timer = Timer(name: "net.franticapparatus.engine.timer", nanosecondsPerTick: UInt64(1.0 / 60.0 * 1_000_000_000.0), callbackQueue: self.queue)
-        self.camera = Camera(viewport: viewport, fovy: Angle(degrees: 65.0))
+        self.camera = Camera()
     }
     
     public func beginSimulation() {
@@ -62,5 +77,10 @@ public final class Engine {
 
         // Pass data to render queue for processing
         renderer.renderState(RenderState(objects: renderObjects))
+    }
+    
+    public func updateViewport(viewport: Viewport) {
+        camera.updateWithAspectRatio(viewport.aspectRatio, fovy: Angle(degrees: 65.0))
+        renderer.updateViewport(viewport)
     }
 }
