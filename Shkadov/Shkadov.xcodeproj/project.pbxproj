@@ -25,9 +25,12 @@
 		E581CFAE1B892C9F00D7174F /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = E581CF9B1B892C9F00D7174F /* Shader.fsh */; };
 		E581CFAF1B892C9F00D7174F /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = E581CF9C1B892C9F00D7174F /* Shader.vsh */; };
 		E581CFB01B892C9F00D7174F /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF9D1B892C9F00D7174F /* Timer.swift */; };
-		E581CFB11B892C9F00D7174F /* Viewport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF9E1B892C9F00D7174F /* Viewport.swift */; };
 		E581CFB81B893D7400D7174F /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CFB71B893D7400D7174F /* Event.swift */; };
-		E581CFBA1B894E6400D7174F /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CFB91B894E6400D7174F /* Platform.swift */; };
+		E581CFBA1B894E6400D7174F /* PlatformOSX.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CFB91B894E6400D7174F /* PlatformOSX.swift */; };
+		E592A5B71B8A116F0032D982 /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5B61B8A116F0032D982 /* Input.swift */; };
+		E592A5B91B8A4EA60032D982 /* TIme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5B81B8A4EA60032D982 /* TIme.swift */; };
+		E592A5BB1B8A4EFA0032D982 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5BA1B8A4EFA0032D982 /* Geometry.swift */; };
+		E592A5BD1B8A64D20032D982 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5BC1B8A64D20032D982 /* Platform.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,9 +66,12 @@
 		E581CF9B1B892C9F00D7174F /* Shader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
 		E581CF9C1B892C9F00D7174F /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 		E581CF9D1B892C9F00D7174F /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
-		E581CF9E1B892C9F00D7174F /* Viewport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Viewport.swift; sourceTree = "<group>"; };
 		E581CFB71B893D7400D7174F /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
-		E581CFB91B894E6400D7174F /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
+		E581CFB91B894E6400D7174F /* PlatformOSX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlatformOSX.swift; sourceTree = "<group>"; };
+		E592A5B61B8A116F0032D982 /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
+		E592A5B81B8A4EA60032D982 /* TIme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TIme.swift; sourceTree = "<group>"; };
+		E592A5BA1B8A4EFA0032D982 /* Geometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
+		E592A5BC1B8A64D20032D982 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,14 +157,17 @@
 			children = (
 				E581CF8C1B892C9F00D7174F /* Camera.swift */,
 				E581CF8F1B892C9F00D7174F /* Engine.swift */,
+				E581CFB71B893D7400D7174F /* Event.swift */,
+				E592A5BA1B8A4EFA0032D982 /* Geometry.swift */,
+				E592A5B61B8A116F0032D982 /* Input.swift */,
 				E581CF941B892C9F00D7174F /* Math.swift */,
 				E581CF951B892C9F00D7174F /* Object3D.swift */,
+				E592A5BC1B8A64D20032D982 /* Platform.swift */,
 				E581CF981B892C9F00D7174F /* Renderer.swift */,
 				E581CF991B892C9F00D7174F /* RenderObject.swift */,
 				E581CF9A1B892C9F00D7174F /* RenderState.swift */,
+				E592A5B81B8A4EA60032D982 /* TIme.swift */,
 				E581CF9D1B892C9F00D7174F /* Timer.swift */,
-				E581CF9E1B892C9F00D7174F /* Viewport.swift */,
-				E581CFB71B893D7400D7174F /* Event.swift */,
 			);
 			name = Engine;
 			sourceTree = "<group>";
@@ -176,7 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				E581CF911B892C9F00D7174F /* ContentView.swift */,
-				E581CFB91B894E6400D7174F /* Platform.swift */,
+				E581CFB91B894E6400D7174F /* PlatformOSX.swift */,
 			);
 			name = "OS X";
 			sourceTree = "<group>";
@@ -282,15 +291,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E592A5B91B8A4EA60032D982 /* TIme.swift in Sources */,
 				E581CF9F1B892C9F00D7174F /* Camera.swift in Sources */,
 				E581CFA71B892C9F00D7174F /* Math.swift in Sources */,
-				E581CFBA1B894E6400D7174F /* Platform.swift in Sources */,
+				E581CFBA1B894E6400D7174F /* PlatformOSX.swift in Sources */,
 				E581CFA61B892C9F00D7174F /* main.swift in Sources */,
 				E581CFA41B892C9F00D7174F /* ContentView.swift in Sources */,
 				E581CFAB1B892C9F00D7174F /* Renderer.swift in Sources */,
+				E592A5B71B8A116F0032D982 /* Input.swift in Sources */,
 				E581CFA21B892C9F00D7174F /* Engine.swift in Sources */,
+				E592A5BB1B8A4EFA0032D982 /* Geometry.swift in Sources */,
+				E592A5BD1B8A64D20032D982 /* Platform.swift in Sources */,
 				E581CFB01B892C9F00D7174F /* Timer.swift in Sources */,
-				E581CFB11B892C9F00D7174F /* Viewport.swift in Sources */,
 				E581CFA01B892C9F00D7174F /* DispatchQueue.swift in Sources */,
 				E581CFB81B893D7400D7174F /* Event.swift in Sources */,
 				E581CFAA1B892C9F00D7174F /* OpenGLRenderer.swift in Sources */,
@@ -473,6 +485,7 @@
 				E581CF881B892C6900D7174F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E581CF891B892C6900D7174F /* Build configuration list for PBXNativeTarget "ShkadovTests" */ = {
 			isa = XCConfigurationList;
@@ -481,6 +494,7 @@
 				E581CF8B1B892C6900D7174F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -25,5 +25,5 @@ SOFTWARE.
 public protocol Renderer {
     func configure()
     func renderState(state: RenderState)
-    func updateViewport(viewport: Viewport)
+    func updateViewport(viewport: Rectangle2D)
 }

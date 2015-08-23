@@ -87,7 +87,7 @@ var gCubeVertexData: [GLfloat] = [
 public final class OpenGLRenderer : Renderer {
     private let context: NSOpenGLContext
     private let queue: DispatchQueue
-    public var viewport: Viewport
+    public var viewport: Rectangle2D
 
     var program: OpenGL.Program!
     
@@ -98,7 +98,7 @@ public final class OpenGLRenderer : Renderer {
     public init(context: NSOpenGLContext) {
         self.context = context
         self.queue = DispatchQueue.queueWithName("net.franticapparatus.engine.render", attribute: .Serial)
-        self.viewport = Viewport(x: 0, y: 0, width: 800, height: 600)
+        self.viewport = Rectangle2D.zero
     }
     
     deinit {
@@ -107,7 +107,7 @@ public final class OpenGLRenderer : Renderer {
         }
     }
     
-    public func updateViewport(viewport: Viewport) {
+    public func updateViewport(viewport: Rectangle2D) {
         queue.dispatchSerialized { [weak self] in
             guard let strongSelf = self else { return }
             

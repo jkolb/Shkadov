@@ -22,8 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import Darwin
-
 public class Timer {
     private enum State {
         case Initial
@@ -34,29 +32,24 @@ public class Timer {
     
     private var state = State.Initial
     private var totalTickCount: UInt64 = 0
-    private var previousTime: UInt64 = 0
-    private var accumulatedTime: UInt64 = 0
+    private var previousTime = Time.zero
+    private var accumulatedTime = Duration.zero
     private let dispatchTimer: DispatchTimer
     private let callbackQueue: DispatchQueue
-    private var _updateHandler: ((Int, UInt64) -> ())?
+    private var _updateHandler: ((Int, Duration) -> ())?
     
-    public init(name: String, nanosecondsPerTick: UInt64, callbackQueue: DispatchQueue) {
+    public init(platform: Platform, name: String, tickDuration: Duration, callbackQueue: DispatchQueue) {
         self.callbackQueue = callbackQueue
         let queue = DispatchQueue.queueWithName(name, attribute: .Serial, qosClass: .UserInteractive, relativePriority: -1)
         self.dispatchTimer = DispatchTimer(strict: true, queue: queue)
-        let interval = nanosecondsPerTick  / 4 // Go slightly faster
+        let interval = tickDuration  / 4 // Go slightly faster
         let leeway = interval / 10 // https://developer.apple.com/library/prerelease/mac/documentation/Performance/Conceptual/power_efficiency_guidelines_osx/Timers.html
-        self.dispatchTimer.timerWithInterval(UInt64(interval), leeway: UInt64(leeway))
-
-        var timeBaseInfo = mach_timebase_info_data_t()
-        mach_timebase_info(&timeBaseInfo)
-        let timeBaseNumerator = UInt64(timeBaseInfo.numer)
-        let timeBaseDenominator = UInt64(timeBaseInfo.denom)
+        self.dispatchTimer.timerWithInterval(interval, leeway: leeway)
 
         self.dispatchTimer.registrationHandler { [weak self] in
             guard let strongSelf = self else { return }
             
-            strongSelf.previousTime = mach_absolute_time()
+            strongSelf.previousTime = platform.currentTime
         }
         
         self.dispatchTimer.eventHandler { [weak self] in
@@ -65,15 +58,15 @@ public class Timer {
             if strongSelf.state != .Running { return }
             if strongSelf._updateHandler == nil { return }
             
-            let currentTime = mach_absolute_time()
-            strongSelf.accumulatedTime += (currentTime - strongSelf.previousTime) * timeBaseNumerator / timeBaseDenominator
+            let currentTime = platform.currentTime
+            strongSelf.accumulatedTime += (currentTime - strongSelf.previousTime)
             strongSelf.previousTime = currentTime
 
             var tickCount = 0
             
-            while strongSelf.accumulatedTime >= nanosecondsPerTick {
+            while strongSelf.accumulatedTime >= tickDuration {
                 ++tickCount
-                strongSelf.accumulatedTime -= nanosecondsPerTick
+                strongSelf.accumulatedTime -= tickDuration
             }
             
             if tickCount > 0 {
@@ -82,13 +75,13 @@ public class Timer {
                 let updateHandler = strongSelf._updateHandler!
                 
                 strongSelf.callbackQueue.dispatchSerialized {
-                    updateHandler(tickCount, nanosecondsPerTick)
+                    updateHandler(tickCount, tickDuration)
                 }
             }
         }
     }
     
-    public func updateHandler(handler: ((Int, UInt64) -> ())?) {
+    public func updateHandler(handler: ((Int, Duration) -> ())?) {
         dispatchTimer.queue.dispatchSerialized { [weak self] in
             guard let strongSelf = self else { return }
             

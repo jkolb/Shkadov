@@ -25,6 +25,8 @@ SOFTWARE.
 import simd
 
 public final class Engine {
+    private let platform: Platform
+    private let input: Input
     private var renderer: Renderer
     private let queue: DispatchQueue
     private let timer: Timer
@@ -39,27 +41,29 @@ public final class Engine {
         Object3D(position: float3(0.0, 0.0, -1.5)),
     ]
 
-    public init(renderer: Renderer) {
+    public init(platform: Platform, renderer: Renderer) {
+        self.platform = platform
+        self.input = Input()
         self.renderer = renderer
         self.queue = DispatchQueue.queueWithName("net.franticapparatus.engine.update", attribute: .Serial)
-        self.timer = Timer(name: "net.franticapparatus.engine.timer", nanosecondsPerTick: UInt64(1.0 / 60.0 * 1_000_000_000.0), callbackQueue: self.queue)
+        self.timer = Timer(platform: platform, name: "net.franticapparatus.engine.timer", tickDuration: Duration(seconds: 1.0 / 60.0), callbackQueue: self.queue)
         self.camera = Camera()
     }
     
     public func beginSimulation() {
         renderer.configure()
         
-        timer.updateHandler { [weak self] (tickCount, nanosecondsPerTick) in
+        timer.updateHandler { [weak self] (tickCount, tickDuration) in
             guard let strongSelf = self else { return }
             
-            strongSelf.updateWithTickCount(tickCount, nanosecondsPerTick: nanosecondsPerTick)
+            strongSelf.updateWithTickCount(tickCount, tickDuration: tickDuration)
         }
 
         timer.startWithHandler {
         }
     }
     
-    public func updateWithTickCount(tickCount: Int, nanosecondsPerTick: UInt64) {
+    public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
         // Generate the data for a frame
         let updateAmount: Float = 0.01
         let viewMatrix = camera.viewMatrix
@@ -79,7 +83,7 @@ public final class Engine {
         renderer.renderState(RenderState(objects: renderObjects))
     }
     
-    public func updateViewport(viewport: Viewport) {
+    public func updateViewport(viewport: Rectangle2D) {
         camera.updateWithAspectRatio(viewport.aspectRatio, fovy: Angle(degrees: 65.0))
         renderer.updateViewport(viewport)
     }

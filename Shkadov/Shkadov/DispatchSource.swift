@@ -69,11 +69,11 @@ public class DispatchTimer : DispatchSource {
         super.init(type: DISPATCH_SOURCE_TYPE_TIMER, handle: 0, mask: strict ? DISPATCH_TIMER_STRICT : 0, queue: queue)
     }
     
-    public func timerWithInterval(interval: UInt64, leeway: UInt64) {
+    public func timerWithInterval(interval: Duration, leeway: Duration) {
         timerWithStart(DISPATCH_TIME_NOW, interval: interval, leeway: leeway)
     }
     
-    public func timerWithStart(start: dispatch_time_t, interval: UInt64, leeway: UInt64) {
-        dispatch_source_set_timer(GCDSource, start, interval, leeway)
+    public func timerWithStart(start: dispatch_time_t, interval: Duration, leeway: Duration) {
+        dispatch_source_set_timer(GCDSource, start, interval.nanoseconds, leeway.nanoseconds)
     }
 }

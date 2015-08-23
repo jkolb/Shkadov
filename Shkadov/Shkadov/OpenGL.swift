@@ -87,8 +87,8 @@ public struct OpenGL {
         case UnableToLinkProgram(String)
     }
     
-    public static func viewport(viewport: Viewport) {
-        glViewport(viewport.x, viewport.y, GLsizei(viewport.width), GLsizei(viewport.height))
+    public static func viewport(viewport: Rectangle2D) {
+        glViewport(GLint(viewport.x), GLint(viewport.y), GLsizei(viewport.width), GLsizei(viewport.height))
     }
     
     public static func clearColor(color: ColorRGBA8) {
