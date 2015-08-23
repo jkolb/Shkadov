@@ -108,40 +108,36 @@ public final class OpenGLRenderer : Renderer {
     }
     
     public func updateViewport(viewport: Rectangle2D) {
-        queue.dispatchSerialized { [weak self] in
-            guard let strongSelf = self else { return }
+        synchronizeWrite { renderer in
+            renderer.context.update()
+            renderer.context.makeCurrentContext()
             
-            strongSelf.context.update()
-            strongSelf.context.makeCurrentContext()
-            
-            strongSelf.viewport = viewport
+            renderer.viewport = viewport
             OpenGL.viewport(viewport)
         }
     }
 
     public func configure() {
-        queue.dispatchSerialized { [weak self] in
-            guard let strongSelf = self else { return }
-            
-            strongSelf.context.makeCurrentContext()
+        synchronizeWrite { renderer in
+            renderer.context.makeCurrentContext()
             
             do {
-                try strongSelf.loadShaders()
+                try renderer.loadShaders()
             }
             catch {
                 NSLog("Error")
             }
             
             var swapInt: GLint = 1
-            strongSelf.context.setValues(&swapInt, forParameter: .GLCPSwapInterval)
+            renderer.context.setValues(&swapInt, forParameter: .GLCPSwapInterval)
             
             OpenGL.enableCapability(GL_DEPTH_TEST)
             
-            strongSelf.vertexArray = OpenGL.VertexArray()
-            strongSelf.vertexArray.bind()
+            renderer.vertexArray = OpenGL.VertexArray()
+            renderer.vertexArray.bind()
             
-            strongSelf.vertexBuffer = OpenGL.VertexBuffer()
-            strongSelf.vertexBuffer.bindToTarget(GL_ARRAY_BUFFER)
+            renderer.vertexBuffer = OpenGL.VertexBuffer()
+            renderer.vertexBuffer.bindToTarget(GL_ARRAY_BUFFER)
             OpenGL.bufferDataForTarget(GL_ARRAY_BUFFER, size: sizeof(GLfloat) * gCubeVertexData.count, data: &gCubeVertexData, usage: GL_STATIC_DRAW)
             
             OpenGL.enableVertexAttributeArrayAtIndex(VertexAttribute.Position)
@@ -231,17 +227,15 @@ public final class OpenGLRenderer : Renderer {
     }
 
     public func renderState(state: RenderState) {
-        queue.dispatchSerialized { [weak self] in
-            guard let strongSelf = self else { return }
-            
-            strongSelf.context.makeCurrentContext()
+        synchronizeWrite { renderer in
+            renderer.context.makeCurrentContext()
             
             OpenGL.clearColor(ColorRGBA8(red: 255, green: 165, blue: 165))
             OpenGL.clearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
             
-            strongSelf.program.use()
+            renderer.program.use()
             
-            strongSelf.vertexArray.bind()
+            renderer.vertexArray.bind()
             
             for object in state.objects {
                 OpenGL.setUniformMatrix(object.modelViewProjectionMatrix, atLocation: uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX])
@@ -249,7 +243,15 @@ public final class OpenGLRenderer : Renderer {
                 OpenGL.drawArraysWithMode(GL_TRIANGLES, first: 0, count: 36)
             }
             
-            CGLFlushDrawable(strongSelf.context.CGLContextObj)
+            CGLFlushDrawable(renderer.context.CGLContextObj)
+        }
+    }
+    
+    private func synchronizeWrite(block: (OpenGLRenderer) -> ()) {
+        queue.dispatchSerialized { [weak self] in
+            guard let strongSelf = self else { return }
+            
+            block(strongSelf)
         }
     }
 }

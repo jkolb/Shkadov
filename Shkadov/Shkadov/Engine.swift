@@ -84,7 +84,17 @@ public final class Engine {
     }
     
     public func updateViewport(viewport: Rectangle2D) {
-        camera.updateWithAspectRatio(viewport.aspectRatio, fovy: Angle(degrees: 65.0))
-        renderer.updateViewport(viewport)
+        synchronizeWrite { engine in
+            engine.camera.updateWithAspectRatio(viewport.aspectRatio, fovy: Angle(degrees: 65.0))
+            engine.renderer.updateViewport(viewport)
+        }
+    }
+    
+    private func synchronizeWrite(block: (Engine) -> ()) {
+        queue.dispatchSerialized { [weak self] in
+            guard let strongSelf = self else { return }
+            
+            block(strongSelf)
+        }
     }
 }
