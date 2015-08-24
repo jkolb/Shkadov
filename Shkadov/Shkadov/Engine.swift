@@ -24,11 +24,11 @@ SOFTWARE.
 
 import simd
 
-public final class Engine {
+public final class Engine: Synchronizable {
     private let platform: Platform
     private let input: Input
     private var renderer: Renderer
-    private let queue: DispatchQueue
+    public let synchronizationQueue: DispatchQueue
     private let timer: Timer
     var camera: Camera
     var cubes: [Object3D] = [
@@ -45,9 +45,34 @@ public final class Engine {
         self.platform = platform
         self.input = Input()
         self.renderer = renderer
-        self.queue = DispatchQueue.queueWithName("net.franticapparatus.engine.update", attribute: .Serial)
-        self.timer = Timer(platform: platform, name: "net.franticapparatus.engine.timer", tickDuration: Duration(seconds: 1.0 / 60.0), callbackQueue: self.queue)
+        self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.engine", attribute: .Serial)
+        self.timer = Timer(platform: platform, name: "net.franticapparatus.shkadov.timer", tickDuration: Duration(seconds: 1.0 / 60.0), callbackQueue: self.synchronizationQueue)
         self.camera = Camera()
+    }
+    
+    public func postDownEventForKeyCode(keyCode: Input.KeyCode) {
+        postInputEventForKind(.KeyDown(keyCode))
+    }
+    
+    public func postUpEventForKeyCode(keyCode: Input.KeyCode) {
+        postInputEventForKind(.KeyUp(keyCode))
+    }
+    
+    public func postDownEventForButtonCode(buttonCode: Input.ButtonCode) {
+        postInputEventForKind(.ButtonDown(buttonCode))
+    }
+    
+    public func postUpEventForButtonCode(buttonCode: Input.ButtonCode) {
+        postInputEventForKind(.ButtonUp(buttonCode))
+    }
+    
+    public func postMousePositionEvent(position: Point2D) {
+        postInputEventForKind(.MousePosition(position))
+    }
+    
+    private func postInputEventForKind(kind: Input.Event.Kind) {
+        let event = Input.Event(kind: kind, timestamp: platform.currentTime)
+        input.postEvent(event)
     }
     
     public func beginSimulation() {
@@ -87,14 +112,6 @@ public final class Engine {
         synchronizeWrite { engine in
             engine.camera.updateWithAspectRatio(viewport.aspectRatio, fovy: Angle(degrees: 65.0))
             engine.renderer.updateViewport(viewport)
-        }
-    }
-    
-    private func synchronizeWrite(block: (Engine) -> ()) {
-        queue.dispatchSerialized { [weak self] in
-            guard let strongSelf = self else { return }
-            
-            block(strongSelf)
         }
     }
 }

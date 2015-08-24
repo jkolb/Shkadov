@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class Timer {
+public class Timer: Synchronizable {
     private enum State {
         case Initial
         case Running
@@ -37,11 +37,12 @@ public class Timer {
     private let dispatchTimer: DispatchTimer
     private let callbackQueue: DispatchQueue
     private var _updateHandler: ((Int, Duration) -> ())?
+    public let synchronizationQueue: DispatchQueue
     
     public init(platform: Platform, name: String, tickDuration: Duration, callbackQueue: DispatchQueue) {
         self.callbackQueue = callbackQueue
-        let queue = DispatchQueue.queueWithName(name, attribute: .Serial, qosClass: .UserInteractive, relativePriority: -1)
-        self.dispatchTimer = DispatchTimer(strict: true, queue: queue)
+        self.synchronizationQueue = DispatchQueue.queueWithName(name, attribute: .Serial, qosClass: .UserInteractive, relativePriority: -1)
+        self.dispatchTimer = DispatchTimer(strict: true, queue: self.synchronizationQueue)
         let interval = tickDuration  / 4 // Go slightly faster
         let leeway = interval / 10 // https://developer.apple.com/library/prerelease/mac/documentation/Performance/Conceptual/power_efficiency_guidelines_osx/Timers.html
         self.dispatchTimer.timerWithInterval(interval, leeway: leeway)
@@ -82,54 +83,44 @@ public class Timer {
     }
     
     public func updateHandler(handler: ((Int, Duration) -> ())?) {
-        dispatchTimer.queue.dispatchSerialized { [weak self] in
-            guard let strongSelf = self else { return }
-            
-            strongSelf._updateHandler = handler
+        synchronizeWrite { timer in
+            timer._updateHandler = handler
         }
     }
     
     public func startWithHandler(handler: () -> ()) {
-        dispatchTimer.queue.dispatchSerialized { [weak self] in
-            guard let strongSelf = self else { return }
-            
-            precondition(strongSelf.state == .Initial)
-            strongSelf.state = .Running
-            strongSelf.callbackQueue.dispatchSerialized(handler)
-            strongSelf.dispatchTimer.resume()
+        synchronizeWrite { timer in
+            precondition(timer.state == .Initial)
+            timer.state = .Running
+            timer.callbackQueue.dispatchSerialized(handler)
+            timer.dispatchTimer.resume()
         }
     }
     
     public func resumeWithHandler(handler: () -> ()) {
-        dispatchTimer.queue.dispatchSerialized { [weak self] in
-            guard let strongSelf = self else { return }
-            
-            precondition(strongSelf.state == .Paused)
-            strongSelf.state = .Running
-            strongSelf.callbackQueue.dispatchSerialized(handler)
-            strongSelf.dispatchTimer.resume()
+        synchronizeWrite { timer in
+            precondition(timer.state == .Paused)
+            timer.state = .Running
+            timer.callbackQueue.dispatchSerialized(handler)
+            timer.dispatchTimer.resume()
         }
     }
     
     public func pauseWithHandler(handler: () -> ()) {
-        dispatchTimer.queue.dispatchSerialized { [weak self] in
-            guard let strongSelf = self else { return }
-            
-            precondition(strongSelf.state == .Running)
-            strongSelf.state = .Paused
-            strongSelf.callbackQueue.dispatchSerialized(handler)
-            strongSelf.dispatchTimer.suspend()
+        synchronizeWrite { timer in
+            precondition(timer.state == .Running)
+            timer.state = .Paused
+            timer.callbackQueue.dispatchSerialized(handler)
+            timer.dispatchTimer.suspend()
         }
     }
     
     public func stopWithHandler(handler: () -> ()) {
-        dispatchTimer.queue.dispatchSerialized { [weak self] in
-            guard let strongSelf = self else { return }
-            
-            precondition(strongSelf.state == .Running)
-            strongSelf.state = .Stopped
-            strongSelf.callbackQueue.dispatchSerialized(handler)
-            strongSelf.dispatchTimer.cancel()
+        synchronizeWrite { timer in
+            precondition(timer.state == .Running)
+            timer.state = .Stopped
+            timer.callbackQueue.dispatchSerialized(handler)
+            timer.dispatchTimer.cancel()
         }
     }
 }

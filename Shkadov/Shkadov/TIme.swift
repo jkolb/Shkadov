@@ -123,6 +123,10 @@ public func -(a: Duration, b: Duration) -> Duration {
     return Duration(nanoseconds: a.nanoseconds - b.nanoseconds)
 }
 
+public func *(a: Duration, b: TimeType) -> Duration {
+    return Duration(nanoseconds: a.nanoseconds * b)
+}
+
 public func /(a: Duration, b: TimeType) -> Duration {
     return Duration(nanoseconds: a.nanoseconds / b)
 }
@@ -133,4 +137,12 @@ public func +=(inout a: Duration, b: Duration) {
 
 public func -=(inout a: Duration, b: Duration) {
     a.nanoseconds = a.nanoseconds - b.nanoseconds
+}
+
+public func *=(inout a: Duration, b: TimeType) {
+    a.nanoseconds = a.nanoseconds * b
+}
+
+public func /=(inout a: Duration, b: TimeType) {
+    a.nanoseconds = a.nanoseconds / b
 }

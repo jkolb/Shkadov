@@ -24,45 +24,6 @@ SOFTWARE.
 
 import simd
 
-public extension Float {
-    public static var pi: Float {
-        return Float(M_PI)
-    }
-}
-
-public struct Angle {
-    private static let degreesToRadians = Float.pi / 180.0
-    private static let radiansToDegrees = 180.0 / Float.pi
-    
-    private let value: Float
-    
-    public init(radians: Float) {
-        self.value = radians;
-    }
-    
-    public init(degrees: Float) {
-        self.init(radians: Angle.degreesToRadians * degrees)
-    }
-    
-    public var radians: Float {
-        return value
-    }
-    
-    public var degrees: Float {
-        return value * Angle.radiansToDegrees
-    }
-}
-
-public extension float4 {
-    public init(_ v: float3, _ w: Float = 0.0) {
-        self.init(v.x, v.y, v.z, w)
-    }
-    
-    public var xyz: float3 {
-        return float3(self.x, self.y, self.z)
-    }
-}
-
 public extension float3x3 {
     public init(angle: Angle, axis: float3) {
         /*
@@ -175,7 +136,7 @@ public extension float4x4 {
     
     public init(fovy: Angle, aspect: Float, zNear: Float, zFar: Float) {
         precondition(fovy.radians > 0.0)
-        precondition(fovy.radians < 2.0 * Float.pi)
+        precondition(fovy.radians < 2.0 * π)
         precondition(aspect != 0.0)
         precondition(zNear > 0.0)
         precondition(zFar > zNear)

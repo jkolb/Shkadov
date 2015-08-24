@@ -84,9 +84,9 @@ var gCubeVertexData: [GLfloat] = [
     -0.5, 0.5, -0.5,        0.0, 0.0, -1.0
 ]
 
-public final class OpenGLRenderer : Renderer {
+public final class OpenGLRenderer : Renderer, Synchronizable {
     private let context: NSOpenGLContext
-    private let queue: DispatchQueue
+    public let synchronizationQueue: DispatchQueue
     public var viewport: Rectangle2D
 
     var program: OpenGL.Program!
@@ -97,7 +97,7 @@ public final class OpenGLRenderer : Renderer {
     
     public init(context: NSOpenGLContext) {
         self.context = context
-        self.queue = DispatchQueue.queueWithName("net.franticapparatus.engine.render", attribute: .Serial)
+        self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.render", attribute: .Serial)
         self.viewport = Rectangle2D.zero
     }
     
@@ -244,14 +244,6 @@ public final class OpenGLRenderer : Renderer {
             }
             
             CGLFlushDrawable(renderer.context.CGLContextObj)
-        }
-    }
-    
-    private func synchronizeWrite(block: (OpenGLRenderer) -> ()) {
-        queue.dispatchSerialized { [weak self] in
-            guard let strongSelf = self else { return }
-            
-            block(strongSelf)
         }
     }
 }

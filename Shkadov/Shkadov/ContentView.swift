@@ -27,36 +27,56 @@ import simd
 
 public class ContentView: NSView {
     public weak var engine: Engine!
-    public let buttonMap: [Int:Input.ButtonCode] = [
+    private let buttonMap: [Int:Input.ButtonCode] = [
         0: .MOUSE0,
+        1: .MOUSE1,
+        2: .MOUSE2,
+        3: .MOUSE3,
+        4: .MOUSE4,
+        5: .MOUSE5,
+        6: .MOUSE6,
+        7: .MOUSE7,
+        8: .MOUSE8,
+        9: .MOUSE9,
+        10: .MOUSE10,
+        11: .MOUSE11,
+        12: .MOUSE12,
+        13: .MOUSE13,
+        14: .MOUSE14,
+        15: .MOUSE15,
     ]
-    public let keyMap: [Int:Input.KeyCode] = [
+    private let keyMap: [Int:Input.KeyCode] = [
         0: .A,
     ]
     
-    private func keyEvent(event: NSEvent, down: Bool) {
-        NSLog("KEY: \(event)")
-        
-//        if let keyCode = keyMap[Int(event.keyCode)] {
-//            engine.updateKeyCode(keyCode, down: down)
-//        }
+    private func buttonCodeForEvent(event: NSEvent) -> Input.ButtonCode {
+        return buttonMap[event.buttonNumber] ?? .UNKNOWN
     }
     
-    private func mouseEvent(event: NSEvent, down: Bool) {
-        NSLog("MOUSE: \(event)")
-        
-//        if let keyCode = buttonMap[event.buttonNumber] {
-//            engine.updateKeyCode(keyCode, down: down)
-//        }
+    private func keyCodeForEvent(event: NSEvent) -> Input.KeyCode {
+        return keyMap[Int(event.keyCode)] ?? .UNKNOWN
+    }
+
+    private func postButtonDownEvent(event: NSEvent) {
+        engine.postDownEventForButtonCode(buttonCodeForEvent(event))
     }
     
-    private func positionEvent(event: NSEvent) {
-        NSLog("POSITION: \(event)")
-        
+    private func postButtonUpEvent(event: NSEvent) {
+        engine.postUpEventForButtonCode(buttonCodeForEvent(event))
+    }
+    
+    private func postKeyDownEvent(event: NSEvent) {
+        engine.postDownEventForKeyCode(keyCodeForEvent(event))
+    }
+    
+    private func postKeyUpEvent(event: NSEvent) {
+        engine.postUpEventForKeyCode(keyCodeForEvent(event))
+    }
+    
+    private func postMousePositionEvent(event: NSEvent) {
         // NSPoint location = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-//        let location = event.locationInWindow
-//        let position = double2(Double(location.x), Double(location.y))
-//        engine.updateMousePosition(position)
+        let position = event.locationInWindow.point2D
+        engine.postMousePositionEvent(position)
     }
     
     public override var acceptsFirstResponder: Bool {
@@ -64,55 +84,55 @@ public class ContentView: NSView {
     }
     
     public override func keyDown(theEvent: NSEvent) {
-        keyEvent(theEvent, down: true)
+        postKeyDownEvent(theEvent)
     }
     
     public override func keyUp(theEvent: NSEvent) {
-        keyEvent(theEvent, down: false)
+        postKeyUpEvent(theEvent)
     }
     
     public override func flagsChanged(theEvent: NSEvent) {
-        NSLog("NSFlagsChanged \(theEvent)")
+        NSLog("FLAGS: \(theEvent)")
     }
 
     public override func mouseDown(theEvent: NSEvent) {
-        mouseEvent(theEvent, down: true)
+        postButtonDownEvent(theEvent)
     }
     
     public override func otherMouseDown(theEvent: NSEvent) {
-        mouseEvent(theEvent, down: true)
+        postButtonDownEvent(theEvent)
     }
     
     public override func rightMouseDown(theEvent: NSEvent) {
-        mouseEvent(theEvent, down: true)
+        postButtonDownEvent(theEvent)
     }
     
     public override func mouseUp(theEvent: NSEvent) {
-        mouseEvent(theEvent, down: false)
+        postButtonUpEvent(theEvent)
     }
     
     public override func otherMouseUp(theEvent: NSEvent) {
-        mouseEvent(theEvent, down: false)
+        postButtonUpEvent(theEvent)
     }
     
     public override func rightMouseUp(theEvent: NSEvent) {
-        mouseEvent(theEvent, down: false)
+        postButtonUpEvent(theEvent)
     }
     
     public override func mouseDragged(theEvent: NSEvent) {
-        positionEvent(theEvent)
+        postMousePositionEvent(theEvent)
     }
     
     public override func otherMouseDragged(theEvent: NSEvent) {
-        positionEvent(theEvent)
+        postMousePositionEvent(theEvent)
     }
     
     public override func rightMouseDragged(theEvent: NSEvent) {
-        positionEvent(theEvent)
+        postMousePositionEvent(theEvent)
     }
     
     public override func mouseMoved(theEvent: NSEvent) {
-        positionEvent(theEvent)
+        postMousePositionEvent(theEvent)
     }
     
     public override func scrollWheel(theEvent: NSEvent) {

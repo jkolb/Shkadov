@@ -22,9 +22,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class Input {
+public class Input: Synchronizable {
+    public let synchronizationQueue: DispatchQueue
+    private var events: [Event]
+    
+    public init() {
+        self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.input", attribute: .Concurrent)
+        self.events = [Event]()
+    }
+
+    public func postEvent(event: Event) {
+        synchronizeWrite { input in
+            input.events.append(event)
+        }
+    }
+    
+    public func eventsBeforeTime(time: Time) -> [Event] {
+        return synchronizeRead { input in
+            return [Event]()
+        }
+    }
+
     public struct Event {
-        public enum Type {
+        public enum Kind {
             case ButtonDown(ButtonCode)
             case ButtonUp(ButtonCode)
             case JoystickAxis(Vector2D)
@@ -34,11 +54,11 @@ public class Input {
             case ScrollWheel(Vector2D)
         }
         
-        public let type: Type
+        public let kind: Kind
         public let timestamp: Time
         
-        public init(type: Type, timestamp: Time) {
-            self.type = type
+        public init(kind: Kind, timestamp: Time) {
+            self.kind = kind
             self.timestamp = timestamp
         }
     }

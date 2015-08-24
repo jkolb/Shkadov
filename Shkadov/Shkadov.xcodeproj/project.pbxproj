@@ -15,7 +15,7 @@
 		E581CFA21B892C9F00D7174F /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8F1B892C9F00D7174F /* Engine.swift */; };
 		E581CFA41B892C9F00D7174F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF911B892C9F00D7174F /* ContentView.swift */; };
 		E581CFA61B892C9F00D7174F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF931B892C9F00D7174F /* main.swift */; };
-		E581CFA71B892C9F00D7174F /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF941B892C9F00D7174F /* Math.swift */; };
+		E581CFA71B892C9F00D7174F /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF941B892C9F00D7174F /* Matrix.swift */; };
 		E581CFA81B892C9F00D7174F /* Object3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF951B892C9F00D7174F /* Object3D.swift */; };
 		E581CFA91B892C9F00D7174F /* OpenGL.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF961B892C9F00D7174F /* OpenGL.swift */; };
 		E581CFAA1B892C9F00D7174F /* OpenGLRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF971B892C9F00D7174F /* OpenGLRenderer.swift */; };
@@ -31,6 +31,8 @@
 		E592A5B91B8A4EA60032D982 /* TIme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5B81B8A4EA60032D982 /* TIme.swift */; };
 		E592A5BB1B8A4EFA0032D982 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5BA1B8A4EFA0032D982 /* Geometry.swift */; };
 		E592A5BD1B8A64D20032D982 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5BC1B8A64D20032D982 /* Platform.swift */; };
+		E592A5BF1B8A9E240032D982 /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5BE1B8A9E240032D982 /* Vector.swift */; };
+		E592A5C11B8AAC220032D982 /* Synchronizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5C01B8AAC220032D982 /* Synchronizable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,7 +58,7 @@
 		E581CF8F1B892C9F00D7174F /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
 		E581CF911B892C9F00D7174F /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E581CF931B892C9F00D7174F /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		E581CF941B892C9F00D7174F /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
+		E581CF941B892C9F00D7174F /* Matrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
 		E581CF951B892C9F00D7174F /* Object3D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Object3D.swift; sourceTree = "<group>"; };
 		E581CF961B892C9F00D7174F /* OpenGL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGL.swift; sourceTree = "<group>"; };
 		E581CF971B892C9F00D7174F /* OpenGLRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGLRenderer.swift; sourceTree = "<group>"; };
@@ -72,6 +74,8 @@
 		E592A5B81B8A4EA60032D982 /* TIme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TIme.swift; sourceTree = "<group>"; };
 		E592A5BA1B8A4EFA0032D982 /* Geometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
 		E592A5BC1B8A64D20032D982 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
+		E592A5BE1B8A9E240032D982 /* Vector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
+		E592A5C01B8AAC220032D982 /* Synchronizable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synchronizable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,14 +164,16 @@
 				E581CFB71B893D7400D7174F /* Event.swift */,
 				E592A5BA1B8A4EFA0032D982 /* Geometry.swift */,
 				E592A5B61B8A116F0032D982 /* Input.swift */,
-				E581CF941B892C9F00D7174F /* Math.swift */,
+				E581CF941B892C9F00D7174F /* Matrix.swift */,
 				E581CF951B892C9F00D7174F /* Object3D.swift */,
 				E592A5BC1B8A64D20032D982 /* Platform.swift */,
 				E581CF981B892C9F00D7174F /* Renderer.swift */,
 				E581CF991B892C9F00D7174F /* RenderObject.swift */,
 				E581CF9A1B892C9F00D7174F /* RenderState.swift */,
+				E592A5C01B8AAC220032D982 /* Synchronizable.swift */,
 				E592A5B81B8A4EA60032D982 /* TIme.swift */,
 				E581CF9D1B892C9F00D7174F /* Timer.swift */,
+				E592A5BE1B8A9E240032D982 /* Vector.swift */,
 			);
 			name = Engine;
 			sourceTree = "<group>";
@@ -293,7 +299,7 @@
 			files = (
 				E592A5B91B8A4EA60032D982 /* TIme.swift in Sources */,
 				E581CF9F1B892C9F00D7174F /* Camera.swift in Sources */,
-				E581CFA71B892C9F00D7174F /* Math.swift in Sources */,
+				E581CFA71B892C9F00D7174F /* Matrix.swift in Sources */,
 				E581CFBA1B894E6400D7174F /* PlatformOSX.swift in Sources */,
 				E581CFA61B892C9F00D7174F /* main.swift in Sources */,
 				E581CFA41B892C9F00D7174F /* ContentView.swift in Sources */,
@@ -301,6 +307,7 @@
 				E592A5B71B8A116F0032D982 /* Input.swift in Sources */,
 				E581CFA21B892C9F00D7174F /* Engine.swift in Sources */,
 				E592A5BB1B8A4EFA0032D982 /* Geometry.swift in Sources */,
+				E592A5BF1B8A9E240032D982 /* Vector.swift in Sources */,
 				E592A5BD1B8A64D20032D982 /* Platform.swift in Sources */,
 				E581CFB01B892C9F00D7174F /* Timer.swift in Sources */,
 				E581CFA01B892C9F00D7174F /* DispatchQueue.swift in Sources */,
@@ -308,6 +315,7 @@
 				E581CFAA1B892C9F00D7174F /* OpenGLRenderer.swift in Sources */,
 				E581CFA91B892C9F00D7174F /* OpenGL.swift in Sources */,
 				E581CFAD1B892C9F00D7174F /* RenderState.swift in Sources */,
+				E592A5C11B8AAC220032D982 /* Synchronizable.swift in Sources */,
 				E581CFA11B892C9F00D7174F /* DispatchSource.swift in Sources */,
 				E581CFAC1B892C9F00D7174F /* RenderObject.swift in Sources */,
 				E581CFA81B892C9F00D7174F /* Object3D.swift in Sources */,

@@ -22,10 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+import Darwin.C.math
+
 public typealias GeometryType = Float
 
+public let π = GeometryType(M_PI)
+
+private let geometryZero = GeometryType(0.0)
+private let degreesToRadians = π / 180.0
+private let radiansToDegrees = 180.0 / π
+
+public struct Angle {
+    public var radians: GeometryType
+    
+    public init(radians: GeometryType) {
+        self.radians = radians;
+    }
+    
+    public init(degrees: GeometryType) {
+        self.init(radians: degreesToRadians * degrees)
+    }
+    
+    public var degrees: GeometryType {
+        return radians * radiansToDegrees
+    }
+}
+
 public struct Point2D {
-    public static let zero = Point2D(x: 0.0, y: 0.0)
+    public static let zero = Point2D(x: geometryZero, y: geometryZero)
     
     public let x: GeometryType
     public let y: GeometryType
@@ -37,7 +61,7 @@ public struct Point2D {
 }
 
 public struct Vector2D {
-    public static let zero = Vector2D(dx: 0.0, dy: 0.0)
+    public static let zero = Vector2D(dx: geometryZero, dy: geometryZero)
     
     public let dx: GeometryType
     public let dy: GeometryType
@@ -49,14 +73,14 @@ public struct Vector2D {
 }
 
 public struct Size2D {
-    public static let zero = Size2D(width: 0.0, height: 0.0)
+    public static let zero = Size2D(width: geometryZero, height: geometryZero)
     
     public let width: GeometryType
     public let height: GeometryType
     
     public init(width: GeometryType, height: GeometryType) {
-        precondition(width >= 0.0)
-        precondition(height >= 0.0)
+        precondition(width >= geometryZero)
+        precondition(height >= geometryZero)
         
         self.width = width
         self.height = height
@@ -99,11 +123,11 @@ public struct Rectangle2D {
     }
 
     public var centerX: GeometryType {
-        return x + width * 0.5
+        return x + (width * 0.5)
     }
     
     public var centerY: GeometryType {
-        return y + height * 0.5
+        return y + (height * 0.5)
     }
     
     public var center: Point2D {
