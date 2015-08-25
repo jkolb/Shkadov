@@ -24,30 +24,19 @@ SOFTWARE.
 
 import simd
 
-public final class Engine: Synchronizable {
+public final class Engine {
     private let platform: Platform
     private let input: Input
+    private let logic: Logic
     private var renderer: Renderer
-    public let synchronizationQueue: DispatchQueue
     private let timer: Timer
-    var camera: Camera
-    var cubes: [Object3D] = [
-        Object3D(position: float3(0.0, 0.0, 0.0)),
-        Object3D(position: float3(1.5, 0.0, 0.0)),
-        Object3D(position: float3(-1.5, 0.0, 0.0)),
-        Object3D(position: float3(0.0, 1.5, 0.0)),
-        Object3D(position: float3(0.0, -1.5, 0.0)),
-        Object3D(position: float3(0.0, 0.0, 1.5)),
-        Object3D(position: float3(0.0, 0.0, -1.5)),
-    ]
 
     public init(platform: Platform, renderer: Renderer) {
         self.platform = platform
         self.input = Input()
+        self.logic = Logic()
         self.renderer = renderer
-        self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.engine", attribute: .Serial)
-        self.timer = Timer(platform: platform, name: "net.franticapparatus.shkadov.timer", tickDuration: Duration(seconds: 1.0 / 60.0), callbackQueue: self.synchronizationQueue)
-        self.camera = Camera()
+        self.timer = Timer(platform: platform, name: "net.franticapparatus.shkadov.timer", tickDuration: Duration(seconds: 1.0 / 60.0))
     }
     
     public func postDownEventForKeyCode(keyCode: Input.KeyCode) {
@@ -77,41 +66,27 @@ public final class Engine: Synchronizable {
     
     public func beginSimulation() {
         renderer.configure()
-        
-        timer.updateHandler { [weak self] (tickCount, tickDuration) in
+
+        let weakUpdateWithTickCount: (Int, Duration) -> () = { [weak self] (tickCount, tickDuration) in
             guard let strongSelf = self else { return }
             
-            strongSelf.updateWithTickCount(tickCount, tickDuration: tickDuration)
+            Engine.updateWithTickCount(strongSelf)(tickCount, tickDuration: tickDuration)
         }
 
-        timer.startWithHandler {
-        }
+        timer.updateHandler = weakUpdateWithTickCount
+
+        timer.start()
     }
-    
-    public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
-        // Generate the data for a frame
-        let updateAmount: Float = 0.01
-        let viewMatrix = camera.viewMatrix
-        var renderObjects = [RenderObject]()
-        
-        for cube in cubes {
-            cube.modelViewMatrix = viewMatrix * cube.modelMatrix
-            cube.modelViewProjectionMatrix = camera.projectionMatrix * cube.modelViewMatrix
-            
-            cube.lookRightByAmount(Angle(radians: updateAmount))
-            cube.lookUpByAmount(Angle(radians: updateAmount))
-            
-            renderObjects.append(RenderObject(modelViewProjectionMatrix: cube.modelViewProjectionMatrix, normalMatrix: cube.normalMatrix))
-        }
 
-        // Pass data to render queue for processing
-        renderer.renderState(RenderState(objects: renderObjects))
+    private func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
+        logic.updateWithTickCount(tickCount, tickDuration: tickDuration) { [weak self] (renderState) in
+            guard let strongSelf = self else { return }
+            strongSelf.renderer.renderState(renderState)
+        }
     }
     
     public func updateViewport(viewport: Rectangle2D) {
-        synchronizeWrite { engine in
-            engine.camera.updateWithAspectRatio(viewport.aspectRatio, fovy: Angle(degrees: 65.0))
-            engine.renderer.updateViewport(viewport)
-        }
+        logic.updateViewport(viewport)
+        renderer.updateViewport(viewport)
     }
 }

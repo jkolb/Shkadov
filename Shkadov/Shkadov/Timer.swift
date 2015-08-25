@@ -35,12 +35,10 @@ public class Timer: Synchronizable {
     private var previousTime = Time.zero
     private var accumulatedTime = Duration.zero
     private let dispatchTimer: DispatchTimer
-    private let callbackQueue: DispatchQueue
     private var _updateHandler: ((Int, Duration) -> ())?
     public let synchronizationQueue: DispatchQueue
     
-    public init(platform: Platform, name: String, tickDuration: Duration, callbackQueue: DispatchQueue) {
-        self.callbackQueue = callbackQueue
+    public init(platform: Platform, name: String, tickDuration: Duration) {
         self.synchronizationQueue = DispatchQueue.queueWithName(name, attribute: .Serial, qosClass: .UserInteractive, relativePriority: -1)
         self.dispatchTimer = DispatchTimer(strict: true, queue: self.synchronizationQueue)
         let interval = tickDuration  / 4 // Go slightly faster
@@ -75,51 +73,52 @@ public class Timer: Synchronizable {
                 
                 let updateHandler = strongSelf._updateHandler!
                 
-                strongSelf.callbackQueue.dispatchSerialized {
-                    updateHandler(tickCount, tickDuration)
-                }
+                updateHandler(tickCount, tickDuration)
             }
         }
     }
     
-    public func updateHandler(handler: ((Int, Duration) -> ())?) {
-        synchronizeWrite { timer in
-            timer._updateHandler = handler
+    public var updateHandler: ((Int, Duration) -> ())? {
+        get {
+            return synchronizeRead { timer -> ((Int, Duration) -> ())? in
+                return timer._updateHandler
+            }
+        }
+        set {
+            synchronizeWrite { timer in
+                timer._updateHandler = newValue
+            }
         }
     }
     
-    public func startWithHandler(handler: () -> ()) {
+    public func start() {
         synchronizeWrite { timer in
             precondition(timer.state == .Initial)
             timer.state = .Running
-            timer.callbackQueue.dispatchSerialized(handler)
             timer.dispatchTimer.resume()
         }
     }
     
-    public func resumeWithHandler(handler: () -> ()) {
+    public func resume() {
         synchronizeWrite { timer in
             precondition(timer.state == .Paused)
             timer.state = .Running
-            timer.callbackQueue.dispatchSerialized(handler)
             timer.dispatchTimer.resume()
         }
     }
     
-    public func pauseWithHandler(handler: () -> ()) {
+    public func pause() {
         synchronizeWrite { timer in
             precondition(timer.state == .Running)
             timer.state = .Paused
-            timer.callbackQueue.dispatchSerialized(handler)
             timer.dispatchTimer.suspend()
         }
     }
     
-    public func stopWithHandler(handler: () -> ()) {
+    public func stop() {
         synchronizeWrite { timer in
             precondition(timer.state == .Running)
             timer.state = .Stopped
-            timer.callbackQueue.dispatchSerialized(handler)
             timer.dispatchTimer.cancel()
         }
     }
