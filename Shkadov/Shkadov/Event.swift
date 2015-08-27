@@ -21,3 +21,58 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
+public struct LookDirection {
+    public var up: Angle
+    public var right: Angle
+    
+    public init(up: Angle, right: Angle) {
+        self.up = up
+        self.right = right
+    }
+}
+
+public enum MoveXDirection {
+    case None
+    case Right
+    case Left
+}
+
+public enum MoveYDirection {
+    case None
+    case Up
+    case Down
+}
+
+public enum MoveZDirection {
+    case None
+    case Forward
+    case Backward
+}
+
+public struct MoveDirection {
+    public var x: MoveXDirection
+    public var y: MoveYDirection
+    public var z: MoveZDirection
+    
+    public init(x: MoveXDirection, y: MoveYDirection, z: MoveZDirection) {
+        self.x = x
+        self.y = y
+        self.z = z
+    }
+}
+
+public struct Event {
+    public enum Kind {
+        case Look(LookDirection)
+        case Move(MoveDirection)
+    }
+    
+    public let kind: Kind
+    public let timestamp: Time
+    
+    public init(kind: Kind, timestamp: Time) {
+        self.kind = kind
+        self.timestamp = timestamp
+    }
+}

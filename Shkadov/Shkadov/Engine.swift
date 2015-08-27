@@ -78,7 +78,66 @@ public final class Engine {
         timer.start()
     }
 
+    private func handleInput() {
+        let inputEvents = input.drainEventsBeforeTime(platform.currentTime)
+        var lookDirection = LookDirection(up: Angle.zero, right: Angle.zero)
+        var moveDirection = MoveDirection(x: .None, y: .None, z: .None)
+        
+        for inputEvent in inputEvents {
+            switch inputEvent.kind {
+            case .KeyDown(let keyCode):
+                switch keyCode {
+                case .W:
+                    moveDirection.z = .Forward
+                case .A:
+                    moveDirection.x = .Left
+                case .S:
+                    moveDirection.z = .Backward
+                case .D:
+                    moveDirection.x = .Right
+                default:
+                    print("Unhandled down key code:", keyCode, separator: " ", terminator: "\n")
+                }
+            case .KeyUp(let keyCode):
+                switch keyCode {
+                case .W:
+                    moveDirection.z = .None
+                case .A:
+                    moveDirection.x = .None
+                case .S:
+                    moveDirection.z = .None
+                case .D:
+                    moveDirection.x = .None
+                default:
+                    print("Unhandled up key code:", keyCode, separator: " ", terminator: "\n")
+                }
+            case .MousePosition(let position):
+                lookDirection.right = angleFromMouseY(position.x)
+                lookDirection.up = angleFromMouseY(position.y)
+            default:
+                print("Unhandled input event:", inputEvent, separator: " ", terminator: "\n")
+            }
+        }
+        
+        dispatchEvent(Event(kind: .Look(lookDirection), timestamp: platform.currentTime))
+        dispatchEvent(Event(kind: .Move(moveDirection), timestamp: platform.currentTime))
+    }
+
+    private func angleFromMouseX(x: GeometryType) -> Angle {
+        return Angle.zero
+    }
+    
+    private func angleFromMouseY(y: GeometryType) -> Angle {
+        return Angle.zero
+    }
+    
+    private func dispatchEvent(event: Event) {
+        
+    }
+    
     private func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
+        handleInput()
+        
         logic.updateWithTickCount(tickCount, tickDuration: tickDuration) { [weak self] (renderState) in
             guard let strongSelf = self else { return }
             strongSelf.renderer.renderState(renderState)

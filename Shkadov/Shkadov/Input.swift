@@ -37,9 +37,22 @@ public class Input: Synchronizable {
         }
     }
     
-    public func eventsBeforeTime(time: Time) -> [Event] {
+    public func drainEventsBeforeTime(time: Time) -> [Event] {
         return synchronizeRead { input in
-            return [Event]()
+            var drainedEvents = [Event]()
+            
+            for event in input.events {
+                if event.timestamp <= time {
+                    drainedEvents.append(event)
+                }
+                else {
+                    break
+                }
+            }
+            
+            input.events.removeRange(0..<drainedEvents.count)
+            
+            return drainedEvents
         }
     }
 

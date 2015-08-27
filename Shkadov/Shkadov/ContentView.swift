@@ -47,6 +47,26 @@ public class ContentView: NSView {
     ]
     private let keyMap: [Int:Input.KeyCode] = [
         0: .A,
+        1: .S,
+        2: .D,
+        3: .F,
+        4: .H,
+        5: .G,
+        6: .Z,
+        7: .X,
+        8: .C,
+        9: .V,
+        10: .UNKNOWN,
+        11: .B,
+        12: .Q,
+        13: .W,
+        14: .E,
+        15: .R,
+        16: .Y,
+        17: .T,
+        
+        49: .SPACE,
+        56: .LSHIFT,
     ]
     
     private func buttonCodeForEvent(event: NSEvent) -> Input.ButtonCode {
@@ -84,10 +104,12 @@ public class ContentView: NSView {
     }
     
     public override func keyDown(theEvent: NSEvent) {
+        NSLog("KEY DOWN: \(theEvent)")
         postKeyDownEvent(theEvent)
     }
     
     public override func keyUp(theEvent: NSEvent) {
+        NSLog("KEY UP: \(theEvent)")
         postKeyUpEvent(theEvent)
     }
     

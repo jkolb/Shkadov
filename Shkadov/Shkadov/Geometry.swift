@@ -33,6 +33,8 @@ private let degreesToRadians = π / 180.0
 private let radiansToDegrees = 180.0 / π
 
 public struct Angle {
+    public static let zero = Angle(radians: geometryZero)
+    
     public var radians: GeometryType
     
     public init(radians: GeometryType) {
