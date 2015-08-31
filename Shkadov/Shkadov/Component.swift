@@ -25,9 +25,3 @@ SOFTWARE.
 public protocol Component {
     static var kind: Kind { get }
 }
-//
-//public extension Component {
-//    static var kind: Kind {
-//        return Kind(value: self)
-//    }
-//}
