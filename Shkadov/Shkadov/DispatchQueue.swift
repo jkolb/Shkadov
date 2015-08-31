@@ -150,6 +150,10 @@ public class DispatchQueue : CustomStringConvertible {
         dispatch_barrier_async(GCDQueue, block)
     }
     
+    public func dispatchSerializedAndWait(block: () -> ()) {
+        dispatch_barrier_sync(GCDQueue, block)
+    }
+    
     public var description: String {
         return String.fromCString(dispatch_queue_get_label(GCDQueue)) ?? "nil"
     }

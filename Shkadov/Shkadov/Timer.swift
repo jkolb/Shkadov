@@ -22,6 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+public protocol TimerDelegate : class {
+    func timer(timer: Timer, didFireWithTickCount tickCount: Int, tickDuration: Duration)
+}
+
 public class Timer: Synchronizable {
     private enum State {
         case Initial
@@ -35,8 +39,8 @@ public class Timer: Synchronizable {
     private var previousTime = Time.zero
     private var accumulatedTime = Duration.zero
     private let dispatchTimer: DispatchTimer
-    private var _updateHandler: ((Int, Duration) -> ())?
     public let synchronizationQueue: DispatchQueue
+    public weak var delegate: TimerDelegate?
     
     public init(platform: Platform, name: String, tickDuration: Duration) {
         self.synchronizationQueue = DispatchQueue.queueWithName(name, attribute: .Serial, qosClass: .UserInteractive, relativePriority: -1)
@@ -53,10 +57,9 @@ public class Timer: Synchronizable {
         
         self.dispatchTimer.eventHandler { [weak self] in
             guard let strongSelf = self else { return }
-            
+
             if strongSelf.state != .Running { return }
-            if strongSelf._updateHandler == nil { return }
-            
+
             let currentTime = platform.currentTime
             strongSelf.accumulatedTime += (currentTime - strongSelf.previousTime)
             strongSelf.previousTime = currentTime
@@ -71,22 +74,9 @@ public class Timer: Synchronizable {
             if tickCount > 0 {
                 strongSelf.totalTickCount += UInt64(tickCount)
                 
-                let updateHandler = strongSelf._updateHandler!
-                
-                updateHandler(tickCount, tickDuration)
-            }
-        }
-    }
-    
-    public var updateHandler: ((Int, Duration) -> ())? {
-        get {
-            return synchronizeRead { timer -> ((Int, Duration) -> ())? in
-                return timer._updateHandler
-            }
-        }
-        set {
-            synchronizeWrite { timer in
-                timer._updateHandler = newValue
+                if let delegate = strongSelf.delegate {
+                    delegate.timer(strongSelf, didFireWithTickCount: tickCount, tickDuration: tickDuration)
+                }
             }
         }
     }

@@ -22,20 +22,36 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
+private typealias HandleType = UInt32
 
-public class Logic: Synchronizable {
-    public let synchronizationQueue: DispatchQueue
-    private let testCubeSystem: TestCubeSystem
+public class HandleFactory {
+    private var lastHandleIndex = HandleType.min
+    
+    public func nextHandle() -> Handle {
+        return Handle(value: lastHandleIndex++)
+    }
+}
 
-    public init(entityComponents: EntityComponents) {
-        self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.logic", attribute: .Concurrent)
-        self.testCubeSystem = TestCubeSystem(entityComponents: entityComponents)
+public struct Handle : CustomStringConvertible, CustomDebugStringConvertible, Equatable, Hashable {
+    private let value: HandleType
+    
+    private init(value: HandleType) {
+        self.value = value
     }
     
-    public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
-        synchronizeWriteAndWait { logic in
-            logic.testCubeSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
-        }
+    public var description: String {
+        return value.description
     }
+
+    public var debugDescription: String {
+        return "\(self)\(value)"
+    }
+
+    public var hashValue: Int {
+        return value.hashValue
+    }
+}
+
+public func ==(lhs: Handle, rhs: Handle) -> Bool {
+    return lhs.value == rhs.value
 }

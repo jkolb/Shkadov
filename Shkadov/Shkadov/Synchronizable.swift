@@ -30,7 +30,13 @@ public extension Synchronizable {
     public func synchronizeRead(synchronized: (Self) -> ()) {
         synchronizationQueue.dispatch { [weak self] in
             guard let strongSelf = self else { return }
-            
+            synchronized(strongSelf)
+        }
+    }
+    
+    public func synchronizeReadAndWait(synchronized: (Self) -> ()) {
+        synchronizationQueue.dispatchAndWait { [weak self] in
+            guard let strongSelf = self else { return }
             synchronized(strongSelf)
         }
     }
@@ -54,8 +60,30 @@ public extension Synchronizable {
     public func synchronizeWrite(synchronized: (Self) -> ()) {
         synchronizationQueue.dispatchSerialized { [weak self] in
             guard let strongSelf = self else { return }
-            
             synchronized(strongSelf)
         }
+    }
+    
+    public func synchronizeWriteAndWait(synchronized: (Self) -> ()) {
+        synchronizationQueue.dispatchSerializedAndWait { [weak self] in
+            guard let strongSelf = self else { return }
+            synchronized(strongSelf)
+        }
+    }
+    
+    public func synchronizeReadWrite<ResultType>(synchronized: (Self) -> ResultType) -> ResultType {
+        var result: ResultType!
+        synchronizationQueue.dispatchSerializedAndWait { [unowned self] in
+            result = synchronized(self)
+        }
+        return result
+    }
+    
+    public func synchronizeReadWrite<ResultType>(synchronized: (Self) -> ResultType?) -> ResultType? {
+        var result: ResultType?
+        synchronizationQueue.dispatchSerializedAndWait { [unowned self] in
+            result = synchronized(self)
+        }
+        return result
     }
 }

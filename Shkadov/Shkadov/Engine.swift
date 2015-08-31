@@ -22,21 +22,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
-public final class Engine {
+public final class Engine : TimerDelegate, Synchronizable {
+    public let synchronizationQueue: DispatchQueue
     private let platform: Platform
     private let input: Input
     private let logic: Logic
-    private var renderer: Renderer
     private let timer: Timer
-
+    private var eventHandlers: [Event.System:[Component]]
+    private let entityComponents: EntityComponents
+    private let renderSystem: RenderSystem
+    
     public init(platform: Platform, renderer: Renderer) {
+        self.synchronizationQueue = DispatchQueue.globalQueueWithQOS(.UserInitiated)
+        self.entityComponents = EntityComponents()
         self.platform = platform
         self.input = Input()
-        self.logic = Logic()
-        self.renderer = renderer
+        self.logic = Logic(entityComponents: self.entityComponents)
         self.timer = Timer(platform: platform, name: "net.franticapparatus.shkadov.timer", tickDuration: Duration(seconds: 1.0 / 60.0))
+        self.eventHandlers = [:]
+        self.renderSystem = RenderSystem(renderer: renderer, entityComponents: self.entityComponents)
     }
     
     public func postDownEventForKeyCode(keyCode: Input.KeyCode) {
@@ -65,16 +69,8 @@ public final class Engine {
     }
     
     public func beginSimulation() {
-        renderer.configure()
-
-        let weakUpdateWithTickCount: (Int, Duration) -> () = { [weak self] (tickCount, tickDuration) in
-            guard let strongSelf = self else { return }
-            
-            Engine.updateWithTickCount(strongSelf)(tickCount, tickDuration: tickDuration)
-        }
-
-        timer.updateHandler = weakUpdateWithTickCount
-
+        renderSystem.configure()
+        timer.delegate = self
         timer.start()
     }
 
@@ -95,6 +91,10 @@ public final class Engine {
                     moveDirection.z = .Backward
                 case .D:
                     moveDirection.x = .Right
+                case .SPACE:
+                    moveDirection.y = .Up
+                case .LSHIFT:
+                    moveDirection.y = .Down
                 default:
                     print("Unhandled down key code:", keyCode, separator: " ", terminator: "\n")
                 }
@@ -108,6 +108,10 @@ public final class Engine {
                     moveDirection.z = .None
                 case .D:
                     moveDirection.x = .None
+                case .SPACE:
+                    moveDirection.y = .None
+                case .LSHIFT:
+                    moveDirection.y = .None
                 default:
                     print("Unhandled up key code:", keyCode, separator: " ", terminator: "\n")
                 }
@@ -119,8 +123,8 @@ public final class Engine {
             }
         }
         
-        dispatchEvent(Event(kind: .Look(lookDirection), timestamp: platform.currentTime))
-        dispatchEvent(Event(kind: .Move(moveDirection), timestamp: platform.currentTime))
+        dispatchEvent(Event(system: .Input, kind: .Look(lookDirection), timestamp: platform.currentTime))
+        dispatchEvent(Event(system: .Input, kind: .Move(moveDirection), timestamp: platform.currentTime))
     }
 
     private func angleFromMouseX(x: GeometryType) -> Angle {
@@ -132,20 +136,18 @@ public final class Engine {
     }
     
     private func dispatchEvent(event: Event) {
-        
     }
     
-    private func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
-        handleInput()
-        
-        logic.updateWithTickCount(tickCount, tickDuration: tickDuration) { [weak self] (renderState) in
-            guard let strongSelf = self else { return }
-            strongSelf.renderer.renderState(renderState)
+    public func timer(timer: Timer, didFireWithTickCount tickCount: Int, tickDuration: Duration) {
+        synchronizeWrite { engine in
+            engine.handleInput()
+            
+            engine.logic.updateWithTickCount(tickCount, tickDuration: tickDuration)
+            engine.renderSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
         }
     }
     
     public func updateViewport(viewport: Rectangle2D) {
-        logic.updateViewport(viewport)
-        renderer.updateViewport(viewport)
+        renderSystem.updateViewport(viewport)
     }
 }

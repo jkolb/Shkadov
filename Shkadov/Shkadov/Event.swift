@@ -63,15 +63,21 @@ public struct MoveDirection {
 }
 
 public struct Event {
+    public enum System {
+        case Input
+    }
+    
     public enum Kind {
         case Look(LookDirection)
         case Move(MoveDirection)
     }
     
+    public let system: System
     public let kind: Kind
     public let timestamp: Time
     
-    public init(kind: Kind, timestamp: Time) {
+    public init(system: System, kind: Kind, timestamp: Time) {
+        self.system = system
         self.kind = kind
         self.timestamp = timestamp
     }

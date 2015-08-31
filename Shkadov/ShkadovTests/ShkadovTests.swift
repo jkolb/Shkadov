@@ -23,30 +23,25 @@ SOFTWARE.
 */
 
 import XCTest
+import simd
 @testable import Shkadov
 
 class ShkadovTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testKind() {
+        XCTAssertEqual(OrientationComponent.kind, OrientationComponent.kind)
+        XCTAssertNotEqual(OrientationComponent.kind, ProjectionComponent.kind)
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
+    func testEntityComponents() {
+        let entityComponents = EntityComponents()
+        let entity = entityComponents.createEntity()
+        let orientation = OrientationComponent(position: float3(0.0), forward: float3(0.0), right: float3(0.0))
+        let projection = ProjectionComponent(projectionMatrix: float4x4(0.0))
+        entityComponents.addComponent(orientation, toEntity: entity)
+        entityComponents.addComponent(projection, toEntity: entity)
+        let orientation2 = entityComponents.componentForEntity(entity, withComponentType: OrientationComponent.self)
+        XCTAssertNotNil(orientation2)
+        let projection2 = entityComponents.componentForEntity(entity, withComponentType: ProjectionComponent.self)
+        XCTAssertNotNil(projection2)
     }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    
 }

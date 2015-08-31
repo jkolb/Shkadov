@@ -24,18 +24,39 @@ SOFTWARE.
 
 import simd
 
-public class Logic: Synchronizable {
-    public let synchronizationQueue: DispatchQueue
-    private let testCubeSystem: TestCubeSystem
-
+public class TestCubeSystem {
+    private let entityComponents: EntityComponents
+    
     public init(entityComponents: EntityComponents) {
-        self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.logic", attribute: .Concurrent)
-        self.testCubeSystem = TestCubeSystem(entityComponents: entityComponents)
+        self.entityComponents = entityComponents
+        
+        let positions = [
+            float3(0.0, 0.0, 0.0),
+            float3(1.5, 0.0, 0.0),
+            float3(-1.5, 0.0, 0.0),
+            float3(0.0, 1.5, 0.0),
+            float3(0.0, -1.5, 0.0),
+            float3(0.0, 0.0, 1.5),
+            float3(0.0, 0.0, -1.5),
+        ]
+        
+        for position in positions {
+            let cube = self.entityComponents.createEntity()
+            self.entityComponents.addComponent(OrientationComponent(position: position), toEntity: cube)
+            self.entityComponents.addComponent(RenderComponent(), toEntity: cube)
+        }
     }
     
     public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
-        synchronizeWriteAndWait { logic in
-            logic.testCubeSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
+        let updateAmount: Float = 0.01
+        
+        for entity in entityComponents.getEntitiesWithComponentType(RenderComponent.self) {
+            var orientation = entityComponents.componentForEntity(entity, withComponentType: OrientationComponent.self)!
+            
+            orientation.lookRightByAmount(Angle(radians: updateAmount))
+            orientation.lookUpByAmount(Angle(radians: updateAmount))
+            
+            entityComponents.updateComponent(orientation, forEntity: entity)
         }
     }
 }

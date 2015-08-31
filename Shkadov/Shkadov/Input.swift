@@ -38,24 +38,25 @@ public class Input: Synchronizable {
     }
     
     public func drainEventsBeforeTime(time: Time) -> [Event] {
-        return synchronizeRead { input in
-            var drainedEvents = [Event]()
+        return synchronizeReadWrite { input in
+            let events = input.events
+            var foundEvents = [Event]()
             
-            for event in input.events {
+            for event in events {
                 if event.timestamp <= time {
-                    drainedEvents.append(event)
+                    foundEvents.append(event)
                 }
                 else {
                     break
                 }
             }
             
-            input.events.removeRange(0..<drainedEvents.count)
+            input.events.removeRange(0..<foundEvents.count)
             
-            return drainedEvents
+            return foundEvents
         }
     }
-
+    
     public struct Event {
         public enum Kind {
             case ButtonDown(ButtonCode)

@@ -23,9 +23,9 @@ SOFTWARE.
 */
 
 public struct RenderState {
-    public let objects: [RenderObject]
+    public let objects: [RenderComponent]
     
-    public init(objects: [RenderObject]) {
+    public init(objects: [RenderComponent]) {
         self.objects = objects
     }
 }

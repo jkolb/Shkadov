@@ -22,20 +22,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
-public class Logic: Synchronizable {
-    public let synchronizationQueue: DispatchQueue
-    private let testCubeSystem: TestCubeSystem
-
-    public init(entityComponents: EntityComponents) {
-        self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.logic", attribute: .Concurrent)
-        self.testCubeSystem = TestCubeSystem(entityComponents: entityComponents)
+public struct Kind : CustomStringConvertible, CustomDebugStringConvertible, Equatable, Hashable {
+    private let value: String
+    public let hashValue: Int
+    
+    public init(value: Any.Type) {
+        self.value = "\(value)"
+        self.hashValue = self.value.hashValue
     }
     
-    public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
-        synchronizeWriteAndWait { logic in
-            logic.testCubeSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
-        }
+    public var description: String {
+        return value
     }
+    
+    public var debugDescription: String {
+        return "\(self)(\(value))"
+    }
+}
+
+public func ==(lhs: Kind, rhs: Kind) -> Bool {
+    return lhs.value == rhs.value
 }

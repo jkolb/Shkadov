@@ -108,17 +108,23 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
     }
     
     public func updateViewport(viewport: Rectangle2D) {
-        synchronizeWrite { renderer in
+        synchronizeWriteAndWait { renderer in
+            CGLLockContext(renderer.context.CGLContextObj)
+            
             renderer.context.update()
             renderer.context.makeCurrentContext()
             
             renderer.viewport = viewport
             OpenGL.viewport(viewport)
+            
+            CGLUnlockContext(renderer.context.CGLContextObj)
         }
     }
 
     public func configure() {
-        synchronizeWrite { renderer in
+        synchronizeWriteAndWait { renderer in
+            CGLLockContext(renderer.context.CGLContextObj)
+            
             renderer.context.makeCurrentContext()
             
             do {
@@ -147,6 +153,8 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             OpenGL.vertexAttribPointerForIndex(VertexAttribute.Normal, size: 3, type: GL_FLOAT, normalized: false, stride: 24, offset: 3 * sizeof(GLfloat))
             
             OpenGL.unbindVertexArray()
+            
+            CGLUnlockContext(renderer.context.CGLContextObj)
         }
     }
     
@@ -227,9 +235,11 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
     }
 
     public func renderState(state: RenderState) {
-        synchronizeWrite { renderer in
-            renderer.context.makeCurrentContext()
+        synchronizeWriteAndWait { renderer in
+            CGLLockContext(renderer.context.CGLContextObj)
             
+            renderer.context.makeCurrentContext()
+
             OpenGL.clearColor(ColorRGBA8(red: 255, green: 165, blue: 165))
             OpenGL.clearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
             
@@ -243,7 +253,9 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
                 OpenGL.drawArraysWithMode(GL_TRIANGLES, first: 0, count: 36)
             }
             
-            CGLFlushDrawable(renderer.context.CGLContextObj)
+            renderer.context.flushBuffer()
+            
+            CGLUnlockContext(renderer.context.CGLContextObj)
         }
     }
 }

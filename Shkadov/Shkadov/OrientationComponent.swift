@@ -24,43 +24,19 @@ SOFTWARE.
 
 import simd
 
-public class Object3D {
-    private var forward = float3(0.0, 0.0, 1.0)
-    private var right = float3(1.0, 0.0, 0.0)
-    private var position = float3(0.0, 0.0, -4.0)
+public struct OrientationComponent : Component {
+    public static let kind = Kind(value: OrientationComponent.self)
+    public var position: float3
+    public var forward: float3
+    public var right: float3
     
-    public var modelViewMatrix = float4x4(1.0)
-    public var modelViewProjectionMatrix = float4x4(1.0)
-    
-    public init(position: float3) {
+    public init(position: float3 = float3(0.0, 0.0, 0.0), forward: float3 = float3(0.0, 0.0, 1.0), right: float3 = float3(1.0, 0.0, 0.0)) {
         self.position = position
+        self.forward = forward
+        self.right = right
     }
     
-    public func lookUpByAmount(amount: Angle) {
-        forward = float3x3(angle: amount, axis: right) * forward
-    }
-    
-    public func lookRightByAmount(amount: Angle) {
-        right = float3x3(angle: amount, axis: forward) * right
-    }
-    
-    public func moveForwardByAmount(amount: Float) {
-        position = position + forward * amount
-    }
-    
-    public func moveRightByAmount(amount: Float) {
-        position = position + right * amount
-    }
-    
-    public func moveUpByAmount(amount: Float) {
-        position = position + float3(0.0, 1.0, 0.0) * amount
-    }
-    
-    public var normalMatrix: float4x4 {
-        return modelViewMatrix.inverse.transpose;
-    }
-    
-    public var modelMatrix: float4x4 {
+    public var orientationMatrix: float4x4 {
         let f = forward
         let s = right
         let u = cross(s, f)
@@ -72,5 +48,25 @@ public class Object3D {
         let column3 = float4(p.x, p.y, p.z, 1.0)
         
         return float4x4([column0, column1, column2, column3])
+    }
+    
+    public mutating func lookUpByAmount(amount: Angle) {
+        forward = normalize(float3x3(angle: amount, axis: right) * forward)
+    }
+    
+    public mutating func lookRightByAmount(amount: Angle) {
+        right = normalize(float3x3(angle: amount, axis: forward) * right)
+    }
+    
+    public mutating func moveForwardByAmount(amount: Float) {
+        position = position + forward * amount
+    }
+    
+    public mutating func moveRightByAmount(amount: Float) {
+        position = position + right * amount
+    }
+    
+    public mutating func moveUpByAmount(amount: Float) {
+        position = position + float3(0.0, 1.0, 0.0) * amount
     }
 }

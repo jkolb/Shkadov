@@ -22,14 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
-public struct RenderObject {
-    public let modelViewProjectionMatrix: float4x4
-    public let normalMatrix: float4x4
+public class EntityFactory {
+    private var handleFactory = HandleFactory()
     
-    public init(modelViewProjectionMatrix: float4x4, normalMatrix: float4x4) {
-        self.modelViewProjectionMatrix = modelViewProjectionMatrix
-        self.normalMatrix = normalMatrix
+    public func createEntity() -> Entity {
+        return Entity(handle: handleFactory.nextHandle())
     }
+}
+
+public struct Entity : CustomStringConvertible, CustomDebugStringConvertible, Equatable, Hashable {
+    private let handle: Handle
+    
+    private init(handle: Handle) {
+        self.handle = handle
+    }
+    
+    public var description: String {
+        return "\(self)\(handle)"
+    }
+
+    public var debugDescription: String {
+        return description
+    }
+
+    public var hashValue: Int {
+        return handle.hashValue
+    }
+}
+
+public func ==(lhs: Entity, rhs: Entity) -> Bool {
+    return lhs.handle == rhs.handle
 }

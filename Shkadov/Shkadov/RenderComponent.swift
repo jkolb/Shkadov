@@ -24,19 +24,13 @@ SOFTWARE.
 
 import simd
 
-public struct WorldState {
-    public var camera: Camera
-    public var cubes: [Object3D] = [
-        Object3D(position: float3(0.0, 0.0, 0.0)),
-        Object3D(position: float3(1.5, 0.0, 0.0)),
-        Object3D(position: float3(-1.5, 0.0, 0.0)),
-        Object3D(position: float3(0.0, 1.5, 0.0)),
-        Object3D(position: float3(0.0, -1.5, 0.0)),
-        Object3D(position: float3(0.0, 0.0, 1.5)),
-        Object3D(position: float3(0.0, 0.0, -1.5)),
-    ]
+public struct RenderComponent : Component {
+    public static let kind = Kind(value: RenderComponent.self)
+    public var modelViewProjectionMatrix: float4x4
+    public var normalMatrix: float4x4
     
     public init() {
-        self.camera = Camera()
+        self.modelViewProjectionMatrix = float4x4(1.0)
+        self.normalMatrix = float4x4(1.0)
     }
 }

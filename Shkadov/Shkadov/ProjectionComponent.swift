@@ -24,18 +24,11 @@ SOFTWARE.
 
 import simd
 
-public class Logic: Synchronizable {
-    public let synchronizationQueue: DispatchQueue
-    private let testCubeSystem: TestCubeSystem
+public struct ProjectionComponent : Component {
+    public static let kind = Kind(value: ProjectionComponent.self)
+    public var projectionMatrix: float4x4
 
-    public init(entityComponents: EntityComponents) {
-        self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.logic", attribute: .Concurrent)
-        self.testCubeSystem = TestCubeSystem(entityComponents: entityComponents)
-    }
-    
-    public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
-        synchronizeWriteAndWait { logic in
-            logic.testCubeSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
-        }
+    public init(projectionMatrix: float4x4) {
+        self.projectionMatrix = projectionMatrix
     }
 }
