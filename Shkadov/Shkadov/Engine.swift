@@ -88,56 +88,81 @@ public final class Engine : TimerDelegate, Synchronizable {
         for inputEvent in inputEvents {
             switch inputEvent.kind {
             case .KeyDown(let keyCode):
-                if keyCode == .W && keyCode == .S {
-                    moveDirection.z = .None
-                }
-                else if keyCode == .W {
-                    moveDirection.z = .Forward
-                }
-                else if keyCode == .S {
-                    moveDirection.z = .Backward
-                }
-                
-                if keyCode == .D && keyCode == .A {
-                    moveDirection.x = .None
-                }
-                else if keyCode == .D {
-                    moveDirection.x = .Right
-                }
-                else if keyCode == .A {
-                    moveDirection.x = .Left
-                }
-
-                if keyCode == .SPACE && keyCode == .C {
-                    moveDirection.y = .None
-                }
-                else if keyCode == .SPACE {
-                    moveDirection.y = .Up
-                }
-                else if keyCode == .C {
-                    moveDirection.y = .Down
+                switch keyCode {
+                case .W:
+                    if moveDirection.z == .Backward {
+                        moveDirection.z = .None
+                    }
+                    else {
+                        moveDirection.z = .Forward
+                    }
+                case .S:
+                    if moveDirection.z == .Forward {
+                        moveDirection.z = .None
+                    }
+                    else {
+                        moveDirection.z = .Backward
+                    }
+                case .D:
+                    if moveDirection.x == .Left {
+                        moveDirection.x = .None
+                    }
+                    else {
+                        moveDirection.x = .Right
+                    }
+                case .A:
+                    if moveDirection.x == .Right {
+                        moveDirection.x = .None
+                    }
+                    else {
+                        moveDirection.x = .Left
+                    }
+                case .SPACE:
+                    if moveDirection.y == .Down {
+                        moveDirection.y = .None
+                    }
+                    else {
+                        moveDirection.y = .Up
+                    }
+                case .C:
+                    if moveDirection.y == .Up {
+                        moveDirection.y = .None
+                    }
+                    else {
+                        moveDirection.y = .Down
+                    }
+                default:
+                    break
                 }
                 
             case .KeyUp(let keyCode):
-                if keyCode == .W && moveDirection.z == .Forward {
-                    moveDirection.z = .None
-                }
-                else if keyCode == .S && moveDirection.z == .Backward {
-                    moveDirection.z = .None
-                }
-                
-                if keyCode == .D && moveDirection.x == .Right {
-                    moveDirection.x = .None
-                }
-                else if keyCode == .A && moveDirection.x == .Left {
-                    moveDirection.x = .None
-                }
-                
-                if keyCode == .SPACE && moveDirection.y == .Up {
-                    moveDirection.y = .None
-                }
-                else if keyCode == .C && moveDirection.y == .Down {
-                    moveDirection.y = .None
+                switch keyCode {
+                case .W:
+                    if moveDirection.z == .Forward {
+                        moveDirection.z = .None
+                    }
+                case .S:
+                    if moveDirection.z == .Backward {
+                        moveDirection.z = .None
+                    }
+                case .D:
+                    if moveDirection.x == .Right {
+                        moveDirection.x = .None
+                    }
+                case .A:
+                    if moveDirection.x == .Left {
+                        moveDirection.x = .None
+                    }
+                case .SPACE:
+                    if moveDirection.y == .Up {
+                        moveDirection.y = .None
+                    }
+                case .C:
+                    if moveDirection.y == .Down {
+                        moveDirection.y = .None
+                    }
+                default:
+                    break
                 }
 
             case .MousePosition(let position):
