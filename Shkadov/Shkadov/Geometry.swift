@@ -72,6 +72,10 @@ public struct Vector2D {
         self.dx = dx
         self.dy = dy
     }
+    
+    public var angle: Angle {
+        return Angle(radians: atan2(dy, dx))
+    }
 }
 
 public struct Size2D {

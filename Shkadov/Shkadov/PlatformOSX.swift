@@ -31,8 +31,6 @@ public class PlatformOSX : NSObject, Platform {
     private var mainWindow: NSWindow!
     private var openGLContext: NSOpenGLContext!
     private var engine: Engine!
-    private var initializing = true
-    private var terminating = false
 
     public override init() {
         var timeBaseInfo = mach_timebase_info_data_t()
@@ -46,7 +44,7 @@ public class PlatformOSX : NSObject, Platform {
         application.setActivationPolicy(.Regular)
         application.mainMenu = createMainMenu()
         application.delegate = self
-        
+
         openGLContext = createOpenGLContext()
         
         let renderer = OpenGLRenderer(context: openGLContext)
@@ -65,7 +63,8 @@ public class PlatformOSX : NSObject, Platform {
         view.addTrackingArea(trackingArea)
         
         mainWindow.contentView = view
-        
+        openGLContext.view = mainWindow.contentView
+
         mainWindow.makeKeyAndOrderFront(nil)
         
         application.run()
@@ -76,18 +75,12 @@ public class PlatformOSX : NSObject, Platform {
     }
     
     private func startEngine() {
-        openGLContext.makeCurrentContext()
-        openGLContext.view = mainWindow.contentView
-        openGLContext.update()
-        
         engine.updateViewport(mainWindow.viewport)
-        engine.beginSimulation()
+        engine.start()
     }
     
     public func stopEngine() {
-        mainWindow = nil
-        openGLContext = nil
-        NSApplication.sharedApplication().terminate(nil)
+        engine.stop()
     }
 
     private func createMainMenu() -> NSMenu {
@@ -140,12 +133,23 @@ public class PlatformOSX : NSObject, Platform {
 }
 
 extension PlatformOSX : NSApplicationDelegate {
+    public func applicationShouldTerminate(sender: NSApplication) -> NSApplicationTerminateReply {
+        NSLog("%@", __FUNCTION__)
+        return .TerminateNow
+    }
+    
+    public func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
+        NSLog("%@", __FUNCTION__)
+        return true
+    }
+    
     public func applicationWillFinishLaunching(notification: NSNotification) {
         NSLog("%@", __FUNCTION__)
     }
     
     public func applicationDidFinishLaunching(notification: NSNotification) {
         NSLog("%@", __FUNCTION__)
+        startEngine()
     }
     
     public func applicationWillHide(notification: NSNotification) {
@@ -190,6 +194,7 @@ extension PlatformOSX : NSApplicationDelegate {
     
     public func applicationWillTerminate(notification: NSNotification) {
         NSLog("%@", __FUNCTION__)
+        stopEngine()
     }
 }
 
@@ -197,19 +202,10 @@ extension PlatformOSX : NSWindowDelegate {
     // TODO: Check to see if there are other useful methods to override
     public func windowDidBecomeKey(notification: NSNotification) {
         NSLog("%@", __FUNCTION__)
-        
-        if initializing {
-            initializing = false
-            startEngine()
-        }
     }
     
     public func windowDidResignKey(notification: NSNotification) {
         NSLog("%@", __FUNCTION__)
-        if terminating {
-            terminating = false
-//            stopEngine()
-        }
     }
     
     public func windowDidBecomeMain(notification: NSNotification) {
@@ -232,7 +228,6 @@ extension PlatformOSX : NSWindowDelegate {
     
     public func windowWillClose(notification: NSNotification) {
         NSLog("%@", __FUNCTION__)
-        terminating = true
     }
     
     public func windowWillEnterFullScreen(notification: NSNotification) {

@@ -106,7 +106,7 @@ public class Timer: Synchronizable {
     }
     
     public func stop() {
-        synchronizeWrite { timer in
+        synchronizeWriteAndWait { timer in
             precondition(timer.state == .Running)
             timer.state = .Stopped
             timer.dispatchTimer.cancel()
