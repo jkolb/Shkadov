@@ -29,11 +29,11 @@ public typealias GeometryType = Float
 public let π = GeometryType(M_PI)
 
 private let geometryZero = GeometryType(0.0)
-private let degreesToRadians = π / 180.0
-private let radiansToDegrees = 180.0 / π
 
 public struct Angle {
     public static let zero = Angle(radians: geometryZero)
+    private static let degreesToRadians = π / 180.0
+    private static let radiansToDegrees = 180.0 / π
     
     public var radians: GeometryType
     
@@ -42,12 +42,32 @@ public struct Angle {
     }
     
     public init(degrees: GeometryType) {
-        self.init(radians: degreesToRadians * degrees)
+        self.init(radians: Angle.degreesToRadians * degrees)
     }
     
     public var degrees: GeometryType {
-        return radians * radiansToDegrees
+        return radians * Angle.radiansToDegrees
     }
+}
+
+public func +(a: Angle, b: Angle) -> Angle {
+    return Angle(radians: a.radians + b.radians);
+}
+
+public func -(a: Angle, b: Angle) -> Angle {
+    return Angle(radians: a.radians - b.radians);
+}
+
+public func *(a: Angle, b: GeometryType) -> Angle {
+    return Angle(radians: a.radians * b)
+}
+
+public func *(a: GeometryType, b: Angle) -> Angle {
+    return Angle(radians: a * b.radians)
+}
+
+public func /(a: Angle, b: GeometryType) -> Angle {
+    return Angle(radians: a.radians / b)
 }
 
 public struct Point2D {
