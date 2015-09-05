@@ -1,2 +1,2 @@
 # Shkadov
-An Experimental Swift Voxel Engine
+An Experimental Multi-threaded Swift Voxel Engine
