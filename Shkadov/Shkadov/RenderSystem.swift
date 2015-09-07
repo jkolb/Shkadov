@@ -54,7 +54,7 @@ public class RenderSystem {
         let camera = entityComponents.getEntitiesWithComponentTypes([ProjectionComponent.self, OrientationComponent.self]).first!
         let cameraOrientation = entityComponents.componentForEntity(camera, withComponentType: OrientationComponent.self)!
         let projection = entityComponents.componentForEntity(camera, withComponentType: ProjectionComponent.self)!
-        let viewMatrix = cameraOrientation.orientationMatrix
+        let viewMatrix = cameraOrientation.lookAtMatrix
         let projectionMatrix = projection.projectionMatrix
         
         var renderComponents = [RenderComponent]()

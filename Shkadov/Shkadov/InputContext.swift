@@ -26,11 +26,13 @@ public class InputContext {
     private var keyDown: Set<RawInput.KeyCode>
     private var buttonDown: Set<RawInput.ButtonCode>
     public private(set) var mousePosition: Point2D
+    public private(set) var mouseDelta: Vector2D
     
     public init() {
         self.keyDown = Set<RawInput.KeyCode>()
         self.buttonDown = Set<RawInput.ButtonCode>()
         self.mousePosition = Point2D.zero
+        self.mouseDelta = Vector2D.zero
     }
     
     private func isKeyDown(keyCode: RawInput.KeyCode) -> Bool {
@@ -58,6 +60,9 @@ public class InputContext {
                 
             case .MousePosition(let position):
                 mousePosition = position
+                
+            case .MouseDelta(let delta):
+                mouseDelta = delta
                 
             default:
                 print("Unhandled input event:", inputEvent, separator: " ", terminator: "\n")
@@ -90,7 +95,11 @@ public class InputContext {
         else if isKeyDown(.C) && !isKeyDown(.SPACE) {
             moveDirection.y = .Down
         }
+
+        let hAngle = Angle(radians: mouseDelta.dx * -0.001)
+        let vAngle = Angle(radians: mouseDelta.dy * -0.001)
+        let lookDirection = LookDirection(up: vAngle, right: hAngle)
         
-        return [Event.Kind.Move(moveDirection)]
+        return [Event.Kind.Move(moveDirection), Event.Kind.Look(lookDirection)]
     }
 }

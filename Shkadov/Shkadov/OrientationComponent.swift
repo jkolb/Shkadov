@@ -29,6 +29,9 @@ public struct OrientationComponent : Component {
     public var position: float3
     public var forward: float3
     public var right: float3
+    public var up: float3 {
+        return cross(right, forward)
+    }
     
     public init(position: float3 = float3(0.0, 0.0, 0.0), forward: float3 = float3(0.0, 0.0, 1.0), right: float3 = float3(1.0, 0.0, 0.0)) {
         self.position = position
@@ -36,10 +39,33 @@ public struct OrientationComponent : Component {
         self.right = right
     }
     
+    public var lookAtMatrix: float4x4 {
+        let f = forward
+        let s = right
+        let u = up
+        let p = position
+        
+        let columnR0 = float4(s.x, u.x, -f.x, 0.0)
+        let columnR1 = float4(s.y, u.y, -f.y, 0.0)
+        let columnR2 = float4(s.z, u.z, -f.z, 0.0)
+        let columnR3 = float4(0.0, 0.0, 0.0, 1.0)
+        
+        let rotation = float4x4([columnR0, columnR1, columnR2, columnR3])
+        
+        let columnT0 = float4(1.0, 0.0, 0.0, 0.0)
+        let columnT1 = float4(0.0, 1.0, 0.0, 0.0)
+        let columnT2 = float4(0.0, 0.0, 1.0, 0.0)
+        let columnT3 = float4(-p.x, -p.y, -p.z, 1.0)
+        
+        let translation = float4x4([columnT0, columnT1, columnT2, columnT3])
+        
+        return rotation * translation
+    }
+    
     public var orientationMatrix: float4x4 {
         let f = forward
         let s = right
-        let u = cross(s, f)
+        let u = up
         let p = position
         
         let column0 = float4(s.x, u.x, -f.x, 0.0)
@@ -55,7 +81,9 @@ public struct OrientationComponent : Component {
     }
     
     public mutating func lookRightByAmount(amount: Angle) {
-        right = normalize(float3x3(angle: amount, axis: forward) * right)
+        let rotation = float3x3(angle: amount, axis: up)
+        right = normalize(rotation * right)
+        forward = normalize(rotation * forward)
     }
     
     public mutating func moveForwardByAmount(amount: Float) {

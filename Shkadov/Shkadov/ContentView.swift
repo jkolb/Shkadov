@@ -23,9 +23,9 @@ SOFTWARE.
 */
 
 import AppKit
-import simd
 
 public class ContentView: NSView {
+    public var sendMouseDelta = false
     public weak var engine: Engine!
     private let buttonMap: [Int:RawInput.ButtonCode] = [
         0: .MOUSE0,
@@ -94,9 +94,14 @@ public class ContentView: NSView {
     }
     
     private func postMousePositionEvent(event: NSEvent) {
-        // NSPoint location = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-        let position = event.locationInWindow.point2D
-        engine.postMousePositionEvent(position)
+        if sendMouseDelta {
+            let delta = event.delta2D
+            engine.postMouseDeltaEvent(delta)
+        }
+        else {
+            let position = event.locationInWindow.point2D
+            engine.postMousePositionEvent(position)
+        }
     }
     
     public override var acceptsFirstResponder: Bool {
@@ -154,6 +159,7 @@ public class ContentView: NSView {
     }
     
     public override func mouseMoved(theEvent: NSEvent) {
+//        NSLog("MOVED: (\(theEvent)")
         postMousePositionEvent(theEvent)
     }
     
@@ -162,5 +168,11 @@ public class ContentView: NSView {
 //            return
 //        }
         NSLog("SCROLL: (\(theEvent)")
+    }
+}
+
+public extension NSEvent {
+    public var delta2D: Vector2D {
+        return Vector2D(dx: GeometryType(deltaX), dy: GeometryType(deltaY))
     }
 }

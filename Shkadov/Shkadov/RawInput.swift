@@ -31,6 +31,7 @@ public class RawInput {
             case KeyDown(KeyCode)
             case KeyUp(KeyCode)
             case MousePosition(Point2D)
+            case MouseDelta(Vector2D)
             case ScrollWheel(Vector2D)
         }
         

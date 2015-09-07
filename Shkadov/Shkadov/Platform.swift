@@ -24,4 +24,8 @@ SOFTWARE.
 
 public protocol Platform {
     var currentTime: Time { get }
+    
+    var mousePositionRelative: Bool { get set }
+    var mousePosition: Point2D { get set }
+    func centerMouse()
 }

@@ -24,7 +24,7 @@ SOFTWARE.
 
 public final class Engine : TimerDelegate, Synchronizable {
     public let synchronizationQueue: DispatchQueue
-    private let platform: Platform
+    private var platform: Platform
     private let rawInputEventBuffer: RawInputEventBuffer
     private let inputContext: InputContext
     private let logic: Logic
@@ -67,19 +67,30 @@ public final class Engine : TimerDelegate, Synchronizable {
         postInputEventForKind(.MousePosition(position))
     }
     
+    public func postMouseDeltaEvent(delta: Vector2D) {
+        postInputEventForKind(.MouseDelta(delta))
+    }
+    
     private func postInputEventForKind(kind: RawInput.Event.Kind) {
         let event = RawInput.Event(kind: kind, timestamp: platform.currentTime)
         rawInputEventBuffer.postEvent(event)
     }
     
     public func start() {
-        renderSystem.configure()
-        timer.delegate = self
-        timer.start()
+        synchronizeWriteAndWait { engine in
+            engine.platform.centerMouse()
+            engine.platform.mousePositionRelative = true
+            engine.renderSystem.configure()
+            engine.timer.delegate = self
+            engine.timer.start()
+        }
     }
 
     public func stop() {
-        timer.stop()
+        synchronizeWriteAndWait { engine in
+            engine.platform.mousePositionRelative = false
+            engine.timer.stop()
+        }
     }
     
     private func handleInput() {
@@ -105,6 +116,8 @@ public final class Engine : TimerDelegate, Synchronizable {
     }
     
     public func updateViewport(viewport: Rectangle2D) {
-        renderSystem.updateViewport(viewport)
+        synchronizeWriteAndWait { engine in
+            engine.renderSystem.updateViewport(viewport)
+        }
     }
 }

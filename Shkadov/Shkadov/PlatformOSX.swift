@@ -23,12 +23,29 @@ SOFTWARE.
 */
 
 import AppKit
+import CoreGraphics
 
 public class PlatformOSX : NSObject, Platform {
+    private static let minimumWidth: CGFloat = 640.0
+    private static let minimumHeight: CGFloat = 480.0
     private let timeBaseNumerator: TimeType
     private let timeBaseDenominator: TimeType
-    
+    public var mousePositionRelative: Bool = false {
+        didSet {
+            if mousePositionRelative != oldValue {
+                contentView.sendMouseDelta = mousePositionRelative
+                
+                if mousePositionRelative {
+                    CGAssociateMouseAndMouseCursorPosition(0)
+                }
+                else {
+                    CGAssociateMouseAndMouseCursorPosition(1)
+                }
+            }
+        }
+    }
     private var mainWindow: NSWindow!
+    private var contentView: ContentView!
     private var openGLContext: NSOpenGLContext!
     private var engine: Engine!
 
@@ -52,18 +69,19 @@ public class PlatformOSX : NSObject, Platform {
 
         mainWindow = createMainWindow()
         mainWindow.delegate = self
-        mainWindow.title = "Test"
+        mainWindow.title = applicationName
         mainWindow.collectionBehavior = .FullScreenPrimary
-        mainWindow.contentMinSize = CGSize(width: 800.0, height: 600.0)
+        mainWindow.contentMinSize = CGSize(width: PlatformOSX.minimumWidth, height: PlatformOSX.minimumHeight)
         
-        let view = ContentView()
-        view.engine = engine
+        contentView = ContentView()
+        contentView.engine = engine
+        
         let options: NSTrackingAreaOptions =  [NSTrackingAreaOptions.MouseEnteredAndExited, NSTrackingAreaOptions.MouseMoved, NSTrackingAreaOptions.InVisibleRect, NSTrackingAreaOptions.ActiveInKeyWindow]
-        let trackingArea = NSTrackingArea(rect: mainWindow.contentView!.frame, options: options, owner: view, userInfo: nil)
-        view.addTrackingArea(trackingArea)
+        let trackingArea = NSTrackingArea(rect: contentView.frame, options: options, owner: contentView, userInfo: nil)
+        contentView.addTrackingArea(trackingArea)
         
-        mainWindow.contentView = view
-        openGLContext.view = mainWindow.contentView
+        mainWindow.contentView = contentView
+        openGLContext.view = contentView
 
         mainWindow.makeKeyAndOrderFront(nil)
         
@@ -73,9 +91,97 @@ public class PlatformOSX : NSObject, Platform {
     public var currentTime: Time {
         return Time(nanoseconds: mach_absolute_time() * timeBaseNumerator / timeBaseDenominator)
     }
+
+    public func centerMouse() {
+        let center = contentBounds.center2D
+        mousePosition = center
+    }
+    
+    public var mousePosition: Point2D {
+        get {
+            let windowPoint = mainWindow.mouseLocationOutsideOfEventStream
+            let contentPoint = convertPointFromWindowToContent(windowPoint)
+            return contentPoint.point2D
+        }
+        set {
+            let contentPoint = newValue.nativePoint
+            let screenPoint = convertPointFromContentToScreen(contentPoint)
+            let coreGraphicsPoint = convertPointFromAppKitToCoreGraphics(screenPoint)
+            CGWarpMouseCursorPosition(coreGraphicsPoint)
+        }
+    }
+
+    private func convertPointFromScreenToContent(screenPoint: CGPoint) -> CGPoint {
+        let windowPoint = convertPointFromScreenToWindow(screenPoint)
+        return convertPointFromWindowToContent(windowPoint)
+    }
+    
+    private func convertPointFromScreenToWindow(screenPoint: CGPoint) -> CGPoint {
+        let screenRect = screenPoint.rect
+        let windowRect = convertRectFromScreenToWindow(screenRect)
+        return windowRect.origin
+    }
+    
+    private func convertPointFromWindowToContent(windowPoint: CGPoint) -> CGPoint {
+        return mainWindow.contentView!.convertPoint(windowPoint, fromView: nil)
+    }
+    
+    private func convertRectFromScreenToContent(screenRect: CGRect) -> CGRect {
+        let windowRect = convertRectFromScreenToWindow(screenRect)
+        return convertRectFromWindowToContent(windowRect)
+    }
+    
+    private func convertRectFromScreenToWindow(screenRect: CGRect) -> CGRect {
+        return mainWindow.convertRectFromScreen(screenRect)
+    }
+    
+    private func convertRectFromWindowToContent(windowRect: CGRect) -> CGRect {
+        return mainWindow.contentView!.convertRect(windowRect, fromView: nil)
+    }
+    
+    private func convertPointFromContentToWindow(contentPoint: CGPoint) -> CGPoint {
+        return mainWindow.contentView!.convertPoint(contentPoint, toView: nil)
+    }
+    
+    private func convertPointFromWindowToScreen(windowPoint: CGPoint) -> CGPoint {
+        let windowRect = windowPoint.rect
+        return convertRectFromWindowToScreen(windowRect).origin
+    }
+
+    private func convertPointFromContentToScreen(point: CGPoint) -> CGPoint {
+        let windowPoint = convertPointFromContentToWindow(point)
+        return convertPointFromWindowToScreen(windowPoint)
+    }
+
+    private func convertRectFromContentToWindow(contentRect: CGRect) -> CGRect {
+        return mainWindow.contentView!.convertRect(contentRect, toView: nil)
+    }
+    
+    private func convertRectFromWindowToScreen(windowRect: CGRect) -> CGRect {
+        return mainWindow.convertRectToScreen(windowRect)
+    }
+    
+    private func convertRectFromContentToScreen(contentRect: CGRect) -> CGRect {
+        let windowRect = convertRectFromContentToWindow(contentRect)
+        return convertRectFromWindowToScreen(windowRect)
+    }
+
+    private func convertPointFromAppKitToCoreGraphics(appKitPoint: CGPoint) -> CGPoint {
+        let primaryRect = primaryScreen.frame
+        let coreGraphicsPoint = CGPoint(x: appKitPoint.x, y: primaryRect.height - appKitPoint.y)
+        return coreGraphicsPoint
+    }
+    
+    private var primaryScreen: NSScreen {
+        return NSScreen.screens()![0]
+    }
+    
+    private var applicationName: String {
+        return NSProcessInfo.processInfo().processName
+    }
     
     private func startEngine() {
-        engine.updateViewport(mainWindow.viewport)
+        engine.updateViewport(viewport)
         engine.start()
     }
     
@@ -92,7 +198,7 @@ public class PlatformOSX : NSObject, Platform {
         let applicationMenu = NSMenu()
         applicationMenuItem.submenu = applicationMenu
         
-        applicationMenu.addItemWithTitle("Quit", action: "terminate:", keyEquivalent: "q")
+        applicationMenu.addItemWithTitle("Quit \(applicationName)", action: "terminate:", keyEquivalent: "q")
         
         let viewMenuItem = NSMenuItem()
         mainMenu.addItem(viewMenuItem)
@@ -106,15 +212,69 @@ public class PlatformOSX : NSObject, Platform {
     }
 
     private func createMainWindow() -> NSWindow {
-        let mainScreen = NSScreen.mainScreen()!
-        let screenFrame = mainScreen.frame
-        var contentFrame = CGRectZero
-        contentFrame.size.width = 800.0
-        contentFrame.size.height = 600.0
-        contentFrame.origin.x = (screenFrame.size.width - contentFrame.size.width) * 0.5
-        contentFrame.origin.y = (screenFrame.size.height - contentFrame.size.height) * 0.5
+        let contentFrame = initialWindowContentFrame()
         
         return NSWindow(contentRect: contentFrame, styleMask: NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask, backing: .Buffered, `defer`: false)
+    }
+    
+    private func initialWindowContentFrame() -> CGRect {
+        if let contentFrame = loadWindowContentFrame() {
+            return contentFrame
+        }
+        
+        var contentFrame = CGRect.zero
+        let mainScreen = NSScreen.mainScreen()!
+        let screenFrame = mainScreen.frame
+        contentFrame.size.width = floor(screenFrame.width * 0.5)
+        contentFrame.size.height = floor(screenFrame.height * 0.5)
+        
+        if contentFrame.width < PlatformOSX.minimumWidth || contentFrame.height < PlatformOSX.minimumHeight {
+            contentFrame.size.width = PlatformOSX.minimumWidth
+            contentFrame.size.height = PlatformOSX.minimumHeight
+        }
+        
+        contentFrame.origin.x = floor((screenFrame.width - contentFrame.width) * 0.5)
+        contentFrame.origin.y = floor((screenFrame.height - contentFrame.height) * 0.5)
+        
+        if contentFrame.minX < 0.0 { contentFrame.origin.x = 0.0 }
+        if contentFrame.minY < 0.0 { contentFrame.origin.y = 0.0 }
+
+        return contentFrame
+    }
+    
+    private var viewport: Rectangle2D {
+        return contentBounds.rectagle2D
+    }
+
+    private var contentBounds: CGRect {
+        return mainWindow.contentView!.bounds
+    }
+    
+    private var contentFrame: CGRect {
+        let windowFrame = mainWindow.frame
+        let contentFrame = mainWindow.contentRectForFrameRect(windowFrame)
+        return contentFrame
+    }
+    
+    private func loadWindowContentFrame() -> CGRect? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        
+        if let contentFrameDictionary = userDefaults.dictionaryForKey("net.franticapparatus.config.contentFrame") {
+            var contentFrame = CGRect.zero
+            
+            if CGRectMakeWithDictionaryRepresentation(contentFrameDictionary, &contentFrame) {
+                return contentFrame
+            }
+        }
+        
+        return nil
+    }
+    
+    private func storeWindowContentFrame(contentFrame: CGRect) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let contentFrameDictionary = CGRectCreateDictionaryRepresentation(contentFrame)
+        userDefaults.setObject(contentFrameDictionary, forKey: "net.franticapparatus.config.contentFrame")
+        userDefaults.synchronize()
     }
     
     private func createOpenGLContext() -> NSOpenGLContext {
@@ -223,11 +383,16 @@ extension PlatformOSX : NSWindowDelegate {
     
     public func windowDidResize(notification: NSNotification) {
         NSLog("%@", __FUNCTION__)
-        engine.updateViewport(mainWindow.viewport)
+        engine.updateViewport(viewport)
+        
+        if mousePositionRelative {
+            centerMouse()
+        }
     }
     
     public func windowWillClose(notification: NSNotification) {
         NSLog("%@", __FUNCTION__)
+        storeWindowContentFrame(contentFrame)
     }
     
     public func windowWillEnterFullScreen(notification: NSNotification) {
@@ -255,15 +420,19 @@ extension PlatformOSX : NSWindowDelegate {
     }
 }
 
-public extension NSWindow {
-    public var viewport: Rectangle2D {
-        return self.contentRectForFrameRect(self.contentView!.bounds).rectagle2D
+public extension Point2D {
+    public var nativePoint: CGPoint {
+        return CGPoint(x: CGFloat(x), y: CGFloat(y))
     }
 }
 
 public extension CGPoint {
     public var point2D: Point2D {
         return Point2D(x: GeometryType(x), y: GeometryType(y))
+    }
+    
+    public var rect: CGRect {
+        return CGRect(origin: self, size: CGSize.zero)
     }
 }
 
@@ -276,5 +445,9 @@ public extension CGSize {
 public extension CGRect {
     public var rectagle2D: Rectangle2D {
         return Rectangle2D(origin: origin.point2D, size: size.size2D)
+    }
+    
+    public var center2D: Point2D {
+        return CGPoint(x: midX, y: midY).point2D
     }
 }
