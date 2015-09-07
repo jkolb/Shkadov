@@ -28,7 +28,7 @@ private let millisecondsPerSecond: TimeType = 1_000
 private let nanosecondsPerSecond: TimeType = 1_000_000_000
 private let millisecondsPerNanosecond = nanosecondsPerSecond / millisecondsPerSecond
 
-public struct Time: Comparable, Equatable, Hashable {
+public struct Time : Comparable, Equatable, Hashable {
     public static let zero = Time(nanoseconds: 0)
     
     public let nanoseconds: TimeType

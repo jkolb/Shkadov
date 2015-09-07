@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09F609501B9C45D3003B4A5B /* RawInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F6094F1B9C45D3003B4A5B /* RawInput.swift */; settings = {ASSET_TAGS = (); }; };
+		09F609521B9C4865003B4A5B /* InputContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F609511B9C4865003B4A5B /* InputContext.swift */; settings = {ASSET_TAGS = (); }; };
+		09F609541B9C53F3003B4A5B /* PlayerComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F609531B9C53F3003B4A5B /* PlayerComponent.swift */; settings = {ASSET_TAGS = (); }; };
+		09F609561B9C546C003B4A5B /* InventoryComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F609551B9C546C003B4A5B /* InventoryComponent.swift */; settings = {ASSET_TAGS = (); }; };
+		09F609591B9C54F0003B4A5B /* HoldableItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F609581B9C54F0003B4A5B /* HoldableItem.swift */; settings = {ASSET_TAGS = (); }; };
+		09F6095B1B9C556E003B4A5B /* WearableItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F6095A1B9C556E003B4A5B /* WearableItem.swift */; settings = {ASSET_TAGS = (); }; };
+		09F6095D1B9C565B003B4A5B /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F6095C1B9C565B003B4A5B /* Item.swift */; settings = {ASSET_TAGS = (); }; };
 		E535C8BB1B90608C0048321F /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = E535C8BA1B90608C0048321F /* Component.swift */; settings = {ASSET_TAGS = (); }; };
 		E535C8BD1B9155C70048321F /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E535C8BC1B9155C70048321F /* Entity.swift */; settings = {ASSET_TAGS = (); }; };
 		E535C8C11B9158920048321F /* Handle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E535C8C01B9158920048321F /* Handle.swift */; settings = {ASSET_TAGS = (); }; };
@@ -34,13 +41,13 @@
 		E581CFB01B892C9F00D7174F /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF9D1B892C9F00D7174F /* Timer.swift */; };
 		E581CFB81B893D7400D7174F /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CFB71B893D7400D7174F /* Event.swift */; };
 		E581CFBA1B894E6400D7174F /* PlatformOSX.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CFB91B894E6400D7174F /* PlatformOSX.swift */; };
-		E592A5B71B8A116F0032D982 /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5B61B8A116F0032D982 /* Input.swift */; };
+		E592A5B71B8A116F0032D982 /* RawInputEventBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5B61B8A116F0032D982 /* RawInputEventBuffer.swift */; };
 		E592A5B91B8A4EA60032D982 /* TIme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5B81B8A4EA60032D982 /* TIme.swift */; };
 		E592A5BB1B8A4EFA0032D982 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5BA1B8A4EFA0032D982 /* Geometry.swift */; };
 		E592A5BD1B8A64D20032D982 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5BC1B8A64D20032D982 /* Platform.swift */; };
 		E592A5BF1B8A9E240032D982 /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5BE1B8A9E240032D982 /* Vector.swift */; };
 		E592A5C11B8AAC220032D982 /* Synchronizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5C01B8AAC220032D982 /* Synchronizable.swift */; };
-		E5C54E2F1B954E58003F5AEB /* InputSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C54E2E1B954E58003F5AEB /* InputSystem.swift */; settings = {ASSET_TAGS = (); }; };
+		E5C54E2F1B954E58003F5AEB /* PlayerMovementSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C54E2E1B954E58003F5AEB /* PlayerMovementSystem.swift */; settings = {ASSET_TAGS = (); }; };
 		E5FF1A6A1B8C02BF009B2AC6 /* Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF1A691B8C02BF009B2AC6 /* Logic.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
@@ -55,6 +62,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		09F6094F1B9C45D3003B4A5B /* RawInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInput.swift; sourceTree = "<group>"; };
+		09F609511B9C4865003B4A5B /* InputContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputContext.swift; sourceTree = "<group>"; };
+		09F609531B9C53F3003B4A5B /* PlayerComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerComponent.swift; sourceTree = "<group>"; };
+		09F609551B9C546C003B4A5B /* InventoryComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryComponent.swift; sourceTree = "<group>"; };
+		09F609581B9C54F0003B4A5B /* HoldableItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HoldableItem.swift; sourceTree = "<group>"; };
+		09F6095A1B9C556E003B4A5B /* WearableItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WearableItem.swift; sourceTree = "<group>"; };
+		09F6095C1B9C565B003B4A5B /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		E535C8BA1B90608C0048321F /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		E535C8BC1B9155C70048321F /* Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
 		E535C8C01B9158920048321F /* Handle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Handle.swift; sourceTree = "<group>"; };
@@ -86,13 +100,13 @@
 		E581CF9D1B892C9F00D7174F /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		E581CFB71B893D7400D7174F /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		E581CFB91B894E6400D7174F /* PlatformOSX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlatformOSX.swift; sourceTree = "<group>"; };
-		E592A5B61B8A116F0032D982 /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
+		E592A5B61B8A116F0032D982 /* RawInputEventBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInputEventBuffer.swift; sourceTree = "<group>"; };
 		E592A5B81B8A4EA60032D982 /* TIme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TIme.swift; sourceTree = "<group>"; };
 		E592A5BA1B8A4EFA0032D982 /* Geometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
 		E592A5BC1B8A64D20032D982 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		E592A5BE1B8A9E240032D982 /* Vector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
 		E592A5C01B8AAC220032D982 /* Synchronizable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synchronizable.swift; sourceTree = "<group>"; };
-		E5C54E2E1B954E58003F5AEB /* InputSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputSystem.swift; sourceTree = "<group>"; };
+		E5C54E2E1B954E58003F5AEB /* PlayerMovementSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerMovementSystem.swift; sourceTree = "<group>"; };
 		E5FF1A691B8C02BF009B2AC6 /* Logic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,10 +128,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		09F609571B9C54CE003B4A5B /* Items */ = {
+			isa = PBXGroup;
+			children = (
+				09F609581B9C54F0003B4A5B /* HoldableItem.swift */,
+				09F6095C1B9C565B003B4A5B /* Item.swift */,
+				09F6095A1B9C556E003B4A5B /* WearableItem.swift */,
+			);
+			name = Items;
+			sourceTree = "<group>";
+		};
 		E535C8D81B93A6D80048321F /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				09F609551B9C546C003B4A5B /* InventoryComponent.swift */,
 				E535C8C21B9161B10048321F /* OrientationComponent.swift */,
+				09F609531B9C53F3003B4A5B /* PlayerComponent.swift */,
 				E535C8C41B91E8F80048321F /* ProjectionComponent.swift */,
 				E535C8D91B93A7490048321F /* RenderComponent.swift */,
 			);
@@ -188,6 +214,7 @@
 			isa = PBXGroup;
 			children = (
 				E535C8D81B93A6D80048321F /* Components */,
+				09F609571B9C54CE003B4A5B /* Items */,
 				E535C8BA1B90608C0048321F /* Component.swift */,
 				E581CF8F1B892C9F00D7174F /* Engine.swift */,
 				E535C8BC1B9155C70048321F /* Entity.swift */,
@@ -195,12 +222,14 @@
 				E581CFB71B893D7400D7174F /* Event.swift */,
 				E592A5BA1B8A4EFA0032D982 /* Geometry.swift */,
 				E535C8C01B9158920048321F /* Handle.swift */,
-				E592A5B61B8A116F0032D982 /* Input.swift */,
-				E5C54E2E1B954E58003F5AEB /* InputSystem.swift */,
+				09F609511B9C4865003B4A5B /* InputContext.swift */,
+				E5C54E2E1B954E58003F5AEB /* PlayerMovementSystem.swift */,
 				E535C8D41B93586B0048321F /* Kind.swift */,
 				E5FF1A691B8C02BF009B2AC6 /* Logic.swift */,
 				E581CF941B892C9F00D7174F /* Matrix.swift */,
 				E592A5BC1B8A64D20032D982 /* Platform.swift */,
+				09F6094F1B9C45D3003B4A5B /* RawInput.swift */,
+				E592A5B61B8A116F0032D982 /* RawInputEventBuffer.swift */,
 				E581CF981B892C9F00D7174F /* Renderer.swift */,
 				E581CF9A1B892C9F00D7174F /* RenderState.swift */,
 				E535C8DB1B93A8620048321F /* RenderSystem.swift */,
@@ -333,30 +362,37 @@
 			buildActionMask = 2147483647;
 			files = (
 				E592A5B91B8A4EA60032D982 /* TIme.swift in Sources */,
-				E5C54E2F1B954E58003F5AEB /* InputSystem.swift in Sources */,
+				E5C54E2F1B954E58003F5AEB /* PlayerMovementSystem.swift in Sources */,
 				E5FF1A6A1B8C02BF009B2AC6 /* Logic.swift in Sources */,
+				09F609501B9C45D3003B4A5B /* RawInput.swift in Sources */,
 				E535C8C11B9158920048321F /* Handle.swift in Sources */,
 				E581CFA71B892C9F00D7174F /* Matrix.swift in Sources */,
 				E581CFBA1B894E6400D7174F /* PlatformOSX.swift in Sources */,
 				E581CFA61B892C9F00D7174F /* main.swift in Sources */,
 				E581CFA41B892C9F00D7174F /* ContentView.swift in Sources */,
 				E581CFAB1B892C9F00D7174F /* Renderer.swift in Sources */,
-				E592A5B71B8A116F0032D982 /* Input.swift in Sources */,
+				E592A5B71B8A116F0032D982 /* RawInputEventBuffer.swift in Sources */,
+				09F609591B9C54F0003B4A5B /* HoldableItem.swift in Sources */,
 				E535C8BB1B90608C0048321F /* Component.swift in Sources */,
 				E535C8D51B93586B0048321F /* Kind.swift in Sources */,
+				09F6095D1B9C565B003B4A5B /* Item.swift in Sources */,
 				E535C8BD1B9155C70048321F /* Entity.swift in Sources */,
 				E581CFA21B892C9F00D7174F /* Engine.swift in Sources */,
 				E592A5BB1B8A4EFA0032D982 /* Geometry.swift in Sources */,
 				E535C8DA1B93A7490048321F /* RenderComponent.swift in Sources */,
+				09F609521B9C4865003B4A5B /* InputContext.swift in Sources */,
 				E592A5BF1B8A9E240032D982 /* Vector.swift in Sources */,
 				E535C8C31B9161B10048321F /* OrientationComponent.swift in Sources */,
 				E592A5BD1B8A64D20032D982 /* Platform.swift in Sources */,
 				E535C8DC1B93A8620048321F /* RenderSystem.swift in Sources */,
+				09F609541B9C53F3003B4A5B /* PlayerComponent.swift in Sources */,
 				E535C8D71B9385E70048321F /* TestCubeSystem.swift in Sources */,
+				09F6095B1B9C556E003B4A5B /* WearableItem.swift in Sources */,
 				E581CFB01B892C9F00D7174F /* Timer.swift in Sources */,
 				E581CFA01B892C9F00D7174F /* DispatchQueue.swift in Sources */,
 				E581CFB81B893D7400D7174F /* Event.swift in Sources */,
 				E581CFAA1B892C9F00D7174F /* OpenGLRenderer.swift in Sources */,
+				09F609561B9C546C003B4A5B /* InventoryComponent.swift in Sources */,
 				E581CFA91B892C9F00D7174F /* OpenGL.swift in Sources */,
 				E581CFAD1B892C9F00D7174F /* RenderState.swift in Sources */,
 				E592A5C11B8AAC220032D982 /* Synchronizable.swift in Sources */,

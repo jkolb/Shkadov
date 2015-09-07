@@ -25,41 +25,41 @@ SOFTWARE.
 public final class Engine : TimerDelegate, Synchronizable {
     public let synchronizationQueue: DispatchQueue
     private let platform: Platform
-    private let input: Input
+    private let rawInputEventBuffer: RawInputEventBuffer
+    private let inputContext: InputContext
     private let logic: Logic
     private let timer: Timer
     private var eventHandlers: [Event.System:[Component]]
     private let entityComponents: EntityComponents
     private let renderSystem: RenderSystem
-    private let inputSystem: InputSystem
-    private var lookDirection = LookDirection(up: Angle.zero, right: Angle.zero)
-    private var moveDirection = MoveDirection(x: .None, y: .None, z: .None)
+    private let playerMovementSystem: PlayerMovementSystem
 
     public init(platform: Platform, renderer: Renderer) {
         self.synchronizationQueue = DispatchQueue.globalQueueWithQOS(.UserInitiated)
         self.entityComponents = EntityComponents()
         self.platform = platform
-        self.input = Input()
+        self.rawInputEventBuffer = RawInputEventBuffer()
         self.logic = Logic(entityComponents: self.entityComponents)
         self.timer = Timer(platform: platform, name: "net.franticapparatus.shkadov.timer", tickDuration: Duration(seconds: 1.0 / 60.0))
         self.eventHandlers = [:]
         self.renderSystem = RenderSystem(renderer: renderer, entityComponents: self.entityComponents)
-        self.inputSystem = InputSystem(entityComponents: self.entityComponents)
+        self.playerMovementSystem = PlayerMovementSystem(entityComponents: self.entityComponents)
+        self.inputContext = InputContext()
     }
     
-    public func postDownEventForKeyCode(keyCode: Input.KeyCode) {
+    public func postDownEventForKeyCode(keyCode: RawInput.KeyCode) {
         postInputEventForKind(.KeyDown(keyCode))
     }
     
-    public func postUpEventForKeyCode(keyCode: Input.KeyCode) {
+    public func postUpEventForKeyCode(keyCode: RawInput.KeyCode) {
         postInputEventForKind(.KeyUp(keyCode))
     }
     
-    public func postDownEventForButtonCode(buttonCode: Input.ButtonCode) {
+    public func postDownEventForButtonCode(buttonCode: RawInput.ButtonCode) {
         postInputEventForKind(.ButtonDown(buttonCode))
     }
     
-    public func postUpEventForButtonCode(buttonCode: Input.ButtonCode) {
+    public func postUpEventForButtonCode(buttonCode: RawInput.ButtonCode) {
         postInputEventForKind(.ButtonUp(buttonCode))
     }
     
@@ -67,9 +67,9 @@ public final class Engine : TimerDelegate, Synchronizable {
         postInputEventForKind(.MousePosition(position))
     }
     
-    private func postInputEventForKind(kind: Input.Event.Kind) {
-        let event = Input.Event(kind: kind, timestamp: platform.currentTime)
-        input.postEvent(event)
+    private func postInputEventForKind(kind: RawInput.Event.Kind) {
+        let event = RawInput.Event(kind: kind, timestamp: platform.currentTime)
+        rawInputEventBuffer.postEvent(event)
     }
     
     public func start() {
@@ -83,110 +83,16 @@ public final class Engine : TimerDelegate, Synchronizable {
     }
     
     private func handleInput() {
-        let inputEvents = input.drainEventsBeforeTime(platform.currentTime)
-        
-        for inputEvent in inputEvents {
-            switch inputEvent.kind {
-            case .KeyDown(let keyCode):
-                switch keyCode {
-                case .W:
-                    if moveDirection.z == .Backward {
-                        moveDirection.z = .None
-                    }
-                    else {
-                        moveDirection.z = .Forward
-                    }
-                case .S:
-                    if moveDirection.z == .Forward {
-                        moveDirection.z = .None
-                    }
-                    else {
-                        moveDirection.z = .Backward
-                    }
-                case .D:
-                    if moveDirection.x == .Left {
-                        moveDirection.x = .None
-                    }
-                    else {
-                        moveDirection.x = .Right
-                    }
-                case .A:
-                    if moveDirection.x == .Right {
-                        moveDirection.x = .None
-                    }
-                    else {
-                        moveDirection.x = .Left
-                    }
-                case .SPACE:
-                    if moveDirection.y == .Down {
-                        moveDirection.y = .None
-                    }
-                    else {
-                        moveDirection.y = .Up
-                    }
-                case .C:
-                    if moveDirection.y == .Up {
-                        moveDirection.y = .None
-                    }
-                    else {
-                        moveDirection.y = .Down
-                    }
-                default:
-                    break
-                }
-                
-            case .KeyUp(let keyCode):
-                switch keyCode {
-                case .W:
-                    if moveDirection.z == .Forward {
-                        moveDirection.z = .None
-                    }
-                case .S:
-                    if moveDirection.z == .Backward {
-                        moveDirection.z = .None
-                    }
-                case .D:
-                    if moveDirection.x == .Right {
-                        moveDirection.x = .None
-                    }
-                case .A:
-                    if moveDirection.x == .Left {
-                        moveDirection.x = .None
-                    }
-                case .SPACE:
-                    if moveDirection.y == .Up {
-                        moveDirection.y = .None
-                    }
-                case .C:
-                    if moveDirection.y == .Down {
-                        moveDirection.y = .None
-                    }
-                default:
-                    break
-                }
+        let inputEvents = rawInputEventBuffer.drainEventsBeforeTime(platform.currentTime)
+        let eventKinds = inputContext.translateInputEvents(inputEvents)
 
-            case .MousePosition(let position):
-                lookDirection.right = angleFromMouseX(position.x)
-                lookDirection.up = angleFromMouseY(position.y)
-            default:
-                print("Unhandled input event:", inputEvent, separator: " ", terminator: "\n")
-            }
+        for eventKind in eventKinds {
+            dispatchEvent(Event(system: .Input, kind: eventKind, timestamp: platform.currentTime))
         }
-        
-        dispatchEvent(Event(system: .Input, kind: .Look(lookDirection), timestamp: platform.currentTime))
-        dispatchEvent(Event(system: .Input, kind: .Move(moveDirection), timestamp: platform.currentTime))
-    }
-
-    private func angleFromMouseX(x: GeometryType) -> Angle {
-        return Vector2D(dx: x, dy: 0.0).angle
-    }
-    
-    private func angleFromMouseY(y: GeometryType) -> Angle {
-        return Vector2D(dx: y, dy: 0.0).angle
     }
     
     private func dispatchEvent(event: Event) {
-        inputSystem.handleEvent(event)
+        playerMovementSystem.handleEvent(event)
     }
     
     public func timer(timer: Timer, didFireWithTickCount tickCount: Int, tickDuration: Duration) {

@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class InputSystem {
+public class PlayerMovementSystem {
     private let entityComponents: EntityComponents
     
     public init(entityComponents: EntityComponents) {

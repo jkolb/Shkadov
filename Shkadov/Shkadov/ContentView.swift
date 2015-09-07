@@ -27,7 +27,7 @@ import simd
 
 public class ContentView: NSView {
     public weak var engine: Engine!
-    private let buttonMap: [Int:Input.ButtonCode] = [
+    private let buttonMap: [Int:RawInput.ButtonCode] = [
         0: .MOUSE0,
         1: .MOUSE1,
         2: .MOUSE2,
@@ -45,7 +45,7 @@ public class ContentView: NSView {
         14: .MOUSE14,
         15: .MOUSE15,
     ]
-    private let keyMap: [Int:Input.KeyCode] = [
+    private let keyMap: [Int:RawInput.KeyCode] = [
         0: .A,
         1: .S,
         2: .D,
@@ -69,11 +69,11 @@ public class ContentView: NSView {
         56: .LSHIFT,
     ]
     
-    private func buttonCodeForEvent(event: NSEvent) -> Input.ButtonCode {
+    private func buttonCodeForEvent(event: NSEvent) -> RawInput.ButtonCode {
         return buttonMap[event.buttonNumber] ?? .UNKNOWN
     }
     
-    private func keyCodeForEvent(event: NSEvent) -> Input.KeyCode {
+    private func keyCodeForEvent(event: NSEvent) -> RawInput.KeyCode {
         return keyMap[Int(event.keyCode)] ?? .UNKNOWN
     }
 

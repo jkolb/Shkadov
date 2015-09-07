@@ -22,41 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class Input: Synchronizable {
-    public let synchronizationQueue: DispatchQueue
-    private var events: [Event]
-    
-    public init() {
-        self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.input", attribute: .Concurrent)
-        self.events = [Event]()
-    }
-
-    public func postEvent(event: Event) {
-        synchronizeWrite { input in
-            input.events.append(event)
-        }
-    }
-    
-    public func drainEventsBeforeTime(time: Time) -> [Event] {
-        return synchronizeReadWrite { input in
-            let events = input.events
-            var foundEvents = [Event]()
-            
-            for event in events {
-                if event.timestamp <= time {
-                    foundEvents.append(event)
-                }
-                else {
-                    break
-                }
-            }
-            
-            input.events.removeRange(0..<foundEvents.count)
-            
-            return foundEvents
-        }
-    }
-    
+public class RawInput {
     public struct Event {
         public enum Kind {
             case ButtonDown(ButtonCode)
@@ -76,7 +42,7 @@ public class Input: Synchronizable {
             self.timestamp = timestamp
         }
     }
-
+    
     public enum ButtonCode : UInt8 {
         case INVALID = 0
         

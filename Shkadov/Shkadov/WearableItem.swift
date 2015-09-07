@@ -22,18 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class Logic : Synchronizable {
-    public let synchronizationQueue: DispatchQueue
-    private let testCubeSystem: TestCubeSystem
-
-    public init(entityComponents: EntityComponents) {
-        self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.logic", attribute: .Concurrent)
-        self.testCubeSystem = TestCubeSystem(entityComponents: entityComponents)
-    }
+public protocol WearableItem {
     
-    public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
-        synchronizeWriteAndWait { logic in
-            logic.testCubeSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
-        }
-    }
 }

@@ -22,18 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class Logic : Synchronizable {
-    public let synchronizationQueue: DispatchQueue
-    private let testCubeSystem: TestCubeSystem
-
-    public init(entityComponents: EntityComponents) {
-        self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.logic", attribute: .Concurrent)
-        self.testCubeSystem = TestCubeSystem(entityComponents: entityComponents)
-    }
-    
-    public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
-        synchronizeWriteAndWait { logic in
-            logic.testCubeSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
-        }
-    }
+public struct PlayerComponent : Component {
+    public static let kind = Kind(value: PlayerComponent.self)
+    public var leftHandItem: HoldableItem
+    public var rightHandItem: HoldableItem
+    public var headItem: WearableItem
+    public var handItem: WearableItem
+    public var upperBodyItem: WearableItem
+    public var lowerBodyItem: WearableItem
 }

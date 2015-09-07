@@ -22,18 +22,38 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class Logic : Synchronizable {
+public class RawInputEventBuffer : Synchronizable {
     public let synchronizationQueue: DispatchQueue
-    private let testCubeSystem: TestCubeSystem
+    private var events: [RawInput.Event]
+    
+    public init() {
+        self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.input", attribute: .Concurrent)
+        self.events = Array<RawInput.Event>()
+    }
 
-    public init(entityComponents: EntityComponents) {
-        self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.logic", attribute: .Concurrent)
-        self.testCubeSystem = TestCubeSystem(entityComponents: entityComponents)
+    public func postEvent(event: RawInput.Event) {
+        synchronizeWrite { buffer in
+            buffer.events.append(event)
+        }
     }
     
-    public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
-        synchronizeWriteAndWait { logic in
-            logic.testCubeSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
+    public func drainEventsBeforeTime(time: Time) -> [RawInput.Event] {
+        return synchronizeReadWrite { buffer in
+            let events = buffer.events
+            var foundEvents = Array<RawInput.Event>()
+            
+            for event in events {
+                if event.timestamp <= time {
+                    foundEvents.append(event)
+                }
+                else {
+                    break
+                }
+            }
+            
+            buffer.events.removeRange(0..<foundEvents.count)
+            
+            return foundEvents
         }
     }
 }
