@@ -24,7 +24,7 @@ SOFTWARE.
 
 import AppKit
 
-public class ContentView: NSView {
+public class ContentView : NSView {
     public var sendMouseDelta = false
     public weak var engine: Engine!
     private let buttonMap: [Int:RawInput.ButtonCode] = [

@@ -23,32 +23,18 @@ SOFTWARE.
 */
 
 import AppKit
-import CoreGraphics
 
-public class PlatformOSX : NSObject, Platform {
+public class PlatformOSX : NSObject {
     private static let minimumWidth: CGFloat = 640.0
     private static let minimumHeight: CGFloat = 480.0
-    private let timeBaseNumerator: TimeType
-    private let timeBaseDenominator: TimeType
-    public var mousePositionRelative: Bool = false {
-        didSet {
-            if mousePositionRelative != oldValue {
-                contentView.sendMouseDelta = mousePositionRelative
-                
-                if mousePositionRelative {
-                    CGAssociateMouseAndMouseCursorPosition(0)
-                }
-                else {
-                    CGAssociateMouseAndMouseCursorPosition(1)
-                }
-            }
-        }
-    }
-    private var mainWindow: NSWindow!
-    private var contentView: ContentView!
-    private var openGLContext: NSOpenGLContext!
+    public let timeBaseNumerator: TimeType
+    public let timeBaseDenominator: TimeType
+    public private(set) var mainWindow: NSWindow!
+    public private(set) var contentView: ContentView!
+    public private(set) var openGLContext: NSOpenGLContext!
     private var engine: Engine!
-
+    public var relativeMouse = false
+    
     public override init() {
         var timeBaseInfo = mach_timebase_info_data_t()
         mach_timebase_info(&timeBaseInfo)
@@ -64,7 +50,7 @@ public class PlatformOSX : NSObject, Platform {
 
         openGLContext = createOpenGLContext()
         
-        let renderer = OpenGLRenderer(context: openGLContext)
+        let renderer = OpenGLRenderer(context: self)
         engine = Engine(platform: self, renderer: renderer)
 
         mainWindow = createMainWindow()
@@ -88,91 +74,7 @@ public class PlatformOSX : NSObject, Platform {
         application.run()
     }
     
-    public var currentTime: Time {
-        return Time(nanoseconds: mach_absolute_time() * timeBaseNumerator / timeBaseDenominator)
-    }
-
-    public func centerMouse() {
-        let center = contentBounds.center2D
-        mousePosition = center
-    }
-    
-    public var mousePosition: Point2D {
-        get {
-            let windowPoint = mainWindow.mouseLocationOutsideOfEventStream
-            let contentPoint = convertPointFromWindowToContent(windowPoint)
-            return contentPoint.point2D
-        }
-        set {
-            let contentPoint = newValue.nativePoint
-            let screenPoint = convertPointFromContentToScreen(contentPoint)
-            let coreGraphicsPoint = convertPointFromAppKitToCoreGraphics(screenPoint)
-            CGWarpMouseCursorPosition(coreGraphicsPoint)
-        }
-    }
-
-    private func convertPointFromScreenToContent(screenPoint: CGPoint) -> CGPoint {
-        let windowPoint = convertPointFromScreenToWindow(screenPoint)
-        return convertPointFromWindowToContent(windowPoint)
-    }
-    
-    private func convertPointFromScreenToWindow(screenPoint: CGPoint) -> CGPoint {
-        let screenRect = screenPoint.rect
-        let windowRect = convertRectFromScreenToWindow(screenRect)
-        return windowRect.origin
-    }
-    
-    private func convertPointFromWindowToContent(windowPoint: CGPoint) -> CGPoint {
-        return mainWindow.contentView!.convertPoint(windowPoint, fromView: nil)
-    }
-    
-    private func convertRectFromScreenToContent(screenRect: CGRect) -> CGRect {
-        let windowRect = convertRectFromScreenToWindow(screenRect)
-        return convertRectFromWindowToContent(windowRect)
-    }
-    
-    private func convertRectFromScreenToWindow(screenRect: CGRect) -> CGRect {
-        return mainWindow.convertRectFromScreen(screenRect)
-    }
-    
-    private func convertRectFromWindowToContent(windowRect: CGRect) -> CGRect {
-        return mainWindow.contentView!.convertRect(windowRect, fromView: nil)
-    }
-    
-    private func convertPointFromContentToWindow(contentPoint: CGPoint) -> CGPoint {
-        return mainWindow.contentView!.convertPoint(contentPoint, toView: nil)
-    }
-    
-    private func convertPointFromWindowToScreen(windowPoint: CGPoint) -> CGPoint {
-        let windowRect = windowPoint.rect
-        return convertRectFromWindowToScreen(windowRect).origin
-    }
-
-    private func convertPointFromContentToScreen(point: CGPoint) -> CGPoint {
-        let windowPoint = convertPointFromContentToWindow(point)
-        return convertPointFromWindowToScreen(windowPoint)
-    }
-
-    private func convertRectFromContentToWindow(contentRect: CGRect) -> CGRect {
-        return mainWindow.contentView!.convertRect(contentRect, toView: nil)
-    }
-    
-    private func convertRectFromWindowToScreen(windowRect: CGRect) -> CGRect {
-        return mainWindow.convertRectToScreen(windowRect)
-    }
-    
-    private func convertRectFromContentToScreen(contentRect: CGRect) -> CGRect {
-        let windowRect = convertRectFromContentToWindow(contentRect)
-        return convertRectFromWindowToScreen(windowRect)
-    }
-
-    private func convertPointFromAppKitToCoreGraphics(appKitPoint: CGPoint) -> CGPoint {
-        let primaryRect = primaryScreen.frame
-        let coreGraphicsPoint = CGPoint(x: appKitPoint.x, y: primaryRect.height - appKitPoint.y)
-        return coreGraphicsPoint
-    }
-    
-    private var primaryScreen: NSScreen {
+    public var primaryScreen: NSScreen {
         return NSScreen.screens()![0]
     }
     
@@ -180,7 +82,7 @@ public class PlatformOSX : NSObject, Platform {
         return NSProcessInfo.processInfo().processName
     }
     
-    private func startEngine() {
+    public func startEngine() {
         engine.updateViewport(viewport)
         engine.start()
     }
@@ -189,6 +91,10 @@ public class PlatformOSX : NSObject, Platform {
         engine.stop()
     }
 
+    public func updateViewport() {
+        engine.updateViewport(viewport)
+    }
+    
     private func createMainMenu() -> NSMenu {
         let mainMenu = NSMenu()
         
@@ -246,7 +152,7 @@ public class PlatformOSX : NSObject, Platform {
         return contentBounds.rectagle2D
     }
 
-    private var contentBounds: CGRect {
+    public var contentBounds: CGRect {
         return mainWindow.contentView!.bounds
     }
     
@@ -256,25 +162,8 @@ public class PlatformOSX : NSObject, Platform {
         return contentFrame
     }
     
-    private func loadWindowContentFrame() -> CGRect? {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        
-        if let contentFrameDictionary = userDefaults.dictionaryForKey("net.franticapparatus.config.contentFrame") {
-            var contentFrame = CGRect.zero
-            
-            if CGRectMakeWithDictionaryRepresentation(contentFrameDictionary, &contentFrame) {
-                return contentFrame
-            }
-        }
-        
-        return nil
-    }
-    
-    private func storeWindowContentFrame(contentFrame: CGRect) {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        let contentFrameDictionary = CGRectCreateDictionaryRepresentation(contentFrame)
-        userDefaults.setObject(contentFrameDictionary, forKey: "net.franticapparatus.config.contentFrame")
-        userDefaults.synchronize()
+    public func saveSizeAndPosition() {
+        storeWindowContentFrame(contentFrame)
     }
     
     private func createOpenGLContext() -> NSOpenGLContext {
@@ -289,165 +178,5 @@ public class PlatformOSX : NSObject, Platform {
         let openGLContext = NSOpenGLContext(format: pixelFormat!, shareContext: nil)
         
         return openGLContext!
-    }
-}
-
-extension PlatformOSX : NSApplicationDelegate {
-    public func applicationShouldTerminate(sender: NSApplication) -> NSApplicationTerminateReply {
-        NSLog("%@", __FUNCTION__)
-        return .TerminateNow
-    }
-    
-    public func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
-        NSLog("%@", __FUNCTION__)
-        return true
-    }
-    
-    public func applicationWillFinishLaunching(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func applicationDidFinishLaunching(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-        startEngine()
-    }
-    
-    public func applicationWillHide(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func applicationDidHide(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func applicationWillUnhide(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func applicationDidUnhide(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func applicationWillBecomeActive(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func applicationDidBecomeActive(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func applicationWillResignActive(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func applicationDidResignActive(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    //    public func applicationWillUpdate(notification: NSNotification) {
-    //        NSLog("%@", __FUNCTION__)
-    //    }
-    
-    //    public func applicationDidUpdate(notification: NSNotification) {
-    //        NSLog("%@", __FUNCTION__)
-    //    }
-    
-    public func applicationWillTerminate(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-        stopEngine()
-    }
-}
-
-extension PlatformOSX : NSWindowDelegate {
-    // TODO: Check to see if there are other useful methods to override
-    public func windowDidBecomeKey(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func windowDidResignKey(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func windowDidBecomeMain(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func windowDidResignMain(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func windowWillResize(sender: NSWindow, toSize frameSize: NSSize) -> NSSize {
-        NSLog("%@", __FUNCTION__)
-        return frameSize
-    }
-    
-    public func windowDidResize(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-        engine.updateViewport(viewport)
-        
-        if mousePositionRelative {
-            centerMouse()
-        }
-    }
-    
-    public func windowWillClose(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-        storeWindowContentFrame(contentFrame)
-    }
-    
-    public func windowWillEnterFullScreen(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func windowDidEnterFullScreen(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func windowWillExitFullScreen(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func windowDidExitFullScreen(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func windowWillMove(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-    
-    public func windowDidMove(notification: NSNotification) {
-        NSLog("%@", __FUNCTION__)
-    }
-}
-
-public extension Point2D {
-    public var nativePoint: CGPoint {
-        return CGPoint(x: CGFloat(x), y: CGFloat(y))
-    }
-}
-
-public extension CGPoint {
-    public var point2D: Point2D {
-        return Point2D(x: GeometryType(x), y: GeometryType(y))
-    }
-    
-    public var rect: CGRect {
-        return CGRect(origin: self, size: CGSize.zero)
-    }
-}
-
-public extension CGSize {
-    public var size2D: Size2D {
-        return Size2D(width: GeometryType(width), height: GeometryType(height))
-    }
-}
-
-public extension CGRect {
-    public var rectagle2D: Rectangle2D {
-        return Rectangle2D(origin: origin.point2D, size: size.size2D)
-    }
-    
-    public var center2D: Point2D {
-        return CGPoint(x: midX, y: midY).point2D
     }
 }

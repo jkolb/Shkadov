@@ -87,6 +87,23 @@ public struct OpenGL {
         case UnableToLinkProgram(String)
     }
     
+    public static var vendor: String {
+        return getString(GL_VENDOR)
+    }
+    
+    public static var renderer: String {
+        return getString(GL_RENDERER)
+    }
+
+    public static var version: String {
+        return getString(GL_VERSION)
+    }
+    
+    public static func getString(name: Int32) -> String {
+        let bytes = UnsafePointer<CChar>(glGetString(GLenum(name)))
+        return String.fromCString(bytes)!
+    }
+    
     public static func viewport(viewport: Rectangle2D) {
         glViewport(GLint(viewport.x), GLint(viewport.y), GLsizei(viewport.width), GLsizei(viewport.height))
     }
@@ -301,6 +318,7 @@ public struct OpenGL {
     public enum ShaderType {
         case Fragment
         case Vertex
+        case Geometry
         
         private var GLType: Int32 {
             switch (self) {
@@ -308,6 +326,8 @@ public struct OpenGL {
                 return GL_FRAGMENT_SHADER
             case .Vertex:
                 return GL_VERTEX_SHADER
+            case .Geometry:
+                return GL_GEOMETRY_SHADER
             }
         }
     }

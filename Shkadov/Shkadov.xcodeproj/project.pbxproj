@@ -47,6 +47,14 @@
 		E592A5BD1B8A64D20032D982 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5BC1B8A64D20032D982 /* Platform.swift */; };
 		E592A5BF1B8A9E240032D982 /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5BE1B8A9E240032D982 /* Vector.swift */; };
 		E592A5C11B8AAC220032D982 /* Synchronizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5C01B8AAC220032D982 /* Synchronizable.swift */; };
+		E59C5F091B9E7BA0003422FB /* OpenGLContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F081B9E7BA0003422FB /* OpenGLContext.swift */; settings = {ASSET_TAGS = (); }; };
+		E59C5F0B1B9E7BF8003422FB /* PlatformOSX+NSApplicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F0A1B9E7BF8003422FB /* PlatformOSX+NSApplicationDelegate.swift */; settings = {ASSET_TAGS = (); }; };
+		E59C5F0D1B9E7C63003422FB /* PlatformOSX+NSWindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F0C1B9E7C63003422FB /* PlatformOSX+NSWindowDelegate.swift */; settings = {ASSET_TAGS = (); }; };
+		E59C5F0F1B9E7D2E003422FB /* Geometry+CoreGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F0E1B9E7D2E003422FB /* Geometry+CoreGraphics.swift */; settings = {ASSET_TAGS = (); }; };
+		E59C5F111B9E7D81003422FB /* PlatformOSX+OpenGLContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F101B9E7D81003422FB /* PlatformOSX+OpenGLContext.swift */; settings = {ASSET_TAGS = (); }; };
+		E59C5F131B9E7DF4003422FB /* PlatformOSX+Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F121B9E7DF4003422FB /* PlatformOSX+Platform.swift */; settings = {ASSET_TAGS = (); }; };
+		E59C5F151B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F141B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift */; settings = {ASSET_TAGS = (); }; };
+		E59C5F171B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F161B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift */; settings = {ASSET_TAGS = (); }; };
 		E5C54E2F1B954E58003F5AEB /* PlayerMovementSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C54E2E1B954E58003F5AEB /* PlayerMovementSystem.swift */; settings = {ASSET_TAGS = (); }; };
 		E5FF1A6A1B8C02BF009B2AC6 /* Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF1A691B8C02BF009B2AC6 /* Logic.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
@@ -106,6 +114,14 @@
 		E592A5BC1B8A64D20032D982 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		E592A5BE1B8A9E240032D982 /* Vector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
 		E592A5C01B8AAC220032D982 /* Synchronizable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synchronizable.swift; sourceTree = "<group>"; };
+		E59C5F081B9E7BA0003422FB /* OpenGLContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGLContext.swift; sourceTree = "<group>"; };
+		E59C5F0A1B9E7BF8003422FB /* PlatformOSX+NSApplicationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+NSApplicationDelegate.swift"; sourceTree = "<group>"; };
+		E59C5F0C1B9E7C63003422FB /* PlatformOSX+NSWindowDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+NSWindowDelegate.swift"; sourceTree = "<group>"; };
+		E59C5F0E1B9E7D2E003422FB /* Geometry+CoreGraphics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Geometry+CoreGraphics.swift"; sourceTree = "<group>"; };
+		E59C5F101B9E7D81003422FB /* PlatformOSX+OpenGLContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+OpenGLContext.swift"; sourceTree = "<group>"; };
+		E59C5F121B9E7DF4003422FB /* PlatformOSX+Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+Platform.swift"; sourceTree = "<group>"; };
+		E59C5F141B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+CoordinateSystem.swift"; sourceTree = "<group>"; };
+		E59C5F161B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+NSUserDefaults.swift"; sourceTree = "<group>"; };
 		E5C54E2E1B954E58003F5AEB /* PlayerMovementSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerMovementSystem.swift; sourceTree = "<group>"; };
 		E5FF1A691B8C02BF009B2AC6 /* Logic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -227,6 +243,7 @@
 				E535C8D41B93586B0048321F /* Kind.swift */,
 				E5FF1A691B8C02BF009B2AC6 /* Logic.swift */,
 				E581CF941B892C9F00D7174F /* Matrix.swift */,
+				E59C5F081B9E7BA0003422FB /* OpenGLContext.swift */,
 				E592A5BC1B8A64D20032D982 /* Platform.swift */,
 				09F6094F1B9C45D3003B4A5B /* RawInput.swift */,
 				E592A5B61B8A116F0032D982 /* RawInputEventBuffer.swift */,
@@ -255,7 +272,14 @@
 			isa = PBXGroup;
 			children = (
 				E581CF911B892C9F00D7174F /* ContentView.swift */,
+				E59C5F0E1B9E7D2E003422FB /* Geometry+CoreGraphics.swift */,
 				E581CFB91B894E6400D7174F /* PlatformOSX.swift */,
+				E59C5F141B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift */,
+				E59C5F0A1B9E7BF8003422FB /* PlatformOSX+NSApplicationDelegate.swift */,
+				E59C5F161B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift */,
+				E59C5F0C1B9E7C63003422FB /* PlatformOSX+NSWindowDelegate.swift */,
+				E59C5F101B9E7D81003422FB /* PlatformOSX+OpenGLContext.swift */,
+				E59C5F121B9E7DF4003422FB /* PlatformOSX+Platform.swift */,
 			);
 			name = "OS X";
 			sourceTree = "<group>";
@@ -364,19 +388,26 @@
 				E592A5B91B8A4EA60032D982 /* TIme.swift in Sources */,
 				E5C54E2F1B954E58003F5AEB /* PlayerMovementSystem.swift in Sources */,
 				E5FF1A6A1B8C02BF009B2AC6 /* Logic.swift in Sources */,
+				E59C5F091B9E7BA0003422FB /* OpenGLContext.swift in Sources */,
+				E59C5F131B9E7DF4003422FB /* PlatformOSX+Platform.swift in Sources */,
 				09F609501B9C45D3003B4A5B /* RawInput.swift in Sources */,
+				E59C5F0F1B9E7D2E003422FB /* Geometry+CoreGraphics.swift in Sources */,
 				E535C8C11B9158920048321F /* Handle.swift in Sources */,
+				E59C5F171B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift in Sources */,
 				E581CFA71B892C9F00D7174F /* Matrix.swift in Sources */,
 				E581CFBA1B894E6400D7174F /* PlatformOSX.swift in Sources */,
 				E581CFA61B892C9F00D7174F /* main.swift in Sources */,
 				E581CFA41B892C9F00D7174F /* ContentView.swift in Sources */,
+				E59C5F111B9E7D81003422FB /* PlatformOSX+OpenGLContext.swift in Sources */,
 				E581CFAB1B892C9F00D7174F /* Renderer.swift in Sources */,
+				E59C5F151B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift in Sources */,
 				E592A5B71B8A116F0032D982 /* RawInputEventBuffer.swift in Sources */,
 				09F609591B9C54F0003B4A5B /* HoldableItem.swift in Sources */,
 				E535C8BB1B90608C0048321F /* Component.swift in Sources */,
 				E535C8D51B93586B0048321F /* Kind.swift in Sources */,
 				09F6095D1B9C565B003B4A5B /* Item.swift in Sources */,
 				E535C8BD1B9155C70048321F /* Entity.swift in Sources */,
+				E59C5F0D1B9E7C63003422FB /* PlatformOSX+NSWindowDelegate.swift in Sources */,
 				E581CFA21B892C9F00D7174F /* Engine.swift in Sources */,
 				E592A5BB1B8A4EFA0032D982 /* Geometry.swift in Sources */,
 				E535C8DA1B93A7490048321F /* RenderComponent.swift in Sources */,
@@ -396,6 +427,7 @@
 				E581CFA91B892C9F00D7174F /* OpenGL.swift in Sources */,
 				E581CFAD1B892C9F00D7174F /* RenderState.swift in Sources */,
 				E592A5C11B8AAC220032D982 /* Synchronizable.swift in Sources */,
+				E59C5F0B1B9E7BF8003422FB /* PlatformOSX+NSApplicationDelegate.swift in Sources */,
 				E581CFA11B892C9F00D7174F /* DispatchSource.swift in Sources */,
 				E535C8D31B923C510048321F /* EntityComponents.swift in Sources */,
 				E535C8C51B91E8F80048321F /* ProjectionComponent.swift in Sources */,
@@ -509,6 +541,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Shkadov/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DDEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = franticapparatus.net.Shkadov;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";

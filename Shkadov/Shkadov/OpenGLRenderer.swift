@@ -24,6 +24,7 @@ SOFTWARE.
 
 import AppKit
 import OpenGL
+import OpenGL.GL3
 import simd
 
 public enum VertexAttribute : GLuint {
@@ -85,17 +86,16 @@ var gCubeVertexData: [GLfloat] = [
 ]
 
 public final class OpenGLRenderer : Renderer, Synchronizable {
-    private let context: NSOpenGLContext
     public let synchronizationQueue: DispatchQueue
     public var viewport: Rectangle2D
-
+    public weak var context: OpenGLContext!
     var program: OpenGL.Program!
     
     var vertexArray: OpenGL.VertexArray!
     var vertexBuffer: OpenGL.VertexBuffer!
     
     
-    public init(context: NSOpenGLContext) {
+    public init(context: OpenGLContext) {
         self.context = context
         self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.render", attribute: .Serial)
         self.viewport = Rectangle2D.zero
@@ -109,23 +109,27 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
     
     public func updateViewport(viewport: Rectangle2D) {
         synchronizeWriteAndWait { renderer in
-            CGLLockContext(renderer.context.CGLContextObj)
-            
+            renderer.context.lock()
             renderer.context.update()
-            renderer.context.makeCurrentContext()
+            renderer.context.makeCurrent()
             
             renderer.viewport = viewport
             OpenGL.viewport(viewport)
             
-            CGLUnlockContext(renderer.context.CGLContextObj)
+            renderer.context.unlock()
         }
     }
 
     public func configure() {
         synchronizeWriteAndWait { renderer in
-            CGLLockContext(renderer.context.CGLContextObj)
+            renderer.context.lock()
+            renderer.context.makeCurrent()
             
-            renderer.context.makeCurrentContext()
+            #if DEBUG
+                print("Vendor: \(OpenGL.vendor)")
+                print("Renderer: \(OpenGL.renderer)")
+                print("Version: \(OpenGL.version)")
+            #endif
             
             do {
                 try renderer.loadShaders()
@@ -133,9 +137,8 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             catch {
                 NSLog("Error")
             }
-            
-            var swapInt: GLint = 1
-            renderer.context.setValues(&swapInt, forParameter: .GLCPSwapInterval)
+
+            renderer.context.swapInterval = 1
             
             OpenGL.enableCapability(GL_DEPTH_TEST)
             
@@ -154,7 +157,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             
             OpenGL.unbindVertexArray()
             
-            CGLUnlockContext(renderer.context.CGLContextObj)
+            renderer.context.unlock()
         }
     }
     
@@ -236,9 +239,8 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
 
     public func renderState(state: RenderState) {
         synchronizeWriteAndWait { renderer in
-            CGLLockContext(renderer.context.CGLContextObj)
-            
-            renderer.context.makeCurrentContext()
+            renderer.context.lock()
+            renderer.context.makeCurrent()
 
             OpenGL.clearColor(ColorRGBA8(red: 255, green: 165, blue: 165))
             OpenGL.clearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -253,9 +255,8 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
                 OpenGL.drawArraysWithMode(GL_TRIANGLES, first: 0, count: 36)
             }
             
-            renderer.context.flushBuffer()
-            
-            CGLUnlockContext(renderer.context.CGLContextObj)
+            renderer.context.flush()
+            renderer.context.unlock()
         }
     }
 }
