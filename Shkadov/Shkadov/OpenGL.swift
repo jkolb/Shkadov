@@ -33,51 +33,6 @@ public extension GLboolean {
     }
 }
 
-public struct ColorRGBA8 {
-    public let red: UInt8
-    public let green: UInt8
-    public let blue: UInt8
-    public let alpha: UInt8
-    
-    public init(rgba: UInt32) {
-        self.init(
-            red: UInt8((rgba & 0xFF000000) >> 24),
-            green: UInt8((rgba & 0x00FF0000) >> 16),
-            blue: UInt8((rgba & 0x0000FF00) >> 8),
-            alpha: UInt8((rgba & 0x000000FF) >> 0)
-        )
-    }
-
-    public init(red: UInt8, green: UInt8, blue: UInt8) {
-        self.init(red: red, green: green, blue: blue, alpha: UInt8.max)
-    }
-    
-    public init(red: UInt8, green: UInt8, blue: UInt8, alpha: UInt8) {
-        self.red = red
-        self.green = green
-        self.blue = blue
-        self.alpha = alpha
-    }
-}
-
-public struct Color {
-    public let red: Float
-    public let green: Float
-    public let blue: Float
-    public let alpha: Float
-
-    public init(rgba8: ColorRGBA8) {
-        self.init(red: Float(rgba8.red) / 255.0, green: Float(rgba8.green) / 255.0, blue: Float(rgba8.blue) / 255.0, alpha: Float(rgba8.alpha) / 255.0)
-    }
-    
-    public init(red: Float, green: Float, blue: Float, alpha: Float) {
-        self.red = red
-        self.green = green
-        self.blue = blue
-        self.alpha = alpha
-    }
-}
-
 public struct OpenGL {
     public enum Error: ErrorType {
         case UnableToCreateShader
@@ -147,8 +102,8 @@ public struct OpenGL {
         glEnable(GLenum(capability))
     }
     
-    public static func enableVertexAttributeArrayAtIndex<T: RawRepresentable where T.RawValue == GLuint>(index: T) {
-        enableVertexAttributeArrayAtIndex(index.rawValue)
+    public static func enableVertexAttributeArrayAtIndex<T: RawRepresentable where T.RawValue == UInt>(index: T) {
+        enableVertexAttributeArrayAtIndex(GLuint(index.rawValue))
     }
     
     public static func enableVertexAttributeArrayAtIndex(index: GLuint) {
@@ -159,8 +114,8 @@ public struct OpenGL {
         glDisableVertexAttribArray(index)
     }
 
-    public static func vertexAttribPointerForIndex<T: RawRepresentable where T.RawValue == GLuint>(index: T, size: GLint, type: Int32, normalized: Bool, stride: GLsizei, offset: Int) {
-        vertexAttribPointerForIndex(index.rawValue, size: size, type: type, normalized: normalized, stride: stride, offset: offset)
+    public static func vertexAttribPointerForIndex<T: RawRepresentable where T.RawValue == UInt>(index: T, size: Int, type: Int32, normalized: Bool, stride: Int, offset: Int) {
+        vertexAttribPointerForIndex(GLuint(index.rawValue), size: GLint(size), type: type, normalized: normalized, stride: GLsizei(stride), offset: offset)
     }
     
     public static func vertexAttribPointerForIndex(index: GLuint, size: GLint, type: Int32, normalized: Bool, stride: GLsizei, offset: Int) {
@@ -281,7 +236,7 @@ public struct OpenGL {
             }
         }
         
-        public func bindAttributeLocations<T: RawRepresentable where T.RawValue == GLuint>(indexByName: [String:T]) {
+        public func bindAttributeLocations<T: RawRepresentable where T.RawValue == UInt>(indexByName: [String:T]) {
             for (name, index) in indexByName {
                 bindAttributeLocation(index, name: name)
             }
@@ -291,8 +246,8 @@ public struct OpenGL {
             glBindAttribLocation(handle, index, name)
         }
         
-        public func bindAttributeLocation<T: RawRepresentable where T.RawValue == GLuint>(index: T, name: String) {
-            bindAttributeLocation(index.rawValue, name: name)
+        public func bindAttributeLocation<T: RawRepresentable where T.RawValue == UInt>(index: T, name: String) {
+            bindAttributeLocation(GLuint(index.rawValue), name: name)
         }
         
         public func link() throws {

@@ -28,7 +28,7 @@ public typealias GeometryType = Float
 
 public let π = GeometryType(M_PI)
 
-private let geometryZero = GeometryType(0.0)
+public let geometryZero = GeometryType(0.0)
 
 public struct Angle {
     public static let zero = Angle(radians: geometryZero)
@@ -166,5 +166,33 @@ public struct Rectangle2D {
     
     public var inverseAspectRatio: GeometryType {
         return size.inverseAspectRatio
+    }
+}
+
+public struct Point3D {
+    public static let zero = Point3D(x: geometryZero, y: geometryZero, z: geometryZero)
+    
+    public let x: GeometryType
+    public let y: GeometryType
+    public let z: GeometryType
+    
+    public init(x: GeometryType, y: GeometryType, z: GeometryType) {
+        self.x = x
+        self.y = y
+        self.z = z
+    }
+}
+
+public struct Vector3D {
+    public static let zero = Vector3D(dx: geometryZero, dy: geometryZero, dz: geometryZero)
+    
+    public let dx: GeometryType
+    public let dy: GeometryType
+    public let dz: GeometryType
+    
+    public init(dx: GeometryType, dy: GeometryType, dz: GeometryType) {
+        self.dx = dx
+        self.dy = dy
+        self.dz = dz
     }
 }

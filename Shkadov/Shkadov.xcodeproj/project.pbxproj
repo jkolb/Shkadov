@@ -56,6 +56,10 @@
 		E59C5F151B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F141B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift */; settings = {ASSET_TAGS = (); }; };
 		E59C5F171B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F161B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift */; settings = {ASSET_TAGS = (); }; };
 		E5C54E2F1B954E58003F5AEB /* PlayerMovementSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C54E2E1B954E58003F5AEB /* PlayerMovementSystem.swift */; settings = {ASSET_TAGS = (); }; };
+		E5CA680E1B9FC695002B065E /* Polygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA680D1B9FC695002B065E /* Polygon.swift */; settings = {ASSET_TAGS = (); }; };
+		E5CA68101B9FC8D0002B065E /* Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA680F1B9FC8D0002B065E /* Mesh.swift */; settings = {ASSET_TAGS = (); }; };
+		E5CA68141B9FCBA4002B065E /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA68131B9FCBA4002B065E /* Color.swift */; settings = {ASSET_TAGS = (); }; };
+		E5CA68161B9FDF40002B065E /* VertexDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA68151B9FDF40002B065E /* VertexDescriptor.swift */; settings = {ASSET_TAGS = (); }; };
 		E5FF1A6A1B8C02BF009B2AC6 /* Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF1A691B8C02BF009B2AC6 /* Logic.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
@@ -123,6 +127,10 @@
 		E59C5F141B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+CoordinateSystem.swift"; sourceTree = "<group>"; };
 		E59C5F161B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+NSUserDefaults.swift"; sourceTree = "<group>"; };
 		E5C54E2E1B954E58003F5AEB /* PlayerMovementSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerMovementSystem.swift; sourceTree = "<group>"; };
+		E5CA680D1B9FC695002B065E /* Polygon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Polygon.swift; sourceTree = "<group>"; };
+		E5CA680F1B9FC8D0002B065E /* Mesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; };
+		E5CA68131B9FCBA4002B065E /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		E5CA68151B9FDF40002B065E /* VertexDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VertexDescriptor.swift; sourceTree = "<group>"; };
 		E5FF1A691B8C02BF009B2AC6 /* Logic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -231,6 +239,7 @@
 			children = (
 				E535C8D81B93A6D80048321F /* Components */,
 				09F609571B9C54CE003B4A5B /* Items */,
+				E5CA68131B9FCBA4002B065E /* Color.swift */,
 				E535C8BA1B90608C0048321F /* Component.swift */,
 				E581CF8F1B892C9F00D7174F /* Engine.swift */,
 				E535C8BC1B9155C70048321F /* Entity.swift */,
@@ -239,12 +248,14 @@
 				E592A5BA1B8A4EFA0032D982 /* Geometry.swift */,
 				E535C8C01B9158920048321F /* Handle.swift */,
 				09F609511B9C4865003B4A5B /* InputContext.swift */,
-				E5C54E2E1B954E58003F5AEB /* PlayerMovementSystem.swift */,
 				E535C8D41B93586B0048321F /* Kind.swift */,
 				E5FF1A691B8C02BF009B2AC6 /* Logic.swift */,
 				E581CF941B892C9F00D7174F /* Matrix.swift */,
+				E5CA680F1B9FC8D0002B065E /* Mesh.swift */,
 				E59C5F081B9E7BA0003422FB /* OpenGLContext.swift */,
 				E592A5BC1B8A64D20032D982 /* Platform.swift */,
+				E5C54E2E1B954E58003F5AEB /* PlayerMovementSystem.swift */,
+				E5CA680D1B9FC695002B065E /* Polygon.swift */,
 				09F6094F1B9C45D3003B4A5B /* RawInput.swift */,
 				E592A5B61B8A116F0032D982 /* RawInputEventBuffer.swift */,
 				E581CF981B892C9F00D7174F /* Renderer.swift */,
@@ -255,6 +266,7 @@
 				E592A5B81B8A4EA60032D982 /* TIme.swift */,
 				E581CF9D1B892C9F00D7174F /* Timer.swift */,
 				E592A5BE1B8A9E240032D982 /* Vector.swift */,
+				E5CA68151B9FDF40002B065E /* VertexDescriptor.swift */,
 			);
 			name = Engine;
 			sourceTree = "<group>";
@@ -386,6 +398,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E592A5B91B8A4EA60032D982 /* TIme.swift in Sources */,
+				E5CA68101B9FC8D0002B065E /* Mesh.swift in Sources */,
 				E5C54E2F1B954E58003F5AEB /* PlayerMovementSystem.swift in Sources */,
 				E5FF1A6A1B8C02BF009B2AC6 /* Logic.swift in Sources */,
 				E59C5F091B9E7BA0003422FB /* OpenGLContext.swift in Sources */,
@@ -416,13 +429,16 @@
 				E535C8C31B9161B10048321F /* OrientationComponent.swift in Sources */,
 				E592A5BD1B8A64D20032D982 /* Platform.swift in Sources */,
 				E535C8DC1B93A8620048321F /* RenderSystem.swift in Sources */,
+				E5CA680E1B9FC695002B065E /* Polygon.swift in Sources */,
 				09F609541B9C53F3003B4A5B /* PlayerComponent.swift in Sources */,
 				E535C8D71B9385E70048321F /* TestCubeSystem.swift in Sources */,
 				09F6095B1B9C556E003B4A5B /* WearableItem.swift in Sources */,
+				E5CA68141B9FCBA4002B065E /* Color.swift in Sources */,
 				E581CFB01B892C9F00D7174F /* Timer.swift in Sources */,
 				E581CFA01B892C9F00D7174F /* DispatchQueue.swift in Sources */,
 				E581CFB81B893D7400D7174F /* Event.swift in Sources */,
 				E581CFAA1B892C9F00D7174F /* OpenGLRenderer.swift in Sources */,
+				E5CA68161B9FDF40002B065E /* VertexDescriptor.swift in Sources */,
 				09F609561B9C546C003B4A5B /* InventoryComponent.swift in Sources */,
 				E581CFA91B892C9F00D7174F /* OpenGL.swift in Sources */,
 				E581CFAD1B892C9F00D7174F /* RenderState.swift in Sources */,

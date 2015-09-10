@@ -27,78 +27,31 @@ import OpenGL
 import OpenGL.GL3
 import simd
 
-public enum VertexAttribute : GLuint {
-    case Position
-    case Normal
-    case Color
-    case TexCoord0
-    case TexCoord1
-}
-
 let UNIFORM_MODELVIEWPROJECTION_MATRIX = 0
 let UNIFORM_NORMAL_MATRIX = 1
 var uniforms = [GLint](count: 2, repeatedValue: 0)
-
-var gCubeVertexData: [GLfloat] = [
-    // Data layout for each line below is:
-    // positionX, positionY, positionZ,     normalX, normalY, normalZ,
-    0.5, -0.5, -0.5,        1.0, 0.0, 0.0,
-    0.5, 0.5, -0.5,         1.0, 0.0, 0.0,
-    0.5, -0.5, 0.5,         1.0, 0.0, 0.0,
-    0.5, -0.5, 0.5,         1.0, 0.0, 0.0,
-    0.5, 0.5, -0.5,         1.0, 0.0, 0.0,
-    0.5, 0.5, 0.5,          1.0, 0.0, 0.0,
-    
-    0.5, 0.5, -0.5,         0.0, 1.0, 0.0,
-    -0.5, 0.5, -0.5,        0.0, 1.0, 0.0,
-    0.5, 0.5, 0.5,          0.0, 1.0, 0.0,
-    0.5, 0.5, 0.5,          0.0, 1.0, 0.0,
-    -0.5, 0.5, -0.5,        0.0, 1.0, 0.0,
-    -0.5, 0.5, 0.5,         0.0, 1.0, 0.0,
-    
-    -0.5, 0.5, -0.5,        -1.0, 0.0, 0.0,
-    -0.5, -0.5, -0.5,      -1.0, 0.0, 0.0,
-    -0.5, 0.5, 0.5,         -1.0, 0.0, 0.0,
-    -0.5, 0.5, 0.5,         -1.0, 0.0, 0.0,
-    -0.5, -0.5, -0.5,      -1.0, 0.0, 0.0,
-    -0.5, -0.5, 0.5,        -1.0, 0.0, 0.0,
-    
-    -0.5, -0.5, -0.5,      0.0, -1.0, 0.0,
-    0.5, -0.5, -0.5,        0.0, -1.0, 0.0,
-    -0.5, -0.5, 0.5,        0.0, -1.0, 0.0,
-    -0.5, -0.5, 0.5,        0.0, -1.0, 0.0,
-    0.5, -0.5, -0.5,        0.0, -1.0, 0.0,
-    0.5, -0.5, 0.5,         0.0, -1.0, 0.0,
-    
-    0.5, 0.5, 0.5,          0.0, 0.0, 1.0,
-    -0.5, 0.5, 0.5,         0.0, 0.0, 1.0,
-    0.5, -0.5, 0.5,         0.0, 0.0, 1.0,
-    0.5, -0.5, 0.5,         0.0, 0.0, 1.0,
-    -0.5, 0.5, 0.5,         0.0, 0.0, 1.0,
-    -0.5, -0.5, 0.5,        0.0, 0.0, 1.0,
-    
-    0.5, -0.5, -0.5,        0.0, 0.0, -1.0,
-    -0.5, -0.5, -0.5,      0.0, 0.0, -1.0,
-    0.5, 0.5, -0.5,         0.0, 0.0, -1.0,
-    0.5, 0.5, -0.5,         0.0, 0.0, -1.0,
-    -0.5, -0.5, -0.5,      0.0, 0.0, -1.0,
-    -0.5, 0.5, -0.5,        0.0, 0.0, -1.0
-]
 
 public final class OpenGLRenderer : Renderer, Synchronizable {
     public let synchronizationQueue: DispatchQueue
     public var viewport: Rectangle2D
     public weak var context: OpenGLContext!
-    var program: OpenGL.Program!
-    
-    var vertexArray: OpenGL.VertexArray!
-    var vertexBuffer: OpenGL.VertexBuffer!
-    
+    private var program: OpenGL.Program!
+    private var vertexArray: OpenGL.VertexArray!
+    private var vertexBuffer: OpenGL.VertexBuffer!
+    private var mesh: Mesh!
     
     public init(context: OpenGLContext) {
         self.context = context
         self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.render", attribute: .Serial)
         self.viewport = Rectangle2D.zero
+        
+        var vertexDescriptor = VertexDescriptor()
+        vertexDescriptor.addAttribute(.Position, dataType: .Float, componentCount: 3)
+        vertexDescriptor.addAttribute(.Normal, dataType: .Float, componentCount: 3)
+        vertexDescriptor.addAttribute(.Color, dataType: .Float, componentCount: 4)
+        self.mesh = Mesh(vertexDescriptor: vertexDescriptor)
+        
+        self.mesh.addCubeWithSize(1.0, color: ColorRGBA8(red: 20, green: 50, blue: 150))
     }
     
     deinit {
@@ -147,13 +100,35 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             
             renderer.vertexBuffer = OpenGL.VertexBuffer()
             renderer.vertexBuffer.bindToTarget(GL_ARRAY_BUFFER)
-            OpenGL.bufferDataForTarget(GL_ARRAY_BUFFER, size: sizeof(GLfloat) * gCubeVertexData.count, data: &gCubeVertexData, usage: GL_STATIC_DRAW)
             
-            OpenGL.enableVertexAttributeArrayAtIndex(VertexAttribute.Position)
-            OpenGL.vertexAttribPointerForIndex(VertexAttribute.Position, size: 3, type: GL_FLOAT, normalized: false, stride: 24, offset: 0)
+            let vertexDescriptor = renderer.mesh.vertexDescriptor
+
+            OpenGL.bufferDataForTarget(GL_ARRAY_BUFFER, size: renderer.mesh.size, data: &renderer.mesh.data, usage: GL_STATIC_DRAW)
+
+            for attribute in vertexDescriptor.attributes {
+                let descriptor = vertexDescriptor.descriptorForAttribute(attribute)
+                let offset = vertexDescriptor.offsetForAttribute(attribute)
+                let dataType: Int32
+                
+                switch descriptor.dataType {
+                case .Float:
+                    dataType = GL_FLOAT
+                }
+                
+                OpenGL.enableVertexAttributeArrayAtIndex(attribute)
+                OpenGL.vertexAttribPointerForIndex(attribute, size: descriptor.componentCount, type: dataType, normalized: false, stride: renderer.mesh.stride, offset: offset)
+            }
             
-            OpenGL.enableVertexAttributeArrayAtIndex(VertexAttribute.Normal)
-            OpenGL.vertexAttribPointerForIndex(VertexAttribute.Normal, size: 3, type: GL_FLOAT, normalized: false, stride: 24, offset: 3 * sizeof(GLfloat))
+//            OpenGL.bufferDataForTarget(GL_ARRAY_BUFFER, size: sizeof(UInt32) * renderer.mesh.data.count, data: &renderer.mesh.data, usage: GL_STATIC_DRAW)
+//
+//            OpenGL.enableVertexAttributeArrayAtIndex(VertexAttribute.Position)
+//            OpenGL.vertexAttribPointerForIndex(VertexAttribute.Position, size: 3, type: GL_FLOAT, normalized: false, stride: renderer.mesh.stride, offset: 0)
+//            
+//            OpenGL.enableVertexAttributeArrayAtIndex(VertexAttribute.Normal)
+//            OpenGL.vertexAttribPointerForIndex(VertexAttribute.Normal, size: 3, type: GL_FLOAT, normalized: false, stride: renderer.mesh.stride, offset: 3 * sizeof(GLfloat))
+//            
+//            OpenGL.enableVertexAttributeArrayAtIndex(VertexAttribute.Color)
+//            OpenGL.vertexAttribPointerForIndex(VertexAttribute.Color, size: 4, type: GL_FLOAT, normalized: false, stride: renderer.mesh.stride, offset: 3 * sizeof(GLfloat) * 2)
             
             OpenGL.unbindVertexArray()
             
@@ -197,6 +172,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
         program.bindAttributeLocations([
             "position": VertexAttribute.Position,
             "normal": VertexAttribute.Normal,
+            "color": VertexAttribute.Color,
             ])
         
         do {
