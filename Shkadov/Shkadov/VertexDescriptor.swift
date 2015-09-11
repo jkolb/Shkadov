@@ -30,73 +30,58 @@ public enum VertexAttribute : UInt {
     case TexCoord1
 }
 
-public enum VertexDataType {
-    case Float
-    
-    public var size: Int {
-        switch self {
-        case Float:
-            return sizeof(Swift.Float.self)
-        }
-    }
+extension Float : RTTI {
+    public static var kind = Kind(dataType: Float.self)
 }
 
-public struct VertexAttributeDescriptor {
-    public let attribute: VertexAttribute
-    public let dataType: VertexDataType
-    public let componentCount: Int
+public struct VertexAttributeFormat {
+    public let kind: Kind
+    public let count: Int
+    public let size: Int
     
-    public init(attribute: VertexAttribute, dataType: VertexDataType, componentCount: Int) {
-        self.attribute = attribute
-        self.dataType = dataType
-        self.componentCount = componentCount
+    private init<T : RTTI>(dataType: T.Type, count: Int) {
+        self.kind = dataType.kind
+        self.count = count
+        self.size = sizeof(dataType) * count
     }
     
-    public var size: Int {
-        return dataType.size * componentCount
-    }
+    public static var Float1 = VertexAttributeFormat(dataType: Float.self, count: 1)
+    public static var Float2 = VertexAttributeFormat(dataType: Float.self, count: 2)
+    public static var Float3 = VertexAttributeFormat(dataType: Float.self, count: 3)
+    public static var Float4 = VertexAttributeFormat(dataType: Float.self, count: 4)
 }
 
 public struct VertexDescriptor {
     private var orderedAttributes: [VertexAttribute]
-    private var attributeDescriptors: [VertexAttribute : VertexAttributeDescriptor]
+    private var attributeFormats: [VertexAttribute : VertexAttributeFormat]
     private var attributeOffsets: [VertexAttribute : Int]
-    private var stride: Int
+    public private(set) var size: Int
     
     public init() {
         self.orderedAttributes = [VertexAttribute]()
-        self.attributeDescriptors = [VertexAttribute : VertexAttributeDescriptor]()
+        self.attributeFormats = [VertexAttribute : VertexAttributeFormat]()
         self.attributeOffsets = [VertexAttribute : Int]()
-        self.stride = 0
+        self.size = 0
     }
     
     public func hasAttribute(attribute: VertexAttribute) -> Bool {
-        return attributeDescriptors[attribute] != nil
+        return attributeFormats[attribute] != nil
     }
     
-    public func descriptorForAttribute(attribute: VertexAttribute) -> VertexAttributeDescriptor {
-        return attributeDescriptors[attribute]!
+    public func formatForAttribute(attribute: VertexAttribute) -> VertexAttributeFormat {
+        return attributeFormats[attribute]!
     }
     
     public func offsetForAttribute(attribute: VertexAttribute) -> Int {
         return attributeOffsets[attribute]!
     }
     
-    public mutating func addAttribute(attribute: VertexAttribute, dataType: VertexDataType, componentCount: Int) {
-        addAttributeDescriptor(VertexAttributeDescriptor(attribute: attribute, dataType: dataType, componentCount: componentCount))
-    }
-    
-    public mutating func addAttributeDescriptor(attributeDescriptor: VertexAttributeDescriptor) {
-        let attribute = attributeDescriptor.attribute
+    public mutating func addAttribute(attribute: VertexAttribute, format: VertexAttributeFormat) {
         precondition(!hasAttribute(attribute), "Duplicate attribute '\(attribute)'")
         orderedAttributes.append(attribute)
-        attributeDescriptors[attribute] = attributeDescriptor
-        attributeOffsets[attribute] = stride
-        stride += attributeDescriptor.size
-    }
-
-    public var size: Int {
-        return stride
+        attributeFormats[attribute] = format
+        attributeOffsets[attribute] = size
+        size += format.size
     }
     
     public var attributes: [VertexAttribute] {

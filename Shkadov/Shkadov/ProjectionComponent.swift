@@ -25,7 +25,7 @@ SOFTWARE.
 import simd
 
 public struct ProjectionComponent : Component {
-    public static let kind = Kind(value: ProjectionComponent.self)
+    public static let kind = Kind(dataType: ProjectionComponent.self)
     public var projectionMatrix: float4x4
 
     public init(projectionMatrix: float4x4) {

@@ -23,7 +23,7 @@ SOFTWARE.
 */
 
 public struct PlayerComponent : Component {
-    public static let kind = Kind(value: PlayerComponent.self)
+    public static let kind = Kind(dataType: PlayerComponent.self)
     public var leftHandItem: HoldableItem
     public var rightHandItem: HoldableItem
     public var headItem: WearableItem

@@ -22,15 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
-public struct RenderComponent : Component {
-    public static let kind = Kind(dataType: RenderComponent.self)
-    public var modelViewProjectionMatrix: float4x4
-    public var normalMatrix: float4x4
-    
-    public init() {
-        self.modelViewProjectionMatrix = float4x4(1.0)
-        self.normalMatrix = float4x4(1.0)
-    }
+public protocol RTTI {
+    static var kind: Kind { get }
 }

@@ -26,8 +26,8 @@ public struct Kind : CustomStringConvertible, CustomDebugStringConvertible, Equa
     private let value: String
     public let hashValue: Int
     
-    public init(value: Any.Type) {
-        self.value = "\(value)"
+    public init<T>(dataType: T.Type) {
+        self.value = "\(dataType)"
         self.hashValue = self.value.hashValue
     }
     

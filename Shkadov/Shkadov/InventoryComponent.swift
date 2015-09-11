@@ -23,7 +23,7 @@ SOFTWARE.
 */
 
 public struct InventoryComponent : Component {
-    public static let kind = Kind(value: InventoryComponent.self)
+    public static let kind = Kind(dataType: InventoryComponent.self)
     public var size: UInt
     public var items: [Entity]
 }

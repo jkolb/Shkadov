@@ -25,7 +25,7 @@ SOFTWARE.
 import simd
 
 public struct OrientationComponent : Component {
-    public static let kind = Kind(value: OrientationComponent.self)
+    public static let kind = Kind(dataType: OrientationComponent.self)
     public var position: float3
     public var forward: float3
     public var right: float3

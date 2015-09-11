@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09C3F4971BA26C410025FFE4 /* RTTI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C3F4961BA26C410025FFE4 /* RTTI.swift */; settings = {ASSET_TAGS = (); }; };
 		09F609501B9C45D3003B4A5B /* RawInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F6094F1B9C45D3003B4A5B /* RawInput.swift */; settings = {ASSET_TAGS = (); }; };
 		09F609521B9C4865003B4A5B /* InputContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F609511B9C4865003B4A5B /* InputContext.swift */; settings = {ASSET_TAGS = (); }; };
 		09F609541B9C53F3003B4A5B /* PlayerComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F609531B9C53F3003B4A5B /* PlayerComponent.swift */; settings = {ASSET_TAGS = (); }; };
@@ -74,6 +75,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		09C3F4961BA26C410025FFE4 /* RTTI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTTI.swift; sourceTree = "<group>"; };
 		09F6094F1B9C45D3003B4A5B /* RawInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInput.swift; sourceTree = "<group>"; };
 		09F609511B9C4865003B4A5B /* InputContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputContext.swift; sourceTree = "<group>"; };
 		09F609531B9C53F3003B4A5B /* PlayerComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerComponent.swift; sourceTree = "<group>"; };
@@ -261,6 +263,7 @@
 				E581CF981B892C9F00D7174F /* Renderer.swift */,
 				E581CF9A1B892C9F00D7174F /* RenderState.swift */,
 				E535C8DB1B93A8620048321F /* RenderSystem.swift */,
+				09C3F4961BA26C410025FFE4 /* RTTI.swift */,
 				E592A5C01B8AAC220032D982 /* Synchronizable.swift */,
 				E535C8D61B9385E70048321F /* TestCubeSystem.swift */,
 				E592A5B81B8A4EA60032D982 /* TIme.swift */,
@@ -416,6 +419,7 @@
 				E59C5F151B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift in Sources */,
 				E592A5B71B8A116F0032D982 /* RawInputEventBuffer.swift in Sources */,
 				09F609591B9C54F0003B4A5B /* HoldableItem.swift in Sources */,
+				09C3F4971BA26C410025FFE4 /* RTTI.swift in Sources */,
 				E535C8BB1B90608C0048321F /* Component.swift in Sources */,
 				E535C8D51B93586B0048321F /* Kind.swift in Sources */,
 				09F6095D1B9C565B003B4A5B /* Item.swift in Sources */,

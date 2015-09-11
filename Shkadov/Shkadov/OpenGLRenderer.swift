@@ -46,9 +46,9 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
         self.viewport = Rectangle2D.zero
         
         var vertexDescriptor = VertexDescriptor()
-        vertexDescriptor.addAttribute(.Position, dataType: .Float, componentCount: 3)
-        vertexDescriptor.addAttribute(.Normal, dataType: .Float, componentCount: 3)
-        vertexDescriptor.addAttribute(.Color, dataType: .Float, componentCount: 4)
+        vertexDescriptor.addAttribute(.Position, format: .Float3)
+        vertexDescriptor.addAttribute(.Normal, format: .Float3)
+        vertexDescriptor.addAttribute(.Color, format: .Float4)
         self.mesh = Mesh(vertexDescriptor: vertexDescriptor)
         
         self.mesh.addCubeWithSize(1.0, color: ColorRGBA8(red: 20, green: 50, blue: 150))
@@ -103,20 +103,22 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             
             let vertexDescriptor = renderer.mesh.vertexDescriptor
 
-            OpenGL.bufferDataForTarget(GL_ARRAY_BUFFER, size: renderer.mesh.size, data: &renderer.mesh.data, usage: GL_STATIC_DRAW)
+            OpenGL.bufferDataForTarget(GL_ARRAY_BUFFER, size: vertexDescriptor.size * renderer.mesh.data.count, data: &renderer.mesh.data, usage: GL_STATIC_DRAW)
 
             for attribute in vertexDescriptor.attributes {
-                let descriptor = vertexDescriptor.descriptorForAttribute(attribute)
+                let format = vertexDescriptor.formatForAttribute(attribute)
                 let offset = vertexDescriptor.offsetForAttribute(attribute)
                 let dataType: Int32
                 
-                switch descriptor.dataType {
-                case .Float:
+                switch format.kind {
+                case Float.kind:
                     dataType = GL_FLOAT
+                default:
+                    fatalError("Unknown kind \(format.kind)")
                 }
                 
                 OpenGL.enableVertexAttributeArrayAtIndex(attribute)
-                OpenGL.vertexAttribPointerForIndex(attribute, size: descriptor.componentCount, type: dataType, normalized: false, stride: renderer.mesh.stride, offset: offset)
+                OpenGL.vertexAttribPointerForIndex(attribute, size: format.count, type: dataType, normalized: false, stride: vertexDescriptor.size, offset: offset)
             }
             
 //            OpenGL.bufferDataForTarget(GL_ARRAY_BUFFER, size: sizeof(UInt32) * renderer.mesh.data.count, data: &renderer.mesh.data, usage: GL_STATIC_DRAW)

@@ -22,6 +22,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public protocol Component {
-    static var kind: Kind { get }
+public protocol Component : RTTI {
 }

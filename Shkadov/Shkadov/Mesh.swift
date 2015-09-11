@@ -58,14 +58,6 @@ public class Mesh {
         }
     }
     
-    public var size: Int {
-        return vertexDescriptor.size * data.count
-    }
-    
-    public var stride: Int {
-        return vertexDescriptor.size
-    }
-    
     deinit {
         bits.dealloc(sizeof(UIntMax))
     }
