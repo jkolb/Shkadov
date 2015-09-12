@@ -28,7 +28,7 @@ public typealias GeometryType = Float
 
 public let π = GeometryType(M_PI)
 
-public let geometryZero = GeometryType(0.0)
+private let geometryZero = GeometryType(0.0)
 
 public struct Angle {
     public static let zero = Angle(radians: geometryZero)
@@ -194,5 +194,23 @@ public struct Vector3D {
         self.dx = dx
         self.dy = dy
         self.dz = dz
+    }
+}
+
+public struct Size3D {
+    public static let zero = Size3D(width: geometryZero, height: geometryZero, depth: geometryZero)
+    
+    public let width: GeometryType
+    public let height: GeometryType
+    public let depth: GeometryType
+    
+    public init(width: GeometryType, height: GeometryType, depth: GeometryType) {
+        precondition(width >= geometryZero)
+        precondition(height >= geometryZero)
+        precondition(depth >= geometryZero)
+        
+        self.width = width
+        self.height = height
+        self.depth = depth
     }
 }

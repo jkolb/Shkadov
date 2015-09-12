@@ -127,6 +127,19 @@ public struct OpenGL {
         glVertexAttribPointer(index, size, GLenum(type), GLboolean(normalized), stride, pointer)
     }
     
+    public static func vertexAttribPointerForIndex<T: RawRepresentable where T.RawValue == UInt>(index: T, size: Int, type: Int32, stride: Int, offset: Int) {
+        vertexAttribPointerForIndex(GLuint(index.rawValue), size: GLint(size), type: type, stride: GLsizei(stride), offset: offset)
+    }
+    
+    public static func vertexAttribPointerForIndex(index: GLuint, size: GLint, type: Int32, stride: GLsizei, offset: Int) {
+        let pointer: UnsafePointer<Void> = nil
+        vertexAttribPointerForIndex(index, size: size, type: type, stride: stride, pointer: pointer.advancedBy(offset))
+    }
+    
+    public static func vertexAttribPointerForIndex(index: GLuint, size: GLint, type: Int32, stride: GLsizei, pointer: UnsafePointer<Void>) {
+        glVertexAttribIPointer(index, size, GLenum(type), stride, pointer)
+    }
+    
     public static func getUniformLocationWithName(name: String, fromProgramWithHandle handle: GLuint) -> GLint {
         return glGetUniformLocation(handle, name)
     }

@@ -53,11 +53,7 @@ public struct ColorRGBA8 {
         let g = UInt32(green) << 16
         let b = UInt32(blue) << 8
         let a = UInt32(alpha) << 0
-        return r | g | b | a
-    }
-    
-    public var color: Color {
-        return Color(rgba8: self)
+        return (r | g | b | a).bigEndian
     }
 }
 

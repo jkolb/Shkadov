@@ -22,43 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public enum VertexAttribute : UInt {
-    case Position
-    case Normal
-    case Color
-    case TexCoord0
-    case TexCoord1
-}
-
-extension Float : RTTI {
-    public static var kind = Kind(dataType: Float.self)
-}
-
-public struct VertexAttributeFormat {
-    public let kind: Kind
-    public let count: Int
-    public let size: Int
-    
-    private init<T : RTTI>(dataType: T.Type, count: Int) {
-        self.kind = dataType.kind
-        self.count = count
-        self.size = sizeof(dataType) * count
-    }
-    
-    public static var Float1 = VertexAttributeFormat(dataType: Float.self, count: 1)
-    public static var Float2 = VertexAttributeFormat(dataType: Float.self, count: 2)
-    public static var Float3 = VertexAttributeFormat(dataType: Float.self, count: 3)
-    public static var Float4 = VertexAttributeFormat(dataType: Float.self, count: 4)
-}
-
 public struct VertexDescriptor {
-    private var orderedAttributes: [VertexAttribute]
+    public private(set) var attributes: [VertexAttribute]
     private var attributeFormats: [VertexAttribute : VertexAttributeFormat]
     private var attributeOffsets: [VertexAttribute : Int]
     public private(set) var size: Int
     
     public init() {
-        self.orderedAttributes = [VertexAttribute]()
+        self.attributes = [VertexAttribute]()
         self.attributeFormats = [VertexAttribute : VertexAttributeFormat]()
         self.attributeOffsets = [VertexAttribute : Int]()
         self.size = 0
@@ -78,13 +49,9 @@ public struct VertexDescriptor {
     
     public mutating func addAttribute(attribute: VertexAttribute, format: VertexAttributeFormat) {
         precondition(!hasAttribute(attribute), "Duplicate attribute '\(attribute)'")
-        orderedAttributes.append(attribute)
+        attributes.append(attribute)
         attributeFormats[attribute] = format
         attributeOffsets[attribute] = size
         size += format.size
-    }
-    
-    public var attributes: [VertexAttribute] {
-        return orderedAttributes
     }
 }

@@ -22,71 +22,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class Mesh {
-    public let vertexDescriptor: VertexDescriptor
-    private let bits = UnsafeMutablePointer<UInt8>.alloc(sizeof(UIntMax))
-    public var data = [UInt32]()
-    
-    public init(vertexDescriptor: VertexDescriptor) {
-        self.vertexDescriptor = vertexDescriptor
-    }
-    
-    public func addPolygon(polygon: Polygon3D, normal: Vector3D, color: ColorRGBA8) {
-        for triangle in polygon.triangles() {
-            for point in triangle.points() {
-                if vertexDescriptor.hasAttribute(.Position) {
-                    addFloat(point.x)
-                    addFloat(point.y)
-                    addFloat(point.z)
-                }
+public protocol Mesh3D {
+    var polygons: [Polygon3D] { get }
+    var vertexCount: Int { get }
+}
 
-                if vertexDescriptor.hasAttribute(.Normal) {
-                    addFloat(normal.dx)
-                    addFloat(normal.dy)
-                    addFloat(normal.dz)
-                }
-
-                if vertexDescriptor.hasAttribute(.Color) {
-                    addColor(color)
-                }
-
-                /*
-                case TexCoord0
-                case TexCoord1
-                */
-            }
-        }
+public struct Box3D : Mesh3D {
+    public var right: Polygon3D
+    public var left: Polygon3D
+    public var top: Polygon3D
+    public var bottom: Polygon3D
+    public var forward: Polygon3D
+    public var backward: Polygon3D
+    
+    public var vertexCount: Int {
+        return 36
     }
     
-    deinit {
-        bits.dealloc(sizeof(UIntMax))
-    }
-
-    private func addColor(color: ColorRGBA8) {
-        let floatColor = color.color
-        addFloat(floatColor.red)
-        addFloat(floatColor.green)
-        addFloat(floatColor.blue)
-        addFloat(floatColor.alpha)
+    public static func cubeWithSize(size: Float) -> Box3D {
+        return boxWithSize(Size3D(width: size, height: size, depth: size))
     }
     
-    private func addFloat(value: Float) {
-        UnsafeMutablePointer<Float32>(bits).memory = value
-        data.append(UnsafePointer<UInt32>(bits).memory)
-    }
-    
-    public func addCubeWithSize(size: GeometryType, color: ColorRGBA8) {
-        addBoxWithWidth(size, height: size, depth: size, color: color)
-    }
-    
-    public func addBoxWithWidth(width: GeometryType, height: GeometryType, depth: GeometryType, color: ColorRGBA8) {
-        precondition(width > geometryZero)
-        precondition(height > geometryZero)
-        precondition(depth > geometryZero)
-        
-        let w = width * 0.5
-        let h = height * 0.5
-        let d = depth * 0.5
+    public static func boxWithSize(size: Size3D) -> Box3D {
+        let w = size.width * 0.5
+        let h = size.height * 0.5
+        let d = size.depth * 0.5
         
         let p0 = Point3D(x: +w, y: -h, z: -d)
         let p1 = Point3D(x: +w, y: +h, z: -d)
@@ -104,18 +64,56 @@ public class Mesh {
         let n4 = Vector3D(dx:  0.0, dy:  0.0, dz: +1.0)
         let n5 = Vector3D(dx:  0.0, dy:  0.0, dz: -1.0)
         
-        let q0 = Quad3D(a: p0, b: p1, c: p2, d: p3)
-        let q1 = Quad3D(a: p4, b: p5, c: p6, d: p7)
-        let q2 = Quad3D(a: p1, b: p4, c: p3, d: p6)
-        let q3 = Quad3D(a: p5, b: p0, c: p7, d: p2)
-        let q4 = Quad3D(a: p3, b: p6, c: p2, d: p7)
-        let q5 = Quad3D(a: p0, b: p5, c: p1, d: p4)
+        let v00 = Vertex3D(position: p0, normal: n0)
+        let v01 = Vertex3D(position: p1, normal: n0)
+        let v02 = Vertex3D(position: p2, normal: n0)
+        let v03 = Vertex3D(position: p3, normal: n0)
         
-        addPolygon(q0, normal: n0, color: color)
-        addPolygon(q1, normal: n1, color: color)
-        addPolygon(q2, normal: n2, color: color)
-        addPolygon(q3, normal: n3, color: color)
-        addPolygon(q4, normal: n4, color: color)
-        addPolygon(q5, normal: n5, color: color)
+        let v04 = Vertex3D(position: p4, normal: n1)
+        let v05 = Vertex3D(position: p5, normal: n1)
+        let v06 = Vertex3D(position: p6, normal: n1)
+        let v07 = Vertex3D(position: p7, normal: n1)
+        
+        let v08 = Vertex3D(position: p1, normal: n2)
+        let v09 = Vertex3D(position: p4, normal: n2)
+        let v10 = Vertex3D(position: p3, normal: n2)
+        let v11 = Vertex3D(position: p6, normal: n2)
+        
+        let v12 = Vertex3D(position: p5, normal: n3)
+        let v13 = Vertex3D(position: p0, normal: n3)
+        let v14 = Vertex3D(position: p7, normal: n3)
+        let v15 = Vertex3D(position: p2, normal: n3)
+        
+        let v16 = Vertex3D(position: p3, normal: n4)
+        let v17 = Vertex3D(position: p6, normal: n4)
+        let v18 = Vertex3D(position: p2, normal: n4)
+        let v19 = Vertex3D(position: p7, normal: n4)
+        
+        let v20 = Vertex3D(position: p0, normal: n5)
+        let v21 = Vertex3D(position: p5, normal: n5)
+        let v22 = Vertex3D(position: p1, normal: n5)
+        let v23 = Vertex3D(position: p4, normal: n5)
+        
+        let q0 = Quad3D(v00, v01, v02, v03)
+        let q1 = Quad3D(v04, v05, v06, v07)
+        let q2 = Quad3D(v08, v09, v10, v11)
+        let q3 = Quad3D(v12, v13, v14, v15)
+        let q4 = Quad3D(v16, v17, v18, v19)
+        let q5 = Quad3D(v20, v21, v22, v23)
+        
+        return Box3D(right: q0, left: q1, top: q2, bottom: q3, forward: q4, backward: q5)
+    }
+    
+    public init(right: Polygon3D, left: Polygon3D, top: Polygon3D, bottom: Polygon3D, forward: Polygon3D, backward: Polygon3D) {
+        self.right = right
+        self.left = left
+        self.top = top
+        self.bottom = bottom
+        self.forward = forward
+        self.backward = backward
+    }
+    
+    public var polygons: [Polygon3D] {
+        return [right, left, top, bottom, forward, backward]
     }
 }

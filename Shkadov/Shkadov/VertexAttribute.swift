@@ -22,50 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public protocol Polygon3D {
-    var triangles: [Triangle3D] { get }
-    var material: Material { get set }
-}
-
-public struct Triangle3D : Polygon3D {
-    public let a: Vertex3D
-    public let b: Vertex3D
-    public let c: Vertex3D
-    public var material: Material = NoMaterial()
-    
-    public init(_ a: Vertex3D, _ b: Vertex3D, _ c: Vertex3D) {
-        self.a = a
-        self.b = b
-        self.c = c
-    }
-    
-    public var triangles: [Triangle3D] {
-        return [self]
-    }
-    
-    public var vertices: [Vertex3D] {
-        return [a, b, c]
-    }
-}
-
-public struct Quad3D : Polygon3D {
-    public let a: Vertex3D
-    public let b: Vertex3D
-    public let c: Vertex3D
-    public let d: Vertex3D
-    public var material: Material = NoMaterial()
-    
-    public init(_ a: Vertex3D, _ b: Vertex3D, _ c: Vertex3D, _ d: Vertex3D) {
-        self.a = a
-        self.b = b
-        self.c = c
-        self.d = d
-    }
-    
-    public var triangles: [Triangle3D] {
-        return [
-            Triangle3D(a, b, c),
-            Triangle3D(c, b, d),
-        ]
-    }
+public enum VertexAttribute : UInt {
+    case Position
+    case Normal
+    case Color
+    case TexCoord0
+    case TexCoord1
 }

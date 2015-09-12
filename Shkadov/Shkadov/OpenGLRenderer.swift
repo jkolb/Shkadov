@@ -38,7 +38,9 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
     private var program: OpenGL.Program!
     private var vertexArray: OpenGL.VertexArray!
     private var vertexBuffer: OpenGL.VertexBuffer!
-    private var mesh: Mesh!
+    private var mesh: Mesh3D
+    private let vertexDescriptor: VertexDescriptor
+    private var buffer: ByteBuffer!
     
     public init(context: OpenGLContext) {
         self.context = context
@@ -48,10 +50,17 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
         var vertexDescriptor = VertexDescriptor()
         vertexDescriptor.addAttribute(.Position, format: .Float3)
         vertexDescriptor.addAttribute(.Normal, format: .Float3)
-        vertexDescriptor.addAttribute(.Color, format: .Float4)
-        self.mesh = Mesh(vertexDescriptor: vertexDescriptor)
-        
-        self.mesh.addCubeWithSize(1.0, color: ColorRGBA8(red: 20, green: 50, blue: 150))
+        vertexDescriptor.addAttribute(.Color, format: .UByte4Normalized)
+        self.vertexDescriptor = vertexDescriptor
+        var mesh = Box3D.cubeWithSize(1.0)
+        mesh.right.material = ColorMaterial(color: ColorRGBA8(red: 255, green: 0, blue: 0))
+        mesh.left.material = ColorMaterial(color: ColorRGBA8(red: 255, green: 0, blue: 255))
+        mesh.top.material = ColorMaterial(color: ColorRGBA8(red: 0, green: 255, blue: 0))
+        mesh.bottom.material = ColorMaterial(color: ColorRGBA8(red: 255, green: 255, blue: 0))
+        mesh.forward.material = ColorMaterial(color: ColorRGBA8(red: 0, green: 0, blue: 255))
+        mesh.backward.material = ColorMaterial(color: ColorRGBA8(red: 0, green: 255, blue: 255))
+        self.mesh = mesh
+        self.buffer = bufferFromMesh(self.mesh)
     }
     
     deinit {
@@ -73,6 +82,24 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
         }
     }
 
+    public func bufferFromMesh(mesh: Mesh3D) -> ByteBuffer {
+        let buffer = ByteBuffer(capacity: mesh.vertexCount * vertexDescriptor.size)
+
+        for polygon in mesh.polygons {
+            let material = polygon.material as! ColorMaterial
+            
+            for triangle in polygon.triangles {
+                for vertex in triangle.vertices {
+                    buffer.putNextValue(vertex.position)
+                    buffer.putNextValue(vertex.normal)
+                    buffer.putNextValue(material.color)
+                }
+            }
+        }
+        
+        return buffer
+    }
+    
     public func configure() {
         synchronizeWriteAndWait { renderer in
             renderer.context.lock()
@@ -101,36 +128,38 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             renderer.vertexBuffer = OpenGL.VertexBuffer()
             renderer.vertexBuffer.bindToTarget(GL_ARRAY_BUFFER)
             
-            let vertexDescriptor = renderer.mesh.vertexDescriptor
+            let buffer = renderer.buffer
+            let vertexDescriptor = renderer.vertexDescriptor
 
-            OpenGL.bufferDataForTarget(GL_ARRAY_BUFFER, size: vertexDescriptor.size * renderer.mesh.data.count, data: &renderer.mesh.data, usage: GL_STATIC_DRAW)
+            OpenGL.bufferDataForTarget(GL_ARRAY_BUFFER, size: buffer.capacity, data: buffer.data, usage: GL_STATIC_DRAW)
 
+            let dataTypes = [
+                Int8.kind : GL_BYTE,
+                UInt8.kind : GL_UNSIGNED_BYTE,
+                Int16.kind : GL_SHORT,
+                UInt16.kind : GL_UNSIGNED_SHORT,
+                Int32.kind : GL_INT,
+                UInt32.kind : GL_UNSIGNED_INT,
+                Float.kind : GL_FLOAT,
+                Double.kind : GL_DOUBLE,
+                Int1010102.kind : GL_INT_2_10_10_10_REV,
+                UInt1010102.kind : GL_UNSIGNED_INT_2_10_10_10_REV,
+            ]
+            
             for attribute in vertexDescriptor.attributes {
                 let format = vertexDescriptor.formatForAttribute(attribute)
                 let offset = vertexDescriptor.offsetForAttribute(attribute)
-                let dataType: Int32
-                
-                switch format.kind {
-                case Float.kind:
-                    dataType = GL_FLOAT
-                default:
-                    fatalError("Unknown kind \(format.kind)")
-                }
+                let dataType = dataTypes[format.kind]!
                 
                 OpenGL.enableVertexAttributeArrayAtIndex(attribute)
-                OpenGL.vertexAttribPointerForIndex(attribute, size: format.count, type: dataType, normalized: false, stride: vertexDescriptor.size, offset: offset)
+                
+                if format.isFloatingPoint {
+                    OpenGL.vertexAttribPointerForIndex(attribute, size: format.count, type: dataType, normalized: format.isNormalized, stride: vertexDescriptor.size, offset: offset)
+                }
+                else {
+                    OpenGL.vertexAttribPointerForIndex(attribute, size: format.count, type: dataType, stride: vertexDescriptor.size, offset: offset)
+                }
             }
-            
-//            OpenGL.bufferDataForTarget(GL_ARRAY_BUFFER, size: sizeof(UInt32) * renderer.mesh.data.count, data: &renderer.mesh.data, usage: GL_STATIC_DRAW)
-//
-//            OpenGL.enableVertexAttributeArrayAtIndex(VertexAttribute.Position)
-//            OpenGL.vertexAttribPointerForIndex(VertexAttribute.Position, size: 3, type: GL_FLOAT, normalized: false, stride: renderer.mesh.stride, offset: 0)
-//            
-//            OpenGL.enableVertexAttributeArrayAtIndex(VertexAttribute.Normal)
-//            OpenGL.vertexAttribPointerForIndex(VertexAttribute.Normal, size: 3, type: GL_FLOAT, normalized: false, stride: renderer.mesh.stride, offset: 3 * sizeof(GLfloat))
-//            
-//            OpenGL.enableVertexAttributeArrayAtIndex(VertexAttribute.Color)
-//            OpenGL.vertexAttribPointerForIndex(VertexAttribute.Color, size: 4, type: GL_FLOAT, normalized: false, stride: renderer.mesh.stride, offset: 3 * sizeof(GLfloat) * 2)
             
             OpenGL.unbindVertexArray()
             
@@ -220,7 +249,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             renderer.context.lock()
             renderer.context.makeCurrent()
 
-            OpenGL.clearColor(ColorRGBA8(red: 255, green: 165, blue: 165))
+            OpenGL.clearColor(ColorRGBA8(red: 128, green: 128, blue: 128))
             OpenGL.clearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
             
             renderer.program.use()
