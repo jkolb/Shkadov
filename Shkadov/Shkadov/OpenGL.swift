@@ -93,6 +93,17 @@ public struct OpenGL {
     public static func uniformMatrix4fvAtLocation(location: GLint, count: GLsizei, transpose: Bool, value: UnsafePointer<GLfloat>) {
         glUniformMatrix4fv(location, count, GLboolean(transpose), value)
     }
+
+    public static func setUniformVector(vector: float4, atLocation location: GLint) {
+        var mutableVector = vector
+        withUnsafePointer(&mutableVector) {
+            OpenGL.uniform4F(location, count: 1, value: UnsafePointer<GLfloat>($0))
+        }
+    }
+    
+    public static func uniform4F(location: GLint, count: GLsizei, value: UnsafePointer<GLfloat>) {
+        glUniform4fv(location, count, value)
+    }
     
     public static func drawArraysWithMode(mode: Int32, first: GLint, count: GLsizei) {
         glDrawArrays(GLenum(mode) , first, count)

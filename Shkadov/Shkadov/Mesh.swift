@@ -22,28 +22,76 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public protocol Mesh3D {
-    var polygons: [Polygon3D] { get }
-    var vertexCount: Int { get }
-}
-
-public struct Box3D : Mesh3D {
-    public var right: Polygon3D
-    public var left: Polygon3D
-    public var top: Polygon3D
-    public var bottom: Polygon3D
-    public var forward: Polygon3D
-    public var backward: Polygon3D
+public class Mesh3D : SequenceType {
+    private var triangles: [RenderableTriangle]
     
-    public var vertexCount: Int {
-        return 36
+    public init() {
+        self.triangles = [RenderableTriangle]()
+    }
+
+    public func generate() -> AnyGenerator<RenderableTriangle> {
+        var index = 0
+        let count = self.count
+        return anyGenerator {
+            if index < count {
+                return self.triangles[index++]
+            }
+            else {
+                return nil
+            }
+        }
     }
     
-    public static func cubeWithSize(size: Float) -> Box3D {
+    public func appendContentsOf(newTriangles: [RenderableTriangle]) {
+        triangles.appendContentsOf(newTriangles)
+    }
+    
+    public func append(triangle: RenderableTriangle) {
+        triangles.append(triangle)
+    }
+    
+    public func append(triangle: Triangle3D, normal: Vector3D = Vector3D.zero, color: ColorRGBA8 = ColorRGBA8.white) {
+        let v0 = Vertex3D(position: triangle.a, normal: normal, texCoords: [], color: color)
+        let v1 = Vertex3D(position: triangle.b, normal: normal, texCoords: [], color: color)
+        let v2 = Vertex3D(position: triangle.c, normal: normal, texCoords: [], color: color)
+        
+        append(RenderableTriangle(v0, v1, v2))
+    }
+    
+    public func append(quad: Quad3D, normal: Vector3D = Vector3D.zero, color: ColorRGBA8 = ColorRGBA8.white) {
+        let v0 = Vertex3D(position: quad.a, normal: normal, texCoords: [], color: color)
+        let v1 = Vertex3D(position: quad.b, normal: normal, texCoords: [], color: color)
+        let v2 = Vertex3D(position: quad.c, normal: normal, texCoords: [], color: color)
+        let v3 = Vertex3D(position: quad.c, normal: normal, texCoords: [], color: color)
+        let v4 = Vertex3D(position: quad.b, normal: normal, texCoords: [], color: color)
+        let v5 = Vertex3D(position: quad.d, normal: normal, texCoords: [], color: color)
+        
+        append(RenderableTriangle(v0, v1, v2))
+        append(RenderableTriangle(v3, v4, v5))
+    }
+    
+    public subscript (index: Int) -> RenderableTriangle {
+        get {
+            return triangles[index]
+        }
+        set {
+            triangles[index] = newValue
+        }
+    }
+    
+    public var count: Int {
+        return triangles.count
+    }
+    
+    public var vertexCount: Int {
+        return count * 3
+    }
+    
+    public static func cubeWithSize(size: Float) -> Mesh3D {
         return boxWithSize(Size3D(width: size, height: size, depth: size))
     }
     
-    public static func boxWithSize(size: Size3D) -> Box3D {
+    public static func boxWithSize(size: Size3D) -> Mesh3D {
         let w = size.width * 0.5
         let h = size.height * 0.5
         let d = size.depth * 0.5
@@ -64,56 +112,20 @@ public struct Box3D : Mesh3D {
         let n4 = Vector3D(dx:  0.0, dy:  0.0, dz: +1.0)
         let n5 = Vector3D(dx:  0.0, dy:  0.0, dz: -1.0)
         
-        let v00 = Vertex3D(position: p0, normal: n0)
-        let v01 = Vertex3D(position: p1, normal: n0)
-        let v02 = Vertex3D(position: p2, normal: n0)
-        let v03 = Vertex3D(position: p3, normal: n0)
+        let q0 = Quad3D(p0, p1, p2, p3)
+        let q1 = Quad3D(p4, p5, p6, p7)
+        let q2 = Quad3D(p1, p4, p3, p6)
+        let q3 = Quad3D(p5, p0, p7, p2)
+        let q4 = Quad3D(p3, p6, p2, p7)
+        let q5 = Quad3D(p0, p5, p1, p4)
         
-        let v04 = Vertex3D(position: p4, normal: n1)
-        let v05 = Vertex3D(position: p5, normal: n1)
-        let v06 = Vertex3D(position: p6, normal: n1)
-        let v07 = Vertex3D(position: p7, normal: n1)
-        
-        let v08 = Vertex3D(position: p1, normal: n2)
-        let v09 = Vertex3D(position: p4, normal: n2)
-        let v10 = Vertex3D(position: p3, normal: n2)
-        let v11 = Vertex3D(position: p6, normal: n2)
-        
-        let v12 = Vertex3D(position: p5, normal: n3)
-        let v13 = Vertex3D(position: p0, normal: n3)
-        let v14 = Vertex3D(position: p7, normal: n3)
-        let v15 = Vertex3D(position: p2, normal: n3)
-        
-        let v16 = Vertex3D(position: p3, normal: n4)
-        let v17 = Vertex3D(position: p6, normal: n4)
-        let v18 = Vertex3D(position: p2, normal: n4)
-        let v19 = Vertex3D(position: p7, normal: n4)
-        
-        let v20 = Vertex3D(position: p0, normal: n5)
-        let v21 = Vertex3D(position: p5, normal: n5)
-        let v22 = Vertex3D(position: p1, normal: n5)
-        let v23 = Vertex3D(position: p4, normal: n5)
-        
-        let q0 = Quad3D(v00, v01, v02, v03)
-        let q1 = Quad3D(v04, v05, v06, v07)
-        let q2 = Quad3D(v08, v09, v10, v11)
-        let q3 = Quad3D(v12, v13, v14, v15)
-        let q4 = Quad3D(v16, v17, v18, v19)
-        let q5 = Quad3D(v20, v21, v22, v23)
-        
-        return Box3D(right: q0, left: q1, top: q2, bottom: q3, forward: q4, backward: q5)
-    }
-    
-    public init(right: Polygon3D, left: Polygon3D, top: Polygon3D, bottom: Polygon3D, forward: Polygon3D, backward: Polygon3D) {
-        self.right = right
-        self.left = left
-        self.top = top
-        self.bottom = bottom
-        self.forward = forward
-        self.backward = backward
-    }
-    
-    public var polygons: [Polygon3D] {
-        return [right, left, top, bottom, forward, backward]
+        let box = Mesh3D()
+        box.append(q0, normal: n0)
+        box.append(q1, normal: n1)
+        box.append(q2, normal: n2)
+        box.append(q3, normal: n3)
+        box.append(q4, normal: n4)
+        box.append(q5, normal: n5)
+        return box
     }
 }

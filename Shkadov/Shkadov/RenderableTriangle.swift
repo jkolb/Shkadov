@@ -22,70 +22,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public struct Triangle3D {
-    public let a: Point3D
-    public let b: Point3D
-    public let c: Point3D
+public final class RenderableTriangle : SequenceType {
+    private let vertices: [Vertex3D]
     
-    public init(_ a: Point3D, _ b: Point3D, _ c: Point3D) {
-        self.a = a
-        self.b = b
-        self.c = c
-    }
-
-    public func polygon() -> Polygon3D {
-        return Polygon3D(points: [a, b, c])
-    }
-}
-
-public struct Quad3D {
-    public let a: Point3D
-    public let b: Point3D
-    public let c: Point3D
-    public let d: Point3D
-    
-    public init(_ a: Point3D, _ b: Point3D, _ c: Point3D, _ d: Point3D) {
-        self.a = a
-        self.b = b
-        self.c = c
-        self.d = d
+    public init(_ a: Vertex3D, _ b: Vertex3D, _ c: Vertex3D) {
+        self.vertices = [a, b, c]
     }
     
-    public func polygon() -> Polygon3D {
-        return Polygon3D(points: [a, b, c, d])
-    }
-}
-
-public class Polygon3D : SequenceType {
-    private var points: [Point3D]
-    
-    public init() {
-        self.points = [Point3D]()
-    }
-
-    public init(points: [Point3D]) {
-        self.points = points
-    }
-    
-    public subscript (index: Int) -> Point3D {
-        get {
-            return points[index]
-        }
-        set {
-            points[index] = newValue
-        }
+    public subscript (index: Int) -> Vertex3D {
+        return vertices[index]
     }
     
     public var count: Int {
-        return points.count
+        return vertices.count
     }
     
-    public func generate() -> AnyGenerator<Point3D> {
+    public func generate() -> AnyGenerator<Vertex3D> {
         var index = 0
         let count = self.count
         return anyGenerator {
             if index < count {
-                return self.points[index++]
+                return self.vertices[index++]
             }
             else {
                 return nil

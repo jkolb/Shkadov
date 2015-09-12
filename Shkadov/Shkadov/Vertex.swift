@@ -22,14 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public struct Vertex3D {
+public class Vertex3D {
     public let position: Point3D
-    public let normal: Vector3D
-    public let texCoords: [Point2D]
+    public var normal: Vector3D
+    public var color: ColorRGBA8
+    public var texCoords: [Point2D]
     
-    public init(position: Point3D, normal: Vector3D = Vector3D.zero, texCoords: [Point2D] = []) {
+    public init(position: Point3D, normal: Vector3D = Vector3D.zero, texCoords: [Point2D] = [], color: ColorRGBA8 = ColorRGBA8(red: 0, green: 0, blue: 0)) {
         self.position = position
         self.normal = normal
         self.texCoords = texCoords
+        self.color = color
     }
 }

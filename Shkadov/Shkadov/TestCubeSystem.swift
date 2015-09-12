@@ -40,10 +40,20 @@ public class TestCubeSystem {
             float3(0.0, 0.0, -1.5),
         ]
         
-        for position in positions {
+        let colors = [
+            Color.white.vector,
+            Color.red.vector,
+            Color.magenta.vector,
+            Color.green.vector,
+            Color.yellow.vector,
+            Color.blue.vector,
+            Color.cyan.vector,
+        ]
+        
+        for index in 0..<positions.count {
             let cube = self.entityComponents.createEntity()
-            self.entityComponents.addComponent(OrientationComponent(position: position), toEntity: cube)
-            self.entityComponents.addComponent(RenderComponent(), toEntity: cube)
+            self.entityComponents.addComponent(OrientationComponent(position: positions[index]), toEntity: cube)
+            self.entityComponents.addComponent(RenderComponent(diffuseColor: colors[index]), toEntity: cube)
         }
     }
     

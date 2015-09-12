@@ -66,6 +66,7 @@
 		E5E8B2431BA47D33004E9485 /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E8B2421BA47D33004E9485 /* Material.swift */; };
 		E5E8B2451BA48112004E9485 /* Vertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E8B2441BA48112004E9485 /* Vertex.swift */; };
 		E5E8B2471BA48915004E9485 /* ByteBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E8B2461BA48915004E9485 /* ByteBuffer.swift */; };
+		E5E8B2831BA4CFC0004E9485 /* RenderableTriangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E8B2821BA4CFC0004E9485 /* RenderableTriangle.swift */; };
 		E5FF1A6A1B8C02BF009B2AC6 /* Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF1A691B8C02BF009B2AC6 /* Logic.swift */; };
 /* End PBXBuildFile section */
 
@@ -143,6 +144,7 @@
 		E5E8B2421BA47D33004E9485 /* Material.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
 		E5E8B2441BA48112004E9485 /* Vertex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vertex.swift; sourceTree = "<group>"; };
 		E5E8B2461BA48915004E9485 /* ByteBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ByteBuffer.swift; sourceTree = "<group>"; };
+		E5E8B2821BA4CFC0004E9485 /* RenderableTriangle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderableTriangle.swift; sourceTree = "<group>"; };
 		E5FF1A691B8C02BF009B2AC6 /* Logic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -272,6 +274,7 @@
 				E5CA680D1B9FC695002B065E /* Polygon.swift */,
 				09F6094F1B9C45D3003B4A5B /* RawInput.swift */,
 				E592A5B61B8A116F0032D982 /* RawInputEventBuffer.swift */,
+				E5E8B2821BA4CFC0004E9485 /* RenderableTriangle.swift */,
 				E581CF981B892C9F00D7174F /* Renderer.swift */,
 				E581CF9A1B892C9F00D7174F /* RenderState.swift */,
 				E535C8DB1B93A8620048321F /* RenderSystem.swift */,
@@ -462,6 +465,7 @@
 				E581CFAA1B892C9F00D7174F /* OpenGLRenderer.swift in Sources */,
 				E5CA68161B9FDF40002B065E /* VertexDescriptor.swift in Sources */,
 				09F609561B9C546C003B4A5B /* InventoryComponent.swift in Sources */,
+				E5E8B2831BA4CFC0004E9485 /* RenderableTriangle.swift in Sources */,
 				E5E8B2431BA47D33004E9485 /* Material.swift in Sources */,
 				E581CFA91B892C9F00D7174F /* OpenGL.swift in Sources */,
 				E5E8B2451BA48112004E9485 /* Vertex.swift in Sources */,

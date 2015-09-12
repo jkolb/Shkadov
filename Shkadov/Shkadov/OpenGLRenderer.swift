@@ -29,7 +29,8 @@ import simd
 
 let UNIFORM_MODELVIEWPROJECTION_MATRIX = 0
 let UNIFORM_NORMAL_MATRIX = 1
-var uniforms = [GLint](count: 2, repeatedValue: 0)
+let UNIFORM_DIFFUSE_COLOR = 2
+var uniforms = [GLint](count: 3, repeatedValue: 0)
 
 public final class OpenGLRenderer : Renderer, Synchronizable {
     public let synchronizationQueue: DispatchQueue
@@ -50,15 +51,8 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
         var vertexDescriptor = VertexDescriptor()
         vertexDescriptor.addAttribute(.Position, format: .Float3)
         vertexDescriptor.addAttribute(.Normal, format: .Float3)
-        vertexDescriptor.addAttribute(.Color, format: .UByte4Normalized)
         self.vertexDescriptor = vertexDescriptor
-        var mesh = Box3D.cubeWithSize(1.0)
-        mesh.right.material = ColorMaterial(color: ColorRGBA8(red: 255, green: 0, blue: 0))
-        mesh.left.material = ColorMaterial(color: ColorRGBA8(red: 255, green: 0, blue: 255))
-        mesh.top.material = ColorMaterial(color: ColorRGBA8(red: 0, green: 255, blue: 0))
-        mesh.bottom.material = ColorMaterial(color: ColorRGBA8(red: 255, green: 255, blue: 0))
-        mesh.forward.material = ColorMaterial(color: ColorRGBA8(red: 0, green: 0, blue: 255))
-        mesh.backward.material = ColorMaterial(color: ColorRGBA8(red: 0, green: 255, blue: 255))
+        let mesh = Mesh3D.cubeWithSize(1.0)
         self.mesh = mesh
         self.buffer = bufferFromMesh(self.mesh)
     }
@@ -85,14 +79,21 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
     public func bufferFromMesh(mesh: Mesh3D) -> ByteBuffer {
         let buffer = ByteBuffer(capacity: mesh.vertexCount * vertexDescriptor.size)
 
-        for polygon in mesh.polygons {
-            let material = polygon.material as! ColorMaterial
-            
-            for triangle in polygon.triangles {
-                for vertex in triangle.vertices {
-                    buffer.putNextValue(vertex.position)
-                    buffer.putNextValue(vertex.normal)
-                    buffer.putNextValue(material.color)
+        for triangle in mesh {
+            for vertex in triangle {
+                for attribute in vertexDescriptor.attributes {
+                    switch attribute {
+                    case .Position:
+                        buffer.putNextValue(vertex.position)
+                    case .Normal:
+                        buffer.putNextValue(vertex.normal)
+                    case .Color:
+                        buffer.putNextValue(vertex.color)
+                    case .TexCoord0:
+                        fatalError("Not handled")
+                    case .TexCoord1:
+                        fatalError("Not handled")
+                    }
                 }
             }
         }
@@ -219,6 +220,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
         // Get uniform locations.
         uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = program.uniformLocationWithName("modelViewProjectionMatrix")
         uniforms[UNIFORM_NORMAL_MATRIX] = program.uniformLocationWithName("normalMatrix")
+        uniforms[UNIFORM_DIFFUSE_COLOR] = program.uniformLocationWithName("diffuseColor")
         
         program.detachShader(vertShader)
         program.detachShader(fragShader)
@@ -249,7 +251,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             renderer.context.lock()
             renderer.context.makeCurrent()
 
-            OpenGL.clearColor(ColorRGBA8(red: 128, green: 128, blue: 128))
+            OpenGL.clearColor(ColorRGBA8.lightGrey)
             OpenGL.clearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
             
             renderer.program.use()
@@ -259,6 +261,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             for object in state.objects {
                 OpenGL.setUniformMatrix(object.modelViewProjectionMatrix, atLocation: uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX])
                 OpenGL.setUniformMatrix(object.normalMatrix, atLocation: uniforms[UNIFORM_NORMAL_MATRIX])
+                OpenGL.setUniformVector(object.diffuseColor, atLocation: uniforms[UNIFORM_DIFFUSE_COLOR])
                 OpenGL.drawArraysWithMode(GL_TRIANGLES, first: 0, count: 36)
             }
             

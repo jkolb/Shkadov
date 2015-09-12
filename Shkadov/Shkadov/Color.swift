@@ -22,11 +22,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+import simd
+
 public struct ColorRGBA8 {
-    public let red: UInt8
-    public let green: UInt8
-    public let blue: UInt8
-    public let alpha: UInt8
+    public var red: UInt8
+    public var green: UInt8
+    public var blue: UInt8
+    public var alpha: UInt8
+    
+    public static var black = ColorRGBA8(red: 0, green: 0, blue: 0)
+    public static var darkGrey = ColorRGBA8(red: 64, green: 64, blue: 64)
+    public static var grey = ColorRGBA8(red: 128, green: 128, blue: 128)
+    public static var lightGrey = ColorRGBA8(red: 192, green: 192, blue: 192)
+    public static var white = ColorRGBA8(red: 255, green: 255, blue: 255)
+    public static var red = ColorRGBA8(red: 255, green: 0, blue: 0)
+    public static var green = ColorRGBA8(red: 0, green: 255, blue: 0)
+    public static var blue = ColorRGBA8(red: 0, green: 0, blue: 255)
+    public static var yellow = ColorRGBA8(red: 255, green: 255, blue: 0)
+    public static var magenta = ColorRGBA8(red: 255, green: 0, blue: 255)
+    public static var cyan = ColorRGBA8(red: 0, green: 255, blue: 255)
     
     public init(rgba: UInt32) {
         self.init(
@@ -47,24 +61,32 @@ public struct ColorRGBA8 {
         self.blue = blue
         self.alpha = alpha
     }
-    
-    public var rgba: UInt32 {
-        let r = UInt32(red) << 24
-        let g = UInt32(green) << 16
-        let b = UInt32(blue) << 8
-        let a = UInt32(alpha) << 0
-        return (r | g | b | a).bigEndian
-    }
 }
 
 public struct Color {
-    public let red: Float
-    public let green: Float
-    public let blue: Float
-    public let alpha: Float
+    public var red: Float
+    public var green: Float
+    public var blue: Float
+    public var alpha: Float
     
+    public static var black = Color(red: 0, green: 0, blue: 0)
+    public static var darkGrey = Color(red: 0.25, green: 0.25, blue: 0.25)
+    public static var grey = Color(red: 0.5, green: 0.5, blue: 0.5)
+    public static var lightGrey = Color(red: 0.75, green: 0.75, blue: 0.75)
+    public static var white = Color(red: 1.0, green: 1.0, blue: 1.0)
+    public static var red = Color(red: 1.0, green: 0.0, blue: 0.0)
+    public static var green = Color(red: 0.0, green: 1.0, blue: 0.0)
+    public static var blue = Color(red: 0.0, green: 0.0, blue: 1.0)
+    public static var yellow = Color(red: 1.0, green: 1.0, blue: 0.0)
+    public static var magenta = Color(red: 1.0, green: 0.0, blue: 1.0)
+    public static var cyan = Color(red: 0.0, green: 1.0, blue: 1.0)
+
     public init(rgba8: ColorRGBA8) {
         self.init(red: Float(rgba8.red) / 255.0, green: Float(rgba8.green) / 255.0, blue: Float(rgba8.blue) / 255.0, alpha: Float(rgba8.alpha) / 255.0)
+    }
+
+    public init(red: Float, green: Float, blue: Float) {
+        self.init(red: red, green: green, blue: blue, alpha: 1.0)
     }
     
     public init(red: Float, green: Float, blue: Float, alpha: Float) {
@@ -72,5 +94,11 @@ public struct Color {
         self.green = green
         self.blue = blue
         self.alpha = alpha
+    }
+}
+
+extension Color {
+    public var vector: float4 {
+        return float4(red, green, blue, alpha)
     }
 }
