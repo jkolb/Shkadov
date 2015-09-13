@@ -30,7 +30,7 @@ public struct OrientationComponent : Component {
     public var forward: float3
     public var right: float3
     public var up: float3 {
-        return cross(right, forward)
+        return normalize(cross(forward, right))
     }
     
     public init(position: float3 = float3(0.0, 0.0, 0.0), forward: float3 = float3(0.0, 0.0, 1.0), right: float3 = float3(1.0, 0.0, 0.0)) {

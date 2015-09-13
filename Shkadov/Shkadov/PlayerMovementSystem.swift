@@ -39,17 +39,17 @@ public class PlayerMovementSystem {
             orientation.lookRightByAmount(direction.right)
         case .Move(let direction):
             if direction.x == .Right {
-                orientation.moveRightByAmount(-0.1)
+                orientation.moveRightByAmount(0.1)
             }
             else if direction.x == .Left {
-                orientation.moveRightByAmount(0.1)
+                orientation.moveRightByAmount(-0.1)
             }
             
             if direction.y == .Up {
-                orientation.moveUpByAmount(-0.1)
+                orientation.moveUpByAmount(0.1)
             }
             else if direction.y == .Down {
-                orientation.moveUpByAmount(0.1)
+                orientation.moveUpByAmount(-0.1)
             }
             
             if direction.z == .Forward {
