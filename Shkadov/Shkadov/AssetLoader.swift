@@ -22,11 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class RenderState {
-    public var program: Handle = Handle.invalid
-    public var buffer: Handle = Handle.invalid
-    public var objects: [RenderComponent] = []
-    
-    public init() {
-    }
+public protocol AssetLoader {
+    func pathToFile(name: String) -> String
+    func loadTextureData(path: String) -> TextureData
 }

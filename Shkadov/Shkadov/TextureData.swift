@@ -22,11 +22,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class RenderState {
-    public var program: Handle = Handle.invalid
-    public var buffer: Handle = Handle.invalid
-    public var objects: [RenderComponent] = []
-    
-    public init() {
+public class TextureData {
+    public let format: TextureFormat
+    public let size: PixelSize
+    public let rawData: UnsafeMutablePointer<RawByte>
+
+    public init(format: TextureFormat, size: PixelSize) {
+        self.format = format
+        self.size = size
+        self.rawData = UnsafeMutablePointer<RawByte>.alloc(format.dataLengthForSize(size))
+    }
+
+    deinit {
+        rawData.dealloc(format.dataLengthForSize(size))
     }
 }

@@ -57,8 +57,6 @@ public class RenderSystem {
         let viewMatrix = cameraOrientation.lookAtMatrix
         let projectionMatrix = projection.projectionMatrix
         
-        var renderComponents = [RenderComponent]()
-        
         for entity in entityComponents.getEntitiesWithComponentTypes([RenderComponent.self, OrientationComponent.self]) {
             let orientation = entityComponents.componentForEntity(entity, withComponentType: OrientationComponent.self)!
             var render = entityComponents.componentForEntity(entity, withComponentType: RenderComponent.self)!
@@ -68,10 +66,6 @@ public class RenderSystem {
             render.normalMatrix = modelViewMatrix.inverse.transpose
             
             entityComponents.updateComponent(render, forEntity: entity)
-            
-            renderComponents.append(render)
         }
-        
-        renderer.renderState(RenderState(objects: renderComponents))
     }
 }

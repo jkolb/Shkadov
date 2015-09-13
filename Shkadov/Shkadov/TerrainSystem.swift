@@ -22,11 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class RenderState {
-    public var program: Handle = Handle.invalid
-    public var buffer: Handle = Handle.invalid
-    public var objects: [RenderComponent] = []
+public class TerrainSystem {
+    private let renderer: Renderer
     
-    public init() {
+    public init(renderer: Renderer) {
+        self.renderer = renderer
     }
 }

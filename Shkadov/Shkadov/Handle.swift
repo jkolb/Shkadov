@@ -33,6 +33,7 @@ public class HandleFactory {
 }
 
 public struct Handle : CustomStringConvertible, CustomDebugStringConvertible, Equatable, Hashable {
+    public static var invalid = Handle(value: HandleType.max)
     private let value: HandleType
     
     private init(value: HandleType) {

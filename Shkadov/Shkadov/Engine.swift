@@ -31,7 +31,6 @@ public final class Engine : TimerDelegate, Synchronizable {
     private let timer: Timer
     private var eventHandlers: [Event.System:[Component]]
     private let entityComponents: EntityComponents
-    private let renderSystem: RenderSystem
     private let playerMovementSystem: PlayerMovementSystem
 
     public init(platform: Platform, renderer: Renderer) {
@@ -39,10 +38,9 @@ public final class Engine : TimerDelegate, Synchronizable {
         self.entityComponents = EntityComponents()
         self.platform = platform
         self.rawInputEventBuffer = RawInputEventBuffer()
-        self.logic = Logic(entityComponents: self.entityComponents)
+        self.logic = Logic(renderer: renderer, entityComponents: self.entityComponents)
         self.timer = Timer(platform: platform, name: "net.franticapparatus.shkadov.timer", tickDuration: Duration(seconds: 1.0 / 60.0))
         self.eventHandlers = [:]
-        self.renderSystem = RenderSystem(renderer: renderer, entityComponents: self.entityComponents)
         self.playerMovementSystem = PlayerMovementSystem(entityComponents: self.entityComponents)
         self.inputContext = InputContext()
     }
@@ -80,7 +78,7 @@ public final class Engine : TimerDelegate, Synchronizable {
         synchronizeWriteAndWait { engine in
             engine.platform.centerMouse()
             engine.platform.mousePositionRelative = true
-            engine.renderSystem.configure()
+            engine.logic.configure()
             engine.timer.delegate = self
             engine.timer.start()
         }
@@ -111,13 +109,13 @@ public final class Engine : TimerDelegate, Synchronizable {
             engine.handleInput()
             
             engine.logic.updateWithTickCount(tickCount, tickDuration: tickDuration)
-            engine.renderSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
+            engine.logic.render()
         }
     }
     
     public func updateViewport(viewport: Rectangle2D) {
         synchronizeWriteAndWait { engine in
-            engine.renderSystem.updateViewport(viewport)
+            engine.logic.updateViewport(viewport)
         }
     }
 }

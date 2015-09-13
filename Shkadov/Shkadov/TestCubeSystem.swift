@@ -22,13 +22,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+import Foundation
 import simd
 
 public class TestCubeSystem {
+    private let renderer: Renderer
     private let entityComponents: EntityComponents
+    private var renderState: RenderState
     
-    public init(entityComponents: EntityComponents) {
+    public init(renderer: Renderer, entityComponents: EntityComponents) {
+        self.renderer = renderer
         self.entityComponents = entityComponents
+        self.renderState = RenderState()
+    }
+    
+    deinit {
+        renderer.destroyProgram(renderState.program)
+        renderer.destoryBuffer(renderState.buffer)
+    }
+    
+    public func configure() {
+        var vertexDescriptor = VertexDescriptor()
+        vertexDescriptor.addAttribute(.Position, format: .Float3)
+        vertexDescriptor.addAttribute(.Normal, format: .Float3)
+        
+        let mesh = Mesh3D.cubeWithSize(1.0)
+        let meshData = mesh.createBufferForVertexDescriptor(vertexDescriptor)
+        
+        self.renderState.program = renderer.createProgramWithVertexPath(NSBundle.mainBundle().pathForResource("Shader", ofType: "vsh")!, fragmentPath: NSBundle.mainBundle().pathForResource("Shader", ofType: "fsh")!)
+        self.renderState.buffer = renderer.createBufferFromDescriptor(vertexDescriptor, buffer: meshData)
         
         let positions = [
             float3(0.0, 0.0, 0.0),
@@ -68,5 +90,18 @@ public class TestCubeSystem {
             
             entityComponents.updateComponent(orientation, forEntity: entity)
         }
+    }
+    
+    public func render() {
+        var renderObjects = [RenderComponent]()
+        
+        for entity in entityComponents.getEntitiesWithComponentType(RenderComponent.self) {
+            let renderObject = entityComponents.componentForEntity(entity, withComponentType: RenderComponent.self)!
+            renderObjects.append(renderObject)
+        }
+        
+        renderState.objects = renderObjects
+        
+        renderer.renderState(renderState)
     }
 }

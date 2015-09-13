@@ -128,4 +128,29 @@ public class Mesh3D : SequenceType {
         box.append(q5, normal: n5)
         return box
     }
+    
+    public func createBufferForVertexDescriptor(vertexDescriptor: VertexDescriptor) -> ByteBuffer {
+        let buffer = ByteBuffer(capacity: vertexCount * vertexDescriptor.size)
+        
+        for triangle in self {
+            for vertex in triangle {
+                for attribute in vertexDescriptor.attributes {
+                    switch attribute {
+                    case .Position:
+                        buffer.putNextValue(vertex.position)
+                    case .Normal:
+                        buffer.putNextValue(vertex.normal)
+                    case .Color:
+                        buffer.putNextValue(vertex.color)
+                    case .TexCoord0:
+                        fatalError("Not handled")
+                    case .TexCoord1:
+                        fatalError("Not handled")
+                    }
+                }
+            }
+        }
+        
+        return buffer
+    }
 }

@@ -369,6 +369,7 @@ public struct OpenGL {
 
     public final class VertexArray {
         public private(set) var handle: GLuint = 0
+        private var buffers = [VertexBuffer]()
         
         public init() {
             glGenVertexArrays(1, &handle)
@@ -380,6 +381,10 @@ public struct OpenGL {
         
         deinit {
             glDeleteVertexArrays(1, &handle)
+        }
+        
+        public func addBuffer(buffer: VertexBuffer) {
+            buffers.append(buffer)
         }
     }
     
@@ -396,6 +401,36 @@ public struct OpenGL {
         
         deinit {
             glDeleteBuffers(1, &handle)
+        }
+    }
+    
+    public final class Texture {
+        public private(set) var handle: GLuint = 0
+
+        public init() {
+            glGenTextures(1, &handle)
+        }
+        
+        public func bind2D() {
+            bindToTarget(GL_TEXTURE_2D)
+        }
+        
+        public func data2D(width: Int, height: Int, pixels: UnsafePointer<Void>) {
+            let level: GLint = 0
+            let internalFormat: GLint = GL_RGBA8
+            let border: GLint = 0
+            let format: GLenum = GLenum(GL_BGRA)
+            let type: GLenum = GLenum(GL_UNSIGNED_INT_8_8_8_8_REV)
+            
+            glTexImage2D(GLenum(GL_TEXTURE_2D), level, internalFormat, GLsizei(width), GLsizei(height), border, format, type, pixels)
+        }
+        
+        public func bindToTarget(target: Int32) {
+            glBindTexture(GLenum(target), handle)
+        }
+        
+        deinit {
+            glDeleteTextures(1, &handle)
         }
     }
 }

@@ -22,11 +22,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class RenderState {
-    public var program: Handle = Handle.invalid
-    public var buffer: Handle = Handle.invalid
-    public var objects: [RenderComponent] = []
+public enum TextureFormat {
+    case RGBA8
     
-    public init() {
+    public func dataLengthForSize(size: PixelSize) -> Int {
+        switch self {
+        case .RGBA8:
+            return sizeof(UInt32) * size.width * size.height
+        }
+    }
+
+    public var bitsPerComponent: Int {
+        switch self {
+        case .RGBA8:
+            return 8
+        }
+    }
+    
+    public var bytesPerSample: Int {
+        switch self {
+        case .RGBA8:
+            return 4
+        }
     }
 }

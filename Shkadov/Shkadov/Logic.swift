@@ -24,16 +24,38 @@ SOFTWARE.
 
 public class Logic : Synchronizable {
     public let synchronizationQueue: DispatchQueue
+    private let renderSystem: RenderSystem
     private let testCubeSystem: TestCubeSystem
 
-    public init(entityComponents: EntityComponents) {
+    public init(renderer: Renderer, entityComponents: EntityComponents) {
         self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.logic", attribute: .Concurrent)
-        self.testCubeSystem = TestCubeSystem(entityComponents: entityComponents)
+        self.testCubeSystem = TestCubeSystem(renderer: renderer, entityComponents: entityComponents)
+        self.renderSystem = RenderSystem(renderer: renderer, entityComponents: entityComponents)
+    }
+    
+    public func configure() {
+        synchronizeWriteAndWait { logic in
+            logic.renderSystem.configure()
+            logic.testCubeSystem.configure()
+        }
     }
     
     public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
         synchronizeWriteAndWait { logic in
             logic.testCubeSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
+            logic.renderSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
+        }
+    }
+    
+    public func render() {
+        synchronizeWriteAndWait { logic in
+            logic.testCubeSystem.render()
+        }
+    }
+    
+    public func updateViewport(viewport: Rectangle2D) {
+        synchronizeWriteAndWait { logic in
+            logic.renderSystem.updateViewport(viewport)
         }
     }
 }

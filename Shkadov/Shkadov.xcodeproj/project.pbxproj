@@ -56,6 +56,13 @@
 		E59C5F131B9E7DF4003422FB /* PlatformOSX+Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F121B9E7DF4003422FB /* PlatformOSX+Platform.swift */; };
 		E59C5F151B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F141B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift */; };
 		E59C5F171B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F161B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift */; };
+		E5AC4E291BA5B13A00134995 /* TerrainSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AC4E281BA5B13A00134995 /* TerrainSystem.swift */; };
+		E5AC4E2B1BA5C5E500134995 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = E5AC4E2A1BA5C5E500134995 /* Assets */; };
+		E5AC4E2D1BA5C6A200134995 /* AssetLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AC4E2C1BA5C6A200134995 /* AssetLoader.swift */; };
+		E5AC4E2F1BA5C6EB00134995 /* PlatformOSX+AssetLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AC4E2E1BA5C6EB00134995 /* PlatformOSX+AssetLoader.swift */; };
+		E5AC4E311BA5C74A00134995 /* TextureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AC4E301BA5C74A00134995 /* TextureData.swift */; };
+		E5AC4E331BA5C77A00134995 /* TextureFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AC4E321BA5C77A00134995 /* TextureFormat.swift */; };
+		E5AC4E351BA5CAB900134995 /* PixelSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AC4E341BA5CAB900134995 /* PixelSize.swift */; };
 		E5C54E2F1B954E58003F5AEB /* PlayerMovementSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C54E2E1B954E58003F5AEB /* PlayerMovementSystem.swift */; };
 		E5CA680E1B9FC695002B065E /* Polygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA680D1B9FC695002B065E /* Polygon.swift */; };
 		E5CA68101B9FC8D0002B065E /* Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA680F1B9FC8D0002B065E /* Mesh.swift */; };
@@ -134,6 +141,13 @@
 		E59C5F121B9E7DF4003422FB /* PlatformOSX+Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+Platform.swift"; sourceTree = "<group>"; };
 		E59C5F141B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+CoordinateSystem.swift"; sourceTree = "<group>"; };
 		E59C5F161B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+NSUserDefaults.swift"; sourceTree = "<group>"; };
+		E5AC4E281BA5B13A00134995 /* TerrainSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TerrainSystem.swift; sourceTree = "<group>"; };
+		E5AC4E2A1BA5C5E500134995 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
+		E5AC4E2C1BA5C6A200134995 /* AssetLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetLoader.swift; sourceTree = "<group>"; };
+		E5AC4E2E1BA5C6EB00134995 /* PlatformOSX+AssetLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+AssetLoader.swift"; sourceTree = "<group>"; };
+		E5AC4E301BA5C74A00134995 /* TextureData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureData.swift; sourceTree = "<group>"; };
+		E5AC4E321BA5C77A00134995 /* TextureFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureFormat.swift; sourceTree = "<group>"; };
+		E5AC4E341BA5CAB900134995 /* PixelSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelSize.swift; sourceTree = "<group>"; };
 		E5C54E2E1B954E58003F5AEB /* PlayerMovementSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerMovementSystem.swift; sourceTree = "<group>"; };
 		E5CA680D1B9FC695002B065E /* Polygon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Polygon.swift; sourceTree = "<group>"; };
 		E5CA680F1B9FC8D0002B065E /* Mesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; };
@@ -209,6 +223,7 @@
 		E581CF701B892C6900D7174F /* Shkadov */ = {
 			isa = PBXGroup;
 			children = (
+				E5AC4E2A1BA5C5E500134995 /* Assets */,
 				E581CFB41B89361100D7174F /* Engine */,
 				E581CFB31B8935F500D7174F /* OpenGL */,
 				E581CFB61B89367100D7174F /* OS X */,
@@ -253,6 +268,7 @@
 			children = (
 				E535C8D81B93A6D80048321F /* Components */,
 				09F609571B9C54CE003B4A5B /* Items */,
+				E5AC4E2C1BA5C6A200134995 /* AssetLoader.swift */,
 				E5E8B2461BA48915004E9485 /* ByteBuffer.swift */,
 				E5CA68131B9FCBA4002B065E /* Color.swift */,
 				E535C8BA1B90608C0048321F /* Component.swift */,
@@ -269,6 +285,7 @@
 				E581CF941B892C9F00D7174F /* Matrix.swift */,
 				E5CA680F1B9FC8D0002B065E /* Mesh.swift */,
 				E59C5F081B9E7BA0003422FB /* OpenGLContext.swift */,
+				E5AC4E341BA5CAB900134995 /* PixelSize.swift */,
 				E592A5BC1B8A64D20032D982 /* Platform.swift */,
 				E5C54E2E1B954E58003F5AEB /* PlayerMovementSystem.swift */,
 				E5CA680D1B9FC695002B065E /* Polygon.swift */,
@@ -280,7 +297,10 @@
 				E535C8DB1B93A8620048321F /* RenderSystem.swift */,
 				09C3F4961BA26C410025FFE4 /* RTTI.swift */,
 				E592A5C01B8AAC220032D982 /* Synchronizable.swift */,
+				E5AC4E281BA5B13A00134995 /* TerrainSystem.swift */,
 				E535C8D61B9385E70048321F /* TestCubeSystem.swift */,
+				E5AC4E301BA5C74A00134995 /* TextureData.swift */,
+				E5AC4E321BA5C77A00134995 /* TextureFormat.swift */,
 				E592A5B81B8A4EA60032D982 /* TIme.swift */,
 				E581CF9D1B892C9F00D7174F /* Timer.swift */,
 				E592A5BE1B8A9E240032D982 /* Vector.swift */,
@@ -307,6 +327,7 @@
 				E581CF911B892C9F00D7174F /* ContentView.swift */,
 				E59C5F0E1B9E7D2E003422FB /* Geometry+CoreGraphics.swift */,
 				E581CFB91B894E6400D7174F /* PlatformOSX.swift */,
+				E5AC4E2E1BA5C6EB00134995 /* PlatformOSX+AssetLoader.swift */,
 				E59C5F141B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift */,
 				E59C5F0A1B9E7BF8003422FB /* PlatformOSX+NSApplicationDelegate.swift */,
 				E59C5F161B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift */,
@@ -399,6 +420,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E581CFAE1B892C9F00D7174F /* Shader.fsh in Resources */,
+				E5AC4E2B1BA5C5E500134995 /* Assets in Resources */,
 				E581CF741B892C6900D7174F /* Assets.xcassets in Resources */,
 				E581CFAF1B892C9F00D7174F /* Shader.vsh in Resources */,
 			);
@@ -420,6 +442,7 @@
 			files = (
 				E592A5B91B8A4EA60032D982 /* TIme.swift in Sources */,
 				E5CA68101B9FC8D0002B065E /* Mesh.swift in Sources */,
+				E5AC4E291BA5B13A00134995 /* TerrainSystem.swift in Sources */,
 				E5C54E2F1B954E58003F5AEB /* PlayerMovementSystem.swift in Sources */,
 				E5FF1A6A1B8C02BF009B2AC6 /* Logic.swift in Sources */,
 				E59C5F091B9E7BA0003422FB /* OpenGLContext.swift in Sources */,
@@ -439,7 +462,10 @@
 				E59C5F151B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift in Sources */,
 				E592A5B71B8A116F0032D982 /* RawInputEventBuffer.swift in Sources */,
 				09F609591B9C54F0003B4A5B /* HoldableItem.swift in Sources */,
+				E5AC4E311BA5C74A00134995 /* TextureData.swift in Sources */,
 				09C3F4971BA26C410025FFE4 /* RTTI.swift in Sources */,
+				E5AC4E331BA5C77A00134995 /* TextureFormat.swift in Sources */,
+				E5AC4E2D1BA5C6A200134995 /* AssetLoader.swift in Sources */,
 				E535C8BB1B90608C0048321F /* Component.swift in Sources */,
 				E535C8D51B93586B0048321F /* Kind.swift in Sources */,
 				09F6095D1B9C565B003B4A5B /* Item.swift in Sources */,
@@ -469,9 +495,11 @@
 				E5E8B2431BA47D33004E9485 /* Material.swift in Sources */,
 				E581CFA91B892C9F00D7174F /* OpenGL.swift in Sources */,
 				E5E8B2451BA48112004E9485 /* Vertex.swift in Sources */,
+				E5AC4E2F1BA5C6EB00134995 /* PlatformOSX+AssetLoader.swift in Sources */,
 				E581CFAD1B892C9F00D7174F /* RenderState.swift in Sources */,
 				E592A5C11B8AAC220032D982 /* Synchronizable.swift in Sources */,
 				E59C5F0B1B9E7BF8003422FB /* PlatformOSX+NSApplicationDelegate.swift in Sources */,
+				E5AC4E351BA5CAB900134995 /* PixelSize.swift in Sources */,
 				E581CFA11B892C9F00D7174F /* DispatchSource.swift in Sources */,
 				E535C8D31B923C510048321F /* EntityComponents.swift in Sources */,
 				E535C8C51B91E8F80048321F /* ProjectionComponent.swift in Sources */,

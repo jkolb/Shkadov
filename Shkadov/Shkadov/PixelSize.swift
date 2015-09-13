@@ -22,11 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class RenderState {
-    public var program: Handle = Handle.invalid
-    public var buffer: Handle = Handle.invalid
-    public var objects: [RenderComponent] = []
+public struct PixelSize {
+    public let width: Int
+    public let height: Int
     
-    public init() {
+    public init(width: Int, height: Int) {
+        precondition(width >= Int(UInt16.min))
+        precondition(width <= Int(UInt16.max))
+        precondition(height >= Int(UInt16.min))
+        precondition(height <= Int(UInt16.max))
+        self.width = width
+        self.height = height
     }
 }

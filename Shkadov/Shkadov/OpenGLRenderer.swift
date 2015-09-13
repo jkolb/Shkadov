@@ -36,25 +36,20 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
     public let synchronizationQueue: DispatchQueue
     public var viewport: Rectangle2D
     public weak var context: OpenGLContext!
-    private var program: OpenGL.Program!
-    private var vertexArray: OpenGL.VertexArray!
-    private var vertexBuffer: OpenGL.VertexBuffer!
-    private var mesh: Mesh3D
-    private let vertexDescriptor: VertexDescriptor
-    private var buffer: ByteBuffer!
+    private let textureHandleFactory = HandleFactory()
+    private var textures: [Handle : OpenGL.Texture]
+    private let bufferHandleFactory = HandleFactory()
+    private var buffers: [Handle : OpenGL.VertexArray]
+    private let programHandleFactory = HandleFactory()
+    private var programs: [Handle : OpenGL.Program]
     
     public init(context: OpenGLContext) {
         self.context = context
         self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.render", attribute: .Serial)
         self.viewport = Rectangle2D.zero
-        
-        var vertexDescriptor = VertexDescriptor()
-        vertexDescriptor.addAttribute(.Position, format: .Float3)
-        vertexDescriptor.addAttribute(.Normal, format: .Float3)
-        self.vertexDescriptor = vertexDescriptor
-        let mesh = Mesh3D.cubeWithSize(1.0)
-        self.mesh = mesh
-        self.buffer = bufferFromMesh(self.mesh)
+        self.textures = Dictionary<Handle, OpenGL.Texture>()
+        self.buffers = Dictionary<Handle, OpenGL.VertexArray>()
+        self.programs = Dictionary<Handle, OpenGL.Program>()
     }
     
     deinit {
@@ -76,64 +71,51 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
         }
     }
 
-    public func bufferFromMesh(mesh: Mesh3D) -> ByteBuffer {
-        let buffer = ByteBuffer(capacity: mesh.vertexCount * vertexDescriptor.size)
+    public func createTextureFromData(textureData: TextureData) -> Handle {
+        return synchronizeReadWrite { renderer in
+            renderer.context.lock()
+            renderer.context.makeCurrent()
 
-        for triangle in mesh {
-            for vertex in triangle {
-                for attribute in vertexDescriptor.attributes {
-                    switch attribute {
-                    case .Position:
-                        buffer.putNextValue(vertex.position)
-                    case .Normal:
-                        buffer.putNextValue(vertex.normal)
-                    case .Color:
-                        buffer.putNextValue(vertex.color)
-                    case .TexCoord0:
-                        fatalError("Not handled")
-                    case .TexCoord1:
-                        fatalError("Not handled")
-                    }
-                }
-            }
+            let handle = renderer.textureHandleFactory.nextHandle()
+            let texture = OpenGL.Texture()
+            renderer.textures[handle] = texture
+            texture.bind2D()
+            texture.data2D(textureData.size.width, height: textureData.size.height, pixels: textureData.rawData)
+            
+            renderer.context.unlock()
+            
+            return handle
         }
-        
-        return buffer
     }
-    
-    public func configure() {
-        synchronizeWriteAndWait { renderer in
+
+    public func destroyTexture(handle: Handle) {
+        synchronizeWrite { renderer in
             renderer.context.lock()
             renderer.context.makeCurrent()
             
-            #if DEBUG
-                print("Vendor: \(OpenGL.vendor)")
-                print("Renderer: \(OpenGL.renderer)")
-                print("Version: \(OpenGL.version)")
-            #endif
+            renderer.textures.removeValueForKey(handle)
             
-            do {
-                try renderer.loadShaders()
-            }
-            catch {
-                NSLog("Error")
-            }
+            renderer.context.unlock()
+        }
+    }
+    
+    public func createBufferFromDescriptor(vertexDescriptor: VertexDescriptor, buffer: ByteBuffer) -> Handle {
+        return synchronizeReadWrite { renderer in
+            renderer.context.lock()
+            renderer.context.makeCurrent()
+            
+            let handle = renderer.bufferHandleFactory.nextHandle()
 
-            renderer.context.swapInterval = 1
+            let vertexArray = OpenGL.VertexArray()
+            vertexArray.bind()
             
-            OpenGL.enableCapability(GL_DEPTH_TEST)
+            let vertexBuffer = OpenGL.VertexBuffer()
+            vertexBuffer.bindToTarget(GL_ARRAY_BUFFER)
             
-            renderer.vertexArray = OpenGL.VertexArray()
-            renderer.vertexArray.bind()
+            vertexArray.addBuffer(vertexBuffer)
             
-            renderer.vertexBuffer = OpenGL.VertexBuffer()
-            renderer.vertexBuffer.bindToTarget(GL_ARRAY_BUFFER)
-            
-            let buffer = renderer.buffer
-            let vertexDescriptor = renderer.vertexDescriptor
-
             OpenGL.bufferDataForTarget(GL_ARRAY_BUFFER, size: buffer.capacity, data: buffer.data, usage: GL_STATIC_DRAW)
-
+            
             let dataTypes = [
                 Int8.kind : GL_BYTE,
                 UInt8.kind : GL_UNSIGNED_BYTE,
@@ -163,67 +145,121 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             }
             
             OpenGL.unbindVertexArray()
+
+            renderer.buffers[handle] = vertexArray
+            
+            renderer.context.unlock()
+            
+            return handle
+        }
+    }
+    
+    public func destoryBuffer(handle: Handle) {
+        synchronizeWrite { renderer in
+            renderer.context.lock()
+            renderer.context.makeCurrent()
+            
+            renderer.buffers.removeValueForKey(handle)
             
             renderer.context.unlock()
         }
     }
     
-    func loadShaders() throws {
-        let vertShader = try OpenGL.Shader(.Vertex)
-        let fragShader = try OpenGL.Shader(.Fragment)
-        
-        // Create shader program.
-        program = try OpenGL.Program()
-        
-        // Create and compile vertex shader.
-        do {
-            try vertShader.compile(NSBundle.mainBundle().pathForResource("Shader", ofType: "vsh")!)
-        }
-        catch OpenGL.Error.UnableToCompileShader(let message) {
-            NSLog("Vertex: \(message)")
-        }
-        catch {
-            NSLog("Vertex: \(error)")
-        }
+    public func createProgramWithVertexPath(vertexPath: String, fragmentPath: String) -> Handle {
+        return synchronizeReadWrite { renderer in
+            renderer.context.lock()
+            renderer.context.makeCurrent()
+            
+            let handle = renderer.programHandleFactory.nextHandle()
+            let vertShader = try! OpenGL.Shader(.Vertex)
+            let fragShader = try! OpenGL.Shader(.Fragment)
+            let program = try! OpenGL.Program()
+            
+            do {
+                try vertShader.compile(vertexPath)
+            }
+            catch OpenGL.Error.UnableToCompileShader(let message) {
+                fatalError("Vertex: \(message)")
+            }
+            catch {
+                fatalError("Vertex: \(error)")
+            }
+            
+            do {
+                try fragShader.compile(fragmentPath)
+            }
+            catch OpenGL.Error.UnableToCompileShader(let message) {
+                fatalError("Fragment: \(message)")
+            }
+            catch {
+                fatalError("Fragment: \(error)")
+            }
+            
+            program.attachShader(vertShader)
+            program.attachShader(fragShader)
+            
+            // Bind attribute locations.
+            // This needs to be done prior to linking.
+            program.bindAttributeLocations([
+                "position": VertexAttribute.Position,
+                "normal": VertexAttribute.Normal,
+                "color": VertexAttribute.Color,
+                ])
+            
+            do {
+                try program.link()
+            }
+            catch OpenGL.Error.UnableToLinkProgram(let message) {
+                fatalError("Link: \(message)")
+            }
+            catch {
+                fatalError("Link: \(error)")
+            }
+            
+            // Get uniform locations.
+            uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = program.uniformLocationWithName("modelViewProjectionMatrix")
+            uniforms[UNIFORM_NORMAL_MATRIX] = program.uniformLocationWithName("normalMatrix")
+            uniforms[UNIFORM_DIFFUSE_COLOR] = program.uniformLocationWithName("diffuseColor")
+            
+            program.detachShader(vertShader)
+            program.detachShader(fragShader)
 
-        do {
-            try fragShader.compile(NSBundle.mainBundle().pathForResource("Shader", ofType: "fsh")!)
+            renderer.programs[handle] = program
+            
+            renderer.context.unlock()
+
+            return handle
         }
-        catch OpenGL.Error.UnableToCompileShader(let message) {
-            NSLog("Fragment: \(message)")
+    }
+    
+    public func destroyProgram(handle: Handle) {
+        synchronizeWrite { renderer in
+            renderer.context.lock()
+            renderer.context.makeCurrent()
+            
+            renderer.programs.removeValueForKey(handle)
+            
+            renderer.context.unlock()
         }
-        catch {
-            NSLog("Fragment: \(error)")
+    }
+
+    public func configure() {
+        synchronizeWriteAndWait { renderer in
+            renderer.context.lock()
+            renderer.context.makeCurrent()
+            
+            #if DEBUG
+                print("Vendor: \(OpenGL.vendor)")
+                print("Renderer: \(OpenGL.renderer)")
+                print("Version: \(OpenGL.version)")
+            #endif
+            
+            renderer.context.swapInterval = 1
+            
+            OpenGL.enableCapability(GL_DEPTH_TEST)
+            
+            renderer.context.unlock()
         }
-        
-        program.attachShader(vertShader)
-        program.attachShader(fragShader)
-        
-        // Bind attribute locations.
-        // This needs to be done prior to linking.
-        program.bindAttributeLocations([
-            "position": VertexAttribute.Position,
-            "normal": VertexAttribute.Normal,
-            "color": VertexAttribute.Color,
-            ])
-        
-        do {
-            try program.link()
-        }
-        catch OpenGL.Error.UnableToLinkProgram(let message) {
-            NSLog("Link: \(message)")
-        }
-        catch {
-            NSLog("Link: \(error)")
-        }
-        
-        // Get uniform locations.
-        uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = program.uniformLocationWithName("modelViewProjectionMatrix")
-        uniforms[UNIFORM_NORMAL_MATRIX] = program.uniformLocationWithName("normalMatrix")
-        uniforms[UNIFORM_DIFFUSE_COLOR] = program.uniformLocationWithName("diffuseColor")
-        
-        program.detachShader(vertShader)
-        program.detachShader(fragShader)
     }
     
     func validateProgram(prog: GLuint) -> Bool {
@@ -254,9 +290,11 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             OpenGL.clearColor(ColorRGBA8.lightGrey)
             OpenGL.clearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
             
-            renderer.program.use()
+            let program = renderer.programs[state.program]!
+            program.use()
             
-            renderer.vertexArray.bind()
+            let buffer = renderer.buffers[state.buffer]!
+            buffer.bind()
             
             for object in state.objects {
                 OpenGL.setUniformMatrix(object.modelViewProjectionMatrix, atLocation: uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX])
