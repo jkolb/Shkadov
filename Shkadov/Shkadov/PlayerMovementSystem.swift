@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+import simd
+
 public class PlayerMovementSystem {
     private let entityComponents: EntityComponents
     
@@ -37,6 +39,7 @@ public class PlayerMovementSystem {
         case .Look(let direction):
             orientation.lookUpByAmount(direction.up)
             orientation.lookRightByAmount(direction.right)
+            
         case .Move(let direction):
             if direction.x == .Right {
                 orientation.moveRightByAmount(0.1)
@@ -58,6 +61,11 @@ public class PlayerMovementSystem {
             else if direction.z == .Backward {
                 orientation.moveForwardByAmount(-0.1)
             }
+            
+        case .ResetCamera:
+            orientation.forward = float3(0.0, 0.0, 1.0)
+            orientation.right = float3(1.0, 0.0, 0.0)
+            orientation.position = float3(0.0, 0.0, -4.0)
         }
         
         entityComponents.updateComponent(orientation, forEntity: camera)

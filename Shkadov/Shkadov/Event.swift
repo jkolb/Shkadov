@@ -70,6 +70,7 @@ public struct Event {
     public enum Kind {
         case Look(LookDirection)
         case Move(MoveDirection)
+        case ResetCamera
     }
     
     public let system: System

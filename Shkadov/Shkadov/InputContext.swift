@@ -95,11 +95,18 @@ public class InputContext {
         else if isKeyDown(.C) && !isKeyDown(.SPACE) {
             moveDirection.y = .Down
         }
-
-        let hAngle = Angle(radians: mouseDelta.dx * -0.001)
-        let vAngle = Angle(radians: mouseDelta.dy * -0.001)
-        let lookDirection = LookDirection(up: vAngle, right: hAngle)
         
-        return [Event.Kind.Move(moveDirection), Event.Kind.Look(lookDirection)]
+        let hAngle = Angle(radians: mouseDelta.dx * 0.001)
+        let vAngle = Angle(radians: mouseDelta.dy * 0.001)
+        let lookDirection = LookDirection(up: vAngle, right: hAngle)
+
+        mouseDelta = Vector2D.zero // Reset delta after use to make sure it doesn't continue to cause movement
+        
+        if isKeyDown(.R) {
+            return [Event.Kind.ResetCamera]
+        }
+        else {
+            return [Event.Kind.Move(moveDirection), Event.Kind.Look(lookDirection)]
+        }
     }
 }

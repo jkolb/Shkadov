@@ -38,7 +38,7 @@ public struct Angle {
     public var radians: GeometryType
     
     public init(radians: GeometryType) {
-        self.radians = radians;
+        self.radians = radians
     }
     
     public init(degrees: GeometryType) {
@@ -51,11 +51,11 @@ public struct Angle {
 }
 
 public func +(a: Angle, b: Angle) -> Angle {
-    return Angle(radians: a.radians + b.radians);
+    return Angle(radians: a.radians + b.radians)
 }
 
 public func -(a: Angle, b: Angle) -> Angle {
-    return Angle(radians: a.radians - b.radians);
+    return Angle(radians: a.radians - b.radians)
 }
 
 public func *(a: Angle, b: GeometryType) -> Angle {
@@ -96,6 +96,14 @@ public struct Vector2D {
     public var angle: Angle {
         return Angle(radians: atan2(dy, dx))
     }
+}
+
+public func +(a: Vector2D, b: Vector2D) -> Vector2D {
+    return Vector2D(dx: a.dx + b.dx, dy: a.dy + b.dy)
+}
+
+public func -(a: Vector2D, b: Vector2D) -> Vector2D {
+    return Vector2D(dx: a.dx - b.dx, dy: a.dy - b.dy)
 }
 
 public struct Size2D {

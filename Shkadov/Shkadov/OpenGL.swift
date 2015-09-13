@@ -242,11 +242,11 @@ public struct OpenGL {
         public func infoLog() -> String {
             var logString = ""
             var logLength: GLint = 0
-            glGetProgramiv(handle, GLenum(GL_INFO_LOG_LENGTH), &logLength);
+            glGetProgramiv(handle, GLenum(GL_INFO_LOG_LENGTH), &logLength)
             
             if logLength > 0 {
                 let log = UnsafeMutablePointer<GLchar>(malloc(Int(logLength)))
-                glGetProgramInfoLog(handle, logLength, &logLength, log);
+                glGetProgramInfoLog(handle, logLength, &logLength, log)
                 logString = String.fromCString(log)!
                 free(log)
             }
@@ -333,11 +333,11 @@ public struct OpenGL {
         public func infoLog() -> String {
             var logString = ""
             var logLength: GLint = 0
-            glGetShaderiv(handle, GLenum(GL_INFO_LOG_LENGTH), &logLength);
+            glGetShaderiv(handle, GLenum(GL_INFO_LOG_LENGTH), &logLength)
             
             if logLength > 0 {
                 let log = UnsafeMutablePointer<GLchar>(malloc(Int(logLength)))
-                glGetShaderInfoLog(handle, logLength, &logLength, log);
+                glGetShaderInfoLog(handle, logLength, &logLength, log)
                 logString = String.fromCString(log)!
                 free(log)
             }
@@ -358,7 +358,7 @@ public struct OpenGL {
             glShaderSource(handle, 1, &castSource, nil)
             glCompileShader(handle)
             
-            var status: GLint = GL_FALSE;
+            var status: GLint = GL_FALSE
             glGetShaderiv(handle, GLenum(GL_COMPILE_STATUS), &status)
             
             if status != GL_TRUE {

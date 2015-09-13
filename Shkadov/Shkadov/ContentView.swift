@@ -25,7 +25,12 @@ SOFTWARE.
 import AppKit
 
 public class ContentView : NSView {
-    public var sendMouseDelta = false
+    public var sendMouseDelta = false {
+        didSet {
+            ignoreFirstDelta = true
+        }
+    }
+    private var ignoreFirstDelta = false
     public weak var engine: Engine!
     private let buttonMap: [Int:RawInput.ButtonCode] = [
         0: .MOUSE0,
@@ -95,6 +100,12 @@ public class ContentView : NSView {
     
     private func postMousePositionEvent(event: NSEvent) {
         if sendMouseDelta {
+            if ignoreFirstDelta {
+                // After warping the cursor the first mouse movement triggers a large delta from the mouse's original position
+                ignoreFirstDelta = false
+                return
+            }
+            
             let delta = event.delta2D
             engine.postMouseDeltaEvent(delta)
         }
