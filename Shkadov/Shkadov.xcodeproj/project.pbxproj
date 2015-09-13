@@ -74,7 +74,6 @@
 		E5E8B2451BA48112004E9485 /* Vertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E8B2441BA48112004E9485 /* Vertex.swift */; };
 		E5E8B2471BA48915004E9485 /* ByteBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E8B2461BA48915004E9485 /* ByteBuffer.swift */; };
 		E5E8B2831BA4CFC0004E9485 /* RenderableTriangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E8B2821BA4CFC0004E9485 /* RenderableTriangle.swift */; };
-		E5FF1A6A1B8C02BF009B2AC6 /* Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF1A691B8C02BF009B2AC6 /* Logic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -159,7 +158,6 @@
 		E5E8B2441BA48112004E9485 /* Vertex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vertex.swift; sourceTree = "<group>"; };
 		E5E8B2461BA48915004E9485 /* ByteBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ByteBuffer.swift; sourceTree = "<group>"; };
 		E5E8B2821BA4CFC0004E9485 /* RenderableTriangle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderableTriangle.swift; sourceTree = "<group>"; };
-		E5FF1A691B8C02BF009B2AC6 /* Logic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -280,7 +278,6 @@
 				E535C8C01B9158920048321F /* Handle.swift */,
 				09F609511B9C4865003B4A5B /* InputContext.swift */,
 				E535C8D41B93586B0048321F /* Kind.swift */,
-				E5FF1A691B8C02BF009B2AC6 /* Logic.swift */,
 				E5E8B2421BA47D33004E9485 /* Material.swift */,
 				E581CF941B892C9F00D7174F /* Matrix.swift */,
 				E5CA680F1B9FC8D0002B065E /* Mesh.swift */,
@@ -444,7 +441,6 @@
 				E5CA68101B9FC8D0002B065E /* Mesh.swift in Sources */,
 				E5AC4E291BA5B13A00134995 /* TerrainSystem.swift in Sources */,
 				E5C54E2F1B954E58003F5AEB /* PlayerMovementSystem.swift in Sources */,
-				E5FF1A6A1B8C02BF009B2AC6 /* Logic.swift in Sources */,
 				E59C5F091B9E7BA0003422FB /* OpenGLContext.swift in Sources */,
 				E59C5F131B9E7DF4003422FB /* PlatformOSX+Platform.swift in Sources */,
 				09F609501B9C45D3003B4A5B /* RawInput.swift in Sources */,

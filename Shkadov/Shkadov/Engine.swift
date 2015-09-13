@@ -27,22 +27,24 @@ public final class Engine : TimerDelegate, Synchronizable {
     private var platform: Platform
     private let rawInputEventBuffer: RawInputEventBuffer
     private let inputContext: InputContext
-    private let logic: Logic
     private let timer: Timer
     private var eventHandlers: [Event.System:[Component]]
     private let entityComponents: EntityComponents
     private let playerMovementSystem: PlayerMovementSystem
+    private let renderSystem: RenderSystem
+    private let testCubeSystem: TestCubeSystem
 
     public init(platform: Platform, renderer: Renderer) {
         self.synchronizationQueue = DispatchQueue.globalQueueWithQOS(.UserInitiated)
         self.entityComponents = EntityComponents()
         self.platform = platform
         self.rawInputEventBuffer = RawInputEventBuffer()
-        self.logic = Logic(renderer: renderer, entityComponents: self.entityComponents)
         self.timer = Timer(platform: platform, name: "net.franticapparatus.shkadov.timer", tickDuration: Duration(seconds: 1.0 / 60.0))
         self.eventHandlers = [:]
         self.playerMovementSystem = PlayerMovementSystem(entityComponents: self.entityComponents)
         self.inputContext = InputContext()
+        self.testCubeSystem = TestCubeSystem(renderer: renderer, entityComponents: entityComponents)
+        self.renderSystem = RenderSystem(renderer: renderer, entityComponents: entityComponents)
     }
     
     public func postDownEventForKeyCode(keyCode: RawInput.KeyCode) {
@@ -78,7 +80,8 @@ public final class Engine : TimerDelegate, Synchronizable {
         synchronizeWriteAndWait { engine in
             engine.platform.centerMouse()
             engine.platform.mousePositionRelative = true
-            engine.logic.configure()
+            engine.renderSystem.configure()
+            engine.testCubeSystem.configure()
             engine.timer.delegate = self
             engine.timer.start()
         }
@@ -108,14 +111,15 @@ public final class Engine : TimerDelegate, Synchronizable {
         synchronizeWrite { engine in
             engine.handleInput()
             
-            engine.logic.updateWithTickCount(tickCount, tickDuration: tickDuration)
-            engine.logic.render()
+            engine.testCubeSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
+            engine.renderSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
+            engine.testCubeSystem.render()
         }
     }
     
     public func updateViewport(viewport: Rectangle2D) {
         synchronizeWriteAndWait { engine in
-            engine.logic.updateViewport(viewport)
+            engine.renderSystem.updateViewport(viewport)
         }
     }
 }
