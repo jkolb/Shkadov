@@ -85,8 +85,8 @@ public class TestCubeSystem {
         for entity in entityComponents.getEntitiesWithComponentType(RenderComponent.self) {
             var orientation = entityComponents.componentForEntity(entity, withComponentType: OrientationComponent.self)!
             
-            orientation.lookRightByAmount(Angle(radians: updateAmount))
-            orientation.lookUpByAmount(Angle(radians: updateAmount))
+            orientation.pitch = orientation.pitch + Angle(radians: updateAmount)
+            orientation.yaw = orientation.yaw + Angle(radians: updateAmount)
             
             entityComponents.updateComponent(orientation, forEntity: entity)
         }

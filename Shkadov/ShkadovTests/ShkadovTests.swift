@@ -35,7 +35,7 @@ class ShkadovTests: XCTestCase {
     func testEntityComponents() {
         let entityComponents = EntityComponents()
         let entity = entityComponents.createEntity()
-        let orientation = OrientationComponent(position: float3(0.0), forward: float3(0.0), right: float3(0.0))
+        let orientation = OrientationComponent(position: float3(0.0))
         let projection = ProjectionComponent(projectionMatrix: float4x4(0.0))
         entityComponents.addComponent(orientation, toEntity: entity)
         entityComponents.addComponent(projection, toEntity: entity)

@@ -27,22 +27,20 @@ import simd
 public struct OrientationComponent : Component {
     public static let kind = Kind(dataType: OrientationComponent.self)
     public var position: float3
-    public var forward: float3
-    public var right: float3
-    public var up: float3 {
-        return normalize(cross(forward, right))
-    }
+    public var pitch: Angle // Up/Down
+    public var yaw: Angle // Right/Left
     
-    public init(position: float3 = float3(0.0, 0.0, 0.0), forward: float3 = float3(0.0, 0.0, 1.0), right: float3 = float3(1.0, 0.0, 0.0)) {
+    public init(position: float3 = float3(0.0, 0.0, 0.0)) {
         self.position = position
-        self.forward = forward
-        self.right = right
+        self.pitch = Angle.zero
+        self.yaw = Angle.zero
     }
     
     public var lookAtMatrix: float4x4 {
-        let f = forward
-        let s = right
-        let u = up
+        let a = angleMatrix()
+        let f = normalize(a * float3(0.0, 0.0, 1.0))
+        let s = normalize(a * float3(1.0, 0.0, 0.0))
+        let u = normalize(cross(f, s))
         let p = position
         
         let columnR0 = float4(s.x, u.x, -f.x, 0.0)
@@ -63,9 +61,10 @@ public struct OrientationComponent : Component {
     }
     
     public var orientationMatrix: float4x4 {
-        let f = forward
-        let s = right
-        let u = up
+        let a = angleMatrix()
+        let f = normalize(a * float3(0.0, 0.0, 1.0))
+        let s = normalize(a * float3(1.0, 0.0, 0.0))
+        let u = normalize(cross(f, s))
         let p = position
         
         let column0 = float4(s.x, u.x, -f.x, 0.0)
@@ -76,21 +75,22 @@ public struct OrientationComponent : Component {
         return float4x4([column0, column1, column2, column3])
     }
     
-    public mutating func lookUpByAmount(amount: Angle) {
-        forward = normalize(float3x3(angle: amount, axis: right) * forward)
-    }
-    
-    public mutating func lookRightByAmount(amount: Angle) {
-        let rotation = float3x3(angle: amount, axis: up)
-        right = normalize(rotation * right)
-        forward = normalize(rotation * forward)
+    public func angleMatrix() -> float3x3 {
+        let pitchMatrix = float3x3(angle: pitch, axis: float3(1.0, 0.0, 0.0))
+        let yawMatrix = float3x3(angle: yaw, axis: float3(0.0, 1.0, 0.0))
+        let a = pitchMatrix * yawMatrix
+        return a
     }
     
     public mutating func moveForwardByAmount(amount: Float) {
+        let angle = angleMatrix()
+        let forward = normalize(angle * float3(0.0, 0.0, 1.0))
         position = position + forward * amount
     }
     
     public mutating func moveRightByAmount(amount: Float) {
+        let angle = angleMatrix()
+        let right = normalize(angle * float3(1.0, 0.0, 0.0))
         position = position + right * amount
     }
     

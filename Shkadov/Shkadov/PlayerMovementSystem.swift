@@ -37,8 +37,8 @@ public class PlayerMovementSystem {
         
         switch event.kind {
         case .Look(let direction):
-            orientation.lookUpByAmount(direction.up)
-            orientation.lookRightByAmount(direction.right)
+            orientation.pitch = orientation.pitch + direction.up
+            orientation.yaw = orientation.yaw + direction.right
             
         case .Move(let direction):
             if direction.x == .Right {
@@ -63,8 +63,8 @@ public class PlayerMovementSystem {
             }
             
         case .ResetCamera:
-            orientation.forward = float3(0.0, 0.0, 1.0)
-            orientation.right = float3(1.0, 0.0, 0.0)
+            orientation.pitch = Angle.zero
+            orientation.yaw = Angle.zero
             orientation.position = float3(0.0, 0.0, -4.0)
         }
         

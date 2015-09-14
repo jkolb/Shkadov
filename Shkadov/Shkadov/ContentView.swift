@@ -110,7 +110,8 @@ public class ContentView : NSView {
             engine.postMouseDeltaEvent(delta)
         }
         else {
-            let position = event.locationInWindow.point2D
+            let contentPoint = convertPoint(event.locationInWindow, fromView: nil)
+            let position = contentPoint.point2D
             engine.postMousePositionEvent(position)
         }
     }
