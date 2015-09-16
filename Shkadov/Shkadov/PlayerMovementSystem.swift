@@ -37,8 +37,10 @@ public class PlayerMovementSystem {
         
         switch event.kind {
         case .Look(let direction):
-            orientation.pitch = orientation.pitch + direction.up
-            orientation.yaw = orientation.yaw + direction.right
+            orientation.pitch += direction.up
+            orientation.yaw += direction.right
+            print("pitch: \(orientation.pitch.degrees), yaw: \(orientation.yaw.degrees)")
+            print("pitch: \(AngleDelta(radians: orientation.pitch.radians).degrees)")
             
         case .Move(let direction):
             if direction.x == .Right {

@@ -30,15 +30,35 @@ public let π = GeometryType(M_PI)
 
 private let geometryZero = GeometryType(0.0)
 
-public struct Angle {
+public struct Angle : Equatable, Comparable, CustomStringConvertible, CustomDebugStringConvertible {
     public static let zero = Angle(radians: geometryZero)
-    private static let degreesToRadians = π / 180.0
-    private static let radiansToDegrees = 180.0 / π
+    private static let degreesToRadians: GeometryType = π / 180.0
+    private static let radiansToDegrees: GeometryType = 180.0 / π
+    public static let min: GeometryType = 0.0
+    public static let max: GeometryType = 2.0 * π
     
-    public var radians: GeometryType
+    public var radians: GeometryType {
+        didSet {
+            radians = Angle.clamped(radians)
+        }
+    }
     
     public init(radians: GeometryType) {
-        self.radians = radians
+        self.radians = Angle.clamped(radians)
+    }
+    
+    private static func clamped(radians: GeometryType) -> GeometryType {
+        var clampedRadians = radians
+        
+        while clampedRadians >= Angle.max {
+            clampedRadians -= Angle.max
+        }
+        
+        while clampedRadians < Angle.min {
+            clampedRadians += Angle.max
+        }
+        
+        return clampedRadians
     }
     
     public init(degrees: GeometryType) {
@@ -48,6 +68,22 @@ public struct Angle {
     public var degrees: GeometryType {
         return radians * Angle.radiansToDegrees
     }
+    
+    public var description: String {
+        return radians.description
+    }
+    
+    public var debugDescription: String {
+        return degrees.description
+    }
+}
+
+public func ==(a: Angle, b: Angle) -> Bool {
+    return a.radians == b.radians
+}
+
+public func <(a: Angle, b: Angle) -> Bool {
+    return a.radians < b.radians
 }
 
 public func +(a: Angle, b: Angle) -> Angle {
@@ -68,6 +104,73 @@ public func *(a: GeometryType, b: Angle) -> Angle {
 
 public func /(a: Angle, b: GeometryType) -> Angle {
     return Angle(radians: a.radians / b)
+}
+
+public func +=(inout a: Angle, b: Angle) {
+    a.radians = a.radians + b.radians
+}
+
+public func -=(inout a: Angle, b: Angle) {
+    a.radians = a.radians - b.radians
+}
+
+public struct AngleDelta : Equatable, Comparable, CustomStringConvertible, CustomDebugStringConvertible {
+    public static let zero = AngleDelta(radians: geometryZero)
+    private static let degreesToRadians: GeometryType = π / 180.0
+    private static let radiansToDegrees: GeometryType = 180.0 / π
+    public static let min: GeometryType = -π
+    public static let max: GeometryType = +π
+    public var radians: GeometryType {
+        didSet {
+            radians = AngleDelta.clamped(radians)
+        }
+    }
+ 
+    public init(radians: GeometryType) {
+        self.radians = AngleDelta.clamped(radians)
+    }
+    
+    private static func clamped(radians: GeometryType) -> GeometryType {
+        var clampedRadians = radians
+        
+        while clampedRadians >= Angle.max {
+            clampedRadians -= Angle.max
+        }
+        
+        while clampedRadians < Angle.min {
+            clampedRadians += Angle.max
+        }
+        
+        if radians >= AngleDelta.max {
+            clampedRadians = -(Angle.max - clampedRadians)
+        }
+        
+        return clampedRadians
+    }
+    
+    public init(degrees: GeometryType) {
+        self.init(radians: Angle.degreesToRadians * degrees)
+    }
+    
+    public var degrees: GeometryType {
+        return radians * Angle.radiansToDegrees
+    }
+    
+    public var description: String {
+        return radians.description
+    }
+    
+    public var debugDescription: String {
+        return degrees.description
+    }
+}
+
+public func ==(a: AngleDelta, b: AngleDelta) -> Bool {
+    return a.radians == b.radians
+}
+
+public func <(a: AngleDelta, b: AngleDelta) -> Bool {
+    return a.radians < b.radians
 }
 
 public struct Point2D {
