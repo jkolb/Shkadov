@@ -34,8 +34,8 @@ public struct Angle : Equatable, Comparable, CustomStringConvertible, CustomDebu
     public static let zero = Angle(radians: geometryZero)
     private static let degreesToRadians: GeometryType = π / 180.0
     private static let radiansToDegrees: GeometryType = 180.0 / π
-    public static let min: GeometryType = 0.0
-    public static let max: GeometryType = 2.0 * π
+    public static let min: GeometryType = -2.0 * π
+    public static let max: GeometryType = +2.0 * π
     
     public var radians: GeometryType {
         didSet {
@@ -112,65 +112,6 @@ public func +=(inout a: Angle, b: Angle) {
 
 public func -=(inout a: Angle, b: Angle) {
     a.radians = a.radians - b.radians
-}
-
-public struct AngleDelta : Equatable, Comparable, CustomStringConvertible, CustomDebugStringConvertible {
-    public static let zero = AngleDelta(radians: geometryZero)
-    private static let degreesToRadians: GeometryType = π / 180.0
-    private static let radiansToDegrees: GeometryType = 180.0 / π
-    public static let min: GeometryType = -π
-    public static let max: GeometryType = +π
-    public var radians: GeometryType {
-        didSet {
-            radians = AngleDelta.clamped(radians)
-        }
-    }
- 
-    public init(radians: GeometryType) {
-        self.radians = AngleDelta.clamped(radians)
-    }
-    
-    private static func clamped(radians: GeometryType) -> GeometryType {
-        var clampedRadians = radians
-        
-        while clampedRadians >= Angle.max {
-            clampedRadians -= Angle.max
-        }
-        
-        while clampedRadians < Angle.min {
-            clampedRadians += Angle.max
-        }
-        
-        if radians >= AngleDelta.max {
-            clampedRadians = -(Angle.max - clampedRadians)
-        }
-        
-        return clampedRadians
-    }
-    
-    public init(degrees: GeometryType) {
-        self.init(radians: Angle.degreesToRadians * degrees)
-    }
-    
-    public var degrees: GeometryType {
-        return radians * Angle.radiansToDegrees
-    }
-    
-    public var description: String {
-        return radians.description
-    }
-    
-    public var debugDescription: String {
-        return degrees.description
-    }
-}
-
-public func ==(a: AngleDelta, b: AngleDelta) -> Bool {
-    return a.radians == b.radians
-}
-
-public func <(a: AngleDelta, b: AngleDelta) -> Bool {
-    return a.radians < b.radians
 }
 
 public struct Point2D {

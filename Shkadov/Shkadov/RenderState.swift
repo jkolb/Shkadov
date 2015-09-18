@@ -24,7 +24,6 @@ SOFTWARE.
 
 public class RenderState {
     public var program: Handle = Handle.invalid
-    public var buffer: Handle = Handle.invalid
     public var objects: [RenderComponent] = []
     
     public init() {

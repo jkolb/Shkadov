@@ -293,10 +293,17 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             let program = renderer.programs[state.program]!
             program.use()
             
-            let buffer = renderer.buffers[state.buffer]!
-            buffer.bind()
+            var lastBuffer = Handle.invalid
             
             for object in state.objects {
+                let nextBuffer = object.buffer
+                
+                if nextBuffer != lastBuffer {
+                    let buffer = renderer.buffers[nextBuffer]!
+                    buffer.bind()
+                    lastBuffer = nextBuffer
+                }
+                
                 OpenGL.setUniformMatrix(object.modelViewProjectionMatrix, atLocation: uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX])
                 OpenGL.setUniformMatrix(object.normalMatrix, atLocation: uniforms[UNIFORM_NORMAL_MATRIX])
                 OpenGL.setUniformVector(object.diffuseColor, atLocation: uniforms[UNIFORM_DIFFUSE_COLOR])

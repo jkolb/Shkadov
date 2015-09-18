@@ -38,7 +38,7 @@ public class TestCubeSystem {
     
     deinit {
         renderer.destroyProgram(renderState.program)
-        renderer.destoryBuffer(renderState.buffer)
+//        renderer.destoryBuffer(renderState.buffer)
     }
     
     public func configure() {
@@ -50,7 +50,7 @@ public class TestCubeSystem {
         let meshData = mesh.createBufferForVertexDescriptor(vertexDescriptor)
         
         self.renderState.program = renderer.createProgramWithVertexPath(NSBundle.mainBundle().pathForResource("Shader", ofType: "vsh")!, fragmentPath: NSBundle.mainBundle().pathForResource("Shader", ofType: "fsh")!)
-        self.renderState.buffer = renderer.createBufferFromDescriptor(vertexDescriptor, buffer: meshData)
+        let buffer = renderer.createBufferFromDescriptor(vertexDescriptor, buffer: meshData)
         
         let positions = [
             float3(0.0, 0.0, 0.0),
@@ -75,21 +75,33 @@ public class TestCubeSystem {
         for index in 0..<positions.count {
             let cube = self.entityComponents.createEntity()
             self.entityComponents.addComponent(OrientationComponent(position: positions[index]), toEntity: cube)
-            self.entityComponents.addComponent(RenderComponent(diffuseColor: colors[index]), toEntity: cube)
+            var renderComponent = RenderComponent(diffuseColor: colors[index])
+            renderComponent.buffer = buffer
+            self.entityComponents.addComponent(renderComponent, toEntity: cube)
         }
+        
+        let floorMesh = Mesh3D.boxWithSize(Size3D(width: 100.0, height: 0.25, depth: 100.0))
+        let floorMeshData = floorMesh.createBufferForVertexDescriptor(vertexDescriptor)
+        let floorBuffer = renderer.createBufferFromDescriptor(vertexDescriptor, buffer: floorMeshData)
+
+        let floor = self.entityComponents.createEntity()
+        self.entityComponents.addComponent(OrientationComponent(position: float3(0.0, -2.5, 0.0)), toEntity: floor)
+        var floorRenderComponent = RenderComponent(diffuseColor: Color.tan.vector)
+        floorRenderComponent.buffer = floorBuffer
+        self.entityComponents.addComponent(floorRenderComponent, toEntity: floor)
     }
     
     public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
-        let updateAmount: Float = 0.01
-        
-        for entity in entityComponents.getEntitiesWithComponentType(RenderComponent.self) {
-            var orientation = entityComponents.componentForEntity(entity, withComponentType: OrientationComponent.self)!
-            
-            orientation.pitch += Angle(radians: updateAmount)
-            orientation.yaw += Angle(radians: updateAmount)
-            
-            entityComponents.updateComponent(orientation, forEntity: entity)
-        }
+//        let updateAmount: Float = 0.01
+//        
+//        for entity in entityComponents.getEntitiesWithComponentType(RenderComponent.self) {
+//            var orientation = entityComponents.componentForEntity(entity, withComponentType: OrientationComponent.self)!
+//            
+//            orientation.pitch += Angle(radians: updateAmount)
+//            orientation.yaw += Angle(radians: updateAmount)
+//            
+//            entityComponents.updateComponent(orientation, forEntity: entity)
+//        }
     }
     
     public func render() {

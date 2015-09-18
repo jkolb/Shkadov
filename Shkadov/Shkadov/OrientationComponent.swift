@@ -76,21 +76,21 @@ public struct OrientationComponent : Component {
     }
     
     public func angleMatrix() -> float3x3 {
-        let pitchMatrix = float3x3(angle: pitch, axis: float3(1.0, 0.0, 0.0))
         let yawMatrix = float3x3(angle: yaw, axis: float3(0.0, 1.0, 0.0))
+        let pitchMatrix = float3x3(angle: pitch, axis: yawMatrix * float3(1.0, 0.0, 0.0))
         let a = pitchMatrix * yawMatrix
         return a
     }
     
     public mutating func moveForwardByAmount(amount: Float) {
-        let angle = angleMatrix()
-        let forward = normalize(angle * float3(0.0, 0.0, 1.0))
+        let yawMatrix = float3x3(angle: yaw, axis: float3(0.0, 1.0, 0.0))
+        let forward = normalize(yawMatrix * float3(0.0, 0.0, 1.0))
         position = position + forward * amount
     }
     
     public mutating func moveRightByAmount(amount: Float) {
-        let angle = angleMatrix()
-        let right = normalize(angle * float3(1.0, 0.0, 0.0))
+        let yawMatrix = float3x3(angle: yaw, axis: float3(0.0, 1.0, 0.0))
+        let right = normalize(yawMatrix * float3(1.0, 0.0, 0.0))
         position = position + right * amount
     }
     

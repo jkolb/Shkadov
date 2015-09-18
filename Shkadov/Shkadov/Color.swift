@@ -81,6 +81,8 @@ public struct Color {
     public static var magenta = Color(red: 1.0, green: 0.0, blue: 1.0)
     public static var cyan = Color(red: 0.0, green: 1.0, blue: 1.0)
 
+    public static var tan = Color(rgba8: ColorRGBA8(red: 210, green: 180, blue: 140))
+
     public init(rgba8: ColorRGBA8) {
         self.init(red: Float(rgba8.red) / 255.0, green: Float(rgba8.green) / 255.0, blue: Float(rgba8.blue) / 255.0, alpha: Float(rgba8.alpha) / 255.0)
     }
