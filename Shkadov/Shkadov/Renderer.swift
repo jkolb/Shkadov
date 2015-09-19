@@ -28,8 +28,8 @@ public protocol Renderer {
     func updateViewport(viewport: Rectangle2D)
     func createTextureFromData(textureData: TextureData) -> Handle
     func destroyTexture(handle: Handle)
-    func createBufferFromDescriptor(vertexDescriptor: VertexDescriptor, buffer: ByteBuffer) -> Handle
-    func destoryBuffer(handle: Handle)
+    func createVertexArrayFromDescriptor(vertexDescriptor: VertexDescriptor, buffer: ByteBuffer) -> Handle
+    func destoryVertexArray(handle: Handle)
     func createProgramWithVertexPath(vertexPath: String, fragmentPath: String) -> Handle
     func destroyProgram(handle: Handle)
 }

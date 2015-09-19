@@ -22,16 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import Foundation
 import simd
 
 public class TestCubeSystem {
     private let renderer: Renderer
+    private let assetLoader: AssetLoader
     private let entityComponents: EntityComponents
     private var renderState: RenderState
     
-    public init(renderer: Renderer, entityComponents: EntityComponents) {
+    public init(renderer: Renderer, assetLoader: AssetLoader, entityComponents: EntityComponents) {
         self.renderer = renderer
+        self.assetLoader = assetLoader
         self.entityComponents = entityComponents
         self.renderState = RenderState()
     }
@@ -45,12 +46,16 @@ public class TestCubeSystem {
         var vertexDescriptor = VertexDescriptor()
         vertexDescriptor.addAttribute(.Position, format: .Float3)
         vertexDescriptor.addAttribute(.Normal, format: .Float3)
+        vertexDescriptor.addAttribute(.TexCoord, format: .Float2)
         
+        let grassTextureData = assetLoader.loadTextureData(assetLoader.pathToFile("Assets/grass_top.png"))
+        let grassTexture = renderer.createTextureFromData(grassTextureData)
+
         let mesh = Mesh3D.cubeWithSize(1.0)
         let meshData = mesh.createBufferForVertexDescriptor(vertexDescriptor)
         
-        self.renderState.program = renderer.createProgramWithVertexPath(NSBundle.mainBundle().pathForResource("Shader", ofType: "vsh")!, fragmentPath: NSBundle.mainBundle().pathForResource("Shader", ofType: "fsh")!)
-        let buffer = renderer.createBufferFromDescriptor(vertexDescriptor, buffer: meshData)
+        self.renderState.program = renderer.createProgramWithVertexPath(assetLoader.pathToFile("Shader.vsh"), fragmentPath: assetLoader.pathToFile("Shader.fsh"))
+        let vertexArray = renderer.createVertexArrayFromDescriptor(vertexDescriptor, buffer: meshData)
         
         let positions = [
             float3(0.0, 0.0, 0.0),
@@ -76,18 +81,19 @@ public class TestCubeSystem {
             let cube = self.entityComponents.createEntity()
             self.entityComponents.addComponent(OrientationComponent(position: positions[index]), toEntity: cube)
             var renderComponent = RenderComponent(diffuseColor: colors[index])
-            renderComponent.buffer = buffer
+            renderComponent.texture = grassTexture
+            renderComponent.vertexArray = vertexArray
             self.entityComponents.addComponent(renderComponent, toEntity: cube)
         }
         
-        let floorMesh = Mesh3D.boxWithSize(Size3D(width: 100.0, height: 0.25, depth: 100.0))
+        let floorMesh = Mesh3D.boxWithSize(Size3D(100.0, 0.25, 100.0))
         let floorMeshData = floorMesh.createBufferForVertexDescriptor(vertexDescriptor)
-        let floorBuffer = renderer.createBufferFromDescriptor(vertexDescriptor, buffer: floorMeshData)
-
+        let floorVertexArray = renderer.createVertexArrayFromDescriptor(vertexDescriptor, buffer: floorMeshData)
         let floor = self.entityComponents.createEntity()
         self.entityComponents.addComponent(OrientationComponent(position: float3(0.0, -2.5, 0.0)), toEntity: floor)
         var floorRenderComponent = RenderComponent(diffuseColor: Color.tan.vector)
-        floorRenderComponent.buffer = floorBuffer
+        floorRenderComponent.texture = grassTexture
+        floorRenderComponent.vertexArray = floorVertexArray
         self.entityComponents.addComponent(floorRenderComponent, toEntity: floor)
     }
     

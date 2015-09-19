@@ -115,24 +115,24 @@ public func -=(inout a: Angle, b: Angle) {
 }
 
 public struct Point2D {
-    public static let zero = Point2D(x: geometryZero, y: geometryZero)
+    public static let zero = Point2D(geometryZero, geometryZero)
     
     public let x: GeometryType
     public let y: GeometryType
     
-    public init(x: GeometryType, y: GeometryType) {
+    public init(_ x: GeometryType, _ y: GeometryType) {
         self.x = x
         self.y = y
     }
 }
 
 public struct Vector2D {
-    public static let zero = Vector2D(dx: geometryZero, dy: geometryZero)
+    public static let zero = Vector2D(geometryZero, geometryZero)
     
     public let dx: GeometryType
     public let dy: GeometryType
     
-    public init(dx: GeometryType, dy: GeometryType) {
+    public init(_ dx: GeometryType, _ dy: GeometryType) {
         self.dx = dx
         self.dy = dy
     }
@@ -143,20 +143,20 @@ public struct Vector2D {
 }
 
 public func +(a: Vector2D, b: Vector2D) -> Vector2D {
-    return Vector2D(dx: a.dx + b.dx, dy: a.dy + b.dy)
+    return Vector2D(a.dx + b.dx, a.dy + b.dy)
 }
 
 public func -(a: Vector2D, b: Vector2D) -> Vector2D {
-    return Vector2D(dx: a.dx - b.dx, dy: a.dy - b.dy)
+    return Vector2D(a.dx - b.dx, a.dy - b.dy)
 }
 
 public struct Size2D {
-    public static let zero = Size2D(width: geometryZero, height: geometryZero)
+    public static let zero = Size2D(geometryZero, geometryZero)
     
     public let width: GeometryType
     public let height: GeometryType
     
-    public init(width: GeometryType, height: GeometryType) {
+    public init(_ width: GeometryType, _ height: GeometryType) {
         precondition(width >= geometryZero)
         precondition(height >= geometryZero)
         
@@ -209,7 +209,7 @@ public struct Rectangle2D {
     }
     
     public var center: Point2D {
-        return Point2D(x: centerX, y: centerY)
+        return Point2D(centerX, centerY)
     }
     
     public var aspectRatio: GeometryType {
@@ -222,13 +222,13 @@ public struct Rectangle2D {
 }
 
 public struct Point3D {
-    public static let zero = Point3D(x: geometryZero, y: geometryZero, z: geometryZero)
+    public static let zero = Point3D(geometryZero, geometryZero, geometryZero)
     
     public let x: GeometryType
     public let y: GeometryType
     public let z: GeometryType
     
-    public init(x: GeometryType, y: GeometryType, z: GeometryType) {
+    public init(_ x: GeometryType, _ y: GeometryType, _ z: GeometryType) {
         self.x = x
         self.y = y
         self.z = z
@@ -236,13 +236,13 @@ public struct Point3D {
 }
 
 public struct Vector3D {
-    public static let zero = Vector3D(dx: geometryZero, dy: geometryZero, dz: geometryZero)
+    public static let zero = Vector3D(geometryZero, geometryZero, geometryZero)
     
     public let dx: GeometryType
     public let dy: GeometryType
     public let dz: GeometryType
     
-    public init(dx: GeometryType, dy: GeometryType, dz: GeometryType) {
+    public init(_ dx: GeometryType, _ dy: GeometryType, _ dz: GeometryType) {
         self.dx = dx
         self.dy = dy
         self.dz = dz
@@ -250,13 +250,13 @@ public struct Vector3D {
 }
 
 public struct Size3D {
-    public static let zero = Size3D(width: geometryZero, height: geometryZero, depth: geometryZero)
+    public static let zero = Size3D(geometryZero, geometryZero, geometryZero)
     
     public let width: GeometryType
     public let height: GeometryType
     public let depth: GeometryType
     
-    public init(width: GeometryType, height: GeometryType, depth: GeometryType) {
+    public init(_ width: GeometryType, _ height: GeometryType, _ depth: GeometryType) {
         precondition(width >= geometryZero)
         precondition(height >= geometryZero)
         precondition(depth >= geometryZero)

@@ -22,6 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+public struct Triangle2D {
+    public let a: Point2D
+    public let b: Point2D
+    public let c: Point2D
+    
+    public init(_ a: Point2D, _ b: Point2D, _ c: Point2D) {
+        self.a = a
+        self.b = b
+        self.c = c
+    }
+    
+    public func polygon() -> Polygon2D {
+        return Polygon2D(points: [a, b, c])
+    }
+}
+
 public struct Triangle3D {
     public let a: Point3D
     public let b: Point3D
@@ -35,6 +51,24 @@ public struct Triangle3D {
 
     public func polygon() -> Polygon3D {
         return Polygon3D(points: [a, b, c])
+    }
+}
+
+public struct Quad2D {
+    public let a: Point2D
+    public let b: Point2D
+    public let c: Point2D
+    public let d: Point2D
+    
+    public init(_ a: Point2D, _ b: Point2D, _ c: Point2D, _ d: Point2D) {
+        self.a = a
+        self.b = b
+        self.c = c
+        self.d = d
+    }
+    
+    public func polygon() -> Polygon2D {
+        return Polygon2D(points: [a, b, c, d])
     }
 }
 
@@ -53,6 +87,44 @@ public struct Quad3D {
     
     public func polygon() -> Polygon3D {
         return Polygon3D(points: [a, b, c, d])
+    }
+}
+
+public class Polygon2D : SequenceType {
+    private var points: [Point2D]
+    
+    public init() {
+        self.points = [Point2D]()
+    }
+    
+    public init(points: [Point2D]) {
+        self.points = points
+    }
+    
+    public subscript (index: Int) -> Point2D {
+        get {
+            return points[index]
+        }
+        set {
+            points[index] = newValue
+        }
+    }
+    
+    public var count: Int {
+        return points.count
+    }
+    
+    public func generate() -> AnyGenerator<Point2D> {
+        var index = 0
+        let count = self.count
+        return anyGenerator {
+            if index < count {
+                return self.points[index++]
+            }
+            else {
+                return nil
+            }
+        }
     }
 }
 

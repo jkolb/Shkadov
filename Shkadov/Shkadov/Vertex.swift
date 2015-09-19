@@ -26,12 +26,12 @@ public class Vertex3D {
     public let position: Point3D
     public var normal: Vector3D
     public var color: ColorRGBA8
-    public var texCoords: [Point2D]
+    public var texCoord: Point2D
     
-    public init(position: Point3D, normal: Vector3D = Vector3D.zero, texCoords: [Point2D] = [], color: ColorRGBA8 = ColorRGBA8(red: 0, green: 0, blue: 0)) {
+    public init(position: Point3D, normal: Vector3D = Vector3D.zero, texCoord: Point2D, color: ColorRGBA8 = ColorRGBA8(red: 0, green: 0, blue: 0)) {
         self.position = position
         self.normal = normal
-        self.texCoords = texCoords
+        self.texCoord = texCoord
         self.color = color
     }
 }

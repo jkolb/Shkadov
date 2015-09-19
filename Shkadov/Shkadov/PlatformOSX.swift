@@ -51,7 +51,7 @@ public class PlatformOSX : NSObject {
         openGLContext = createOpenGLContext()
         
         let renderer = OpenGLRenderer(context: self)
-        engine = Engine(platform: self, renderer: renderer)
+        engine = Engine(platform: self, renderer: renderer, assetLoader: self)
 
         mainWindow = createMainWindow()
         mainWindow.delegate = self

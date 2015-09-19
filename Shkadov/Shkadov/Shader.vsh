@@ -24,6 +24,12 @@
 
 #version 150
 
+layout(std140) uniform activeBuffer {
+    mat4 modelViewProjectionMatrix2;
+    mat4 normalMatrix2;
+    vec4 diffuseColor2;
+};
+
 uniform mat4 modelViewProjectionMatrix;
 uniform mat4 normalMatrix;
 uniform vec4 diffuseColor;

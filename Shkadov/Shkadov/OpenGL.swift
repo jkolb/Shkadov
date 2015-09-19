@@ -210,6 +210,8 @@ public struct OpenGL {
     public final class Program {
         public let handle: GLuint
         private var shaders = [Shader]()
+        private var uniformLocations = [String:GLint]()
+        private var uniformBlockIndices = [String:GLuint]()
         
         public init() throws {
             handle = OpenGL.createProgram()
@@ -285,8 +287,53 @@ public struct OpenGL {
             }
         }
 
+        public func addUniformName(name: String) {
+            precondition(uniformLocations[name] == nil, "Duplicate uniform name `\(name)`")
+            let location = uniformLocationWithName(name)
+            
+            if location < 0 {
+                fatalError("Non-active uniform `\(name)`")
+            }
+            
+            uniformLocations[name] = location
+        }
+        
+        public func uniformLocationForName(name: String) -> GLint {
+            return uniformLocations[name]!
+        }
+        
         public func uniformLocationWithName(name: String) -> GLint {
             return OpenGL.getUniformLocationWithName(name, fromProgramWithHandle: handle)
+        }
+        
+        public func addUniformBlockName(name: String) {
+            precondition(uniformBlockIndices[name] == nil, "Duplication uniform block name `\(name)`")
+            let index = getUniformBlockIndexForName(name)
+            
+            if index == GLuint(GL_INVALID_INDEX) {
+                fatalError("Non-active uniform block `\(name)`")
+            }
+            
+            uniformBlockIndices[name] = index
+        }
+        
+        public func uniformBlockIndexForName(name: String) -> GLuint {
+            return uniformBlockIndices[name]!
+        }
+        
+        public func getUniformBlockIndexForName(name: String) -> GLuint {
+            return glGetUniformBlockIndex(handle, name)
+        }
+        
+        public func sizeOfUniformBlockWithName(name: String) -> Int {
+            let index = uniformBlockIndices[name]!
+            return getSizeForActiveUniformBlockAtIndex(index)
+        }
+        
+        public func getSizeForActiveUniformBlockAtIndex(index: GLuint) -> Int {
+            var size: GLint = 0
+            glGetActiveUniformBlockiv(handle, index, GLenum(GL_UNIFORM_BLOCK_DATA_SIZE), &size)
+            return Int(size)
         }
         
         public func use() {

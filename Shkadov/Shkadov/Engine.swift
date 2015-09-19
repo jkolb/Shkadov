@@ -34,7 +34,7 @@ public final class Engine : TimerDelegate, Synchronizable {
     private let renderSystem: RenderSystem
     private let testCubeSystem: TestCubeSystem
 
-    public init(platform: Platform, renderer: Renderer) {
+    public init(platform: Platform, renderer: Renderer, assetLoader: AssetLoader) {
         self.synchronizationQueue = DispatchQueue.globalQueueWithQOS(.UserInitiated)
         self.entityComponents = EntityComponents()
         self.platform = platform
@@ -43,7 +43,7 @@ public final class Engine : TimerDelegate, Synchronizable {
         self.eventHandlers = [:]
         self.playerMovementSystem = PlayerMovementSystem(entityComponents: self.entityComponents)
         self.inputContext = InputContext()
-        self.testCubeSystem = TestCubeSystem(renderer: renderer, entityComponents: entityComponents)
+        self.testCubeSystem = TestCubeSystem(renderer: renderer, assetLoader: assetLoader, entityComponents: entityComponents)
         self.renderSystem = RenderSystem(renderer: renderer, entityComponents: entityComponents)
     }
     

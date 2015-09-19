@@ -32,7 +32,7 @@ public extension Point2D {
 
 public extension CGPoint {
     public var point2D: Point2D {
-        return Point2D(x: GeometryType(x), y: GeometryType(y))
+        return Point2D(GeometryType(x), GeometryType(y))
     }
     
     public var rect: CGRect {
@@ -42,7 +42,7 @@ public extension CGPoint {
 
 public extension CGSize {
     public var size2D: Size2D {
-        return Size2D(width: GeometryType(width), height: GeometryType(height))
+        return Size2D(GeometryType(width), GeometryType(height))
     }
 }
 

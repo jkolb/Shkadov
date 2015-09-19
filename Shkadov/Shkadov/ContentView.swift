@@ -185,6 +185,6 @@ public class ContentView : NSView {
 
 public extension NSEvent {
     public var delta2D: Vector2D {
-        return Vector2D(dx: GeometryType(deltaX), dy: GeometryType(deltaY))
+        return Vector2D(GeometryType(deltaX), GeometryType(deltaY))
     }
 }

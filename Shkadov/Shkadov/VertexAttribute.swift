@@ -25,7 +25,6 @@ SOFTWARE.
 public enum VertexAttribute : UInt {
     case Position
     case Normal
+    case TexCoord
     case Color
-    case TexCoord0
-    case TexCoord1
 }

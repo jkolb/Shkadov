@@ -29,12 +29,14 @@ public struct RenderComponent : Component {
     public var modelViewProjectionMatrix: float4x4
     public var normalMatrix: float4x4
     public var diffuseColor: float4
-    public var buffer: Handle
+    public var texture: Handle
+    public var vertexArray: Handle
     
     public init(diffuseColor: float4 = Color.white.vector) {
         self.modelViewProjectionMatrix = float4x4(1.0)
         self.normalMatrix = float4x4(1.0)
         self.diffuseColor = diffuseColor
-        self.buffer = Handle.invalid
+        self.texture = Handle.invalid
+        self.vertexArray = Handle.invalid
     }
 }

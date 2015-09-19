@@ -27,19 +27,14 @@ import OpenGL
 import OpenGL.GL3
 import simd
 
-let UNIFORM_MODELVIEWPROJECTION_MATRIX = 0
-let UNIFORM_NORMAL_MATRIX = 1
-let UNIFORM_DIFFUSE_COLOR = 2
-var uniforms = [GLint](count: 3, repeatedValue: 0)
-
 public final class OpenGLRenderer : Renderer, Synchronizable {
     public let synchronizationQueue: DispatchQueue
     public var viewport: Rectangle2D
     public weak var context: OpenGLContext!
     private let textureHandleFactory = HandleFactory()
     private var textures: [Handle : OpenGL.Texture]
-    private let bufferHandleFactory = HandleFactory()
-    private var buffers: [Handle : OpenGL.VertexArray]
+    private let vertexArrayHandleFactory = HandleFactory()
+    private var vertexArrays: [Handle : OpenGL.VertexArray]
     private let programHandleFactory = HandleFactory()
     private var programs: [Handle : OpenGL.Program]
     
@@ -48,7 +43,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
         self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.render", attribute: .Serial)
         self.viewport = Rectangle2D.zero
         self.textures = Dictionary<Handle, OpenGL.Texture>()
-        self.buffers = Dictionary<Handle, OpenGL.VertexArray>()
+        self.vertexArrays = Dictionary<Handle, OpenGL.VertexArray>()
         self.programs = Dictionary<Handle, OpenGL.Program>()
     }
     
@@ -99,12 +94,12 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
         }
     }
     
-    public func createBufferFromDescriptor(vertexDescriptor: VertexDescriptor, buffer: ByteBuffer) -> Handle {
+    public func createVertexArrayFromDescriptor(vertexDescriptor: VertexDescriptor, buffer: ByteBuffer) -> Handle {
         return synchronizeReadWrite { renderer in
             renderer.context.lock()
             renderer.context.makeCurrent()
             
-            let handle = renderer.bufferHandleFactory.nextHandle()
+            let handle = renderer.vertexArrayHandleFactory.nextHandle()
 
             let vertexArray = OpenGL.VertexArray()
             vertexArray.bind()
@@ -146,7 +141,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             
             OpenGL.unbindVertexArray()
 
-            renderer.buffers[handle] = vertexArray
+            renderer.vertexArrays[handle] = vertexArray
             
             renderer.context.unlock()
             
@@ -154,12 +149,12 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
         }
     }
     
-    public func destoryBuffer(handle: Handle) {
+    public func destoryVertexArray(handle: Handle) {
         synchronizeWrite { renderer in
             renderer.context.lock()
             renderer.context.makeCurrent()
             
-            renderer.buffers.removeValueForKey(handle)
+            renderer.vertexArrays.removeValueForKey(handle)
             
             renderer.context.unlock()
         }
@@ -203,7 +198,8 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             program.bindAttributeLocations([
                 "position": VertexAttribute.Position,
                 "normal": VertexAttribute.Normal,
-                "color": VertexAttribute.Color,
+//                "vertexPosition": VertexAttribute.Position,
+//                "vertexNormal": VertexAttribute.Normal,
                 ])
             
             do {
@@ -216,10 +212,9 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
                 fatalError("Link: \(error)")
             }
             
-            // Get uniform locations.
-            uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = program.uniformLocationWithName("modelViewProjectionMatrix")
-            uniforms[UNIFORM_NORMAL_MATRIX] = program.uniformLocationWithName("normalMatrix")
-            uniforms[UNIFORM_DIFFUSE_COLOR] = program.uniformLocationWithName("diffuseColor")
+            program.addUniformName("modelViewProjectionMatrix")
+            program.addUniformName("normalMatrix")
+            program.addUniformName("diffuseColor")
             
             program.detachShader(vertShader)
             program.detachShader(fragShader)
@@ -229,6 +224,22 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             renderer.context.unlock()
 
             return handle
+        }
+    }
+    
+    public func createUniformBlockForProgram(program: Handle, withName name: String) -> ByteBuffer {
+        return synchronizeReadWrite { renderer in
+            renderer.context.lock()
+            renderer.context.makeCurrent()
+
+            let p = renderer.programs[program]!
+            p.addUniformBlockName(name)
+            let size = p.sizeOfUniformBlockWithName(name)
+            let buffer = ByteBuffer(capacity: size)
+            
+            renderer.context.unlock()
+
+            return buffer
         }
     }
     
@@ -257,6 +268,8 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             renderer.context.swapInterval = 1
             
             OpenGL.enableCapability(GL_DEPTH_TEST)
+            glEnable(GLenum(GL_CULL_FACE))
+            glFrontFace(GLenum(GL_CCW))
             
             renderer.context.unlock()
         }
@@ -293,20 +306,29 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             let program = renderer.programs[state.program]!
             program.use()
             
-            var lastBuffer = Handle.invalid
+            var lastVertexArray = Handle.invalid
+            var lastTexture = Handle.invalid
             
             for object in state.objects {
-                let nextBuffer = object.buffer
+                let nextVertexArray = object.vertexArray
                 
-                if nextBuffer != lastBuffer {
-                    let buffer = renderer.buffers[nextBuffer]!
+                if nextVertexArray != lastVertexArray && nextVertexArray != Handle.invalid {
+                    let buffer = renderer.vertexArrays[nextVertexArray]!
                     buffer.bind()
-                    lastBuffer = nextBuffer
+                    lastVertexArray = nextVertexArray
+                }
+            
+                let nextTexture = object.texture
+                
+                if nextTexture != lastTexture && nextTexture != Handle.invalid {
+                    let texture = renderer.textures[nextTexture]!
+                    texture.bind2D()
+                    lastTexture = nextTexture
                 }
                 
-                OpenGL.setUniformMatrix(object.modelViewProjectionMatrix, atLocation: uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX])
-                OpenGL.setUniformMatrix(object.normalMatrix, atLocation: uniforms[UNIFORM_NORMAL_MATRIX])
-                OpenGL.setUniformVector(object.diffuseColor, atLocation: uniforms[UNIFORM_DIFFUSE_COLOR])
+                OpenGL.setUniformMatrix(object.modelViewProjectionMatrix, atLocation: program.uniformLocationForName("modelViewProjectionMatrix"))
+                OpenGL.setUniformMatrix(object.normalMatrix, atLocation: program.uniformLocationForName("normalMatrix"))
+                OpenGL.setUniformVector(object.diffuseColor, atLocation: program.uniformLocationForName("diffuseColor"))
                 OpenGL.drawArraysWithMode(GL_TRIANGLES, first: 0, count: 36)
             }
             
