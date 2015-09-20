@@ -43,9 +43,8 @@ public class RenderSystem {
     
     public func updateViewport(viewport: Rectangle2D) {
         let camera = entityComponents.getEntitiesWithComponentType(ProjectionComponent.self).first!
-        var projection = entityComponents.componentForEntity(camera, withComponentType: ProjectionComponent.self)!
+        let projection = entityComponents.componentForEntity(camera, withComponentType: ProjectionComponent.self)!
         projection.projectionMatrix = float4x4(fovy: Angle(degrees: 65.0), aspect: viewport.aspectRatio, zNear: 0.1, zFar: 100.0)
-        entityComponents.updateComponent(projection, forEntity: camera)
         
         renderer.updateViewport(viewport)
     }
@@ -59,13 +58,12 @@ public class RenderSystem {
         
         for entity in entityComponents.getEntitiesWithComponentTypes([RenderComponent.self, OrientationComponent.self]) {
             let orientation = entityComponents.componentForEntity(entity, withComponentType: OrientationComponent.self)!
-            var render = entityComponents.componentForEntity(entity, withComponentType: RenderComponent.self)!
+            let render = entityComponents.componentForEntity(entity, withComponentType: RenderComponent.self)!
             
-            let modelViewMatrix = viewMatrix * orientation.orientationMatrix
-            render.modelViewProjectionMatrix = projectionMatrix * modelViewMatrix
-            render.normalMatrix = modelViewMatrix.inverse.transpose
-            
-            entityComponents.updateComponent(render, forEntity: entity)
+            render.modelViewMatrix = viewMatrix * orientation.orientationMatrix
+            render.normalMatrix = render.modelViewMatrix.inverse.transpose
+            render.projectionMatrix = projectionMatrix
+            render.modelViewProjectionMatrix = projectionMatrix * render.modelViewMatrix
         }
     }
 }

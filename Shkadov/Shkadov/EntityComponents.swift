@@ -71,7 +71,7 @@ public class EntityComponents {
         entitiesByKind[kind] = entities
     }
     
-    public func updateComponent<ComponentType : Component>(component: ComponentType, forEntity entity: Entity) {
+    public func replaceComponent<ComponentType : Component>(component: ComponentType, forEntity entity: Entity) {
         let kind = ComponentType.kind
         
         var componentsByKind = componentsByEntityAndKind[entity]!

@@ -80,7 +80,7 @@ public class TestCubeSystem {
         for index in 0..<positions.count {
             let cube = self.entityComponents.createEntity()
             self.entityComponents.addComponent(OrientationComponent(position: positions[index]), toEntity: cube)
-            var renderComponent = RenderComponent(diffuseColor: colors[index])
+            let renderComponent = RenderComponent(diffuseColor: colors[index])
             renderComponent.texture = grassTexture
             renderComponent.vertexArray = vertexArray
             self.entityComponents.addComponent(renderComponent, toEntity: cube)
@@ -91,7 +91,7 @@ public class TestCubeSystem {
         let floorVertexArray = renderer.createVertexArrayFromDescriptor(vertexDescriptor, buffer: floorMeshData)
         let floor = self.entityComponents.createEntity()
         self.entityComponents.addComponent(OrientationComponent(position: float3(0.0, -2.5, 0.0)), toEntity: floor)
-        var floorRenderComponent = RenderComponent(diffuseColor: Color.tan.vector)
+        let floorRenderComponent = RenderComponent(diffuseColor: Color.tan.vector)
         floorRenderComponent.texture = grassTexture
         floorRenderComponent.vertexArray = floorVertexArray
         self.entityComponents.addComponent(floorRenderComponent, toEntity: floor)

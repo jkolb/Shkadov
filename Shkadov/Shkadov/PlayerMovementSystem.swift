@@ -31,9 +31,9 @@ public class PlayerMovementSystem {
         self.entityComponents = entityComponents
     }
     
-    public func handleEvent(event: Event) {
+    public func handleEvent(event: EngineEvent) {
         let camera = entityComponents.getEntitiesWithComponentType(ProjectionComponent.self).first!
-        var orientation = entityComponents.componentForEntity(camera, withComponentType: OrientationComponent.self)!
+        let orientation = entityComponents.componentForEntity(camera, withComponentType: OrientationComponent.self)!
         
         switch event.kind {
         case .Look(let direction):
@@ -48,7 +48,7 @@ public class PlayerMovementSystem {
             }
 
             orientation.yaw += direction.right
-            print("pitch: \(orientation.pitch.degrees), yaw: \(orientation.yaw.degrees)")
+//            print("pitch: \(orientation.pitch.degrees), yaw: \(orientation.yaw.degrees)")
             
         case .Move(let direction):
             if direction.x == .Right {
@@ -77,7 +77,5 @@ public class PlayerMovementSystem {
             orientation.yaw = Angle.zero
             orientation.position = float3(0.0, 0.0, -4.0)
         }
-        
-        entityComponents.updateComponent(orientation, forEntity: camera)
     }
 }

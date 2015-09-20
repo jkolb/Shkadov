@@ -22,64 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public struct LookDirection {
-    public var up: Angle
-    public var right: Angle
+import OpenGL
+
+public final class OpenGLTexture {
+    public private(set) var handle: GLuint = 0
     
-    public init(up: Angle, right: Angle) {
-        self.up = up
-        self.right = right
-    }
-}
-
-public enum MoveXDirection {
-    case None
-    case Right
-    case Left
-}
-
-public enum MoveYDirection {
-    case None
-    case Up
-    case Down
-}
-
-public enum MoveZDirection {
-    case None
-    case Forward
-    case Backward
-}
-
-public struct MoveDirection {
-    public var x: MoveXDirection
-    public var y: MoveYDirection
-    public var z: MoveZDirection
-    
-    public init(x: MoveXDirection, y: MoveYDirection, z: MoveZDirection) {
-        self.x = x
-        self.y = y
-        self.z = z
-    }
-}
-
-public struct Event {
-    public enum System {
-        case Input
+    public init() {
+        glGenTextures(1, &handle)
     }
     
-    public enum Kind {
-        case Look(LookDirection)
-        case Move(MoveDirection)
-        case ResetCamera
+    public func bind2D() {
+        bindToTarget(GL_TEXTURE_2D)
     }
     
-    public let system: System
-    public let kind: Kind
-    public let timestamp: Time
+    public func data2D(width: Int, height: Int, pixels: UnsafePointer<Void>) {
+        let level: GLint = 0
+        let internalFormat: GLint = GL_RGBA8
+        let border: GLint = 0
+        let format: GLenum = GLenum(GL_BGRA)
+        let type: GLenum = GLenum(GL_UNSIGNED_INT_8_8_8_8_REV)
+        
+        glTexImage2D(GLenum(GL_TEXTURE_2D), level, internalFormat, GLsizei(width), GLsizei(height), border, format, type, pixels)
+    }
     
-    public init(system: System, kind: Kind, timestamp: Time) {
-        self.system = system
-        self.kind = kind
-        self.timestamp = timestamp
+    public func bindToTarget(target: Int32) {
+        glBindTexture(GLenum(target), handle)
+    }
+    
+    deinit {
+        glDeleteTextures(1, &handle)
     }
 }

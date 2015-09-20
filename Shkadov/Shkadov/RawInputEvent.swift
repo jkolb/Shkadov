@@ -22,13 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
-public class ProjectionComponent : Component {
-    public static let kind = Kind(dataType: ProjectionComponent.self)
-    public var projectionMatrix: float4x4
-
-    public init(projectionMatrix: float4x4) {
-        self.projectionMatrix = projectionMatrix
+public struct RawInputEvent {
+    public let kind: RawInputEventKind
+    public let timestamp: Time
+    
+    public init(kind: RawInputEventKind, timestamp: Time) {
+        self.kind = kind
+        self.timestamp = timestamp
     }
 }

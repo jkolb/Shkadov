@@ -22,13 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
+import OpenGL
 
-public class ProjectionComponent : Component {
-    public static let kind = Kind(dataType: ProjectionComponent.self)
-    public var projectionMatrix: float4x4
-
-    public init(projectionMatrix: float4x4) {
-        self.projectionMatrix = projectionMatrix
+public enum OpenGLShaderType {
+    case Fragment
+    case Vertex
+    case Geometry
+    
+    public var GLType: Int32 {
+        switch (self) {
+        case .Fragment:
+            return GL_FRAGMENT_SHADER
+        case .Vertex:
+            return GL_VERTEX_SHADER
+        case .Geometry:
+            return GL_GEOMETRY_SHADER
+        }
     }
 }

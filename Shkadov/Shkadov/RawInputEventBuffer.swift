@@ -24,23 +24,23 @@ SOFTWARE.
 
 public class RawInputEventBuffer : Synchronizable {
     public let synchronizationQueue: DispatchQueue
-    private var events: [RawInput.Event]
+    private var events: [RawInputEvent]
     
     public init() {
         self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.input", attribute: .Concurrent)
-        self.events = Array<RawInput.Event>()
+        self.events = [RawInputEvent]()
     }
 
-    public func postEvent(event: RawInput.Event) {
+    public func postEvent(event: RawInputEvent) {
         synchronizeWrite { buffer in
             buffer.events.append(event)
         }
     }
     
-    public func drainEventsBeforeTime(time: Time) -> [RawInput.Event] {
+    public func drainEventsBeforeTime(time: Time) -> [RawInputEvent] {
         return synchronizeReadWrite { buffer in
             let events = buffer.events
-            var foundEvents = Array<RawInput.Event>()
+            var foundEvents = [RawInputEvent]()
             
             for event in events {
                 if event.timestamp <= time {

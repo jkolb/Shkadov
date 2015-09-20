@@ -23,27 +23,27 @@ SOFTWARE.
 */
 
 public class InputContext {
-    private var keyDown: Set<RawInput.KeyCode>
-    private var buttonDown: Set<RawInput.ButtonCode>
+    private var keyDown: Set<RawInputKeyCode>
+    private var buttonDown: Set<RawInputButtonCode>
     public private(set) var mousePosition: Point2D
     public private(set) var mouseDelta: Vector2D
     
     public init() {
-        self.keyDown = Set<RawInput.KeyCode>()
-        self.buttonDown = Set<RawInput.ButtonCode>()
+        self.keyDown = Set<RawInputKeyCode>()
+        self.buttonDown = Set<RawInputButtonCode>()
         self.mousePosition = Point2D.zero
         self.mouseDelta = Vector2D.zero
     }
     
-    private func isKeyDown(keyCode: RawInput.KeyCode) -> Bool {
+    private func isKeyDown(keyCode: RawInputKeyCode) -> Bool {
         return keyDown.contains(keyCode)
     }
     
-    private func isButtonDown(buttonCode: RawInput.ButtonCode) -> Bool {
+    private func isButtonDown(buttonCode: RawInputButtonCode) -> Bool {
         return buttonDown.contains(buttonCode)
     }
     
-    private func handleInputEvents(inputEvents: [RawInput.Event]) {
+    private func handleInputEvents(inputEvents: [RawInputEvent]) {
         for inputEvent in inputEvents {
             switch inputEvent.kind {
             case .KeyDown(let keyCode):
@@ -70,7 +70,7 @@ public class InputContext {
         }
     }
     
-    public func translateInputEvents(inputEvents: [RawInput.Event]) -> [Event.Kind] {
+    public func translateInputEvents(inputEvents: [RawInputEvent]) -> [EngineEventKind] {
         handleInputEvents(inputEvents)
         
         var moveDirection = MoveDirection(x: .None, y: .None, z: .None)
@@ -89,10 +89,10 @@ public class InputContext {
             moveDirection.x = .Right
         }
         
-        if isKeyDown(.SPACE) && !isKeyDown(.C) {
+        if isKeyDown(.SPACE) && !isKeyDown(.LSHIFT) {
             moveDirection.y = .Up
         }
-        else if isKeyDown(.C) && !isKeyDown(.SPACE) {
+        else if isKeyDown(.LSHIFT) && !isKeyDown(.SPACE) {
             moveDirection.y = .Down
         }
         
@@ -103,10 +103,10 @@ public class InputContext {
         mouseDelta = Vector2D.zero // Reset delta after use to make sure it doesn't continue to cause movement
         
         if isKeyDown(.R) {
-            return [Event.Kind.ResetCamera]
+            return [EngineEventKind.ResetCamera]
         }
         else {
-            return [Event.Kind.Move(moveDirection), Event.Kind.Look(lookDirection)]
+            return [EngineEventKind.Move(moveDirection), EngineEventKind.Look(lookDirection)]
         }
     }
 }

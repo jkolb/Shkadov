@@ -22,13 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
-public class ProjectionComponent : Component {
-    public static let kind = Kind(dataType: ProjectionComponent.self)
-    public var projectionMatrix: float4x4
-
-    public init(projectionMatrix: float4x4) {
-        self.projectionMatrix = projectionMatrix
-    }
+public enum EngineEventSystem {
+    case Input
 }

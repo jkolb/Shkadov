@@ -22,13 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
-public class ProjectionComponent : Component {
-    public static let kind = Kind(dataType: ProjectionComponent.self)
-    public var projectionMatrix: float4x4
-
-    public init(projectionMatrix: float4x4) {
-        self.projectionMatrix = projectionMatrix
-    }
+public enum OpenGLError: ErrorType {
+    case UnableToCreateShader
+    case UnableToLoadShader(ErrorType)
+    case UnableToCompileShader(String)
+    case UnableToCreateProgram
+    case UnableToLinkProgram(String)
 }

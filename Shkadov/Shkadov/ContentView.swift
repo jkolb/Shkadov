@@ -24,6 +24,9 @@ SOFTWARE.
 
 import AppKit
 
+typealias NSEventButtonNumberType = Int
+typealias NSEventKeyCodeType = UInt16
+
 public class ContentView : NSView {
     public var sendMouseDelta = false {
         didSet {
@@ -31,8 +34,12 @@ public class ContentView : NSView {
         }
     }
     private var ignoreFirstDelta = false
+    private var currentDownModifierKeyCodes = Set<NSEventKeyCodeType>()
+    private var atLeastOneEventForModifierKeyCodes = Set<NSEventKeyCodeType>()
+    private let startingEventModifierFlags = NSEvent.modifierFlags()
+    private var currentDownEventModifierFlags = NSEvent.modifierFlags().intersect([.DeviceIndependentModifierFlagsMask])
     public weak var engine: Engine!
-    private let buttonMap: [Int:RawInput.ButtonCode] = [
+    private let buttonMap: [NSEventButtonNumberType : RawInputButtonCode] = [
         0: .MOUSE0,
         1: .MOUSE1,
         2: .MOUSE2,
@@ -50,7 +57,7 @@ public class ContentView : NSView {
         14: .MOUSE14,
         15: .MOUSE15,
     ]
-    private let keyMap: [Int:RawInput.KeyCode] = [
+    private let keyMap: [NSEventKeyCodeType : RawInputKeyCode] = [
         0: .A,
         1: .S,
         2: .D,
@@ -69,33 +76,59 @@ public class ContentView : NSView {
         15: .R,
         16: .Y,
         17: .T,
-        
+        36: .RETURN,
+        48: .TAB,
         49: .SPACE,
+        53: .ESCAPE,
+        54: .RMETA,
+        55: .LMETA,
         56: .LSHIFT,
+        57: .CAPSLOCK,
+        58: .LALT,
+        59: .LCONTROL,
+        60: .RSHIFT,
+        61: .RALT,
+        62: .RCONTROL,
     ]
-    
-    private func buttonCodeForEvent(event: NSEvent) -> RawInput.ButtonCode {
-        return buttonMap[event.buttonNumber] ?? .UNKNOWN
+
+    private func transformButtonNumber(buttonNumber: NSEventButtonNumberType) -> RawInputButtonCode {
+        return buttonMap[buttonNumber] ?? .UNKNOWN
     }
     
-    private func keyCodeForEvent(event: NSEvent) -> RawInput.KeyCode {
-        return keyMap[Int(event.keyCode)] ?? .UNKNOWN
+    private func transformKeyCode(keyCode: NSEventKeyCodeType) -> RawInputKeyCode {
+        return keyMap[keyCode] ?? .UNKNOWN
     }
 
     private func postButtonDownEvent(event: NSEvent) {
-        engine.postDownEventForButtonCode(buttonCodeForEvent(event))
+        let rawButtonCode = transformButtonNumber(event.buttonNumber)
+        if rawButtonCode == .UNKNOWN { return }
+        engine.postInputEventForKind(.ButtonDown(rawButtonCode))
     }
     
     private func postButtonUpEvent(event: NSEvent) {
-        engine.postUpEventForButtonCode(buttonCodeForEvent(event))
+        let rawButtonCode = transformButtonNumber(event.buttonNumber)
+        if rawButtonCode == .UNKNOWN { return }
+        engine.postInputEventForKind(.ButtonUp(rawButtonCode))
     }
     
     private func postKeyDownEvent(event: NSEvent) {
-        engine.postDownEventForKeyCode(keyCodeForEvent(event))
+        postKeyDownCode(event.keyCode)
     }
     
     private func postKeyUpEvent(event: NSEvent) {
-        engine.postUpEventForKeyCode(keyCodeForEvent(event))
+        postKeyUpCode(event.keyCode)
+    }
+    
+    private func postKeyDownCode(keyCode: NSEventKeyCodeType) {
+        let rawKeyCode = transformKeyCode(keyCode)
+        if rawKeyCode == .UNKNOWN { return }
+        engine.postInputEventForKind(.KeyDown(rawKeyCode))
+    }
+    
+    private func postKeyUpCode(keyCode: NSEventKeyCodeType) {
+        let rawKeyCode = transformKeyCode(keyCode)
+        if rawKeyCode == .UNKNOWN { return }
+        engine.postInputEventForKind(.KeyUp(rawKeyCode))
     }
     
     private func postMousePositionEvent(event: NSEvent) {
@@ -107,12 +140,12 @@ public class ContentView : NSView {
             }
             
             let delta = event.delta2D
-            engine.postMouseDeltaEvent(delta)
+            engine.postInputEventForKind(.MouseDelta(delta))
         }
         else {
             let contentPoint = convertPoint(event.locationInWindow, fromView: nil)
             let position = contentPoint.point2D
-            engine.postMousePositionEvent(position)
+            engine.postInputEventForKind(.MousePosition(position))
         }
     }
     
@@ -121,17 +154,59 @@ public class ContentView : NSView {
     }
     
     public override func keyDown(theEvent: NSEvent) {
-        NSLog("KEY DOWN: \(theEvent)")
+//        NSLog("KEY DOWN: \(theEvent)")
         postKeyDownEvent(theEvent)
     }
     
     public override func keyUp(theEvent: NSEvent) {
-        NSLog("KEY UP: \(theEvent)")
+//        NSLog("KEY UP: \(theEvent)")
         postKeyUpEvent(theEvent)
     }
     
     public override func flagsChanged(theEvent: NSEvent) {
-        NSLog("FLAGS: \(theEvent)")
+        let previousDownEventModifierFlags = currentDownEventModifierFlags
+        currentDownEventModifierFlags = theEvent.modifierFlags.intersect([.DeviceIndependentModifierFlagsMask])
+        let transitionedToUp = !previousDownEventModifierFlags.subtract(currentDownEventModifierFlags).isEmpty
+        let transitionedToDown = !currentDownEventModifierFlags.subtract(previousDownEventModifierFlags).isEmpty
+        
+        if transitionedToUp {
+            let previousDownModifierKeyCodes = currentDownModifierKeyCodes
+            currentDownModifierKeyCodes.remove(theEvent.keyCode)
+            let transitionedToUpKeyCodes = previousDownModifierKeyCodes.subtract(currentDownModifierKeyCodes)
+            
+            if transitionedToUpKeyCodes.count == 1 {
+                postKeyUpCode(transitionedToUpKeyCodes.first!)
+                NSLog("FLAG UP: \(transitionedToUpKeyCodes.first!)")
+            }
+        }
+        else if transitionedToDown {
+            let previousDownModifierKeyCodes = currentDownModifierKeyCodes
+            currentDownModifierKeyCodes.insert(theEvent.keyCode)
+            let transitionedToDownKeyCodes = currentDownModifierKeyCodes.subtract(previousDownModifierKeyCodes)
+            
+            if transitionedToDownKeyCodes.count == 1 {
+                postKeyDownCode(transitionedToDownKeyCodes.first!)
+                NSLog("FLAG DOWN: \(transitionedToDownKeyCodes.first!)")
+            }
+        }
+        else if currentDownModifierKeyCodes.contains(theEvent.keyCode) {
+            currentDownModifierKeyCodes.remove(theEvent.keyCode)
+            postKeyUpCode(theEvent.keyCode)
+            NSLog("FLAG UP 2: \(theEvent.keyCode)")
+        }
+        else if atLeastOneEventForModifierKeyCodes.contains(theEvent.keyCode) {
+            /*
+            If you get here an haven't been added to this set yet most likely the keys were already down before the app started.
+            For example if both Left & Right Shift are held down before the app starts this helps prevent them from generating
+            incorrect Down events (since they were already down).
+            */
+            currentDownModifierKeyCodes.insert(theEvent.keyCode)
+            postKeyDownCode(theEvent.keyCode)
+            NSLog("FLAG DOWN 2: \(theEvent.keyCode)")
+        }
+        
+        atLeastOneEventForModifierKeyCodes.insert(theEvent.keyCode)
+//        NSLog("FLAGS: \(theEvent)")
     }
 
     public override func mouseDown(theEvent: NSEvent) {

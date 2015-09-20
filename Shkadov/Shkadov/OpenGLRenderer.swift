@@ -32,19 +32,19 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
     public var viewport: Rectangle2D
     public weak var context: OpenGLContext!
     private let textureHandleFactory = HandleFactory()
-    private var textures: [Handle : OpenGL.Texture]
+    private var textures: [Handle : OpenGLTexture]
     private let vertexArrayHandleFactory = HandleFactory()
-    private var vertexArrays: [Handle : OpenGL.VertexArray]
+    private var vertexArrays: [Handle : OpenGLVertexArray]
     private let programHandleFactory = HandleFactory()
-    private var programs: [Handle : OpenGL.Program]
+    private var programs: [Handle : OpenGLProgram]
     
     public init(context: OpenGLContext) {
         self.context = context
         self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.render", attribute: .Serial)
         self.viewport = Rectangle2D.zero
-        self.textures = Dictionary<Handle, OpenGL.Texture>()
-        self.vertexArrays = Dictionary<Handle, OpenGL.VertexArray>()
-        self.programs = Dictionary<Handle, OpenGL.Program>()
+        self.textures = [Handle : OpenGLTexture]()
+        self.vertexArrays = [Handle : OpenGLVertexArray]()
+        self.programs = [Handle : OpenGLProgram]()
     }
     
     deinit {
@@ -72,7 +72,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             renderer.context.makeCurrent()
 
             let handle = renderer.textureHandleFactory.nextHandle()
-            let texture = OpenGL.Texture()
+            let texture = OpenGLTexture()
             renderer.textures[handle] = texture
             texture.bind2D()
             texture.data2D(textureData.size.width, height: textureData.size.height, pixels: textureData.rawData)
@@ -101,10 +101,10 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             
             let handle = renderer.vertexArrayHandleFactory.nextHandle()
 
-            let vertexArray = OpenGL.VertexArray()
+            let vertexArray = OpenGLVertexArray()
             vertexArray.bind()
             
-            let vertexBuffer = OpenGL.VertexBuffer()
+            let vertexBuffer = OpenGLVertexBuffer()
             vertexBuffer.bindToTarget(GL_ARRAY_BUFFER)
             
             vertexArray.addBuffer(vertexBuffer)
@@ -166,14 +166,14 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             renderer.context.makeCurrent()
             
             let handle = renderer.programHandleFactory.nextHandle()
-            let vertShader = try! OpenGL.Shader(.Vertex)
-            let fragShader = try! OpenGL.Shader(.Fragment)
-            let program = try! OpenGL.Program()
+            let vertShader = try! OpenGLShader(.Vertex)
+            let fragShader = try! OpenGLShader(.Fragment)
+            let program = try! OpenGLProgram()
             
             do {
                 try vertShader.compile(vertexPath)
             }
-            catch OpenGL.Error.UnableToCompileShader(let message) {
+            catch OpenGLError.UnableToCompileShader(let message) {
                 fatalError("Vertex: \(message)")
             }
             catch {
@@ -183,7 +183,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             do {
                 try fragShader.compile(fragmentPath)
             }
-            catch OpenGL.Error.UnableToCompileShader(let message) {
+            catch OpenGLError.UnableToCompileShader(let message) {
                 fatalError("Fragment: \(message)")
             }
             catch {
@@ -205,7 +205,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             do {
                 try program.link()
             }
-            catch OpenGL.Error.UnableToLinkProgram(let message) {
+            catch OpenGLError.UnableToLinkProgram(let message) {
                 fatalError("Link: \(message)")
             }
             catch {

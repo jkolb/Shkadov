@@ -22,13 +22,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
-public class ProjectionComponent : Component {
-    public static let kind = Kind(dataType: ProjectionComponent.self)
-    public var projectionMatrix: float4x4
-
-    public init(projectionMatrix: float4x4) {
-        self.projectionMatrix = projectionMatrix
-    }
+public enum RawInputButtonCode : UInt8 {
+    case INVALID = 0
+    
+    case MOUSE0  = 1
+    case MOUSE1  = 2
+    case MOUSE2  = 3
+    case MOUSE3  = 4
+    case MOUSE4  = 5
+    case MOUSE5  = 6
+    case MOUSE6  = 7
+    case MOUSE7  = 8
+    case MOUSE8  = 9
+    case MOUSE9  = 10
+    case MOUSE10 = 11
+    case MOUSE11 = 12
+    case MOUSE12 = 13
+    case MOUSE13 = 14
+    case MOUSE14 = 15
+    case MOUSE15 = 16
+    
+    case UNKNOWN = 255
 }

@@ -28,7 +28,7 @@ public final class Engine : TimerDelegate, Synchronizable {
     private let rawInputEventBuffer: RawInputEventBuffer
     private let inputContext: InputContext
     private let timer: Timer
-    private var eventHandlers: [Event.System:[Component]]
+    private var eventHandlers: [EngineEventSystem:[Component]]
     private let entityComponents: EntityComponents
     private let playerMovementSystem: PlayerMovementSystem
     private let renderSystem: RenderSystem
@@ -47,32 +47,8 @@ public final class Engine : TimerDelegate, Synchronizable {
         self.renderSystem = RenderSystem(renderer: renderer, entityComponents: entityComponents)
     }
     
-    public func postDownEventForKeyCode(keyCode: RawInput.KeyCode) {
-        postInputEventForKind(.KeyDown(keyCode))
-    }
-    
-    public func postUpEventForKeyCode(keyCode: RawInput.KeyCode) {
-        postInputEventForKind(.KeyUp(keyCode))
-    }
-    
-    public func postDownEventForButtonCode(buttonCode: RawInput.ButtonCode) {
-        postInputEventForKind(.ButtonDown(buttonCode))
-    }
-    
-    public func postUpEventForButtonCode(buttonCode: RawInput.ButtonCode) {
-        postInputEventForKind(.ButtonUp(buttonCode))
-    }
-    
-    public func postMousePositionEvent(position: Point2D) {
-        postInputEventForKind(.MousePosition(position))
-    }
-    
-    public func postMouseDeltaEvent(delta: Vector2D) {
-        postInputEventForKind(.MouseDelta(delta))
-    }
-    
-    private func postInputEventForKind(kind: RawInput.Event.Kind) {
-        let event = RawInput.Event(kind: kind, timestamp: platform.currentTime)
+    public func postInputEventForKind(kind: RawInputEventKind) {
+        let event = RawInputEvent(kind: kind, timestamp: platform.currentTime)
         rawInputEventBuffer.postEvent(event)
     }
     
@@ -99,11 +75,11 @@ public final class Engine : TimerDelegate, Synchronizable {
         let eventKinds = inputContext.translateInputEvents(inputEvents)
 
         for eventKind in eventKinds {
-            dispatchEvent(Event(system: .Input, kind: eventKind, timestamp: platform.currentTime))
+            dispatchEvent(EngineEvent(system: .Input, kind: eventKind, timestamp: platform.currentTime))
         }
     }
     
-    private func dispatchEvent(event: Event) {
+    private func dispatchEvent(event: EngineEvent) {
         playerMovementSystem.handleEvent(event)
     }
     

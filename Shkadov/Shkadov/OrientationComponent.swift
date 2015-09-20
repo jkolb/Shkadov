@@ -24,7 +24,7 @@ SOFTWARE.
 
 import simd
 
-public struct OrientationComponent : Component {
+public class OrientationComponent : Component {
     public static let kind = Kind(dataType: OrientationComponent.self)
     public var position: float3
     public var pitch: Angle // Up/Down
@@ -82,19 +82,19 @@ public struct OrientationComponent : Component {
         return a
     }
     
-    public mutating func moveForwardByAmount(amount: Float) {
+    public func moveForwardByAmount(amount: Float) {
         let yawMatrix = float3x3(angle: yaw, axis: float3(0.0, 1.0, 0.0))
         let forward = normalize(yawMatrix * float3(0.0, 0.0, 1.0))
         position = position + forward * amount
     }
     
-    public mutating func moveRightByAmount(amount: Float) {
+    public func moveRightByAmount(amount: Float) {
         let yawMatrix = float3x3(angle: yaw, axis: float3(0.0, 1.0, 0.0))
         let right = normalize(yawMatrix * float3(1.0, 0.0, 0.0))
         position = position + right * amount
     }
     
-    public mutating func moveUpByAmount(amount: Float) {
+    public func moveUpByAmount(amount: Float) {
         position = position + float3(0.0, 1.0, 0.0) * amount
     }
 }

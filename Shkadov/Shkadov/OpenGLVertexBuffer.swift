@@ -22,13 +22,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
+import OpenGL
 
-public class ProjectionComponent : Component {
-    public static let kind = Kind(dataType: ProjectionComponent.self)
-    public var projectionMatrix: float4x4
-
-    public init(projectionMatrix: float4x4) {
-        self.projectionMatrix = projectionMatrix
+public final class OpenGLVertexBuffer {
+    public private(set) var handle: GLuint = 0
+    
+    public init() {
+        glGenBuffers(1, &handle)
+    }
+    
+    public func bindToTarget(target: Int32) {
+        OpenGL.bindBufferToTarget(target, handle: handle)
+    }
+    
+    deinit {
+        glDeleteBuffers(1, &handle)
     }
 }

@@ -22,13 +22,48 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
+public enum EngineEventKind {
+    case Look(LookDirection)
+    case Move(MoveDirection)
+    case ResetCamera
+}
 
-public class ProjectionComponent : Component {
-    public static let kind = Kind(dataType: ProjectionComponent.self)
-    public var projectionMatrix: float4x4
+public struct LookDirection {
+    public var up: Angle
+    public var right: Angle
+    
+    public init(up: Angle, right: Angle) {
+        self.up = up
+        self.right = right
+    }
+}
 
-    public init(projectionMatrix: float4x4) {
-        self.projectionMatrix = projectionMatrix
+public enum MoveXDirection {
+    case None
+    case Right
+    case Left
+}
+
+public enum MoveYDirection {
+    case None
+    case Up
+    case Down
+}
+
+public enum MoveZDirection {
+    case None
+    case Forward
+    case Backward
+}
+
+public struct MoveDirection {
+    public var x: MoveXDirection
+    public var y: MoveYDirection
+    public var z: MoveZDirection
+    
+    public init(x: MoveXDirection, y: MoveYDirection, z: MoveZDirection) {
+        self.x = x
+        self.y = y
+        self.z = z
     }
 }
