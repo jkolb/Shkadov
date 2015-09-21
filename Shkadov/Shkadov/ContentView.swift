@@ -35,8 +35,7 @@ public class ContentView : NSView {
     }
     private var ignoreFirstDelta = false
     private var currentDownModifierKeyCodes = Set<NSEventKeyCodeType>()
-    private var atLeastOneEventForModifierKeyCodes = Set<NSEventKeyCodeType>()
-    private let startingEventModifierFlags = NSEvent.modifierFlags()
+    private var startingEventModifierFlags = NSEvent.modifierFlags().intersect([.DeviceIndependentModifierFlagsMask])
     private var currentDownEventModifierFlags = NSEvent.modifierFlags().intersect([.DeviceIndependentModifierFlagsMask])
     public weak var engine: Engine!
     private let buttonMap: [NSEventButtonNumberType : RawInputButtonCode] = [
@@ -90,7 +89,7 @@ public class ContentView : NSView {
         61: .RALT,
         62: .RCONTROL,
     ]
-
+    
     private func transformButtonNumber(buttonNumber: NSEventButtonNumberType) -> RawInputButtonCode {
         return buttonMap[buttonNumber] ?? .UNKNOWN
     }
@@ -166,49 +165,55 @@ public class ContentView : NSView {
     public override func flagsChanged(theEvent: NSEvent) {
         let previousDownEventModifierFlags = currentDownEventModifierFlags
         currentDownEventModifierFlags = theEvent.modifierFlags.intersect([.DeviceIndependentModifierFlagsMask])
-        let transitionedToUp = !previousDownEventModifierFlags.subtract(currentDownEventModifierFlags).isEmpty
-        let transitionedToDown = !currentDownEventModifierFlags.subtract(previousDownEventModifierFlags).isEmpty
+        let transitionedToUpModifierFlags = previousDownEventModifierFlags.subtract(currentDownEventModifierFlags)
+        let transitionedToDownModifierFlags = currentDownEventModifierFlags.subtract(previousDownEventModifierFlags)
+        let transitionedToUp = !transitionedToUpModifierFlags.isEmpty
+        let transitionedToDown = !transitionedToDownModifierFlags.isEmpty
+        let keyCode = theEvent.keyCode
         
         if transitionedToUp {
-            let previousDownModifierKeyCodes = currentDownModifierKeyCodes
-            currentDownModifierKeyCodes.remove(theEvent.keyCode)
-            let transitionedToUpKeyCodes = previousDownModifierKeyCodes.subtract(currentDownModifierKeyCodes)
+            let upModifierFlagsWereDownOnStart = !startingEventModifierFlags.intersect(transitionedToUpModifierFlags).isEmpty
             
-            if transitionedToUpKeyCodes.count == 1 {
-                postKeyUpCode(transitionedToUpKeyCodes.first!)
-                NSLog("FLAG UP: \(transitionedToUpKeyCodes.first!)")
+            if upModifierFlagsWereDownOnStart {
+                // Do not start handling a modifier until it has been cleared out from startingEventModifierFlags
+                startingEventModifierFlags.subtractInPlace(transitionedToUpModifierFlags)
+//                NSLog("IGNORE: \(keyCode)")
+            }
+            else {
+                currentDownModifierKeyCodes.remove(keyCode)
+                postKeyUpCode(keyCode)
+//                NSLog("FLAG UP: \(keyCode)")
             }
         }
         else if transitionedToDown {
-            let previousDownModifierKeyCodes = currentDownModifierKeyCodes
-            currentDownModifierKeyCodes.insert(theEvent.keyCode)
-            let transitionedToDownKeyCodes = currentDownModifierKeyCodes.subtract(previousDownModifierKeyCodes)
-            
-            if transitionedToDownKeyCodes.count == 1 {
-                postKeyDownCode(transitionedToDownKeyCodes.first!)
-                NSLog("FLAG DOWN: \(transitionedToDownKeyCodes.first!)")
-            }
+            currentDownModifierKeyCodes.insert(keyCode)
+            postKeyDownCode(keyCode)
+//            NSLog("FLAG DOWN: \(keyCode)")
         }
-        else if currentDownModifierKeyCodes.contains(theEvent.keyCode) {
-            currentDownModifierKeyCodes.remove(theEvent.keyCode)
-            postKeyUpCode(theEvent.keyCode)
-            NSLog("FLAG UP 2: \(theEvent.keyCode)")
+        else if isAleadyDownKeyCode(keyCode) {
+            currentDownModifierKeyCodes.remove(keyCode)
+            postKeyUpCode(keyCode)
+//            NSLog("FLAG UP 2: \(keyCode)")
         }
-        else if atLeastOneEventForModifierKeyCodes.contains(theEvent.keyCode) {
-            /*
-            If you get here an haven't been added to this set yet most likely the keys were already down before the app started.
-            For example if both Left & Right Shift are held down before the app starts this helps prevent them from generating
-            incorrect Down events (since they were already down).
-            */
-            currentDownModifierKeyCodes.insert(theEvent.keyCode)
-            postKeyDownCode(theEvent.keyCode)
-            NSLog("FLAG DOWN 2: \(theEvent.keyCode)")
+        else if modifierFlagWasNotDownOnStart {
+            currentDownModifierKeyCodes.insert(keyCode)
+            postKeyDownCode(keyCode)
+//            NSLog("FLAG DOWN 2: \(keyCode)")
         }
-        
-        atLeastOneEventForModifierKeyCodes.insert(theEvent.keyCode)
-//        NSLog("FLAGS: \(theEvent)")
+        else {
+//            NSLog("IGNORE 2: \(keyCode)")
+        }
+        //NSLog("FLAGS: \(theEvent)")
     }
 
+    private func isAleadyDownKeyCode(keyCode: NSEventKeyCodeType) -> Bool {
+        return currentDownModifierKeyCodes.contains(keyCode)
+    }
+    
+    private var modifierFlagWasNotDownOnStart: Bool {
+        return !currentDownEventModifierFlags.subtract(startingEventModifierFlags).isEmpty
+    }
+    
     public override func mouseDown(theEvent: NSEvent) {
         postButtonDownEvent(theEvent)
     }
