@@ -24,7 +24,7 @@ SOFTWARE.
 
 import OpenGL
 
-public final class OpenGLVertexBuffer {
+public final class OpenGLBuffer {
     public private(set) var handle: GLuint = 0
     
     public init() {

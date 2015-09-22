@@ -26,7 +26,7 @@ import OpenGL
 
 public final class OpenGLVertexArray {
     public private(set) var handle: GLuint = 0
-    private var buffers = [OpenGLVertexBuffer]()
+    private var buffers = [OpenGLBuffer]()
     
     public init() {
         glGenVertexArrays(1, &handle)
@@ -40,7 +40,7 @@ public final class OpenGLVertexArray {
         glDeleteVertexArrays(1, &handle)
     }
     
-    public func addBuffer(buffer: OpenGLVertexBuffer) {
+    public func addBuffer(buffer: OpenGLBuffer) {
         buffers.append(buffer)
     }
 }

@@ -32,4 +32,5 @@ public protocol Renderer {
     func destoryVertexArray(handle: Handle)
     func createProgramWithVertexPath(vertexPath: String, fragmentPath: String) -> Handle
     func destroyProgram(handle: Handle)
+    func createUniformBlockForProgram(program: Handle, withName name: String) -> ByteBuffer
 }

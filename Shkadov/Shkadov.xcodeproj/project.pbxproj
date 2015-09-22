@@ -68,7 +68,7 @@
 		E5AC4E331BA5C77A00134995 /* TextureFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AC4E321BA5C77A00134995 /* TextureFormat.swift */; };
 		E5AC4E351BA5CAB900134995 /* PixelSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AC4E341BA5CAB900134995 /* PixelSize.swift */; };
 		E5B7A3951BAEFFFE0027A5F0 /* OpenGLVertexArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B7A3941BAEFFFE0027A5F0 /* OpenGLVertexArray.swift */; };
-		E5B7A3971BAF00290027A5F0 /* OpenGLVertexBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B7A3961BAF00290027A5F0 /* OpenGLVertexBuffer.swift */; };
+		E5B7A3971BAF00290027A5F0 /* OpenGLBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B7A3961BAF00290027A5F0 /* OpenGLBuffer.swift */; };
 		E5B7A3991BAF01530027A5F0 /* OpenGLTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B7A3981BAF01530027A5F0 /* OpenGLTexture.swift */; };
 		E5C54E2F1B954E58003F5AEB /* PlayerMovementSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C54E2E1B954E58003F5AEB /* PlayerMovementSystem.swift */; };
 		E5CA680E1B9FC695002B065E /* Polygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA680D1B9FC695002B065E /* Polygon.swift */; };
@@ -164,7 +164,7 @@
 		E5AC4E321BA5C77A00134995 /* TextureFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureFormat.swift; sourceTree = "<group>"; };
 		E5AC4E341BA5CAB900134995 /* PixelSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelSize.swift; sourceTree = "<group>"; };
 		E5B7A3941BAEFFFE0027A5F0 /* OpenGLVertexArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGLVertexArray.swift; sourceTree = "<group>"; };
-		E5B7A3961BAF00290027A5F0 /* OpenGLVertexBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGLVertexBuffer.swift; sourceTree = "<group>"; };
+		E5B7A3961BAF00290027A5F0 /* OpenGLBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGLBuffer.swift; sourceTree = "<group>"; };
 		E5B7A3981BAF01530027A5F0 /* OpenGLTexture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGLTexture.swift; sourceTree = "<group>"; };
 		E5C54E2E1B954E58003F5AEB /* PlayerMovementSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerMovementSystem.swift; sourceTree = "<group>"; };
 		E5CA680D1B9FC695002B065E /* Polygon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Polygon.swift; sourceTree = "<group>"; };
@@ -280,6 +280,7 @@
 			children = (
 				E581CFB21B8935E100D7174F /* Shaders */,
 				E581CF961B892C9F00D7174F /* OpenGL.swift */,
+				E5B7A3961BAF00290027A5F0 /* OpenGLBuffer.swift */,
 				E52C5B141BAEF89D00517152 /* OpenGLError.swift */,
 				E52C5B161BAEF90100517152 /* OpenGLProgram.swift */,
 				E581CF971B892C9F00D7174F /* OpenGLRenderer.swift */,
@@ -287,7 +288,6 @@
 				E52C5B181BAEF94F00517152 /* OpenGLShaderType.swift */,
 				E5B7A3981BAF01530027A5F0 /* OpenGLTexture.swift */,
 				E5B7A3941BAEFFFE0027A5F0 /* OpenGLVertexArray.swift */,
-				E5B7A3961BAF00290027A5F0 /* OpenGLVertexBuffer.swift */,
 			);
 			name = OpenGL;
 			sourceTree = "<group>";
@@ -484,7 +484,7 @@
 				E5E45B5A1BAF08E800072EFF /* RawInputEventKind.swift in Sources */,
 				09F609501B9C45D3003B4A5B /* RawInputKeyCode.swift in Sources */,
 				E59C5F0F1B9E7D2E003422FB /* Geometry+CoreGraphics.swift in Sources */,
-				E5B7A3971BAF00290027A5F0 /* OpenGLVertexBuffer.swift in Sources */,
+				E5B7A3971BAF00290027A5F0 /* OpenGLBuffer.swift in Sources */,
 				E535C8C11B9158920048321F /* Handle.swift in Sources */,
 				E5E8B2471BA48915004E9485 /* ByteBuffer.swift in Sources */,
 				E59C5F171B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift in Sources */,

@@ -35,6 +35,8 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
     private var textures: [Handle : OpenGLTexture]
     private let vertexArrayHandleFactory = HandleFactory()
     private var vertexArrays: [Handle : OpenGLVertexArray]
+    private let uniformHandleFactory = HandleFactory()
+    private var uniforms: [Handle : OpenGLBuffer]
     private let programHandleFactory = HandleFactory()
     private var programs: [Handle : OpenGLProgram]
     
@@ -45,6 +47,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
         self.textures = [Handle : OpenGLTexture]()
         self.vertexArrays = [Handle : OpenGLVertexArray]()
         self.programs = [Handle : OpenGLProgram]()
+        self.uniforms = [Handle : OpenGLBuffer]()
     }
     
     deinit {
@@ -104,7 +107,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             let vertexArray = OpenGLVertexArray()
             vertexArray.bind()
             
-            let vertexBuffer = OpenGLVertexBuffer()
+            let vertexBuffer = OpenGLBuffer()
             vertexBuffer.bindToTarget(GL_ARRAY_BUFFER)
             
             vertexArray.addBuffer(vertexBuffer)
@@ -237,12 +240,53 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             let size = p.sizeOfUniformBlockWithName(name)
             let buffer = ByteBuffer(capacity: size)
             
+            let uniformBuffer = OpenGLBuffer()
+            uniformBuffer.bindToTarget(GL_UNIFORM_BUFFER)
+            OpenGL.bufferDataForTarget(GL_UNIFORM_BUFFER, size: buffer.capacity, data: buffer.data, usage: GL_DYNAMIC_DRAW)
+            OpenGL.bindBufferToTarget(GL_UNIFORM_BUFFER, handle: 0)
+
+            let handle = renderer.uniformHandleFactory.nextHandle()
+            renderer.uniforms[handle] = uniformBuffer
+            
             renderer.context.unlock()
 
             return buffer
         }
     }
     
+    /* Update the data in the buffer
+    glBindBuffer(GL_UNIFORM_BUFFER, gbo);
+    GLvoid* p = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
+    memcpy(p, &shader_data, sizeof(shader_data))
+    glUnmapBuffer(GL_UNIFORM_BUFFER);
+    */
+    
+    /* Bind multiple uniform buffers
+    glBindBufferBase(GL_UNIFORM_BUFFER, binding_point_index, ubo);
+    */
+    
+    /* Iterate uniforms in program
+    GLint numBlocks;
+    glGetProgramiv(prog, GL_ACTIVE_UNIFORM_BLOCKS, &numBlocks);
+    
+    std::vector<std::string> nameList;
+    nameList.reserve(numBlocks);
+    for(int blockIx = 0; blockIx < numBlocks; ++blockIx)
+    {
+        GLint nameLen;
+        glGetActiveUniformBlockiv​(prog, blockIx, GL_UNIFORM_BLOCK_NAME_LENGTH, &nameLen);
+    
+        std::vector<GLchar> name; //Yes, not std::string. There's a reason for that.
+        name.resize(nameLen);
+        glGetActiveUniformBlockName​(prog, blockIx, nameLen, NULL, &name[0]);
+    
+        nameList.push_back(std::string());
+        nameList.back().assign(name.begin(), name.end() - 1); //Remove the null terminator.
+    }
+    
+    Can't tell the difference between shader and fragment names (so that Metal-like API could be used)?
+    Would have to have some prefix just for GLSL so that you could index them differently and have mapping tables between the outside and inside indices.
+    */
     public func destroyProgram(handle: Handle) {
         synchronizeWrite { renderer in
             renderer.context.lock()
