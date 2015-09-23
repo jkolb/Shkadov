@@ -35,6 +35,10 @@ public final class OpenGLBuffer {
         OpenGL.bindBufferToTarget(target, handle: handle)
     }
     
+    public func bindToTarget(target: Int32, index: GLuint) {
+        glBindBufferBase(GLenum(target), index, handle)
+    }
+    
     deinit {
         glDeleteBuffers(1, &handle)
     }

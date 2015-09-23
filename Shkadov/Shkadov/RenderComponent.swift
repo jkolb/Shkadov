@@ -33,6 +33,7 @@ public class RenderComponent : Component {
     public var diffuseColor: float4
     public var texture: Handle
     public var vertexArray: Handle
+    public var uniform: Handle
     
     public init(diffuseColor: float4 = Color.white.vector) {
         self.modelViewMatrix = float4x4(1.0)
@@ -42,5 +43,6 @@ public class RenderComponent : Component {
         self.diffuseColor = diffuseColor
         self.texture = Handle.invalid
         self.vertexArray = Handle.invalid
+        self.uniform = Handle.invalid
     }
 }

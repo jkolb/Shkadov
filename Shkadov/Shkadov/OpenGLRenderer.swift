@@ -230,7 +230,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
         }
     }
     
-    public func createUniformBlockForProgram(program: Handle, withName name: String) -> ByteBuffer {
+    public func createUniformForProgram(program: Handle, withName name: String) -> Handle {
         return synchronizeReadWrite { renderer in
             renderer.context.lock()
             renderer.context.makeCurrent()
@@ -238,11 +238,10 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             let p = renderer.programs[program]!
             p.addUniformBlockName(name)
             let size = p.sizeOfUniformBlockWithName(name)
-            let buffer = ByteBuffer(capacity: size)
             
             let uniformBuffer = OpenGLBuffer()
             uniformBuffer.bindToTarget(GL_UNIFORM_BUFFER)
-            OpenGL.bufferDataForTarget(GL_UNIFORM_BUFFER, size: buffer.capacity, data: buffer.data, usage: GL_DYNAMIC_DRAW)
+            OpenGL.bufferDataForTarget(GL_UNIFORM_BUFFER, size: size, data: nil, usage: GL_DYNAMIC_DRAW)
             OpenGL.bindBufferToTarget(GL_UNIFORM_BUFFER, handle: 0)
 
             let handle = renderer.uniformHandleFactory.nextHandle()
@@ -250,21 +249,34 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             
             renderer.context.unlock()
 
-            return buffer
+            return handle
         }
     }
     
-    /* Update the data in the buffer
-    glBindBuffer(GL_UNIFORM_BUFFER, gbo);
-    GLvoid* p = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
-    memcpy(p, &shader_data, sizeof(shader_data))
-    glUnmapBuffer(GL_UNIFORM_BUFFER);
-    */
+    public func updateData(data: ByteBuffer, forUniform uniform: Handle) {
+        synchronizeWrite { renderer in
+            renderer.context.lock()
+            renderer.context.makeCurrent()
+            
+            let buffer = renderer.uniforms[uniform]!
+            buffer.bindToTarget(GL_UNIFORM_BUFFER)
+            glBufferSubData(GLenum(GL_UNIFORM_BUFFER), 0, data.capacity, data.data)
+            OpenGL.bindBufferToTarget(GL_UNIFORM_BUFFER, handle: 0)
+            
+            renderer.context.unlock()
+        }
+    }
     
-    /* Bind multiple uniform buffers
-    glBindBufferBase(GL_UNIFORM_BUFFER, binding_point_index, ubo);
-    */
-    
+    public func destroyUniform(uniform: Handle) {
+        synchronizeWrite { renderer in
+            renderer.context.lock()
+            renderer.context.makeCurrent()
+            
+            renderer.uniforms.removeValueForKey(uniform)
+            
+            renderer.context.unlock()
+        }
+    }
     /* Iterate uniforms in program
     GLint numBlocks;
     glGetProgramiv(prog, GL_ACTIVE_UNIFORM_BLOCKS, &numBlocks);
@@ -276,7 +288,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
         GLint nameLen;
         glGetActiveUniformBlockiv​(prog, blockIx, GL_UNIFORM_BLOCK_NAME_LENGTH, &nameLen);
     
-        std::vector<GLchar> name; //Yes, not std::string. There's a reason for that.
+        std::vector<GLchar> name;
         name.resize(nameLen);
         glGetActiveUniformBlockName​(prog, blockIx, nameLen, NULL, &name[0]);
     
@@ -352,6 +364,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             
             var lastVertexArray = Handle.invalid
             var lastTexture = Handle.invalid
+            var lastUniform = Handle.invalid
             
             for object in state.objects {
                 let nextVertexArray = object.vertexArray
@@ -368,6 +381,14 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
                     let texture = renderer.textures[nextTexture]!
                     texture.bind2D()
                     lastTexture = nextTexture
+                }
+                
+                let nextUniform = object.uniform
+                
+                if nextUniform != lastUniform && nextUniform != Handle.invalid {
+                    let uniform = renderer.uniforms[nextUniform]!
+                    uniform.bindToTarget(GL_UNIFORM_BUFFER, index: 0)
+                    lastUniform = nextUniform
                 }
                 
                 OpenGL.setUniformMatrix(object.modelViewProjectionMatrix, atLocation: program.uniformLocationForName("modelViewProjectionMatrix"))
