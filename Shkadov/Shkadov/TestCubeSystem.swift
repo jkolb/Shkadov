@@ -28,18 +28,20 @@ public class TestCubeSystem {
     private let renderer: Renderer
     private let assetLoader: AssetLoader
     private let entityComponents: EntityComponents
-    private var renderState: RenderState
+    private var program: Handle = Handle.invalid
+    private var vertexArray: Handle = Handle.invalid
+    private var texture: Handle = Handle.invalid
+    private var cubes: [Entity] = []
     
     public init(renderer: Renderer, assetLoader: AssetLoader, entityComponents: EntityComponents) {
         self.renderer = renderer
         self.assetLoader = assetLoader
         self.entityComponents = entityComponents
-        self.renderState = RenderState()
     }
     
     deinit {
-        renderer.destroyProgram(renderState.program)
-//        renderer.destoryBuffer(renderState.buffer)
+        renderer.destroyProgram(program)
+        renderer.destoryVertexArray(vertexArray)
     }
     
     public func configure() {
@@ -49,13 +51,13 @@ public class TestCubeSystem {
         vertexDescriptor.addAttribute(.TexCoord, format: .Float2)
         
         let grassTextureData = assetLoader.loadTextureData(assetLoader.pathToFile("Assets/grass_top.png"))
-        let grassTexture = renderer.createTextureFromData(grassTextureData)
+        texture = renderer.createTextureFromData(grassTextureData)
 
         let mesh = Mesh3D.cubeWithSize(1.0)
         let meshData = mesh.createBufferForVertexDescriptor(vertexDescriptor)
         
-        self.renderState.program = renderer.createProgramWithVertexPath(assetLoader.pathToFile("Shader.vsh"), fragmentPath: assetLoader.pathToFile("Shader.fsh"))
-        let vertexArray = renderer.createVertexArrayFromDescriptor(vertexDescriptor, buffer: meshData)
+        program = renderer.createProgramWithVertexPath(assetLoader.pathToFile("Shader.vsh"), fragmentPath: assetLoader.pathToFile("Shader.fsh"))
+        vertexArray = renderer.createVertexArrayFromDescriptor(vertexDescriptor, buffer: meshData)
         
         let positions = [
             float3(0.0, 0.0, 0.0),
@@ -68,58 +70,51 @@ public class TestCubeSystem {
         ]
         
         let colors = [
-            Color.white.vector,
-            Color.red.vector,
-            Color.magenta.vector,
-            Color.green.vector,
-            Color.yellow.vector,
-            Color.blue.vector,
-            Color.cyan.vector,
+            Color.white,
+            Color.red,
+            Color.magenta,
+            Color.green,
+            Color.yellow,
+            Color.blue,
+            Color.cyan,
         ]
         
         for index in 0..<positions.count {
-            let cube = self.entityComponents.createEntity()
-            self.entityComponents.addComponent(OrientationComponent(position: positions[index]), toEntity: cube)
-            let renderComponent = RenderComponent(diffuseColor: colors[index])
-            renderComponent.texture = grassTexture
-            renderComponent.vertexArray = vertexArray
-            self.entityComponents.addComponent(renderComponent, toEntity: cube)
+            let cube = entityComponents.createEntity()
+            entityComponents.addComponent(OrientationComponent(position: positions[index]), toEntity: cube)
+            entityComponents.addComponent(RenderComponent(diffuseColor: colors[index]), toEntity: cube)
+            cubes.append(cube)
         }
-        
-        let floorMesh = Mesh3D.boxWithSize(Size3D(100.0, 0.25, 100.0))
-        let floorMeshData = floorMesh.createBufferForVertexDescriptor(vertexDescriptor)
-        let floorVertexArray = renderer.createVertexArrayFromDescriptor(vertexDescriptor, buffer: floorMeshData)
-        let floor = self.entityComponents.createEntity()
-        self.entityComponents.addComponent(OrientationComponent(position: float3(0.0, -2.5, 0.0)), toEntity: floor)
-        let floorRenderComponent = RenderComponent(diffuseColor: Color.tan.vector)
-        floorRenderComponent.texture = grassTexture
-        floorRenderComponent.vertexArray = floorVertexArray
-        self.entityComponents.addComponent(floorRenderComponent, toEntity: floor)
     }
     
     public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
-//        let updateAmount: Float = 0.01
-//        
-//        for entity in entityComponents.getEntitiesWithComponentType(RenderComponent.self) {
-//            var orientation = entityComponents.componentForEntity(entity, withComponentType: OrientationComponent.self)!
-//            
-//            orientation.pitch += Angle(radians: updateAmount)
-//            orientation.yaw += Angle(radians: updateAmount)
-//            
-//            entityComponents.updateComponent(orientation, forEntity: entity)
-//        }
+        let updateAmount: Float = 0.01
+        
+        for cube in cubes {
+            let oldOrientation = entityComponents.componentForEntity(cube, withComponentType: OrientationComponent.self)!
+            let newOrientation = OrientationComponent(
+                position: oldOrientation.position,
+                pitch: oldOrientation.pitch + Angle(radians: updateAmount),
+                yaw: oldOrientation.yaw + Angle(radians: updateAmount)
+            )
+            
+            entityComponents.replaceComponent(newOrientation, forEntity: cube)
+        }
     }
     
-    public func render() {
-        var renderObjects = [RenderComponent]()
+    public func render() -> RenderState {
+        var objects = [RenderComponent]()
         
-        for entity in entityComponents.getEntitiesWithComponentType(RenderComponent.self) {
-            let renderObject = entityComponents.componentForEntity(entity, withComponentType: RenderComponent.self)!
-            renderObjects.append(renderObject)
+        for cube in cubes {
+            let renderObject = entityComponents.componentForEntity(cube, withComponentType: RenderComponent.self)!
+            objects.append(renderObject)
         }
         
-        renderState.objects = renderObjects
-        
-        renderer.renderState(renderState)
+        return RenderState(
+            program: program,
+            vertexArray: vertexArray,
+            texture: texture,
+            objects: objects
+        )
     }
 }

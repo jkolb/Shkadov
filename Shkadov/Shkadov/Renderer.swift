@@ -24,7 +24,7 @@ SOFTWARE.
 
 public protocol Renderer {
     func configure()
-    func renderState(state: RenderState)
+    func renderStates(states: [RenderState])
     func updateViewport(viewport: Rectangle2D)
     func createTextureFromData(textureData: TextureData) -> Handle
     func destroyTexture(handle: Handle)

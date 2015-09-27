@@ -22,10 +22,61 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+import simd
+
 public class TerrainSystem {
     private let renderer: Renderer
+    private let assetLoader: AssetLoader
+    private let entityComponents: EntityComponents
+    private var program: Handle = Handle.invalid
+    private var vertexArray: Handle = Handle.invalid
+    private var texture: Handle = Handle.invalid
+    private var floor: Entity!
     
-    public init(renderer: Renderer) {
+    public init(renderer: Renderer, assetLoader: AssetLoader, entityComponents: EntityComponents) {
         self.renderer = renderer
+        self.assetLoader = assetLoader
+        self.entityComponents = entityComponents
+    }
+    
+    deinit {
+        renderer.destroyProgram(program)
+        renderer.destoryVertexArray(vertexArray)
+    }
+    
+    public func configure() {
+        var vertexDescriptor = VertexDescriptor()
+        vertexDescriptor.addAttribute(.Position, format: .Float3)
+        vertexDescriptor.addAttribute(.Normal, format: .Float3)
+        vertexDescriptor.addAttribute(.TexCoord, format: .Float2)
+        
+        let grassTextureData = assetLoader.loadTextureData(assetLoader.pathToFile("Assets/grass_top.png"))
+        texture = renderer.createTextureFromData(grassTextureData)
+        
+        let mesh = Mesh3D.boxWithSize(Size3D(100.0, 0.25, 100.0))
+        let meshData = mesh.createBufferForVertexDescriptor(vertexDescriptor)
+        
+        program = renderer.createProgramWithVertexPath(assetLoader.pathToFile("Shader.vsh"), fragmentPath: assetLoader.pathToFile("Shader.fsh"))
+        vertexArray = renderer.createVertexArrayFromDescriptor(vertexDescriptor, buffer: meshData)
+        
+        floor = entityComponents.createEntity()
+        entityComponents.addComponent(OrientationComponent(position: float3(0.0, -4.0, 0.0)), toEntity: floor)
+        entityComponents.addComponent(RenderComponent(diffuseColor: Color.tan), toEntity: floor)
+    }
+    
+    public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
+    }
+    
+    public func render() -> RenderState {
+        var objects = [RenderComponent]()
+        let renderObject = entityComponents.componentForEntity(floor, withComponentType: RenderComponent.self)!
+        objects.append(renderObject)
+        
+        return RenderState(
+            program: program,
+            vertexArray: vertexArray,
+            texture: texture,
+            objects: objects
+        )
     }
 }

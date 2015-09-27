@@ -24,11 +24,13 @@ SOFTWARE.
 
 import simd
 
-public class ProjectionComponent : Component {
+public struct ProjectionComponent : Component {
     public static let kind = Kind(dataType: ProjectionComponent.self)
     public var projectionMatrix: float4x4
 
-    public init(projectionMatrix: float4x4) {
+    public init(
+        projectionMatrix: float4x4 = float4x4(1.0)
+    ) {
         self.projectionMatrix = projectionMatrix
     }
 }

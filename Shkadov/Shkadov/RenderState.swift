@@ -22,10 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class RenderState {
-    public var program: Handle = Handle.invalid
-    public var objects: [RenderComponent] = []
+public struct RenderState {
+    public let program: Handle
+    public let vertexArray: Handle
+    public let texture: Handle
+    public let objects: [RenderComponent]
     
-    public init() {
+    public init(program: Handle, vertexArray: Handle, texture: Handle, objects: [RenderComponent]) {
+        self.program = program
+        self.vertexArray = vertexArray
+        self.texture = texture
+        self.objects = objects
     }
 }

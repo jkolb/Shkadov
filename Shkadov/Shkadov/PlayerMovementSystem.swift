@@ -33,49 +33,64 @@ public class PlayerMovementSystem {
     
     public func handleEvent(event: EngineEvent) {
         let camera = entityComponents.getEntitiesWithComponentType(ProjectionComponent.self).first!
-        let orientation = entityComponents.componentForEntity(camera, withComponentType: OrientationComponent.self)!
+        let oldOrientation = entityComponents.componentForEntity(camera, withComponentType: OrientationComponent.self)!
+        var position = oldOrientation.position
+        var pitch = oldOrientation.pitch
+        var yaw = oldOrientation.yaw
         
         switch event.kind {
         case .Look(let direction):
-            orientation.pitch += direction.up
+            pitch += direction.up
             
-            if orientation.pitch < Angle(degrees: -85.0) {
-                orientation.pitch = Angle(degrees: -85.0)
+            if pitch < Angle(degrees: -85.0) {
+                pitch = Angle(degrees: -85.0)
             }
             
-            if orientation.pitch > Angle(degrees: 85.0) {
-                orientation.pitch = Angle(degrees: 85.0)
+            if pitch > Angle(degrees: 85.0) {
+                pitch = Angle(degrees: 85.0)
             }
 
-            orientation.yaw += direction.right
+            yaw += direction.right
 //            print("pitch: \(orientation.pitch.degrees), yaw: \(orientation.yaw.degrees)")
             
         case .Move(let direction):
+            var updatedOrientation = oldOrientation
+            
             if direction.x == .Right {
-                orientation.moveRightByAmount(0.1)
+                updatedOrientation = updatedOrientation.moveRightByAmount(0.1)
             }
             else if direction.x == .Left {
-                orientation.moveRightByAmount(-0.1)
+                updatedOrientation = updatedOrientation.moveRightByAmount(-0.1)
             }
             
             if direction.y == .Up {
-                orientation.moveUpByAmount(0.1)
+                updatedOrientation = updatedOrientation.moveUpByAmount(0.1)
             }
             else if direction.y == .Down {
-                orientation.moveUpByAmount(-0.1)
+                updatedOrientation = updatedOrientation.moveUpByAmount(-0.1)
             }
             
             if direction.z == .Forward {
-                orientation.moveForwardByAmount(0.1)
+                updatedOrientation = updatedOrientation.moveForwardByAmount(0.1)
             }
             else if direction.z == .Backward {
-                orientation.moveForwardByAmount(-0.1)
+                updatedOrientation = updatedOrientation.moveForwardByAmount(-0.1)
             }
             
+            position = updatedOrientation.position
+            
         case .ResetCamera:
-            orientation.pitch = Angle.zero
-            orientation.yaw = Angle.zero
-            orientation.position = float3(0.0, 0.0, -4.0)
+            position = float3(0.0, 0.0, -4.0)
+            pitch = Angle.zero
+            yaw = Angle.zero
         }
+        
+        let newOrientation = OrientationComponent(
+            position: position,
+            pitch: pitch,
+            yaw: yaw
+        )
+        
+        entityComponents.replaceComponent(newOrientation, forEntity: camera)
     }
 }

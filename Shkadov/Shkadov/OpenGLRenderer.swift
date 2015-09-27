@@ -351,7 +351,7 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
         return returnVal
     }
 
-    public func renderState(state: RenderState) {
+    public func renderStates(states: [RenderState]) {
         synchronizeWriteAndWait { renderer in
             renderer.context.lock()
             renderer.context.makeCurrent()
@@ -359,42 +359,19 @@ public final class OpenGLRenderer : Renderer, Synchronizable {
             OpenGL.clearColor(ColorRGBA8.lightGrey)
             OpenGL.clearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
             
-            let program = renderer.programs[state.program]!
-            program.use()
-            
-            var lastVertexArray = Handle.invalid
-            var lastTexture = Handle.invalid
-            var lastUniform = Handle.invalid
-            
-            for object in state.objects {
-                let nextVertexArray = object.vertexArray
+            for state in states {
+                let program = renderer.programs[state.program]!
+                program.use()
                 
-                if nextVertexArray != lastVertexArray && nextVertexArray != Handle.invalid {
-                    let buffer = renderer.vertexArrays[nextVertexArray]!
-                    buffer.bind()
-                    lastVertexArray = nextVertexArray
+                let buffer = renderer.vertexArrays[state.vertexArray]!
+                buffer.bind()
+                
+                for object in state.objects {
+                    OpenGL.setUniformMatrix(object.modelViewProjectionMatrix, atLocation: program.uniformLocationForName("modelViewProjectionMatrix"))
+                    OpenGL.setUniformMatrix(object.normalMatrix, atLocation: program.uniformLocationForName("normalMatrix"))
+                    OpenGL.setUniformVector(object.diffuseColor.vector, atLocation: program.uniformLocationForName("diffuseColor"))
+                    OpenGL.drawArraysWithMode(GL_TRIANGLES, first: 0, count: 36)
                 }
-            
-                let nextTexture = object.texture
-                
-                if nextTexture != lastTexture && nextTexture != Handle.invalid {
-                    let texture = renderer.textures[nextTexture]!
-                    texture.bind2D()
-                    lastTexture = nextTexture
-                }
-                
-                let nextUniform = object.uniform
-                
-                if nextUniform != lastUniform && nextUniform != Handle.invalid {
-                    let uniform = renderer.uniforms[nextUniform]!
-                    uniform.bindToTarget(GL_UNIFORM_BUFFER, index: 0)
-                    lastUniform = nextUniform
-                }
-                
-                OpenGL.setUniformMatrix(object.modelViewProjectionMatrix, atLocation: program.uniformLocationForName("modelViewProjectionMatrix"))
-                OpenGL.setUniformMatrix(object.normalMatrix, atLocation: program.uniformLocationForName("normalMatrix"))
-                OpenGL.setUniformVector(object.diffuseColor, atLocation: program.uniformLocationForName("diffuseColor"))
-                OpenGL.drawArraysWithMode(GL_TRIANGLES, first: 0, count: 36)
             }
             
             renderer.context.flush()

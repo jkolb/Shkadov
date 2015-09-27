@@ -27,12 +27,13 @@ import simd
 public class RenderSystem {
     private let renderer: Renderer
     private let entityComponents: EntityComponents
+    private let camera: Entity
     
     public init(renderer: Renderer, entityComponents: EntityComponents) {
+        self.camera = entityComponents.createEntity()
         self.renderer = renderer
         self.entityComponents = entityComponents
         
-        let camera = entityComponents.createEntity()
         entityComponents.addComponent(OrientationComponent(position: float3(0.0, 0.0, -4.0)), toEntity: camera)
         entityComponents.addComponent(ProjectionComponent(projectionMatrix: float4x4(fovy: Angle(degrees: 90.0), aspect: 1.0, zNear: 0.1, zFar: 100.0)), toEntity: camera)
     }
@@ -42,28 +43,35 @@ public class RenderSystem {
     }
     
     public func updateViewport(viewport: Rectangle2D) {
-        let camera = entityComponents.getEntitiesWithComponentType(ProjectionComponent.self).first!
-        let projection = entityComponents.componentForEntity(camera, withComponentType: ProjectionComponent.self)!
-        projection.projectionMatrix = float4x4(fovy: Angle(degrees: 65.0), aspect: viewport.aspectRatio, zNear: 0.1, zFar: 100.0)
-        
+        let projection = ProjectionComponent(
+            projectionMatrix: float4x4(fovy: Angle(degrees: 65.0), aspect: viewport.aspectRatio, zNear: 0.1, zFar: 100.0)
+        )
+        entityComponents.replaceComponent(projection, forEntity: camera)
         renderer.updateViewport(viewport)
     }
 
     public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
-        let camera = entityComponents.getEntitiesWithComponentTypes([ProjectionComponent.self, OrientationComponent.self]).first!
         let cameraOrientation = entityComponents.componentForEntity(camera, withComponentType: OrientationComponent.self)!
         let projection = entityComponents.componentForEntity(camera, withComponentType: ProjectionComponent.self)!
         let viewMatrix = cameraOrientation.lookAtMatrix
         let projectionMatrix = projection.projectionMatrix
-        
-        for entity in entityComponents.getEntitiesWithComponentTypes([RenderComponent.self, OrientationComponent.self]) {
-            let orientation = entityComponents.componentForEntity(entity, withComponentType: OrientationComponent.self)!
-            let render = entityComponents.componentForEntity(entity, withComponentType: RenderComponent.self)!
+        let entities = entityComponents.getEntitiesWithComponentTypes([RenderComponent.self, OrientationComponent.self])
             
-            render.modelViewMatrix = viewMatrix * orientation.orientationMatrix
-            render.normalMatrix = render.modelViewMatrix.inverse.transpose
-            render.projectionMatrix = projectionMatrix
-            render.modelViewProjectionMatrix = projectionMatrix * render.modelViewMatrix
+        for entity in entities {
+            let oldRender = entityComponents.componentForEntity(entity, withComponentType: RenderComponent.self)!
+            let orientation = entityComponents.componentForEntity(entity, withComponentType: OrientationComponent.self)!
+            
+            let modelViewMatrix = viewMatrix * orientation.orientationMatrix
+            
+            let render = RenderComponent(
+                diffuseColor: oldRender.diffuseColor,
+                modelViewMatrix: modelViewMatrix,
+                normalMatrix: modelViewMatrix.inverse.transpose,
+                projectionMatrix: projectionMatrix,
+                modelViewProjectionMatrix: projectionMatrix * modelViewMatrix
+            )
+            
+            entityComponents.replaceComponent(render, forEntity: entity)
         }
     }
 }

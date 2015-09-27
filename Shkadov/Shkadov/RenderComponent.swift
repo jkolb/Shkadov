@@ -24,25 +24,25 @@ SOFTWARE.
 
 import simd
 
-public class RenderComponent : Component {
+public struct RenderComponent : Component {
     public static let kind = Kind(dataType: RenderComponent.self)
-    public var modelViewMatrix: float4x4
-    public var normalMatrix: float4x4
-    public var projectionMatrix: float4x4
-    public var modelViewProjectionMatrix: float4x4
-    public var diffuseColor: float4
-    public var texture: Handle
-    public var vertexArray: Handle
-    public var uniform: Handle
+    public let diffuseColor: Color
+    public let modelViewMatrix: float4x4
+    public let normalMatrix: float4x4
+    public let projectionMatrix: float4x4
+    public let modelViewProjectionMatrix: float4x4
     
-    public init(diffuseColor: float4 = Color.white.vector) {
-        self.modelViewMatrix = float4x4(1.0)
-        self.normalMatrix = float4x4(1.0)
-        self.projectionMatrix = float4x4(1.0)
-        self.modelViewProjectionMatrix = float4x4(1.0)
+    public init(
+        diffuseColor: Color,
+        modelViewMatrix: float4x4 = float4x4(1.0),
+        normalMatrix: float4x4 = float4x4(1.0),
+        projectionMatrix: float4x4 = float4x4(1.0),
+        modelViewProjectionMatrix: float4x4 = float4x4(1.0)
+    ) {
         self.diffuseColor = diffuseColor
-        self.texture = Handle.invalid
-        self.vertexArray = Handle.invalid
-        self.uniform = Handle.invalid
+        self.modelViewMatrix = modelViewMatrix
+        self.normalMatrix = normalMatrix
+        self.projectionMatrix = projectionMatrix
+        self.modelViewProjectionMatrix = modelViewProjectionMatrix
     }
 }

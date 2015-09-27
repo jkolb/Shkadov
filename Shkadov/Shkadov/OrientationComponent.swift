@@ -24,16 +24,20 @@ SOFTWARE.
 
 import simd
 
-public class OrientationComponent : Component {
+public struct OrientationComponent : Component {
     public static let kind = Kind(dataType: OrientationComponent.self)
-    public var position: float3
-    public var pitch: Angle // Up/Down
-    public var yaw: Angle // Right/Left
+    public let position: float3
+    public let pitch: Angle // Up/Down
+    public let yaw: Angle // Right/Left
     
-    public init(position: float3 = float3(0.0, 0.0, 0.0)) {
+    public init(
+        position: float3 = float3(0.0),
+        pitch: Angle = Angle.zero,
+        yaw: Angle = Angle.zero
+    ) {
         self.position = position
-        self.pitch = Angle.zero
-        self.yaw = Angle.zero
+        self.pitch = pitch
+        self.yaw = yaw
     }
     
     public var lookAtMatrix: float4x4 {
@@ -82,19 +86,19 @@ public class OrientationComponent : Component {
         return a
     }
     
-    public func moveForwardByAmount(amount: Float) {
+    public func moveForwardByAmount(amount: Float) -> OrientationComponent {
         let yawMatrix = float3x3(angle: yaw, axis: float3(0.0, 1.0, 0.0))
         let forward = normalize(yawMatrix * float3(0.0, 0.0, 1.0))
-        position = position + forward * amount
+        return OrientationComponent(position: position + forward * amount, pitch: pitch, yaw: yaw)
     }
     
-    public func moveRightByAmount(amount: Float) {
+    public func moveRightByAmount(amount: Float) -> OrientationComponent {
         let yawMatrix = float3x3(angle: yaw, axis: float3(0.0, 1.0, 0.0))
         let right = normalize(yawMatrix * float3(1.0, 0.0, 0.0))
-        position = position + right * amount
+        return OrientationComponent(position: position + right * amount, pitch: pitch, yaw: yaw)
     }
     
-    public func moveUpByAmount(amount: Float) {
-        position = position + float3(0.0, 1.0, 0.0) * amount
+    public func moveUpByAmount(amount: Float) -> OrientationComponent {
+        return OrientationComponent(position: position + float3(0.0, 1.0, 0.0) * amount, pitch: pitch, yaw: yaw)
     }
 }
