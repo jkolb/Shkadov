@@ -143,7 +143,7 @@ extension MetalRenderer : Renderer {
         
         let samplerDescriptor = MTLSamplerDescriptor()
         samplerDescriptor.minFilter = .Nearest
-        samplerDescriptor.magFilter = .Linear
+        samplerDescriptor.magFilter = .Nearest
         samplerDescriptor.sAddressMode = .Repeat
         samplerDescriptor.tAddressMode = .Repeat
         sampler = device.newSamplerStateWithDescriptor(samplerDescriptor)
