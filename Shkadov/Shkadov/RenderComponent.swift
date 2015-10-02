@@ -26,6 +26,8 @@ import simd
 
 public struct RenderComponent : Component {
     public static let kind = Kind(dataType: RenderComponent.self)
+    public let uniformBuffer: Handle
+    public let uniformOffset: Int
     public let diffuseColor: Color
     public let modelViewMatrix: float4x4
     public let normalMatrix: float4x4
@@ -33,12 +35,16 @@ public struct RenderComponent : Component {
     public let modelViewProjectionMatrix: float4x4
     
     public init(
+        uniformBuffer: Handle,
+        uniformOffset: Int,
         diffuseColor: Color,
         modelViewMatrix: float4x4 = float4x4(1.0),
         normalMatrix: float4x4 = float4x4(1.0),
         projectionMatrix: float4x4 = float4x4(1.0),
         modelViewProjectionMatrix: float4x4 = float4x4(1.0)
     ) {
+        self.uniformBuffer = uniformBuffer
+        self.uniformOffset = uniformOffset
         self.diffuseColor = diffuseColor
         self.modelViewMatrix = modelViewMatrix
         self.normalMatrix = normalMatrix

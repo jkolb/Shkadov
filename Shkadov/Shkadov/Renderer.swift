@@ -32,7 +32,9 @@ public protocol Renderer {
     func destoryVertexArray(handle: Handle)
     func createProgramWithVertexPath(vertexPath: String, fragmentPath: String) -> Handle
     func destroyProgram(handle: Handle)
-    func createUniformForProgram(program: Handle, withName name: String) -> Handle
-    func updateData(data: ByteBuffer, forUniform uniform: Handle)
-    func destroyUniform(uniform: Handle)
+    
+    func createBufferWithName(name: String, length: Int) -> Handle
+    func bufferContents(handle: Handle) -> UnsafeMutablePointer<Void>
+    func destroyBuffer(handle: Handle)
+
 }

@@ -25,12 +25,14 @@ SOFTWARE.
 public struct RenderState {
     public let program: Handle
     public let vertexArray: Handle
+    public let uniformBuffer: Handle
     public let texture: Handle
     public let objects: [RenderComponent]
     
-    public init(program: Handle, vertexArray: Handle, texture: Handle, objects: [RenderComponent]) {
+    public init(program: Handle, vertexArray: Handle, uniformBuffer: Handle, texture: Handle, objects: [RenderComponent]) {
         self.program = program
         self.vertexArray = vertexArray
+        self.uniformBuffer = uniformBuffer
         self.texture = texture
         self.objects = objects
     }

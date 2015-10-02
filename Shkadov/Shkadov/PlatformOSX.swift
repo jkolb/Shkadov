@@ -30,8 +30,7 @@ public class PlatformOSX : NSObject {
     public let timeBaseNumerator: TimeType
     public let timeBaseDenominator: TimeType
     public private(set) var mainWindow: NSWindow!
-    public private(set) var viewController: MetalViewController!
-    public private(set) var openGLContext: NSOpenGLContext!
+    public private(set) var viewController: ViewController!
     private var engine: Engine!
     public var relativeMouse = false
     
@@ -47,10 +46,8 @@ public class PlatformOSX : NSObject {
         application.setActivationPolicy(.Regular)
         application.mainMenu = createMainMenu()
         application.delegate = self
-
-        openGLContext = createOpenGLContext()
         
-        let renderer = OpenGLRenderer(context: self)
+        let renderer = MetalRenderer()
         engine = Engine(platform: self, renderer: renderer, assetLoader: self)
 
         mainWindow = createMainWindow()
@@ -59,15 +56,15 @@ public class PlatformOSX : NSObject {
         mainWindow.collectionBehavior = .FullScreenPrimary
         mainWindow.contentMinSize = CGSize(width: PlatformOSX.minimumWidth, height: PlatformOSX.minimumHeight)
         
-        viewController = MetalViewController()
+        viewController = ViewController()
         viewController.engine = engine
+        viewController.viewSource = renderer
         
         let options: NSTrackingAreaOptions =  [NSTrackingAreaOptions.MouseEnteredAndExited, NSTrackingAreaOptions.MouseMoved, NSTrackingAreaOptions.InVisibleRect, NSTrackingAreaOptions.ActiveInKeyWindow]
         let trackingArea = NSTrackingArea(rect: viewController.view.frame, options: options, owner: viewController.view, userInfo: nil)
-        viewController.metalView.addTrackingArea(trackingArea)
+        viewController.view.addTrackingArea(trackingArea)
         
-        mainWindow.contentView = viewController.metalView
-        openGLContext.view = viewController.metalView
+        mainWindow.contentView = viewController.view
 
         mainWindow.makeKeyAndOrderFront(nil)
         mainWindow.makeFirstResponder(viewController)
@@ -165,19 +162,5 @@ public class PlatformOSX : NSObject {
     
     public func saveSizeAndPosition() {
         storeWindowContentFrame(contentFrame)
-    }
-    
-    private func createOpenGLContext() -> NSOpenGLContext {
-        let attributes: [NSOpenGLPixelFormatAttribute] = [
-            NSOpenGLPixelFormatAttribute(NSOpenGLPFADoubleBuffer),
-            NSOpenGLPixelFormatAttribute(NSOpenGLPFAAccelerated),
-            NSOpenGLPixelFormatAttribute(NSOpenGLPFADepthSize), NSOpenGLPixelFormatAttribute(24),
-            NSOpenGLPixelFormatAttribute(NSOpenGLPFAOpenGLProfile), NSOpenGLPixelFormatAttribute(NSOpenGLProfileVersion3_2Core),
-        ]
-        
-        let pixelFormat = NSOpenGLPixelFormat(attributes: attributes)
-        let openGLContext = NSOpenGLContext(format: pixelFormat!, shareContext: nil)
-        
-        return openGLContext!
     }
 }

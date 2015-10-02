@@ -23,25 +23,17 @@ SOFTWARE.
 */
 
 import AppKit
-import MetalKit
 
 
 typealias NSEventButtonNumberType = Int
 typealias NSEventKeyCodeType = UInt16
 
 
-public class MetalViewController : NSViewController {
-    public private(set) var metalView: MTKView!
+public final class ViewController : NSViewController {
+    public var viewSource: ContentViewSource!
     
     public override func loadView() {
-        metalView = MTKView()
-        view = metalView
-    }
-    
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        metalView.delegate = self
+        view = viewSource.contentView
     }
     
     public var sendMouseDelta = false {
@@ -276,28 +268,6 @@ public class MetalViewController : NSViewController {
         //            return
         //        }
         NSLog("SCROLL: (\(theEvent)")
-    }
-}
-
-extension MetalViewController : MTKViewDelegate {
-    /*!
-    @method mtkView:drawableSizeWillChange:
-    @abstract Called whenever the drawableSize of the view will change
-    @discussion Delegate can recompute view and projection matricies or regenerate any buffers to be compatible with the new view size or resolution
-    @param view MTKView which called this method
-    @param size New drawable size in pixels
-    */
-    public func mtkView(view: MTKView, drawableSizeWillChange size: CGSize) {
-        
-    }
-    
-    /*!
-    @method drawInMTKView:
-    @abstract Called on the delegate when it is asked to render into the view
-    @discussion Called on the delegate when it is asked to render into the view
-    */
-    public func drawInMTKView(view: MTKView) {
-        
     }
 }
 

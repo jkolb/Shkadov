@@ -30,6 +30,7 @@ public class TestCubeSystem {
     private let entityComponents: EntityComponents
     private var program: Handle = Handle.invalid
     private var vertexArray: Handle = Handle.invalid
+    private var uniformBuffer: Handle = Handle.invalid
     private var texture: Handle = Handle.invalid
     private var cubes: [Entity] = []
     
@@ -56,7 +57,8 @@ public class TestCubeSystem {
         let mesh = Mesh3D.cubeWithSize(1.0)
         let meshData = mesh.createBufferForVertexDescriptor(vertexDescriptor)
         
-        program = renderer.createProgramWithVertexPath(assetLoader.pathToFile("Shader.vsh"), fragmentPath: assetLoader.pathToFile("Shader.fsh"))
+//        program = renderer.createProgramWithVertexPath(assetLoader.pathToFile("Shader.vsh"), fragmentPath: assetLoader.pathToFile("Shader.fsh"))
+        program = renderer.createProgramWithVertexPath("passThroughVertex", fragmentPath: "passThroughFragment")
         vertexArray = renderer.createVertexArrayFromDescriptor(vertexDescriptor, buffer: meshData)
         
         let positions = [
@@ -79,10 +81,15 @@ public class TestCubeSystem {
             Color.cyan,
         ]
         
+        let uniformSize = max(256, strideof(float4x4) + strideof(float4x4) + strideof(float4))
+        uniformBuffer = renderer.createBufferWithName("Cube Uniforms", length: positions.count * uniformSize)
+        var uniformOffset = 0
+        
         for index in 0..<positions.count {
             let cube = entityComponents.createEntity()
             entityComponents.addComponent(OrientationComponent(position: positions[index]), toEntity: cube)
-            entityComponents.addComponent(RenderComponent(diffuseColor: colors[index]), toEntity: cube)
+            entityComponents.addComponent(RenderComponent(uniformBuffer: uniformBuffer, uniformOffset: uniformOffset, diffuseColor: colors[index]), toEntity: cube)
+            uniformOffset += uniformSize
             cubes.append(cube)
         }
     }
@@ -113,6 +120,7 @@ public class TestCubeSystem {
         return RenderState(
             program: program,
             vertexArray: vertexArray,
+            uniformBuffer: uniformBuffer,
             texture: texture,
             objects: objects
         )
