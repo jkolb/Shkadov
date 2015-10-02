@@ -23,11 +23,27 @@ SOFTWARE.
 */
 
 import AppKit
+import MetalKit
+
 
 typealias NSEventButtonNumberType = Int
 typealias NSEventKeyCodeType = UInt16
 
-public class ContentView : NSView {
+
+public class MetalViewController : NSViewController {
+    public private(set) var metalView: MTKView!
+    
+    public override func loadView() {
+        metalView = MTKView()
+        view = metalView
+    }
+    
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        metalView.delegate = self
+    }
+    
     public var sendMouseDelta = false {
         didSet {
             ignoreFirstDelta = true
@@ -97,7 +113,7 @@ public class ContentView : NSView {
     private func transformKeyCode(keyCode: NSEventKeyCodeType) -> RawInputKeyCode {
         return keyMap[keyCode] ?? .UNKNOWN
     }
-
+    
     private func postButtonDownEvent(event: NSEvent) {
         let rawButtonCode = transformButtonNumber(event.buttonNumber)
         if rawButtonCode == .UNKNOWN { return }
@@ -142,7 +158,7 @@ public class ContentView : NSView {
             engine.postInputEventForKind(.MouseDelta(delta))
         }
         else {
-            let contentPoint = convertPoint(event.locationInWindow, fromView: nil)
+            let contentPoint = view.convertPoint(event.locationInWindow, fromView: nil)
             let position = contentPoint.point2D
             engine.postInputEventForKind(.MousePosition(position))
         }
@@ -153,12 +169,12 @@ public class ContentView : NSView {
     }
     
     public override func keyDown(theEvent: NSEvent) {
-//        NSLog("KEY DOWN: \(theEvent)")
+        //        NSLog("KEY DOWN: \(theEvent)")
         postKeyDownEvent(theEvent)
     }
     
     public override func keyUp(theEvent: NSEvent) {
-//        NSLog("KEY UP: \(theEvent)")
+        //        NSLog("KEY UP: \(theEvent)")
         postKeyUpEvent(theEvent)
     }
     
@@ -177,35 +193,35 @@ public class ContentView : NSView {
             if upModifierFlagsWereDownOnStart {
                 // Do not start handling a modifier until it has been cleared out from startingEventModifierFlags
                 startingEventModifierFlags.subtractInPlace(transitionedToUpModifierFlags)
-//                NSLog("IGNORE: \(keyCode)")
+                //                NSLog("IGNORE: \(keyCode)")
             }
             else {
                 currentDownModifierKeyCodes.remove(keyCode)
                 postKeyUpCode(keyCode)
-//                NSLog("FLAG UP: \(keyCode)")
+                //                NSLog("FLAG UP: \(keyCode)")
             }
         }
         else if transitionedToDown {
             currentDownModifierKeyCodes.insert(keyCode)
             postKeyDownCode(keyCode)
-//            NSLog("FLAG DOWN: \(keyCode)")
+            //            NSLog("FLAG DOWN: \(keyCode)")
         }
         else if isAleadyDownKeyCode(keyCode) {
             currentDownModifierKeyCodes.remove(keyCode)
             postKeyUpCode(keyCode)
-//            NSLog("FLAG UP 2: \(keyCode)")
+            //            NSLog("FLAG UP 2: \(keyCode)")
         }
         else if modifierFlagWasNotDownOnStart {
             currentDownModifierKeyCodes.insert(keyCode)
             postKeyDownCode(keyCode)
-//            NSLog("FLAG DOWN 2: \(keyCode)")
+            //            NSLog("FLAG DOWN 2: \(keyCode)")
         }
         else {
-//            NSLog("IGNORE 2: \(keyCode)")
+            //            NSLog("IGNORE 2: \(keyCode)")
         }
         //NSLog("FLAGS: \(theEvent)")
     }
-
+    
     private func isAleadyDownKeyCode(keyCode: NSEventKeyCodeType) -> Bool {
         return currentDownModifierKeyCodes.contains(keyCode)
     }
@@ -251,15 +267,37 @@ public class ContentView : NSView {
     }
     
     public override func mouseMoved(theEvent: NSEvent) {
-//        NSLog("MOVED: (\(theEvent)")
+        //        NSLog("MOVED: (\(theEvent)")
         postMousePositionEvent(theEvent)
     }
     
     public override func scrollWheel(theEvent: NSEvent) {
-//        if theEvent.momentumPhase.contains(NSEventPhase.Changed) || theEvent.momentumPhase.contains(NSEventPhase.Ended) {
-//            return
-//        }
+        //        if theEvent.momentumPhase.contains(NSEventPhase.Changed) || theEvent.momentumPhase.contains(NSEventPhase.Ended) {
+        //            return
+        //        }
         NSLog("SCROLL: (\(theEvent)")
+    }
+}
+
+extension MetalViewController : MTKViewDelegate {
+    /*!
+    @method mtkView:drawableSizeWillChange:
+    @abstract Called whenever the drawableSize of the view will change
+    @discussion Delegate can recompute view and projection matricies or regenerate any buffers to be compatible with the new view size or resolution
+    @param view MTKView which called this method
+    @param size New drawable size in pixels
+    */
+    public func mtkView(view: MTKView, drawableSizeWillChange size: CGSize) {
+        
+    }
+    
+    /*!
+    @method drawInMTKView:
+    @abstract Called on the delegate when it is asked to render into the view
+    @discussion Called on the delegate when it is asked to render into the view
+    */
+    public func drawInMTKView(view: MTKView) {
+        
     }
 }
 

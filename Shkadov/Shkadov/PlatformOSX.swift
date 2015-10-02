@@ -30,7 +30,7 @@ public class PlatformOSX : NSObject {
     public let timeBaseNumerator: TimeType
     public let timeBaseDenominator: TimeType
     public private(set) var mainWindow: NSWindow!
-    public private(set) var contentView: ContentView!
+    public private(set) var viewController: MetalViewController!
     public private(set) var openGLContext: NSOpenGLContext!
     private var engine: Engine!
     public var relativeMouse = false
@@ -59,17 +59,18 @@ public class PlatformOSX : NSObject {
         mainWindow.collectionBehavior = .FullScreenPrimary
         mainWindow.contentMinSize = CGSize(width: PlatformOSX.minimumWidth, height: PlatformOSX.minimumHeight)
         
-        contentView = ContentView()
-        contentView.engine = engine
+        viewController = MetalViewController()
+        viewController.engine = engine
         
         let options: NSTrackingAreaOptions =  [NSTrackingAreaOptions.MouseEnteredAndExited, NSTrackingAreaOptions.MouseMoved, NSTrackingAreaOptions.InVisibleRect, NSTrackingAreaOptions.ActiveInKeyWindow]
-        let trackingArea = NSTrackingArea(rect: contentView.frame, options: options, owner: contentView, userInfo: nil)
-        contentView.addTrackingArea(trackingArea)
+        let trackingArea = NSTrackingArea(rect: viewController.view.frame, options: options, owner: viewController.view, userInfo: nil)
+        viewController.metalView.addTrackingArea(trackingArea)
         
-        mainWindow.contentView = contentView
-        openGLContext.view = contentView
+        mainWindow.contentView = viewController.metalView
+        openGLContext.view = viewController.metalView
 
         mainWindow.makeKeyAndOrderFront(nil)
+        mainWindow.makeFirstResponder(viewController)
         
         application.run()
     }

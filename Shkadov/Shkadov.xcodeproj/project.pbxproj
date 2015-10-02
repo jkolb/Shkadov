@@ -34,7 +34,6 @@
 		E581CFA01B892C9F00D7174F /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8D1B892C9F00D7174F /* DispatchQueue.swift */; };
 		E581CFA11B892C9F00D7174F /* DispatchSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8E1B892C9F00D7174F /* DispatchSource.swift */; };
 		E581CFA21B892C9F00D7174F /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8F1B892C9F00D7174F /* Engine.swift */; };
-		E581CFA41B892C9F00D7174F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF911B892C9F00D7174F /* ContentView.swift */; };
 		E581CFA61B892C9F00D7174F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF931B892C9F00D7174F /* main.swift */; };
 		E581CFA71B892C9F00D7174F /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF941B892C9F00D7174F /* Matrix.swift */; };
 		E581CFA91B892C9F00D7174F /* OpenGL.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF961B892C9F00D7174F /* OpenGL.swift */; };
@@ -75,6 +74,7 @@
 		E5CA68101B9FC8D0002B065E /* Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA680F1B9FC8D0002B065E /* Mesh.swift */; };
 		E5CA68141B9FCBA4002B065E /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA68131B9FCBA4002B065E /* Color.swift */; };
 		E5CA68161B9FDF40002B065E /* VertexDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA68151B9FDF40002B065E /* VertexDescriptor.swift */; };
+		E5DF0A2B1BBE185900C4AA87 /* MetalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DF0A2A1BBE185900C4AA87 /* MetalViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		E5E45B581BAF08B000072EFF /* RawInputEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E45B571BAF08B000072EFF /* RawInputEvent.swift */; settings = {ASSET_TAGS = (); }; };
 		E5E45B5A1BAF08E800072EFF /* RawInputEventKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E45B591BAF08E800072EFF /* RawInputEventKind.swift */; settings = {ASSET_TAGS = (); }; };
 		E5E45B5C1BAF093200072EFF /* RawInputButtonCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E45B5B1BAF093200072EFF /* RawInputButtonCode.swift */; settings = {ASSET_TAGS = (); }; };
@@ -130,7 +130,6 @@
 		E581CF8D1B892C9F00D7174F /* DispatchQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueue.swift; sourceTree = "<group>"; };
 		E581CF8E1B892C9F00D7174F /* DispatchSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchSource.swift; sourceTree = "<group>"; };
 		E581CF8F1B892C9F00D7174F /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
-		E581CF911B892C9F00D7174F /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E581CF931B892C9F00D7174F /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		E581CF941B892C9F00D7174F /* Matrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
 		E581CF961B892C9F00D7174F /* OpenGL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGL.swift; sourceTree = "<group>"; };
@@ -171,6 +170,7 @@
 		E5CA680F1B9FC8D0002B065E /* Mesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; };
 		E5CA68131B9FCBA4002B065E /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		E5CA68151B9FDF40002B065E /* VertexDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VertexDescriptor.swift; sourceTree = "<group>"; };
+		E5DF0A2A1BBE185900C4AA87 /* MetalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalViewController.swift; sourceTree = "<group>"; };
 		E5E45B571BAF08B000072EFF /* RawInputEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInputEvent.swift; sourceTree = "<group>"; };
 		E5E45B591BAF08E800072EFF /* RawInputEventKind.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInputEventKind.swift; sourceTree = "<group>"; };
 		E5E45B5B1BAF093200072EFF /* RawInputButtonCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInputButtonCode.swift; sourceTree = "<group>"; };
@@ -357,8 +357,8 @@
 		E581CFB61B89367100D7174F /* OS X */ = {
 			isa = PBXGroup;
 			children = (
-				E581CF911B892C9F00D7174F /* ContentView.swift */,
 				E59C5F0E1B9E7D2E003422FB /* Geometry+CoreGraphics.swift */,
+				E5DF0A2A1BBE185900C4AA87 /* MetalViewController.swift */,
 				E581CFB91B894E6400D7174F /* PlatformOSX.swift */,
 				E5AC4E2E1BA5C6EB00134995 /* PlatformOSX+AssetLoader.swift */,
 				E59C5F141B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift */,
@@ -490,8 +490,8 @@
 				E59C5F171B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift in Sources */,
 				E581CFA71B892C9F00D7174F /* Matrix.swift in Sources */,
 				E581CFBA1B894E6400D7174F /* PlatformOSX.swift in Sources */,
+				E5DF0A2B1BBE185900C4AA87 /* MetalViewController.swift in Sources */,
 				E581CFA61B892C9F00D7174F /* main.swift in Sources */,
-				E581CFA41B892C9F00D7174F /* ContentView.swift in Sources */,
 				E5E8B23F1BA4606D004E9485 /* VertexAttribute.swift in Sources */,
 				E5E45B581BAF08B000072EFF /* RawInputEvent.swift in Sources */,
 				E59C5F111B9E7D81003422FB /* PlatformOSX+OpenGLContext.swift in Sources */,
@@ -657,6 +657,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Shkadov/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				OTHER_SWIFT_FLAGS = "-DDEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = franticapparatus.net.Shkadov;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -672,6 +673,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Shkadov/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = franticapparatus.net.Shkadov;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

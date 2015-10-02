@@ -43,7 +43,7 @@ extension PlatformOSX : Platform {
             relativeMouse = newValue
             
             if changed {
-                contentView.sendMouseDelta = relativeMouse
+                viewController.sendMouseDelta = relativeMouse
                 
                 if relativeMouse {
                     CGAssociateMouseAndMouseCursorPosition(0)
