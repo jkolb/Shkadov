@@ -57,7 +57,6 @@ public class TestCubeSystem {
         let mesh = Mesh3D.cubeWithSize(1.0)
         let meshData = mesh.createBufferForVertexDescriptor(vertexDescriptor)
         
-//        program = renderer.createProgramWithVertexPath(assetLoader.pathToFile("Shader.vsh"), fragmentPath: assetLoader.pathToFile("Shader.fsh"))
         program = renderer.createProgramWithVertexPath("passThroughVertex", fragmentPath: "passThroughFragment")
         vertexArray = renderer.createVertexArrayFromDescriptor(vertexDescriptor, buffer: meshData)
         

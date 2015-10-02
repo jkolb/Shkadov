@@ -57,7 +57,6 @@ public class TerrainSystem {
         let mesh = Mesh3D.boxWithSize(Size3D(100.0, 0.25, 100.0))
         let meshData = mesh.createBufferForVertexDescriptor(vertexDescriptor)
         
-//        program = renderer.createProgramWithVertexPath(assetLoader.pathToFile("Shader.vsh"), fragmentPath: assetLoader.pathToFile("Shader.fsh"))
         program = renderer.createProgramWithVertexPath("passThroughVertex", fragmentPath: "passThroughFragment")
         vertexArray = renderer.createVertexArrayFromDescriptor(vertexDescriptor, buffer: meshData)
         let uniformSize = strideof(float4x4) + strideof(float4x4) + strideof(float4)

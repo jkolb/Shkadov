@@ -60,7 +60,7 @@ public class PlatformOSX : NSObject {
         viewController.engine = engine
         viewController.viewSource = renderer
         
-        let options: NSTrackingAreaOptions =  [NSTrackingAreaOptions.MouseEnteredAndExited, NSTrackingAreaOptions.MouseMoved, NSTrackingAreaOptions.InVisibleRect, NSTrackingAreaOptions.ActiveInKeyWindow]
+        let options: NSTrackingAreaOptions = [NSTrackingAreaOptions.MouseEnteredAndExited, NSTrackingAreaOptions.MouseMoved, NSTrackingAreaOptions.InVisibleRect, NSTrackingAreaOptions.ActiveInKeyWindow]
         let trackingArea = NSTrackingArea(rect: viewController.view.frame, options: options, owner: viewController.view, userInfo: nil)
         viewController.view.addTrackingArea(trackingArea)
         
