@@ -139,10 +139,14 @@ public class Mesh3D : SequenceType {
         let q4 = Quad3D(p0, p1, p2, p3)
         let q5 = Quad3D(p4, p5, p6, p7)
 
+//        let uv0 = Point2D(0.0, 0.0)
+//        let uv1 = Point2D(0.0, 1.0)
+//        let uv2 = Point2D(1.0, 1.0)
+//        let uv3 = Point2D(1.0, 0.0)
         let uv0 = Point2D(0.0, 0.0)
-        let uv1 = Point2D(0.0, 1.0)
-        let uv2 = Point2D(1.0, 1.0)
-        let uv3 = Point2D(1.0, 0.0)
+        let uv1 = Point2D(0.0, d)
+        let uv2 = Point2D(w, d)
+        let uv3 = Point2D(w, 0.0)
         
         let tc = Quad2D(uv0, uv1, uv2, uv3)
         

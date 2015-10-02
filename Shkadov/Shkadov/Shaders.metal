@@ -39,6 +39,13 @@ struct VertexOut {
     float4 color;
 };
 
+struct TextureVertexOut {
+    float4 position [[position]];
+    float3 eyePosition;
+    float3 normal;
+    float2 texCoord;
+};
+
 struct LightInfo {
     float4 position; // Light position in eye coordinates
     float3 La; // Ambient light intensity
@@ -93,4 +100,60 @@ vertex VertexOut passThroughVertex(uint vid [[vertex_id]], constant VertexIn* in
 
 fragment half4 passThroughFragment(VertexOut inFrag [[stage_in]]) {
     return half4(inFrag.color);
+};
+
+vertex TextureVertexOut textureVertex(uint vid [[vertex_id]], constant VertexIn* inVertex [[buffer(0)]], constant UniformIn& inUniform [[buffer(1)]]) {
+    float3 vertexPosition = float3(inVertex[vid].position);
+    float3 vertexNormal = float3(inVertex[vid].normal);
+    
+    float3x3 normalMatrix = inUniform.normalMatrix;
+    float4 eyeCoords = inUniform.modelViewMatrix * float4(vertexPosition, 1.0);
+    
+    TextureVertexOut outVertex;
+    
+    outVertex.position = inUniform.modelViewProjectionMatrix * float4(vertexPosition, 1.0);
+    outVertex.eyePosition = eyeCoords.xyz;
+    outVertex.normal = vertexNormal;
+    outVertex.texCoord = float2(inVertex[vid].texCoord);
+    
+    return outVertex;
+};
+
+struct Light
+{
+    float3 direction;
+    float3 ambientColor;
+    float3 diffuseColor;
+    float3 specularColor;
+};
+
+constant Light light = {
+    .direction = { 0.13, 0.72, 0.68 },
+    .ambientColor = { 0.05, 0.05, 0.05 },
+    .diffuseColor = { 1, 1, 1 },
+    .specularColor = { 0.2, 0.2, 0.2 }
+};
+
+constant float3 kSpecularColor= { 1, 1, 1 };
+constant float kSpecularPower = 80;
+
+fragment float4 textureFragment(TextureVertexOut inFrag [[stage_in]], texture2d<float> diffuseTexture [[texture(0)]], sampler samplr [[sampler(0)]]) {
+    float3 diffuseColor = diffuseTexture.sample(samplr, inFrag.texCoord).rgb;
+    
+    float3 ambientTerm = light.ambientColor * diffuseColor;
+    
+    float3 normal = normalize(inFrag.normal);
+    float diffuseIntensity = saturate(dot(normal, light.direction));
+    float3 diffuseTerm = light.diffuseColor * diffuseColor * diffuseIntensity;
+    
+    float3 specularTerm(0);
+    if (diffuseIntensity > 0)
+    {
+        float3 eyeDirection = normalize(inFrag.eyePosition);
+        float3 halfway = normalize(light.direction + eyeDirection);
+        float specularFactor = pow(saturate(dot(normal, halfway)), kSpecularPower);
+        specularTerm = light.specularColor * kSpecularColor * specularFactor;
+    }
+    
+    return float4(ambientTerm + diffuseTerm + specularTerm, 1);
 };

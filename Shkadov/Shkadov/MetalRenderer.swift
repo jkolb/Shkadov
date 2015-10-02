@@ -41,12 +41,16 @@ public final class MetalRenderer : NSObject, ContentViewSource, Synchronizable {
     
     private let bufferHandleFactory = HandleFactory()
     private var buffers = [Handle : MTLBuffer]()
+    
+    private let textureHandleFactory = HandleFactory()
+    private var textures = [Handle : MTLTexture]()
 
     private var renderStates = [[RenderState]]()
     
     private var commandQueue: MTLCommandQueue!
     private var library: MTLLibrary!
     private var depthStencilState: MTLDepthStencilState!
+    private var sampler: MTLSamplerState!
     
     public override init() {
         self.device = MTLCreateSystemDefaultDevice()!
@@ -95,6 +99,7 @@ extension MetalRenderer : MTKViewDelegate {
         let renderEncoder = commandBuffer.renderCommandEncoderWithDescriptor(renderPassDescriptor)
         renderEncoder.label = "Render Encoder"
         renderEncoder.setDepthStencilState(depthStencilState)
+//        renderEncoder.setCullMode(.Back)
         
         let states = renderStates.removeAtIndex(0)
         
@@ -104,6 +109,11 @@ extension MetalRenderer : MTKViewDelegate {
             
             let vertexBuffer = vertexArrays[state.vertexArray]!
             renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, atIndex: 0)
+            
+            if let texture = textures[state.texture] {
+                renderEncoder.setFragmentTexture(texture, atIndex: 0)
+                renderEncoder.setFragmentSamplerState(sampler, atIndex: 0)
+            }
             
             for object in state.objects {
                 let uniformBuffer = buffers[object.uniformBuffer]!
@@ -130,6 +140,13 @@ extension MetalRenderer : Renderer {
         depthStencilDescriptor.depthCompareFunction = .Less
         depthStencilDescriptor.depthWriteEnabled = true
         depthStencilState = device.newDepthStencilStateWithDescriptor(depthStencilDescriptor)
+        
+        let samplerDescriptor = MTLSamplerDescriptor()
+        samplerDescriptor.minFilter = .Nearest
+        samplerDescriptor.magFilter = .Linear
+        samplerDescriptor.sAddressMode = .Repeat
+        samplerDescriptor.tAddressMode = .Repeat
+        sampler = device.newSamplerStateWithDescriptor(samplerDescriptor)
     }
     
     public func renderStates(states: [RenderState]) {
@@ -142,11 +159,17 @@ extension MetalRenderer : Renderer {
     }
     
     public func createTextureFromData(textureData: TextureData) -> Handle {
-        return Handle.invalid
+        let textureDescriptor = MTLTextureDescriptor.texture2DDescriptorWithPixelFormat(.BGRA8Unorm, width: textureData.size.width, height: textureData.size.height, mipmapped: false)
+        let texture = device.newTextureWithDescriptor(textureDescriptor)
+        let region = MTLRegionMake2D(0, 0, textureData.size.width, textureData.size.height)
+        texture.replaceRegion(region, mipmapLevel: 0, withBytes: textureData.rawData, bytesPerRow: textureData.bytesPerRow)
+        let handle = textureHandleFactory.nextHandle()
+        textures[handle] = texture
+        return handle
     }
     
     public func destroyTexture(handle: Handle) {
-        
+        textures.removeValueForKey(handle)
     }
     
     public func createVertexArrayFromDescriptor(vertexDescriptor: VertexDescriptor, buffer: ByteBuffer) -> Handle {

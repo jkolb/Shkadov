@@ -33,6 +33,10 @@ public class TextureData {
         self.rawData = UnsafeMutablePointer<RawByte>.alloc(format.dataLengthForSize(size))
     }
 
+    public var bytesPerRow: Int {
+        return size.width * 4
+    }
+    
     deinit {
         rawData.dealloc(format.dataLengthForSize(size))
     }

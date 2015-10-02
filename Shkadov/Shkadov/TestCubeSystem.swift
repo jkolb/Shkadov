@@ -31,7 +31,6 @@ public class TestCubeSystem {
     private var program: Handle = Handle.invalid
     private var vertexArray: Handle = Handle.invalid
     private var uniformBuffer: Handle = Handle.invalid
-    private var texture: Handle = Handle.invalid
     private var cubes: [Entity] = []
     
     public init(renderer: Renderer, assetLoader: AssetLoader, entityComponents: EntityComponents) {
@@ -50,9 +49,6 @@ public class TestCubeSystem {
         vertexDescriptor.addAttribute(.Position, format: .Float3)
         vertexDescriptor.addAttribute(.Normal, format: .Float3)
         vertexDescriptor.addAttribute(.TexCoord, format: .Float2)
-        
-        let grassTextureData = assetLoader.loadTextureData(assetLoader.pathToFile("Assets/grass_top.png"))
-        texture = renderer.createTextureFromData(grassTextureData)
 
         let mesh = Mesh3D.cubeWithSize(1.0)
         let meshData = mesh.createBufferForVertexDescriptor(vertexDescriptor)
@@ -120,7 +116,7 @@ public class TestCubeSystem {
             program: program,
             vertexArray: vertexArray,
             uniformBuffer: uniformBuffer,
-            texture: texture,
+            texture: Handle.invalid,
             objects: objects
         )
     }
