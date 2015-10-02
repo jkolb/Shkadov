@@ -15,7 +15,6 @@
 		09F609591B9C54F0003B4A5B /* HoldableItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F609581B9C54F0003B4A5B /* HoldableItem.swift */; };
 		09F6095B1B9C556E003B4A5B /* WearableItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F6095A1B9C556E003B4A5B /* WearableItem.swift */; };
 		09F6095D1B9C565B003B4A5B /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F6095C1B9C565B003B4A5B /* Item.swift */; };
-		E5011DAC1BBED1D40002D854 /* MetalRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5011DAB1BBED1D40002D854 /* MetalRenderer.swift */; settings = {ASSET_TAGS = (); }; };
 		E5011DAE1BBED7140002D854 /* ContentViewSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5011DAD1BBED7140002D854 /* ContentViewSource.swift */; settings = {ASSET_TAGS = (); }; };
 		E535C8BB1B90608C0048321F /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = E535C8BA1B90608C0048321F /* Component.swift */; };
 		E535C8BD1B9155C70048321F /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E535C8BC1B9155C70048321F /* Entity.swift */; };
@@ -45,7 +44,6 @@
 		E592A5BD1B8A64D20032D982 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5BC1B8A64D20032D982 /* Platform.swift */; };
 		E592A5BF1B8A9E240032D982 /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5BE1B8A9E240032D982 /* Vector.swift */; };
 		E592A5C11B8AAC220032D982 /* Synchronizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5C01B8AAC220032D982 /* Synchronizable.swift */; };
-		E59933FC1BBEE1DD0074A37A /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = E59933FB1BBEE1DD0074A37A /* Shaders.metal */; settings = {ASSET_TAGS = (); }; };
 		E59C5F091B9E7BA0003422FB /* OpenGLContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F081B9E7BA0003422FB /* OpenGLContext.swift */; };
 		E59C5F0B1B9E7BF8003422FB /* PlatformOSX+NSApplicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F0A1B9E7BF8003422FB /* PlatformOSX+NSApplicationDelegate.swift */; };
 		E59C5F0D1B9E7C63003422FB /* PlatformOSX+NSWindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F0C1B9E7C63003422FB /* PlatformOSX+NSWindowDelegate.swift */; };
@@ -65,6 +63,8 @@
 		E5CA68101B9FC8D0002B065E /* Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA680F1B9FC8D0002B065E /* Mesh.swift */; };
 		E5CA68141B9FCBA4002B065E /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA68131B9FCBA4002B065E /* Color.swift */; };
 		E5CA68161B9FDF40002B065E /* VertexDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA68151B9FDF40002B065E /* VertexDescriptor.swift */; };
+		E5D464461BBF3447009B4D5D /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = E5D464451BBF3447009B4D5D /* Shaders.metal */; settings = {ASSET_TAGS = (); }; };
+		E5D464481BBF3458009B4D5D /* MetalRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D464471BBF3458009B4D5D /* MetalRenderer.swift */; settings = {ASSET_TAGS = (); }; };
 		E5DF0A2B1BBE185900C4AA87 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DF0A2A1BBE185900C4AA87 /* ViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		E5E45B581BAF08B000072EFF /* RawInputEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E45B571BAF08B000072EFF /* RawInputEvent.swift */; settings = {ASSET_TAGS = (); }; };
 		E5E45B5A1BAF08E800072EFF /* RawInputEventKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E45B591BAF08E800072EFF /* RawInputEventKind.swift */; settings = {ASSET_TAGS = (); }; };
@@ -98,7 +98,6 @@
 		09F609581B9C54F0003B4A5B /* HoldableItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HoldableItem.swift; sourceTree = "<group>"; };
 		09F6095A1B9C556E003B4A5B /* WearableItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WearableItem.swift; sourceTree = "<group>"; };
 		09F6095C1B9C565B003B4A5B /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
-		E5011DAB1BBED1D40002D854 /* MetalRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalRenderer.swift; sourceTree = "<group>"; };
 		E5011DAD1BBED7140002D854 /* ContentViewSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewSource.swift; sourceTree = "<group>"; };
 		E535C8BA1B90608C0048321F /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		E535C8BC1B9155C70048321F /* Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
@@ -132,7 +131,6 @@
 		E592A5BC1B8A64D20032D982 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		E592A5BE1B8A9E240032D982 /* Vector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
 		E592A5C01B8AAC220032D982 /* Synchronizable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synchronizable.swift; sourceTree = "<group>"; };
-		E59933FB1BBEE1DD0074A37A /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		E59C5F081B9E7BA0003422FB /* OpenGLContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGLContext.swift; sourceTree = "<group>"; };
 		E59C5F0A1B9E7BF8003422FB /* PlatformOSX+NSApplicationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+NSApplicationDelegate.swift"; sourceTree = "<group>"; };
 		E59C5F0C1B9E7C63003422FB /* PlatformOSX+NSWindowDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+NSWindowDelegate.swift"; sourceTree = "<group>"; };
@@ -152,6 +150,10 @@
 		E5CA680F1B9FC8D0002B065E /* Mesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; };
 		E5CA68131B9FCBA4002B065E /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		E5CA68151B9FDF40002B065E /* VertexDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VertexDescriptor.swift; sourceTree = "<group>"; };
+		E5D4643F1BBF2E59009B4D5D /* Shkadov-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Shkadov-Bridging-Header.h"; sourceTree = "<group>"; };
+		E5D464401BBF2E59009B4D5D /* ShaderUniform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderUniform.h; sourceTree = "<group>"; };
+		E5D464451BBF3447009B4D5D /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		E5D464471BBF3458009B4D5D /* MetalRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalRenderer.swift; sourceTree = "<group>"; };
 		E5DF0A2A1BBE185900C4AA87 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E5E45B571BAF08B000072EFF /* RawInputEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInputEvent.swift; sourceTree = "<group>"; };
 		E5E45B591BAF08E800072EFF /* RawInputEventKind.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInputEventKind.swift; sourceTree = "<group>"; };
@@ -194,15 +196,6 @@
 			name = Items;
 			sourceTree = "<group>";
 		};
-		E5011DAA1BBED1C00002D854 /* Metal */ = {
-			isa = PBXGroup;
-			children = (
-				E5011DAB1BBED1D40002D854 /* MetalRenderer.swift */,
-				E59933FB1BBEE1DD0074A37A /* Shaders.metal */,
-			);
-			path = Metal;
-			sourceTree = "<group>";
-		};
 		E535C8D81B93A6D80048321F /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -238,7 +231,6 @@
 			children = (
 				E5AC4E2A1BA5C5E500134995 /* Assets */,
 				E581CFB41B89361100D7174F /* Engine */,
-				E5011DAA1BBED1C00002D854 /* Metal */,
 				E581CFB61B89367100D7174F /* OS X */,
 				E581CFB51B89363500D7174F /* Utility */,
 				E581CF931B892C9F00D7174F /* main.swift */,
@@ -260,6 +252,7 @@
 		E581CFB41B89361100D7174F /* Engine */ = {
 			isa = PBXGroup;
 			children = (
+				E5D464491BBF3478009B4D5D /* Metal */,
 				E535C8D81B93A6D80048321F /* Components */,
 				09F609571B9C54CE003B4A5B /* Items */,
 				E5AC4E2C1BA5C6A200134995 /* AssetLoader.swift */,
@@ -306,6 +299,7 @@
 				E5E8B23E1BA4606D004E9485 /* VertexAttribute.swift */,
 				E5E8B2401BA460A1004E9485 /* VertexAttributeFormat.swift */,
 				E5CA68151B9FDF40002B065E /* VertexDescriptor.swift */,
+				E5D4643F1BBF2E59009B4D5D /* Shkadov-Bridging-Header.h */,
 			);
 			name = Engine;
 			sourceTree = "<group>";
@@ -334,6 +328,16 @@
 				E5DF0A2A1BBE185900C4AA87 /* ViewController.swift */,
 			);
 			name = "OS X";
+			sourceTree = "<group>";
+		};
+		E5D464491BBF3478009B4D5D /* Metal */ = {
+			isa = PBXGroup;
+			children = (
+				E5D464471BBF3458009B4D5D /* MetalRenderer.swift */,
+				E5D464451BBF3447009B4D5D /* Shaders.metal */,
+				E5D464401BBF2E59009B4D5D /* ShaderUniform.h */,
+			);
+			name = Metal;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -443,7 +447,6 @@
 				E5C54E2F1B954E58003F5AEB /* PlayerMovementSystem.swift in Sources */,
 				E59C5F091B9E7BA0003422FB /* OpenGLContext.swift in Sources */,
 				E59C5F131B9E7DF4003422FB /* PlatformOSX+Platform.swift in Sources */,
-				E59933FC1BBEE1DD0074A37A /* Shaders.metal in Sources */,
 				E5E45B5A1BAF08E800072EFF /* RawInputEventKind.swift in Sources */,
 				09F609501B9C45D3003B4A5B /* RawInputKeyCode.swift in Sources */,
 				E59C5F0F1B9E7D2E003422FB /* Geometry+CoreGraphics.swift in Sources */,
@@ -463,10 +466,12 @@
 				09F609591B9C54F0003B4A5B /* HoldableItem.swift in Sources */,
 				E5AC4E311BA5C74A00134995 /* TextureData.swift in Sources */,
 				09C3F4971BA26C410025FFE4 /* RTTI.swift in Sources */,
+				E5D464481BBF3458009B4D5D /* MetalRenderer.swift in Sources */,
 				E5AC4E331BA5C77A00134995 /* TextureFormat.swift in Sources */,
 				E5AC4E2D1BA5C6A200134995 /* AssetLoader.swift in Sources */,
 				E535C8BB1B90608C0048321F /* Component.swift in Sources */,
 				E535C8D51B93586B0048321F /* Kind.swift in Sources */,
+				E5D464461BBF3447009B4D5D /* Shaders.metal in Sources */,
 				09F6095D1B9C565B003B4A5B /* Item.swift in Sources */,
 				E535C8BD1B9155C70048321F /* Entity.swift in Sources */,
 				E5E8B2411BA460A1004E9485 /* VertexAttributeFormat.swift in Sources */,
@@ -479,7 +484,6 @@
 				E535C8C31B9161B10048321F /* OrientationComponent.swift in Sources */,
 				E592A5BD1B8A64D20032D982 /* Platform.swift in Sources */,
 				E535C8DC1B93A8620048321F /* RenderSystem.swift in Sources */,
-				E5011DAC1BBED1D40002D854 /* MetalRenderer.swift in Sources */,
 				E5CA680E1B9FC695002B065E /* Polygon.swift in Sources */,
 				E5E45B5C1BAF093200072EFF /* RawInputButtonCode.swift in Sources */,
 				09F609541B9C53F3003B4A5B /* PlayerComponent.swift in Sources */,
@@ -617,6 +621,7 @@
 				OTHER_SWIFT_FLAGS = "-DDEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = franticapparatus.net.Shkadov;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Shkadov/Shkadov-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -632,6 +637,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = franticapparatus.net.Shkadov;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Shkadov/Shkadov-Bridging-Header.h";
 			};
 			name = Release;
 		};

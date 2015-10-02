@@ -24,12 +24,6 @@ SOFTWARE.
 
 import simd
 
-struct UniformIn {
-    let modelViewProjectionMatrix: float4x4
-    let normalMatrix: float4x4
-    let diffuseColor: float4
-}
-
 public class RenderSystem {
     private let renderer: Renderer
     private let entityComponents: EntityComponents
@@ -74,13 +68,19 @@ public class RenderSystem {
                 uniformOffset: oldRender.uniformOffset,
                 diffuseColor: oldRender.diffuseColor,
                 modelViewMatrix: modelViewMatrix,
-                normalMatrix: modelViewMatrix.inverse.transpose,
+                normalMatrix: modelViewMatrix.inverse.transpose.matrix3x3,
                 projectionMatrix: projectionMatrix,
                 modelViewProjectionMatrix: projectionMatrix * modelViewMatrix
             )
             
             let bufferContents = UnsafeMutablePointer<UniformIn>(renderer.bufferContents(render.uniformBuffer).advancedBy(render.uniformOffset))
-            bufferContents.memory = UniformIn(modelViewProjectionMatrix: render.modelViewProjectionMatrix, normalMatrix: render.normalMatrix, diffuseColor: render.diffuseColor.vector)
+            bufferContents.memory = UniformIn(
+                modelViewMatrix: modelViewMatrix.cmatrix,
+                projectionMatrix: projectionMatrix.cmatrix,
+                modelViewProjectionMatrix: render.modelViewProjectionMatrix.cmatrix,
+                normalMatrix: render.normalMatrix.cmatrix,
+                diffuseColor: render.diffuseColor.vector
+            )
             
             entityComponents.replaceComponent(render, forEntity: entity)
         }

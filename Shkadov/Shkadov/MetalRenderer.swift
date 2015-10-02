@@ -64,7 +64,7 @@ public final class MetalRenderer : NSObject, ContentViewSource, Synchronizable {
         view.colorPixelFormat = .BGRA8Unorm
         view.depthStencilPixelFormat = .Depth32Float_Stencil8
         view.sampleCount = 4
-        view.clearColor = MTLClearColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        view.clearColor = MTLClearColor(red: 178.0/255.0, green: 1.0, blue: 1.0, alpha: 1.0)
         view.clearDepth = 1.0
         view.clearStencil = 0
         view.paused = true

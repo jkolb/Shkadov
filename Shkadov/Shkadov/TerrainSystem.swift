@@ -59,7 +59,7 @@ public class TerrainSystem {
         
         program = renderer.createProgramWithVertexPath("passThroughVertex", fragmentPath: "passThroughFragment")
         vertexArray = renderer.createVertexArrayFromDescriptor(vertexDescriptor, buffer: meshData)
-        let uniformSize = strideof(float4x4) + strideof(float4x4) + strideof(float4)
+        let uniformSize = strideof(UniformIn)
         uniformBuffer = renderer.createBufferWithName("Terrain Uniforms", length: uniformSize)
 
         floor = entityComponents.createEntity()

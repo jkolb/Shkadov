@@ -80,7 +80,7 @@ public class TestCubeSystem {
             Color.cyan,
         ]
         
-        let uniformSize = max(256, strideof(float4x4) + strideof(float4x4) + strideof(float4))
+        let uniformSize = max(256, strideof(UniformIn))
         uniformBuffer = renderer.createBufferWithName("Cube Uniforms", length: positions.count * uniformSize)
         var uniformOffset = 0
         

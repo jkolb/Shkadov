@@ -30,7 +30,7 @@ public struct RenderComponent : Component {
     public let uniformOffset: Int
     public let diffuseColor: Color
     public let modelViewMatrix: float4x4
-    public let normalMatrix: float4x4
+    public let normalMatrix: float3x3
     public let projectionMatrix: float4x4
     public let modelViewProjectionMatrix: float4x4
     
@@ -39,7 +39,7 @@ public struct RenderComponent : Component {
         uniformOffset: Int,
         diffuseColor: Color,
         modelViewMatrix: float4x4 = float4x4(1.0),
-        normalMatrix: float4x4 = float4x4(1.0),
+        normalMatrix: float3x3 = float3x3(1.0),
         projectionMatrix: float4x4 = float4x4(1.0),
         modelViewProjectionMatrix: float4x4 = float4x4(1.0)
     ) {
