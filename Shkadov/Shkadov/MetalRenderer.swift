@@ -99,7 +99,8 @@ extension MetalRenderer : MTKViewDelegate {
         let renderEncoder = commandBuffer.renderCommandEncoderWithDescriptor(renderPassDescriptor)
         renderEncoder.label = "Render Encoder"
         renderEncoder.setDepthStencilState(depthStencilState)
-//        renderEncoder.setCullMode(.Back)
+        renderEncoder.setCullMode(.Back)
+        renderEncoder.setFrontFacingWinding(.CounterClockwise)
         
         let states = renderStates.removeAtIndex(0)
         

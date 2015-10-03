@@ -30,10 +30,34 @@ typealias NSEventKeyCodeType = UInt16
 
 
 public final class ViewController : NSViewController {
+    private var debugLabel: NSTextView!
     public var viewSource: ContentViewSource!
     
     public override func loadView() {
         view = viewSource.contentView
+    }
+    
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let shadow = NSShadow()
+        shadow.shadowColor = NSColor.blackColor()
+        shadow.shadowBlurRadius = 1.0
+        shadow.shadowOffset = NSSize(width: 1.0, height: 1.0)
+        
+        debugLabel = NSTextView()
+        debugLabel.string = "Test"
+        debugLabel.textColor = NSColor.whiteColor()
+        debugLabel.backgroundColor = NSColor.clearColor()
+        debugLabel.editable = false
+        debugLabel.shadow = shadow
+        view.addSubview(debugLabel)
+    }
+    
+    public override func viewDidLayout() {
+        super.viewDidLayout()
+        
+        debugLabel.frame = view.bounds.insetBy(dx: 10.0, dy: 10.0)
     }
     
     public var sendMouseDelta = false {

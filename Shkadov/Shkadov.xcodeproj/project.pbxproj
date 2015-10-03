@@ -44,7 +44,6 @@
 		E592A5BD1B8A64D20032D982 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5BC1B8A64D20032D982 /* Platform.swift */; };
 		E592A5BF1B8A9E240032D982 /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5BE1B8A9E240032D982 /* Vector.swift */; };
 		E592A5C11B8AAC220032D982 /* Synchronizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E592A5C01B8AAC220032D982 /* Synchronizable.swift */; };
-		E59C5F091B9E7BA0003422FB /* OpenGLContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F081B9E7BA0003422FB /* OpenGLContext.swift */; };
 		E59C5F0B1B9E7BF8003422FB /* PlatformOSX+NSApplicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F0A1B9E7BF8003422FB /* PlatformOSX+NSApplicationDelegate.swift */; };
 		E59C5F0D1B9E7C63003422FB /* PlatformOSX+NSWindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F0C1B9E7C63003422FB /* PlatformOSX+NSWindowDelegate.swift */; };
 		E59C5F0F1B9E7D2E003422FB /* Geometry+CoreGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F0E1B9E7D2E003422FB /* Geometry+CoreGraphics.swift */; };
@@ -131,7 +130,6 @@
 		E592A5BC1B8A64D20032D982 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		E592A5BE1B8A9E240032D982 /* Vector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
 		E592A5C01B8AAC220032D982 /* Synchronizable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synchronizable.swift; sourceTree = "<group>"; };
-		E59C5F081B9E7BA0003422FB /* OpenGLContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGLContext.swift; sourceTree = "<group>"; };
 		E59C5F0A1B9E7BF8003422FB /* PlatformOSX+NSApplicationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+NSApplicationDelegate.swift"; sourceTree = "<group>"; };
 		E59C5F0C1B9E7C63003422FB /* PlatformOSX+NSWindowDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+NSWindowDelegate.swift"; sourceTree = "<group>"; };
 		E59C5F0E1B9E7D2E003422FB /* Geometry+CoreGraphics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Geometry+CoreGraphics.swift"; sourceTree = "<group>"; };
@@ -272,7 +270,6 @@
 				E5E8B2421BA47D33004E9485 /* Material.swift */,
 				E581CF941B892C9F00D7174F /* Matrix.swift */,
 				E5CA680F1B9FC8D0002B065E /* Mesh.swift */,
-				E59C5F081B9E7BA0003422FB /* OpenGLContext.swift */,
 				E5AC4E341BA5CAB900134995 /* PixelSize.swift */,
 				E592A5BC1B8A64D20032D982 /* Platform.swift */,
 				E5C54E2E1B954E58003F5AEB /* PlayerMovementSystem.swift */,
@@ -445,7 +442,6 @@
 				E5CA68101B9FC8D0002B065E /* Mesh.swift in Sources */,
 				E5AC4E291BA5B13A00134995 /* TerrainSystem.swift in Sources */,
 				E5C54E2F1B954E58003F5AEB /* PlayerMovementSystem.swift in Sources */,
-				E59C5F091B9E7BA0003422FB /* OpenGLContext.swift in Sources */,
 				E59C5F131B9E7DF4003422FB /* PlatformOSX+Platform.swift in Sources */,
 				E5E45B5A1BAF08E800072EFF /* RawInputEventKind.swift in Sources */,
 				09F609501B9C45D3003B4A5B /* RawInputKeyCode.swift in Sources */,
