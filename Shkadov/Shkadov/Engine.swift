@@ -37,7 +37,7 @@ public final class Engine : TimerDelegate, Synchronizable {
     private let renderer: Renderer
     
     public init(platform: Platform, renderer: Renderer, assetLoader: AssetLoader) {
-        self.synchronizationQueue = DispatchQueue.globalQueueWithQOS(.UserInitiated)
+        self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.engine", attribute: .Serial, qosClass: .UserInitiated, relativePriority: -1)
         self.entityComponents = EntityComponents()
         self.platform = platform
         self.rawInputEventBuffer = RawInputEventBuffer()
@@ -57,7 +57,7 @@ public final class Engine : TimerDelegate, Synchronizable {
     }
     
     public func start() {
-        synchronizeWriteAndWait { engine in
+        synchronizeWrite { engine in
             engine.platform.centerMouse()
             engine.platform.mousePositionRelative = true
             engine.renderSystem.configure()
@@ -69,7 +69,7 @@ public final class Engine : TimerDelegate, Synchronizable {
     }
 
     public func stop() {
-        synchronizeWriteAndWait { engine in
+        synchronizeWrite { engine in
             engine.platform.mousePositionRelative = false
             engine.timer.stop()
         }
@@ -106,7 +106,7 @@ public final class Engine : TimerDelegate, Synchronizable {
     }
     
     public func updateViewport(viewport: Rectangle2D) {
-        synchronizeWriteAndWait { engine in
+        synchronizeWrite { engine in
             engine.renderSystem.updateViewport(viewport)
         }
     }
