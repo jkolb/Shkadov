@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		09C3F4971BA26C410025FFE4 /* RTTI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C3F4961BA26C410025FFE4 /* RTTI.swift */; };
 		09F609501B9C45D3003B4A5B /* RawInputKeyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F6094F1B9C45D3003B4A5B /* RawInputKeyCode.swift */; };
-		09F609521B9C4865003B4A5B /* InputContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F609511B9C4865003B4A5B /* InputContext.swift */; };
+		09F609521B9C4865003B4A5B /* MovementInputContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F609511B9C4865003B4A5B /* MovementInputContext.swift */; };
 		09F609541B9C53F3003B4A5B /* PlayerComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F609531B9C53F3003B4A5B /* PlayerComponent.swift */; };
 		09F609561B9C546C003B4A5B /* InventoryComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F609551B9C546C003B4A5B /* InventoryComponent.swift */; };
 		09F609591B9C54F0003B4A5B /* HoldableItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F609581B9C54F0003B4A5B /* HoldableItem.swift */; };
@@ -26,6 +26,8 @@
 		E535C8D71B9385E70048321F /* TestCubeSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E535C8D61B9385E70048321F /* TestCubeSystem.swift */; };
 		E535C8DA1B93A7490048321F /* RenderComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E535C8D91B93A7490048321F /* RenderComponent.swift */; };
 		E535C8DC1B93A8620048321F /* RenderSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E535C8DB1B93A8620048321F /* RenderSystem.swift */; };
+		E55033EB1BC3636900F1CF46 /* MenuInputContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55033EA1BC3636900F1CF46 /* MenuInputContext.swift */; settings = {ASSET_TAGS = (); }; };
+		E5523CDF1BC3640700DDB75A /* InputContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5523CDE1BC3640700DDB75A /* InputContext.swift */; settings = {ASSET_TAGS = (); }; };
 		E581CF741B892C6900D7174F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E581CF731B892C6900D7174F /* Assets.xcassets */; };
 		E581CF821B892C6900D7174F /* ShkadovTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF811B892C6900D7174F /* ShkadovTests.swift */; };
 		E581CFA01B892C9F00D7174F /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8D1B892C9F00D7174F /* DispatchQueue.swift */; };
@@ -91,7 +93,7 @@
 /* Begin PBXFileReference section */
 		09C3F4961BA26C410025FFE4 /* RTTI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTTI.swift; sourceTree = "<group>"; };
 		09F6094F1B9C45D3003B4A5B /* RawInputKeyCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInputKeyCode.swift; sourceTree = "<group>"; };
-		09F609511B9C4865003B4A5B /* InputContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputContext.swift; sourceTree = "<group>"; };
+		09F609511B9C4865003B4A5B /* MovementInputContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovementInputContext.swift; sourceTree = "<group>"; };
 		09F609531B9C53F3003B4A5B /* PlayerComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerComponent.swift; sourceTree = "<group>"; };
 		09F609551B9C546C003B4A5B /* InventoryComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryComponent.swift; sourceTree = "<group>"; };
 		09F609581B9C54F0003B4A5B /* HoldableItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HoldableItem.swift; sourceTree = "<group>"; };
@@ -108,6 +110,8 @@
 		E535C8D61B9385E70048321F /* TestCubeSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestCubeSystem.swift; sourceTree = "<group>"; };
 		E535C8D91B93A7490048321F /* RenderComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderComponent.swift; sourceTree = "<group>"; };
 		E535C8DB1B93A8620048321F /* RenderSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderSystem.swift; sourceTree = "<group>"; };
+		E55033EA1BC3636900F1CF46 /* MenuInputContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuInputContext.swift; sourceTree = "<group>"; };
+		E5523CDE1BC3640700DDB75A /* InputContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputContext.swift; sourceTree = "<group>"; };
 		E581CF6E1B892C6900D7174F /* Shkadov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shkadov.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E581CF731B892C6900D7174F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E581CF781B892C6900D7174F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -265,7 +269,9 @@
 				E535C8D21B923C510048321F /* EntityComponents.swift */,
 				E592A5BA1B8A4EFA0032D982 /* Geometry.swift */,
 				E535C8C01B9158920048321F /* Handle.swift */,
-				09F609511B9C4865003B4A5B /* InputContext.swift */,
+				E5523CDE1BC3640700DDB75A /* InputContext.swift */,
+				09F609511B9C4865003B4A5B /* MovementInputContext.swift */,
+				E55033EA1BC3636900F1CF46 /* MenuInputContext.swift */,
 				E535C8D41B93586B0048321F /* Kind.swift */,
 				E5E8B2421BA47D33004E9485 /* Material.swift */,
 				E581CF941B892C9F00D7174F /* Matrix.swift */,
@@ -439,6 +445,7 @@
 			files = (
 				E592A5B91B8A4EA60032D982 /* TIme.swift in Sources */,
 				E5E45B601BAF0ADC00072EFF /* EngineEventSystem.swift in Sources */,
+				E5523CDF1BC3640700DDB75A /* InputContext.swift in Sources */,
 				E5CA68101B9FC8D0002B065E /* Mesh.swift in Sources */,
 				E5AC4E291BA5B13A00134995 /* TerrainSystem.swift in Sources */,
 				E5C54E2F1B954E58003F5AEB /* PlayerMovementSystem.swift in Sources */,
@@ -474,8 +481,9 @@
 				E59C5F0D1B9E7C63003422FB /* PlatformOSX+NSWindowDelegate.swift in Sources */,
 				E581CFA21B892C9F00D7174F /* Engine.swift in Sources */,
 				E592A5BB1B8A4EFA0032D982 /* Geometry.swift in Sources */,
+				E55033EB1BC3636900F1CF46 /* MenuInputContext.swift in Sources */,
 				E535C8DA1B93A7490048321F /* RenderComponent.swift in Sources */,
-				09F609521B9C4865003B4A5B /* InputContext.swift in Sources */,
+				09F609521B9C4865003B4A5B /* MovementInputContext.swift in Sources */,
 				E592A5BF1B8A9E240032D982 /* Vector.swift in Sources */,
 				E535C8C31B9161B10048321F /* OrientationComponent.swift in Sources */,
 				E592A5BD1B8A64D20032D982 /* Platform.swift in Sources */,

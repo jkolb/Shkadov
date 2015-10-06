@@ -26,7 +26,7 @@ public final class Engine : TimerDelegate, Synchronizable {
     public let synchronizationQueue: DispatchQueue
     private var platform: Platform
     private let rawInputEventBuffer: RawInputEventBuffer
-    private let inputContext: InputContext
+    private var inputContext: InputContext
     private let timer: Timer
     private var eventHandlers: [EngineEventSystem:[Component]]
     private let entityComponents: EntityComponents
@@ -35,6 +35,7 @@ public final class Engine : TimerDelegate, Synchronizable {
     private let testCubeSystem: TestCubeSystem
     private let terrainSystem: TerrainSystem
     private let renderer: Renderer
+    private var menuOpen = false
     
     public init(platform: Platform, renderer: Renderer, assetLoader: AssetLoader) {
         self.synchronizationQueue = DispatchQueue.queueWithName("net.franticapparatus.shkadov.engine", attribute: .Serial, qosClass: .UserInitiated, relativePriority: -1)
@@ -44,7 +45,7 @@ public final class Engine : TimerDelegate, Synchronizable {
         self.timer = Timer(platform: platform, name: "net.franticapparatus.shkadov.timer", tickDuration: Duration(seconds: 1.0 / 60.0))
         self.eventHandlers = [:]
         self.playerMovementSystem = PlayerMovementSystem(entityComponents: self.entityComponents)
-        self.inputContext = InputContext()
+        self.inputContext = MovementInputContext()
         self.testCubeSystem = TestCubeSystem(renderer: renderer, assetLoader: assetLoader, entityComponents: entityComponents)
         self.terrainSystem = TerrainSystem(renderer: renderer, assetLoader: assetLoader, entityComponents: entityComponents)
         self.renderSystem = RenderSystem(renderer: renderer, entityComponents: entityComponents)
@@ -80,7 +81,26 @@ public final class Engine : TimerDelegate, Synchronizable {
         let eventKinds = inputContext.translateInputEvents(inputEvents)
 
         for eventKind in eventKinds {
-            dispatchEvent(EngineEvent(system: .Input, kind: eventKind, timestamp: platform.currentTime))
+            switch eventKind {
+            case .ExitInputContext:
+                if menuOpen {
+                    platform.centerMouse()
+                    platform.mousePositionRelative = true
+                    inputContext = MovementInputContext()
+                    menuOpen = false
+                }
+                else {
+                    platform.mousePositionRelative = false
+                    inputContext = MenuInputContext()
+                    menuOpen = true
+                }
+            default:
+                if menuOpen {
+                }
+                else {
+                    dispatchEvent(EngineEvent(system: .Input, kind: eventKind, timestamp: platform.currentTime))
+                }
+            }
         }
     }
     

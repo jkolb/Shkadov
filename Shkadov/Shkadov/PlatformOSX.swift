@@ -67,7 +67,6 @@ public class PlatformOSX : NSObject {
         mainWindow.contentView = viewController.view
 
         mainWindow.makeKeyAndOrderFront(nil)
-        mainWindow.makeFirstResponder(viewController)
         
         application.run()
     }

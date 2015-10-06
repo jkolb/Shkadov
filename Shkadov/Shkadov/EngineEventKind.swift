@@ -26,6 +26,7 @@ public enum EngineEventKind {
     case Look(LookDirection)
     case Move(MoveDirection)
     case ResetCamera
+    case ExitInputContext
 }
 
 public struct LookDirection {

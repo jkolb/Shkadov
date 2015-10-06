@@ -28,6 +28,7 @@ extension PlatformOSX : NSWindowDelegate {
     // TODO: Check to see if there are other useful methods to override
     public func windowDidBecomeKey(notification: NSNotification) {
         NSLog("%@", __FUNCTION__)
+        mainWindow.makeFirstResponder(viewController)
     }
     
     public func windowDidResignKey(notification: NSNotification) {

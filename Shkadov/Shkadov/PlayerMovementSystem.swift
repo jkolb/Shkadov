@@ -83,6 +83,8 @@ public class PlayerMovementSystem {
             position = float3(0.0, 0.0, -4.0)
             pitch = Angle.zero
             yaw = Angle.zero
+        case .ExitInputContext:
+            fatalError("Handle this in Engine")
         }
         
         let newOrientation = OrientationComponent(

@@ -22,6 +22,38 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public protocol InputContext {
-    func translateInputEvents(inputEvents: [RawInputEvent]) -> [EngineEventKind]
+public class MenuInputContext : InputContext {
+    private var keyDown: Set<RawInputKeyCode>
+    
+    public init() {
+        self.keyDown = Set<RawInputKeyCode>()
+    }
+    
+    private func isKeyDown(keyCode: RawInputKeyCode) -> Bool {
+        return keyDown.contains(keyCode)
+    }
+    
+    private func handleInputEvents(inputEvents: [RawInputEvent]) {
+        for inputEvent in inputEvents {
+            switch inputEvent.kind {
+            case .KeyDown(let keyCode):
+                keyDown.insert(keyCode)
+                
+            case .KeyUp(let keyCode):
+                keyDown.remove(keyCode)
+
+            default:
+                print("Unhandled input event:", inputEvent, separator: " ", terminator: "\n")
+            }
+        }
+    }
+    
+    public func translateInputEvents(inputEvents: [RawInputEvent]) -> [EngineEventKind] {
+        handleInputEvents(inputEvents)
+        if isKeyDown(.ESCAPE) {
+            return [EngineEventKind.ExitInputContext]
+        } else {
+            return []
+        }
+    }
 }
