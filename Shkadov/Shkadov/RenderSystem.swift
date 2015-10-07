@@ -33,7 +33,7 @@ public class RenderSystem {
         self.entityComponents = entityComponents
         
         entityComponents.addComponent(OrientationComponent(position: Point3D(0.0, 0.0, -4.0)), toEntity: camera)
-        entityComponents.addComponent(ProjectionComponent(projectionMatrix: float4x4(fovy: Angle(degrees: 90.0), aspect: 1.0, zNear: 0.1, zFar: 100.0)), toEntity: camera)
+        entityComponents.addComponent(ProjectionComponent(projectionMatrix: Matrix4x4(fovy: Angle(degrees: 90.0), aspect: 1.0, zNear: 0.1, zFar: 100.0)), toEntity: camera)
     }
     
     public func configure() {
@@ -42,7 +42,7 @@ public class RenderSystem {
     
     public func updateViewport(viewport: Rectangle2D) {
         let projection = ProjectionComponent(
-            projectionMatrix: float4x4(fovy: Angle(degrees: 65.0), aspect: viewport.aspectRatio, zNear: 0.1, zFar: 100.0)
+            projectionMatrix: Matrix4x4(fovy: Angle(degrees: 65.0), aspect: viewport.aspectRatio, zNear: 0.1, zFar: 100.0)
         )
         entityComponents.replaceComponent(projection, forEntity: camera)
         renderer.updateViewport(viewport)
