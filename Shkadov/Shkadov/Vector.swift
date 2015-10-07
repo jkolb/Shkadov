@@ -24,12 +24,22 @@ SOFTWARE.
 
 import simd
 
-public extension float4 {
-    public init(_ v: float3, _ w: Float = 0.0) {
+public typealias Vector2D = float2
+public typealias Vector3D = float3
+public typealias Vector4D = float4
+
+extension Vector2D {
+    public var angle: Angle {
+        return Angle(radians: atan2(y, x))
+    }
+}
+
+public extension Vector4D {
+    public init(_ v: Vector3D, _ w: Float = 0.0) {
         self.init(v.x, v.y, v.z, w)
     }
     
-    public var xyz: float3 {
-        return float3(self.x, self.y, self.z)
+    public var xyz: Vector3D {
+        return Vector3D(x, y, z)
     }
 }

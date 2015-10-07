@@ -22,8 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
 public class PlayerMovementSystem {
     private let entityComponents: EntityComponents
     
@@ -80,9 +78,9 @@ public class PlayerMovementSystem {
             position = updatedOrientation.position
             
         case .ResetCamera:
-            position = float3(0.0, 0.0, -4.0)
-            pitch = Angle.zero
-            yaw = Angle.zero
+            position = Point3D(0.0, 0.0, -4.0)
+            pitch = Angle()
+            yaw = Angle()
         case .ExitInputContext:
             fatalError("Handle this in Engine")
         }

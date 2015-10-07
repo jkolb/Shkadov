@@ -22,8 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
 public class TestCubeSystem {
     private let renderer: Renderer
     private let assetLoader: AssetLoader
@@ -57,13 +55,13 @@ public class TestCubeSystem {
         vertexArray = renderer.createVertexArrayFromDescriptor(vertexDescriptor, buffer: meshData)
         
         let positions = [
-            float3(0.0, 0.0, 0.0),
-            float3(1.5, 0.0, 0.0),
-            float3(-1.5, 0.0, 0.0),
-            float3(0.0, 1.5, 0.0),
-            float3(0.0, -1.5, 0.0),
-            float3(0.0, 0.0, 1.5),
-            float3(0.0, 0.0, -1.5),
+            Point3D(0.0, 0.0, 0.0),
+            Point3D(1.5, 0.0, 0.0),
+            Point3D(-1.5, 0.0, 0.0),
+            Point3D(0.0, 1.5, 0.0),
+            Point3D(0.0, -1.5, 0.0),
+            Point3D(0.0, 0.0, 1.5),
+            Point3D(0.0, 0.0, -1.5),
         ]
         
         let colors = [

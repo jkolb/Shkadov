@@ -22,8 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
 public class RenderSystem {
     private let renderer: Renderer
     private let entityComponents: EntityComponents
@@ -34,7 +32,7 @@ public class RenderSystem {
         self.renderer = renderer
         self.entityComponents = entityComponents
         
-        entityComponents.addComponent(OrientationComponent(position: float3(0.0, 0.0, -4.0)), toEntity: camera)
+        entityComponents.addComponent(OrientationComponent(position: Point3D(0.0, 0.0, -4.0)), toEntity: camera)
         entityComponents.addComponent(ProjectionComponent(projectionMatrix: float4x4(fovy: Angle(degrees: 90.0), aspect: 1.0, zNear: 0.1, zFar: 100.0)), toEntity: camera)
     }
     

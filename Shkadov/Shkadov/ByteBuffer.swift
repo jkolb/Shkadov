@@ -181,6 +181,11 @@ extension ByteBuffer {
         putNextValue(value.y)
     }
     
+    public func putNextValue(value: Vector2D) {
+        putNextValue(value.x)
+        putNextValue(value.y)
+    }
+    
     public func putNextValue(value: Point3D) {
         putNextValue(value.x)
         putNextValue(value.y)
@@ -188,9 +193,9 @@ extension ByteBuffer {
     }
     
     public func putNextValue(value: Vector3D) {
-        putNextValue(value.dx)
-        putNextValue(value.dy)
-        putNextValue(value.dz)
+        putNextValue(value.x)
+        putNextValue(value.y)
+        putNextValue(value.z)
     }
     
     public func putNextValue(value: ColorRGBA8) {

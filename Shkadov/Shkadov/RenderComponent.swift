@@ -22,26 +22,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
 public struct RenderComponent : Component {
     public static let kind = Kind(dataType: RenderComponent.self)
     public let uniformBuffer: Handle
     public let uniformOffset: Int
     public let diffuseColor: Color
-    public let modelViewMatrix: float4x4
-    public let normalMatrix: float3x3
-    public let projectionMatrix: float4x4
-    public let modelViewProjectionMatrix: float4x4
+    public let modelViewMatrix: Matrix4x4
+    public let normalMatrix: Matrix3x3
+    public let projectionMatrix: Matrix4x4
+    public let modelViewProjectionMatrix: Matrix4x4
     
     public init(
         uniformBuffer: Handle,
         uniformOffset: Int,
         diffuseColor: Color,
-        modelViewMatrix: float4x4 = float4x4(1.0),
-        normalMatrix: float3x3 = float3x3(1.0),
-        projectionMatrix: float4x4 = float4x4(1.0),
-        modelViewProjectionMatrix: float4x4 = float4x4(1.0)
+        modelViewMatrix: Matrix4x4 = Matrix4x4(1.0),
+        normalMatrix: Matrix3x3 = Matrix3x3(1.0),
+        projectionMatrix: Matrix4x4 = Matrix4x4(1.0),
+        modelViewProjectionMatrix: Matrix4x4 = Matrix4x4(1.0)
     ) {
         self.uniformBuffer = uniformBuffer
         self.uniformOffset = uniformOffset

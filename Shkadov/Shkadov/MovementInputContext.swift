@@ -31,8 +31,8 @@ public class MovementInputContext : InputContext {
     public init() {
         self.keyDown = Set<RawInputKeyCode>()
         self.buttonDown = Set<RawInputButtonCode>()
-        self.mousePosition = Point2D.zero
-        self.mouseDelta = Vector2D.zero
+        self.mousePosition = Point2D()
+        self.mouseDelta = Vector2D()
     }
     
     private func isKeyDown(keyCode: RawInputKeyCode) -> Bool {
@@ -96,11 +96,11 @@ public class MovementInputContext : InputContext {
             moveDirection.y = .Down
         }
         
-        let hAngle = Angle(radians: mouseDelta.dx * 0.001)
-        let vAngle = Angle(radians: mouseDelta.dy * 0.001)
+        let hAngle = Angle(radians: mouseDelta.x * 0.001)
+        let vAngle = Angle(radians: mouseDelta.y * 0.001)
         let lookDirection = LookDirection(up: vAngle, right: hAngle)
 
-        mouseDelta = Vector2D.zero // Reset delta after use to make sure it doesn't continue to cause movement
+        mouseDelta = Vector2D() // Reset delta after use to make sure it doesn't continue to cause movement
         
         if isKeyDown(.ESCAPE) {
             return [EngineEventKind.ExitInputContext]

@@ -28,7 +28,7 @@ public class Vertex3D {
     public var color: ColorRGBA8
     public var texCoord: Point2D
     
-    public init(position: Point3D, normal: Vector3D = Vector3D.zero, texCoord: Point2D, color: ColorRGBA8 = ColorRGBA8(red: 0, green: 0, blue: 0)) {
+    public init(position: Point3D, normal: Vector3D, texCoord: Point2D, color: ColorRGBA8 = ColorRGBA8()) {
         self.position = position
         self.normal = normal
         self.texCoord = texCoord

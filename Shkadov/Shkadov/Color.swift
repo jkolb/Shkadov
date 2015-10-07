@@ -22,8 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
 public struct ColorRGBA8 {
     public var red: UInt8
     public var green: UInt8
@@ -51,11 +49,7 @@ public struct ColorRGBA8 {
         )
     }
     
-    public init(red: UInt8, green: UInt8, blue: UInt8) {
-        self.init(red: red, green: green, blue: blue, alpha: UInt8.max)
-    }
-    
-    public init(red: UInt8, green: UInt8, blue: UInt8, alpha: UInt8) {
+    public init(red: UInt8 = 0, green: UInt8 = 0, blue: UInt8 = 0, alpha: UInt8 = 255) {
         self.red = red
         self.green = green
         self.blue = blue
@@ -97,10 +91,8 @@ public struct Color {
         self.blue = blue
         self.alpha = alpha
     }
-}
-
-extension Color {
-    public var vector: float4 {
-        return float4(red, green, blue, alpha)
+    
+    public var vector: Vector4D {
+        return Vector4D(red, green, blue, alpha)
     }
 }

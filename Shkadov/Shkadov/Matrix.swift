@@ -24,8 +24,11 @@ SOFTWARE.
 
 import simd
 
-public extension float3x3 {
-    public init(angle: Angle, axis: float3) {
+public typealias Matrix3x3 = float3x3
+public typealias Matrix4x4 = float4x4
+
+public extension Matrix3x3 {
+    public init(angle: Angle, axis: Vector3D) {
         /*
         https://www.opengl.org/sdk/docs/man2/xhtml/glRotate.xml
         */
@@ -39,17 +42,17 @@ public extension float3x3 {
         let sa = s * na
         let ka = k * na
         
-        let column0 = float3(
+        let column0 = Vector3D(
             na.x * ka.x + c,
             na.y * ka.x + sa.z,
             na.x * ka.z - sa.y
         )
-        let column1 = float3(
+        let column1 = Vector3D(
             na.x * ka.y - sa.z,
             na.y * ka.y + c,
             na.y * ka.z + sa.x
         )
-        let column2 = float3(
+        let column2 = Vector3D(
             na.x * ka.z + sa.y,
             na.y * ka.z - sa.x,
             na.z * ka.z + c
@@ -59,30 +62,30 @@ public extension float3x3 {
     }
 }
 
-public extension float4x4 {
-    public init(translate: float3) {
+public extension Matrix4x4 {
+    public init(translate: Vector3D) {
         /*
         https://www.opengl.org/sdk/docs/man2/xhtml/glTranslate.xml
         */
-        let column0 = float4(
+        let column0 = Vector4D(
             1.0,
             0.0,
             0.0,
             0.0
         )
-        let column1 = float4(
+        let column1 = Vector4D(
             0.0,
             1.0,
             0.0,
             0.0
         )
-        let column2 = float4(
+        let column2 = Vector4D(
             0.0,
             0.0,
             1.0,
             0.0
         )
-        let column3 = float4(
+        let column3 = Vector4D(
             translate.x,
             translate.y,
             translate.z,
@@ -92,7 +95,7 @@ public extension float4x4 {
         self.init([column0, column1, column2, column3])
     }
     
-    public init(angle: Angle, axis: float3) {
+    public init(angle: Angle, axis: Vector3D) {
         /*
         https://www.opengl.org/sdk/docs/man2/xhtml/glRotate.xml
         */
@@ -106,25 +109,25 @@ public extension float4x4 {
         let sa = s * na
         let ka = k * na
         
-        let column0 = float4(
+        let column0 = Vector4D(
             na.x * ka.x + c,
             na.y * ka.x + sa.z,
             na.x * ka.z - sa.y,
             0.0
         )
-        let column1 = float4(
+        let column1 = Vector4D(
             na.x * ka.y - sa.z,
             na.y * ka.y + c,
             na.y * ka.z + sa.x,
             0.0
         )
-        let column2 = float4(
+        let column2 = Vector4D(
             na.x * ka.z + sa.y,
             na.y * ka.z - sa.x,
             na.z * ka.z + c,
             0.0
         )
-        let column3 = float4(
+        let column3 = Vector4D(
             0.0,
             0.0,
             0.0,
@@ -174,25 +177,25 @@ public extension float4x4 {
         // cotangent(x) = cos(x) / sin(x)
         let f = c / s
         
-        let column0 = float4(
+        let column0 = Vector4D(
             f / aspect,
             0.0,
             0.0,
             0.0
         )
-        let column1 = float4(
+        let column1 = Vector4D(
             0.0,
             f,
             0.0,
             0.0
         )
-        let column2 = float4(
+        let column2 = Vector4D(
             0.0,
             0.0,
             (zFar + zNear) / (zNear - zFar),
             -1.0
         )
-        let column3 = float4(
+        let column3 = Vector4D(
             0.0,
             0.0,
             (2.0 * zFar * zNear) / (zNear - zFar),
@@ -202,7 +205,7 @@ public extension float4x4 {
         self.init([column0, column1, column2, column3])
     }
     
-    public var matrix3x3: float3x3 {
-        return float3x3([self[0].xyz, self[1].xyz, self[2].xyz])
+    public var matrix3x3: Matrix3x3 {
+        return Matrix3x3([self[0].xyz, self[1].xyz, self[2].xyz])
     }
 }

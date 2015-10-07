@@ -29,7 +29,6 @@
 		E55033EB1BC3636900F1CF46 /* MenuInputContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55033EA1BC3636900F1CF46 /* MenuInputContext.swift */; settings = {ASSET_TAGS = (); }; };
 		E5523CDF1BC3640700DDB75A /* InputContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5523CDE1BC3640700DDB75A /* InputContext.swift */; settings = {ASSET_TAGS = (); }; };
 		E581CF741B892C6900D7174F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E581CF731B892C6900D7174F /* Assets.xcassets */; };
-		E581CF821B892C6900D7174F /* ShkadovTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF811B892C6900D7174F /* ShkadovTests.swift */; };
 		E581CFA01B892C9F00D7174F /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8D1B892C9F00D7174F /* DispatchQueue.swift */; };
 		E581CFA11B892C9F00D7174F /* DispatchSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8E1B892C9F00D7174F /* DispatchSource.swift */; };
 		E581CFA21B892C9F00D7174F /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8F1B892C9F00D7174F /* Engine.swift */; };
@@ -80,16 +79,6 @@
 		E5E8B2831BA4CFC0004E9485 /* RenderableTriangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E8B2821BA4CFC0004E9485 /* RenderableTriangle.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		E581CF7E1B892C6900D7174F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E581CF661B892C6900D7174F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E581CF6D1B892C6900D7174F;
-			remoteInfo = Shkadov;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		09C3F4961BA26C410025FFE4 /* RTTI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTTI.swift; sourceTree = "<group>"; };
 		09F6094F1B9C45D3003B4A5B /* RawInputKeyCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInputKeyCode.swift; sourceTree = "<group>"; };
@@ -115,9 +104,6 @@
 		E581CF6E1B892C6900D7174F /* Shkadov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shkadov.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E581CF731B892C6900D7174F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E581CF781B892C6900D7174F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E581CF7D1B892C6900D7174F /* ShkadovTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShkadovTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E581CF811B892C6900D7174F /* ShkadovTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShkadovTests.swift; sourceTree = "<group>"; };
-		E581CF831B892C6900D7174F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E581CF8D1B892C9F00D7174F /* DispatchQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueue.swift; sourceTree = "<group>"; };
 		E581CF8E1B892C9F00D7174F /* DispatchSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchSource.swift; sourceTree = "<group>"; };
 		E581CF8F1B892C9F00D7174F /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
@@ -178,13 +164,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E581CF7A1B892C6900D7174F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -214,7 +193,6 @@
 			isa = PBXGroup;
 			children = (
 				E581CF701B892C6900D7174F /* Shkadov */,
-				E581CF801B892C6900D7174F /* ShkadovTests */,
 				E581CF6F1B892C6900D7174F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -223,7 +201,6 @@
 			isa = PBXGroup;
 			children = (
 				E581CF6E1B892C6900D7174F /* Shkadov.app */,
-				E581CF7D1B892C6900D7174F /* ShkadovTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -240,15 +217,6 @@
 				E581CF781B892C6900D7174F /* Info.plist */,
 			);
 			path = Shkadov;
-			sourceTree = "<group>";
-		};
-		E581CF801B892C6900D7174F /* ShkadovTests */ = {
-			isa = PBXGroup;
-			children = (
-				E581CF811B892C6900D7174F /* ShkadovTests.swift */,
-				E581CF831B892C6900D7174F /* Info.plist */,
-			);
-			path = ShkadovTests;
 			sourceTree = "<group>";
 		};
 		E581CFB41B89361100D7174F /* Engine */ = {
@@ -363,24 +331,6 @@
 			productReference = E581CF6E1B892C6900D7174F /* Shkadov.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E581CF7C1B892C6900D7174F /* ShkadovTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E581CF891B892C6900D7174F /* Build configuration list for PBXNativeTarget "ShkadovTests" */;
-			buildPhases = (
-				E581CF791B892C6900D7174F /* Sources */,
-				E581CF7A1B892C6900D7174F /* Frameworks */,
-				E581CF7B1B892C6900D7174F /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E581CF7F1B892C6900D7174F /* PBXTargetDependency */,
-			);
-			name = ShkadovTests;
-			productName = ShkadovTests;
-			productReference = E581CF7D1B892C6900D7174F /* ShkadovTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -393,10 +343,6 @@
 				TargetAttributes = {
 					E581CF6D1B892C6900D7174F = {
 						CreatedOnToolsVersion = 7.0;
-					};
-					E581CF7C1B892C6900D7174F = {
-						CreatedOnToolsVersion = 7.0;
-						TestTargetID = E581CF6D1B892C6900D7174F;
 					};
 				};
 			};
@@ -414,7 +360,6 @@
 			projectRoot = "";
 			targets = (
 				E581CF6D1B892C6900D7174F /* Shkadov */,
-				E581CF7C1B892C6900D7174F /* ShkadovTests */,
 			);
 		};
 /* End PBXProject section */
@@ -426,13 +371,6 @@
 			files = (
 				E5AC4E2B1BA5C5E500134995 /* Assets in Resources */,
 				E581CF741B892C6900D7174F /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E581CF7B1B892C6900D7174F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -514,23 +452,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E581CF791B892C6900D7174F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E581CF821B892C6900D7174F /* ShkadovTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		E581CF7F1B892C6900D7174F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E581CF6D1B892C6900D7174F /* Shkadov */;
-			targetProxy = E581CF7E1B892C6900D7174F /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		E581CF841B892C6900D7174F /* Debug */ = {
@@ -645,32 +567,6 @@
 			};
 			name = Release;
 		};
-		E581CF8A1B892C6900D7174F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = ShkadovTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = franticapparatus.net.ShkadovTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shkadov.app/Contents/MacOS/Shkadov";
-			};
-			name = Debug;
-		};
-		E581CF8B1B892C6900D7174F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = ShkadovTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = franticapparatus.net.ShkadovTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shkadov.app/Contents/MacOS/Shkadov";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -688,15 +584,6 @@
 			buildConfigurations = (
 				E581CF871B892C6900D7174F /* Debug */,
 				E581CF881B892C6900D7174F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E581CF891B892C6900D7174F /* Build configuration list for PBXNativeTarget "ShkadovTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E581CF8A1B892C6900D7174F /* Debug */,
-				E581CF8B1B892C6900D7174F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

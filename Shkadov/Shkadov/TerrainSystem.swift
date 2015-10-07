@@ -22,8 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
 public class TerrainSystem {
     private let renderer: Renderer
     private let assetLoader: AssetLoader
@@ -63,7 +61,7 @@ public class TerrainSystem {
         uniformBuffer = renderer.createBufferWithName("Terrain Uniforms", length: uniformSize)
 
         floor = entityComponents.createEntity()
-        entityComponents.addComponent(OrientationComponent(position: float3(0.0, -4.0, 0.0)), toEntity: floor)
+        entityComponents.addComponent(OrientationComponent(position: Point3D(0.0, -4.0, 0.0)), toEntity: floor)
         entityComponents.addComponent(RenderComponent(uniformBuffer: uniformBuffer, uniformOffset: 0, diffuseColor: Color.tan), toEntity: floor)
     }
     

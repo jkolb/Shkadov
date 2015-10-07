@@ -22,83 +22,81 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import simd
-
 public struct OrientationComponent : Component {
     public static let kind = Kind(dataType: OrientationComponent.self)
-    public let position: float3
+    public let position: Point3D
     public let pitch: Angle // Up/Down
     public let yaw: Angle // Right/Left
     
     public init(
-        position: float3 = float3(0.0),
-        pitch: Angle = Angle.zero,
-        yaw: Angle = Angle.zero
+        position: Point3D = Point3D(),
+        pitch: Angle = Angle(),
+        yaw: Angle = Angle()
     ) {
         self.position = position
         self.pitch = pitch
         self.yaw = yaw
     }
     
-    public var lookAtMatrix: float4x4 {
+    public var lookAtMatrix: Matrix4x4 {
         let a = angleMatrix()
-        let f = normalize(a * float3(0.0, 0.0, 1.0))
-        let s = normalize(a * float3(1.0, 0.0, 0.0))
+        let f = normalize(a * Vector3D(0.0, 0.0, 1.0))
+        let s = normalize(a * Vector3D(1.0, 0.0, 0.0))
         let u = normalize(cross(f, s))
         let p = position
         
-        let columnR0 = float4(s.x, u.x, -f.x, 0.0)
-        let columnR1 = float4(s.y, u.y, -f.y, 0.0)
-        let columnR2 = float4(s.z, u.z, -f.z, 0.0)
-        let columnR3 = float4(0.0, 0.0, 0.0, 1.0)
+        let columnR0 = Vector4D(s.x, u.x, -f.x, 0.0)
+        let columnR1 = Vector4D(s.y, u.y, -f.y, 0.0)
+        let columnR2 = Vector4D(s.z, u.z, -f.z, 0.0)
+        let columnR3 = Vector4D(0.0, 0.0, 0.0, 1.0)
         
-        let rotation = float4x4([columnR0, columnR1, columnR2, columnR3])
+        let rotation = Matrix4x4([columnR0, columnR1, columnR2, columnR3])
         
-        let columnT0 = float4(1.0, 0.0, 0.0, 0.0)
-        let columnT1 = float4(0.0, 1.0, 0.0, 0.0)
-        let columnT2 = float4(0.0, 0.0, 1.0, 0.0)
-        let columnT3 = float4(-p.x, -p.y, -p.z, 1.0)
+        let columnT0 = Vector4D(1.0, 0.0, 0.0, 0.0)
+        let columnT1 = Vector4D(0.0, 1.0, 0.0, 0.0)
+        let columnT2 = Vector4D(0.0, 0.0, 1.0, 0.0)
+        let columnT3 = Vector4D(-p.x, -p.y, -p.z, 1.0)
         
-        let translation = float4x4([columnT0, columnT1, columnT2, columnT3])
+        let translation = Matrix4x4([columnT0, columnT1, columnT2, columnT3])
         
         return rotation * translation
     }
     
-    public var orientationMatrix: float4x4 {
+    public var orientationMatrix: Matrix4x4 {
         let a = angleMatrix()
-        let f = normalize(a * float3(0.0, 0.0, 1.0))
-        let s = normalize(a * float3(1.0, 0.0, 0.0))
+        let f = normalize(a * Vector3D(0.0, 0.0, 1.0))
+        let s = normalize(a * Vector3D(1.0, 0.0, 0.0))
         let u = normalize(cross(f, s))
         let p = position
         
-        let column0 = float4(s.x, u.x, -f.x, 0.0)
-        let column1 = float4(s.y, u.y, -f.y, 0.0)
-        let column2 = float4(s.z, u.z, -f.z, 0.0)
-        let column3 = float4(p.x, p.y, p.z, 1.0)
+        let column0 = Vector4D(s.x, u.x, -f.x, 0.0)
+        let column1 = Vector4D(s.y, u.y, -f.y, 0.0)
+        let column2 = Vector4D(s.z, u.z, -f.z, 0.0)
+        let column3 = Vector4D(p.x, p.y, p.z, 1.0)
         
-        return float4x4([column0, column1, column2, column3])
+        return Matrix4x4([column0, column1, column2, column3])
     }
     
-    public func angleMatrix() -> float3x3 {
-        let yawMatrix = float3x3(angle: yaw, axis: float3(0.0, 1.0, 0.0))
-        let pitchMatrix = float3x3(angle: pitch, axis: yawMatrix * float3(1.0, 0.0, 0.0))
+    public func angleMatrix() -> Matrix3x3 {
+        let yawMatrix = Matrix3x3(angle: yaw, axis: Vector3D(0.0, 1.0, 0.0))
+        let pitchMatrix = Matrix3x3(angle: pitch, axis: yawMatrix * Vector3D(1.0, 0.0, 0.0))
         let a = pitchMatrix * yawMatrix
         return a
     }
     
     public func moveForwardByAmount(amount: Float) -> OrientationComponent {
-        let yawMatrix = float3x3(angle: yaw, axis: float3(0.0, 1.0, 0.0))
-        let forward = normalize(yawMatrix * float3(0.0, 0.0, 1.0))
+        let yawMatrix = Matrix3x3(angle: yaw, axis: Vector3D(0.0, 1.0, 0.0))
+        let forward = normalize(yawMatrix * Vector3D(0.0, 0.0, 1.0))
         return OrientationComponent(position: position + forward * amount, pitch: pitch, yaw: yaw)
     }
     
     public func moveRightByAmount(amount: Float) -> OrientationComponent {
-        let yawMatrix = float3x3(angle: yaw, axis: float3(0.0, 1.0, 0.0))
-        let right = normalize(yawMatrix * float3(1.0, 0.0, 0.0))
+        let yawMatrix = Matrix3x3(angle: yaw, axis: Vector3D(0.0, 1.0, 0.0))
+        let right = normalize(yawMatrix * Vector3D(1.0, 0.0, 0.0))
         return OrientationComponent(position: position + right * amount, pitch: pitch, yaw: yaw)
     }
     
     public func moveUpByAmount(amount: Float) -> OrientationComponent {
-        return OrientationComponent(position: position + float3(0.0, 1.0, 0.0) * amount, pitch: pitch, yaw: yaw)
+        return OrientationComponent(position: position + Vector3D(0.0, 1.0, 0.0) * amount, pitch: pitch, yaw: yaw)
     }
 }
