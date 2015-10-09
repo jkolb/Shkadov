@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class MovementInputContext : InputContext {
+public final class MovementInputContext : InputContext {
     private var keyDown: Set<RawInputKeyCode>
     private var buttonDown: Set<RawInputButtonCode>
     public private(set) var mousePosition: Point2D

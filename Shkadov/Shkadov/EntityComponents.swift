@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class EntityComponents {
+public final class EntityComponents {
     private let entityFactory = EntityFactory()
     private var componentsByEntityAndKind: [Entity: [Kind : Component]] = [:]
     private var entitiesByKind: [Kind : [Entity]] = [:]
@@ -80,9 +80,9 @@ public class EntityComponents {
         componentsByEntityAndKind[entity] = componentsByKind
     }
     
-    public func componentForEntity<ComponentType: Component>(entity: Entity, withComponentType componentType: ComponentType.Type) -> ComponentType? {
-        guard let componentsByKind = componentsByEntityAndKind[entity] else { return nil }
+    public func componentForEntity<ComponentType: Component>(entity: Entity, withComponentType componentType: ComponentType.Type) -> ComponentType {
+        let componentsByKind = componentsByEntityAndKind[entity]!
         let kind = ComponentType.kind
-        return componentsByKind[kind] as? ComponentType
+        return componentsByKind[kind] as! ComponentType
     }
 }

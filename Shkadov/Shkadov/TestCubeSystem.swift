@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class TestCubeSystem {
+public final class TestCubeSystem {
     private let renderer: Renderer
     private let assetLoader: AssetLoader
     private let entityComponents: EntityComponents
@@ -91,7 +91,7 @@ public class TestCubeSystem {
         let updateAmount: Float = 0.01
         
         for cube in cubes {
-            let oldOrientation = entityComponents.componentForEntity(cube, withComponentType: OrientationComponent.self)!
+            let oldOrientation = entityComponents.componentForEntity(cube, withComponentType: OrientationComponent.self)
             let newOrientation = OrientationComponent(
                 position: oldOrientation.position,
                 pitch: oldOrientation.pitch + Angle(radians: updateAmount),
@@ -106,7 +106,7 @@ public class TestCubeSystem {
         var objects = [RenderComponent]()
         
         for cube in cubes {
-            let renderObject = entityComponents.componentForEntity(cube, withComponentType: RenderComponent.self)!
+            let renderObject = entityComponents.componentForEntity(cube, withComponentType: RenderComponent.self)
             objects.append(renderObject)
         }
         

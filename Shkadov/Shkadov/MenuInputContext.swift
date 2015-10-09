@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class MenuInputContext : InputContext {
+public final class MenuInputContext : InputContext {
     private var keyDown: Set<RawInputKeyCode>
     
     public init() {

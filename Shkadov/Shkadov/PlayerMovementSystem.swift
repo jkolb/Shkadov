@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class PlayerMovementSystem {
+public final class PlayerMovementSystem {
     private let entityComponents: EntityComponents
     
     public init(entityComponents: EntityComponents) {
@@ -31,7 +31,7 @@ public class PlayerMovementSystem {
     
     public func handleEvent(event: EngineEvent) {
         let camera = entityComponents.getEntitiesWithComponentType(ProjectionComponent.self).first!
-        let oldOrientation = entityComponents.componentForEntity(camera, withComponentType: OrientationComponent.self)!
+        let oldOrientation = entityComponents.componentForEntity(camera, withComponentType: OrientationComponent.self)
         var position = oldOrientation.position
         var pitch = oldOrientation.pitch
         var yaw = oldOrientation.yaw

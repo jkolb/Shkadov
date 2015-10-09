@@ -26,7 +26,7 @@ public protocol TimerDelegate : class {
     func timer(timer: Timer, didFireWithTickCount tickCount: Int, tickDuration: Duration)
 }
 
-public class Timer : Synchronizable {
+public final class Timer : Synchronizable {
     private enum State {
         case Initial
         case Running

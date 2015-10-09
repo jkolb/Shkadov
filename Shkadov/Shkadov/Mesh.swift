@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class Mesh3D : SequenceType {
+public final class Mesh3D : SequenceType {
     private var triangles: [RenderableTriangle]
     
     public init() {

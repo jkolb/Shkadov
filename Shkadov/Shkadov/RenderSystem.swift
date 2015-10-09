@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class RenderSystem {
+public final class RenderSystem {
     private let renderer: Renderer
     private let entityComponents: EntityComponents
     private let camera: Entity
@@ -49,38 +49,28 @@ public class RenderSystem {
     }
 
     public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
-        let cameraOrientation = entityComponents.componentForEntity(camera, withComponentType: OrientationComponent.self)!
-        let projection = entityComponents.componentForEntity(camera, withComponentType: ProjectionComponent.self)!
+        let cameraOrientation = entityComponents.componentForEntity(camera, withComponentType: OrientationComponent.self)
+        let projection = entityComponents.componentForEntity(camera, withComponentType: ProjectionComponent.self)
         let viewMatrix = cameraOrientation.lookAtMatrix
         let projectionMatrix = projection.projectionMatrix
         let entities = entityComponents.getEntitiesWithComponentTypes([RenderComponent.self, OrientationComponent.self])
             
         for entity in entities {
-            let oldRender = entityComponents.componentForEntity(entity, withComponentType: RenderComponent.self)!
-            let orientation = entityComponents.componentForEntity(entity, withComponentType: OrientationComponent.self)!
+            let render = entityComponents.componentForEntity(entity, withComponentType: RenderComponent.self)
+            let orientation = entityComponents.componentForEntity(entity, withComponentType: OrientationComponent.self)
             
             let modelViewMatrix = viewMatrix * orientation.orientationMatrix
-            
-            let render = RenderComponent(
-                uniformBuffer: oldRender.uniformBuffer,
-                uniformOffset: oldRender.uniformOffset,
-                diffuseColor: oldRender.diffuseColor,
-                modelViewMatrix: modelViewMatrix,
-                normalMatrix: modelViewMatrix.inverse.transpose.matrix3x3,
-                projectionMatrix: projectionMatrix,
-                modelViewProjectionMatrix: projectionMatrix * modelViewMatrix
-            )
+            let normalMatrix = modelViewMatrix.inverse.transpose.matrix3x3
+            let modelViewProjectionMatrix = projectionMatrix * modelViewMatrix
             
             let bufferContents = UnsafeMutablePointer<UniformIn>(renderer.bufferContents(render.uniformBuffer).advancedBy(render.uniformOffset))
             bufferContents.memory = UniformIn(
                 modelViewMatrix: modelViewMatrix.cmatrix,
                 projectionMatrix: projectionMatrix.cmatrix,
-                modelViewProjectionMatrix: render.modelViewProjectionMatrix.cmatrix,
-                normalMatrix: render.normalMatrix.cmatrix,
+                modelViewProjectionMatrix: modelViewProjectionMatrix.cmatrix,
+                normalMatrix: normalMatrix.cmatrix,
                 diffuseColor: render.diffuseColor.vector
             )
-            
-            entityComponents.replaceComponent(render, forEntity: entity)
         }
     }
 }

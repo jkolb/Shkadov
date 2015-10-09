@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class Vertex3D {
+public struct Vertex3D {
     public let position: Point3D
     public var normal: Vector3D
     public var color: ColorRGBA8

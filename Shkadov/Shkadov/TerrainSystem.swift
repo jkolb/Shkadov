@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class TerrainSystem {
+public final class TerrainSystem {
     private let renderer: Renderer
     private let assetLoader: AssetLoader
     private let entityComponents: EntityComponents
@@ -70,7 +70,7 @@ public class TerrainSystem {
     
     public func render() -> RenderState {
         var objects = [RenderComponent]()
-        let renderObject = entityComponents.componentForEntity(floor, withComponentType: RenderComponent.self)!
+        let renderObject = entityComponents.componentForEntity(floor, withComponentType: RenderComponent.self)
         objects.append(renderObject)
         
         return RenderState(

@@ -27,26 +27,14 @@ public struct RenderComponent : Component {
     public let uniformBuffer: Handle
     public let uniformOffset: Int
     public let diffuseColor: Color
-    public let modelViewMatrix: Matrix4x4
-    public let normalMatrix: Matrix3x3
-    public let projectionMatrix: Matrix4x4
-    public let modelViewProjectionMatrix: Matrix4x4
     
     public init(
         uniformBuffer: Handle,
         uniformOffset: Int,
-        diffuseColor: Color,
-        modelViewMatrix: Matrix4x4 = Matrix4x4(1.0),
-        normalMatrix: Matrix3x3 = Matrix3x3(1.0),
-        projectionMatrix: Matrix4x4 = Matrix4x4(1.0),
-        modelViewProjectionMatrix: Matrix4x4 = Matrix4x4(1.0)
+        diffuseColor: Color
     ) {
         self.uniformBuffer = uniformBuffer
         self.uniformOffset = uniformOffset
         self.diffuseColor = diffuseColor
-        self.modelViewMatrix = modelViewMatrix
-        self.normalMatrix = normalMatrix
-        self.projectionMatrix = projectionMatrix
-        self.modelViewProjectionMatrix = modelViewProjectionMatrix
     }
 }
