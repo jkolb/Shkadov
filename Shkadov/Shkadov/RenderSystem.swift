@@ -51,7 +51,7 @@ public final class RenderSystem {
     public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
         let cameraOrientation = entityComponents.componentForEntity(camera, withComponentType: OrientationComponent.self)
         let projection = entityComponents.componentForEntity(camera, withComponentType: ProjectionComponent.self)
-        let viewMatrix = cameraOrientation.lookAtMatrix
+        let viewMatrix = cameraOrientation.inverseTransform
         let projectionMatrix = projection.projectionMatrix
         let entities = entityComponents.getEntitiesWithComponentTypes([RenderComponent.self, OrientationComponent.self])
             
@@ -59,7 +59,7 @@ public final class RenderSystem {
             let render = entityComponents.componentForEntity(entity, withComponentType: RenderComponent.self)
             let orientation = entityComponents.componentForEntity(entity, withComponentType: OrientationComponent.self)
             
-            let modelViewMatrix = viewMatrix * orientation.orientationMatrix
+            let modelViewMatrix = viewMatrix * orientation.transform
             let normalMatrix = modelViewMatrix.inverse.transpose.matrix3x3
             let modelViewProjectionMatrix = projectionMatrix * modelViewMatrix
             

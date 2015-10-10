@@ -29,7 +29,7 @@
 using namespace metal;
 
 struct LightInfo {
-    float4 position; // Light position in eye coordinates
+    float3 position; // Light position in eye coordinates
     float3 intensity; // Light intensity
 };
 
@@ -49,22 +49,22 @@ struct VertexIn {
 struct VertexOut {
     float4 position [[position]];
     float4 color;
-    float4 eyeCoords;
+    float3 eyeCoords;
     float3 tnorm;
 };
 
 struct TextureVertexOut {
     float4 position [[position]];
-    float4 eyePosition;
+    float3 eyePosition;
     float3 normal;
     float2 texCoord;
 };
 
-float3 calculateLight(float4 eyeCoords, float3 tnorm, LightInfo light, MaterialInfo material);
+float3 calculateLight(float3 eyeCoords, float3 tnorm, LightInfo light, MaterialInfo material);
 
-float3 calculateLight(float4 eyeCoords, float3 tnorm, LightInfo light, MaterialInfo material) {
-    float3 s = normalize((light.position - eyeCoords).xyz);
-    float3 v = normalize(-eyeCoords.xyz);
+float3 calculateLight(float3 eyeCoords, float3 tnorm, LightInfo light, MaterialInfo material) {
+    float3 s = normalize((light.position - eyeCoords));
+    float3 v = normalize(-eyeCoords);
     float3 r = reflect(-s, tnorm);
     float3 ambient = material.Ka;
     float sDotN = max(dot(s, tnorm), 0.0);
@@ -82,7 +82,7 @@ vertex VertexOut passThroughVertex(uint vid [[vertex_id]], constant VertexIn* in
     
     outVertex.position = inUniform.modelViewProjectionMatrix * vertexPosition;
     outVertex.color = inUniform.diffuseColor;
-    outVertex.eyeCoords = inUniform.modelViewMatrix * vertexPosition;
+    outVertex.eyeCoords = (inUniform.modelViewMatrix * vertexPosition).xyz;
     outVertex.tnorm = normalize(inUniform.normalMatrix * vertexNormal);
     
     return outVertex;
@@ -90,7 +90,7 @@ vertex VertexOut passThroughVertex(uint vid [[vertex_id]], constant VertexIn* in
 
 fragment half4 passThroughFragment(VertexOut inFrag [[stage_in]]) {
     LightInfo light = {
-        float4(0.0, 10.0, 0.0, 1.0),
+        float3(0.0, 10.0, 0.0),
         float3(1.0, 1.0, 1.0)
     };
     MaterialInfo material = {
@@ -111,7 +111,7 @@ vertex TextureVertexOut textureVertex(uint vid [[vertex_id]], constant VertexIn*
     TextureVertexOut outVertex;
     
     outVertex.position = inUniform.modelViewProjectionMatrix * vertexPosition;
-    outVertex.eyePosition = inUniform.modelViewMatrix * vertexPosition;
+    outVertex.eyePosition = (inUniform.modelViewMatrix * vertexPosition).xyz;
     outVertex.normal = normalize(inUniform.normalMatrix * vertexNormal);
     outVertex.texCoord = float2(inVertex[vid].texCoord);
     
@@ -120,7 +120,7 @@ vertex TextureVertexOut textureVertex(uint vid [[vertex_id]], constant VertexIn*
 
 fragment float4 textureFragment(TextureVertexOut inFrag [[stage_in]], texture2d<float> diffuseTexture [[texture(0)]], sampler samplr [[sampler(0)]]) {
     LightInfo light = {
-        float4(0.0, 10.0, 0.0, 1.0),
+        float3(0.0, 10.0, 0.0),
         float3(1.0, 1.0, 1.0)
     };
     MaterialInfo material = {

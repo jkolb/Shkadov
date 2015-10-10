@@ -28,10 +28,16 @@ public typealias Vector2D = float2
 public typealias Vector3D = float3
 public typealias Vector4D = float4
 
-extension Vector2D {
+public extension Vector2D {
     public var angle: Angle {
         return Angle(radians: atan2(y, x))
     }
+}
+
+public extension Vector3D {
+    public static var xAxis = Vector3D(1.0, 0.0, 0.0)
+    public static var yAxis = Vector3D(0.0, 1.0, 0.0)
+    public static var zAxis = Vector3D(0.0, 0.0, 1.0)
 }
 
 public extension Vector4D {
