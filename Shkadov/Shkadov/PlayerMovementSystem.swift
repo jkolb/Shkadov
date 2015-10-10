@@ -52,35 +52,39 @@ public final class PlayerMovementSystem {
 //            print("pitch: \(orientation.pitch.degrees), yaw: \(orientation.yaw.degrees)")
             
         case .Move(let direction):
-            var updatedOrientation = oldOrientation
+            let yawMatrix = Matrix3x3(angle: yaw, axis: Vector3D.yAxis)
+            let forward = yawMatrix * Vector3D.zAxis
+            let sideways = yawMatrix * Vector3D.xAxis
+            var vector = Vector3D()
             
             if direction.x == .Right {
-                updatedOrientation = updatedOrientation.moveRightByAmount(0.1)
+                vector += sideways * 0.1
             }
             else if direction.x == .Left {
-                updatedOrientation = updatedOrientation.moveRightByAmount(-0.1)
+                vector += sideways * -0.1
             }
             
             if direction.y == .Up {
-                updatedOrientation = updatedOrientation.moveUpByAmount(0.1)
+                vector += Vector3D.yAxis * 0.1
             }
             else if direction.y == .Down {
-                updatedOrientation = updatedOrientation.moveUpByAmount(-0.1)
+                vector += Vector3D.yAxis * -0.1
             }
             
             if direction.z == .Forward {
-                updatedOrientation = updatedOrientation.moveForwardByAmount(0.1)
+                vector += forward * 0.1
             }
             else if direction.z == .Backward {
-                updatedOrientation = updatedOrientation.moveForwardByAmount(-0.1)
+                vector += forward * -0.1
             }
             
-            position = updatedOrientation.position
+            position = position + vector
             
         case .ResetCamera:
             position = Point3D(0.0, 0.0, -4.0)
             pitch = Angle()
             yaw = Angle()
+            
         case .ExitInputContext:
             fatalError("Handle this in Engine")
         }

@@ -73,20 +73,4 @@ public struct OrientationComponent : Component {
         let pitchMatrix = Matrix3x3(angle: pitch, axis: Vector3D.xAxis)
         return pitchMatrix * yawMatrix
     }
-    
-    public func moveForwardByAmount(amount: Float) -> OrientationComponent {
-        let yawMatrix = Matrix3x3(angle: yaw, axis: Vector3D.yAxis)
-        let forward = yawMatrix * Vector3D.zAxis
-        return OrientationComponent(position: position + forward * amount, pitch: pitch, yaw: yaw)
-    }
-    
-    public func moveRightByAmount(amount: Float) -> OrientationComponent {
-        let yawMatrix = Matrix3x3(angle: yaw, axis: Vector3D.yAxis)
-        let sideways = yawMatrix * Vector3D.xAxis
-        return OrientationComponent(position: position + sideways * amount, pitch: pitch, yaw: yaw)
-    }
-    
-    public func moveUpByAmount(amount: Float) -> OrientationComponent {
-        return OrientationComponent(position: position + Vector3D.yAxis * amount, pitch: pitch, yaw: yaw)
-    }
 }
