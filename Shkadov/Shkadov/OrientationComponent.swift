@@ -25,24 +25,26 @@ SOFTWARE.
 public struct OrientationComponent : Component {
     public static let kind = Kind(dataType: OrientationComponent.self)
     public let position: Point3D
-    public let pitch: Angle // Up/Down
-    public let yaw: Angle // Right/Left
+    public let scale: Vector3D
+    public let eulerAngles: Angle3D
     
     public init(
         position: Point3D = Point3D(),
-        pitch: Angle = Angle(),
-        yaw: Angle = Angle()
+        scale: Vector3D = Vector3D(1.0),
+        eulerAngles: Angle3D = Angle3D()
     ) {
         self.position = position
-        self.pitch = pitch
-        self.yaw = yaw
+        self.scale = scale
+        self.eulerAngles = eulerAngles
     }
     
     public var inverseTransform: Matrix4x4 {
+        let rotation = eulerAngles.rotation
         let f = normalize(rotation * Vector3D.zAxis)
         let s = normalize(rotation * Vector3D.xAxis)
         let u = normalize(cross(f, s))
-        let r = Matrix3x3([s, u, -f])
+        let x = Matrix3x3(diagonal: scale)
+        let r = Matrix3x3([s, u, -f]) * x
         let t = r * -Vector3D(position.x, position.y, position.z)
         
         let column0 = Vector4D(r[0], 0.0)
@@ -54,10 +56,12 @@ public struct OrientationComponent : Component {
     }
     
     public var transform: Matrix4x4 {
+        let rotation = eulerAngles.rotation
         let f = normalize(rotation * Vector3D.zAxis)
         let s = normalize(rotation * Vector3D.xAxis)
         let u = normalize(cross(f, s))
-        let r = Matrix3x3([s, u, -f]).transpose
+        let x = Matrix3x3(diagonal: scale)
+        let r = Matrix3x3([s, u, -f]).transpose * x
         let t = Vector3D(position.x, position.y, position.z)
         
         let column0 = Vector4D(r[0], 0.0)
@@ -66,11 +70,5 @@ public struct OrientationComponent : Component {
         let column3 = Vector4D(t, 1.0)
         
         return Matrix4x4([column0, column1, column2, column3])
-    }
-    
-    public var rotation: Matrix3x3 {
-        let yawMatrix = Matrix3x3(angle: yaw, axis: Vector3D.yAxis)
-        let pitchMatrix = Matrix3x3(angle: pitch, axis: Vector3D.xAxis)
-        return pitchMatrix * yawMatrix
     }
 }

@@ -111,6 +111,25 @@ public func -=(inout a: Angle, b: Angle) {
     a.radians = a.radians - b.radians
 }
 
+public struct Angle3D {
+    let roll: Angle
+    let pitch: Angle
+    let yaw: Angle
+    
+    public init(roll: Angle = Angle(), pitch: Angle = Angle(), yaw: Angle = Angle()) {
+        self.roll = roll
+        self.pitch = pitch
+        self.yaw = yaw
+    }
+    
+    public var rotation: Matrix3x3 {
+        let yawMatrix = Matrix3x3(angle: yaw, axis: Vector3D.yAxis)
+        let pitchMatrix = Matrix3x3(angle: pitch, axis: Vector3D.xAxis)
+        let rollMatrix = Matrix3x3(angle: roll, axis: Vector3D.zAxis)
+        return rollMatrix * pitchMatrix * yawMatrix
+    }
+}
+
 public struct Point2D {
     public let x: GeometryType
     public let y: GeometryType
