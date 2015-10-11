@@ -33,7 +33,6 @@ public final class PlayerMovementSystem {
         let camera = entityComponents.getEntitiesWithComponentType(ProjectionComponent.self).first!
         let oldOrientation = entityComponents.componentForEntity(camera, withComponentType: OrientationComponent.self)
         var position = oldOrientation.position
-        let scale = oldOrientation.scale
         var pitch = oldOrientation.eulerAngles.pitch
         var yaw = oldOrientation.eulerAngles.yaw
         
@@ -92,7 +91,6 @@ public final class PlayerMovementSystem {
         
         let newOrientation = OrientationComponent(
             position: position,
-            scale: scale,
             eulerAngles: Angle3D(roll: Angle(), pitch: pitch, yaw: yaw)
         )
         

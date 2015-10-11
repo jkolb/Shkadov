@@ -219,6 +219,10 @@ public struct Point3D {
         self.y = y
         self.z = z
     }
+    
+    public var vector: Vector3D {
+        return Vector3D(x, y, z)
+    }
 }
 
 public func +(a: Point3D, b: Vector3D) -> Point3D {

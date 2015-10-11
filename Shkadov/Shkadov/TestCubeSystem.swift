@@ -46,12 +46,11 @@ public final class TestCubeSystem {
         var vertexDescriptor = VertexDescriptor()
         vertexDescriptor.addAttribute(.Position, format: .Float3)
         vertexDescriptor.addAttribute(.Normal, format: .Float3)
-        vertexDescriptor.addAttribute(.TexCoord, format: .Float2)
 
         let mesh = Mesh3D.cubeWithSize(1.0)
         let meshData = mesh.createBufferForVertexDescriptor(vertexDescriptor)
         
-        program = renderer.createProgramWithVertexPath("passThroughVertex", fragmentPath: "passThroughFragment")
+        program = renderer.createProgramWithVertexPath("basicVertex", fragmentPath: "basicFragment")
         vertexArray = renderer.createVertexArrayFromDescriptor(vertexDescriptor, buffer: meshData)
         
         let positions = [
@@ -80,7 +79,7 @@ public final class TestCubeSystem {
         
         for index in 0..<positions.count {
             let cube = entityComponents.createEntity()
-            entityComponents.addComponent(OrientationComponent(position: positions[index], scale: Vector3D(1.0, 0.5, 0.25)), toEntity: cube)
+            entityComponents.addComponent(OrientationComponent(position: positions[index]), toEntity: cube)
             entityComponents.addComponent(RenderComponent(uniformBuffer: uniformBuffer, uniformOffset: uniformOffset, diffuseColor: colors[index]), toEntity: cube)
             uniformOffset += uniformSize
             cubes.append(cube)
@@ -94,7 +93,6 @@ public final class TestCubeSystem {
             let oldOrientation = entityComponents.componentForEntity(cube, withComponentType: OrientationComponent.self)
             let newOrientation = OrientationComponent(
                 position: oldOrientation.position,
-                scale: oldOrientation.scale,
                 eulerAngles: Angle3D(roll: Angle(), pitch: oldOrientation.eulerAngles.pitch + Angle(radians: updateAmount), yaw: oldOrientation.eulerAngles.yaw + Angle(radians: updateAmount))
             )
             

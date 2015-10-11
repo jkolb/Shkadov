@@ -60,7 +60,7 @@ public final class RenderSystem {
             let orientation = entityComponents.componentForEntity(entity, withComponentType: OrientationComponent.self)
             
             let modelViewMatrix = viewMatrix * orientation.transform
-            let normalMatrix = modelViewMatrix.inverse.transpose.matrix3x3
+            let normalMatrix = modelViewMatrix.matrix3x3
             let modelViewProjectionMatrix = projectionMatrix * modelViewMatrix
             
             let bufferContents = UnsafeMutablePointer<UniformIn>(renderer.bufferContents(render.uniformBuffer).advancedBy(render.uniformOffset))

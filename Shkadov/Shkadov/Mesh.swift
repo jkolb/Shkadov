@@ -174,7 +174,7 @@ public final class Mesh3D : SequenceType {
                     case .TexCoord:
                         buffer.putNextValue(vertex.texCoord)
                     case .Color:
-                        buffer.putNextValue(vertex.color)
+                        buffer.putNextValue(Color(rgba8: vertex.color))
                     }
                 }
             }

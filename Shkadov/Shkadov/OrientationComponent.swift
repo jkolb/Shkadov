@@ -25,16 +25,13 @@ SOFTWARE.
 public struct OrientationComponent : Component {
     public static let kind = Kind(dataType: OrientationComponent.self)
     public let position: Point3D
-    public let scale: Vector3D
     public let eulerAngles: Angle3D
     
     public init(
         position: Point3D = Point3D(),
-        scale: Vector3D = Vector3D(1.0),
         eulerAngles: Angle3D = Angle3D()
     ) {
         self.position = position
-        self.scale = scale
         self.eulerAngles = eulerAngles
     }
     
@@ -43,8 +40,7 @@ public struct OrientationComponent : Component {
         let f = normalize(rotation * Vector3D.zAxis)
         let s = normalize(rotation * Vector3D.xAxis)
         let u = normalize(cross(f, s))
-        let x = Matrix3x3(diagonal: scale)
-        let r = Matrix3x3([s, u, -f]) * x
+        let r = Matrix3x3([s, u, -f])
         let t = r * -Vector3D(position.x, position.y, position.z)
         
         let column0 = Vector4D(r[0], 0.0)
@@ -60,8 +56,7 @@ public struct OrientationComponent : Component {
         let f = normalize(rotation * Vector3D.zAxis)
         let s = normalize(rotation * Vector3D.xAxis)
         let u = normalize(cross(f, s))
-        let x = Matrix3x3(diagonal: scale)
-        let r = Matrix3x3([s, u, -f]).transpose * x
+        let r = Matrix3x3([s, u, -f]).transpose
         let t = Vector3D(position.x, position.y, position.z)
         
         let column0 = Vector4D(r[0], 0.0)

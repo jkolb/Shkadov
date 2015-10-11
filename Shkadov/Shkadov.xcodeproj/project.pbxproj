@@ -51,6 +51,7 @@
 		E59C5F131B9E7DF4003422FB /* PlatformOSX+Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F121B9E7DF4003422FB /* PlatformOSX+Platform.swift */; };
 		E59C5F151B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F141B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift */; };
 		E59C5F171B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59C5F161B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift */; };
+		E5A7EDA01BCAD915009AEEE2 /* TestIcosahedronSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A7ED9F1BCAD915009AEEE2 /* TestIcosahedronSystem.swift */; settings = {ASSET_TAGS = (); }; };
 		E5AC4E291BA5B13A00134995 /* TerrainSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AC4E281BA5B13A00134995 /* TerrainSystem.swift */; };
 		E5AC4E2B1BA5C5E500134995 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = E5AC4E2A1BA5C5E500134995 /* Assets */; };
 		E5AC4E2D1BA5C6A200134995 /* AssetLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AC4E2C1BA5C6A200134995 /* AssetLoader.swift */; };
@@ -126,6 +127,7 @@
 		E59C5F121B9E7DF4003422FB /* PlatformOSX+Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+Platform.swift"; sourceTree = "<group>"; };
 		E59C5F141B9E7F0C003422FB /* PlatformOSX+CoordinateSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+CoordinateSystem.swift"; sourceTree = "<group>"; };
 		E59C5F161B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlatformOSX+NSUserDefaults.swift"; sourceTree = "<group>"; };
+		E5A7ED9F1BCAD915009AEEE2 /* TestIcosahedronSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestIcosahedronSystem.swift; sourceTree = "<group>"; };
 		E5AC4E281BA5B13A00134995 /* TerrainSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TerrainSystem.swift; sourceTree = "<group>"; };
 		E5AC4E2A1BA5C5E500134995 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		E5AC4E2C1BA5C6A200134995 /* AssetLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetLoader.swift; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 				E5E8B2401BA460A1004E9485 /* VertexAttributeFormat.swift */,
 				E5CA68151B9FDF40002B065E /* VertexDescriptor.swift */,
 				E5D4643F1BBF2E59009B4D5D /* Shkadov-Bridging-Header.h */,
+				E5A7ED9F1BCAD915009AEEE2 /* TestIcosahedronSystem.swift */,
 			);
 			name = Engine;
 			sourceTree = "<group>";
@@ -414,6 +417,7 @@
 				E535C8D51B93586B0048321F /* Kind.swift in Sources */,
 				E5D464461BBF3447009B4D5D /* Shaders.metal in Sources */,
 				09F6095D1B9C565B003B4A5B /* Item.swift in Sources */,
+				E5A7EDA01BCAD915009AEEE2 /* TestIcosahedronSystem.swift in Sources */,
 				E535C8BD1B9155C70048321F /* Entity.swift in Sources */,
 				E5E8B2411BA460A1004E9485 /* VertexAttributeFormat.swift in Sources */,
 				E59C5F0D1B9E7C63003422FB /* PlatformOSX+NSWindowDelegate.swift in Sources */,

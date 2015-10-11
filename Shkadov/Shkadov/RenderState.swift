@@ -28,12 +28,27 @@ public struct RenderState {
     public let uniformBuffer: Handle
     public let texture: Handle
     public let objects: [RenderComponent]
+    public let cullMode: RenderCullMode
+    public let winding: RenderWinding
     
-    public init(program: Handle, vertexArray: Handle, uniformBuffer: Handle, texture: Handle, objects: [RenderComponent]) {
+    public init(program: Handle, vertexArray: Handle, uniformBuffer: Handle, texture: Handle, objects: [RenderComponent], cullMode: RenderCullMode = .Back, winding: RenderWinding = .CounterClockwise) {
         self.program = program
         self.vertexArray = vertexArray
         self.uniformBuffer = uniformBuffer
         self.texture = texture
         self.objects = objects
+        self.cullMode = cullMode
+        self.winding = winding
     }
+}
+
+public enum RenderCullMode : UInt8 {
+    case None
+    case Front
+    case Back
+}
+
+public enum RenderWinding : UInt8 {
+    case Clockwise
+    case CounterClockwise
 }

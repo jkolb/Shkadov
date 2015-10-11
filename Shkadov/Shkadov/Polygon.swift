@@ -52,6 +52,15 @@ public struct Triangle3D {
     public func polygon() -> Polygon3D {
         return Polygon3D(points: [a, b, c])
     }
+    
+    public func normal() -> Vector3D {
+        let v0 = a.vector
+        let v1 = b.vector
+        let v2 = c.vector
+        let u = v1 - v0
+        let v = v2 - v0
+        return normalize(cross(u, v))
+    }
 }
 
 public struct Quad2D {

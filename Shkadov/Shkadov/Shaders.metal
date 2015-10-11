@@ -23,6 +23,7 @@
  */
 
 #include <metal_stdlib>
+#include <metal_pack>
 #include <simd/simd.h>
 #include "ShaderUniform.h"
 
@@ -40,10 +41,21 @@ struct MaterialInfo {
     float Shininess; // Specular shininess factor
 };
 
-struct VertexIn {
+struct BasicVertexIn {
+    packed_float3 position;
+    packed_float3 normal;
+};
+
+struct TextureVertexIn {
     packed_float3 position;
     packed_float3 normal;
     packed_float2 texCoord;
+};
+
+struct ColorVertexIn {
+    packed_float3 position;
+    packed_float3 normal;
+    packed_float4 color;
 };
 
 struct VertexOut {
@@ -74,7 +86,38 @@ float3 calculateLight(float3 eyeCoords, float3 tnorm, LightInfo light, MaterialI
     return light.intensity * (ambient + diffuse + spec);
 }
 
-vertex VertexOut passThroughVertex(uint vid [[vertex_id]], constant VertexIn* inVertex [[buffer(0)]], constant UniformIn& inUniform [[buffer(1)]]) {
+vertex VertexOut colorVertex(uint vid [[vertex_id]], constant ColorVertexIn* inVertex [[buffer(0)]], constant UniformIn& inUniform [[buffer(1)]]) {
+    float4 vertexPosition = float4(float3(inVertex[vid].position), 1.0);
+    float3 vertexNormal = float3(inVertex[vid].normal);
+    float4 vertexColor = float4(inVertex[vid].color);
+    
+    VertexOut outVertex;
+    
+    outVertex.position = inUniform.modelViewProjectionMatrix * vertexPosition;
+    outVertex.color = inUniform.diffuseColor * vertexColor;
+    outVertex.eyeCoords = (inUniform.modelViewMatrix * vertexPosition).xyz;
+    outVertex.tnorm = normalize(inUniform.normalMatrix * vertexNormal);
+    
+    return outVertex;
+};
+
+fragment half4 colorFragment(VertexOut inFrag [[stage_in]]) {
+    LightInfo light = {
+        float3(10.0, 10.0, 10.0),
+        float3(1.0, 1.0, 1.0)
+    };
+    MaterialInfo material = {
+        float3(1.0, 1.0, 1.0),
+        float3(1.0, 1.0, 1.0),
+        float3(0.2, 0.2, 0.2),
+        80
+    };
+    float3 lighting = calculateLight(inFrag.eyeCoords, inFrag.tnorm, light, material);
+    
+    return half4(inFrag.color * float4(lighting, 1.0));
+};
+
+vertex VertexOut basicVertex(uint vid [[vertex_id]], constant BasicVertexIn* inVertex [[buffer(0)]], constant UniformIn& inUniform [[buffer(1)]]) {
     float4 vertexPosition = float4(float3(inVertex[vid].position), 1.0);
     float3 vertexNormal = float3(inVertex[vid].normal);
     
@@ -88,9 +131,9 @@ vertex VertexOut passThroughVertex(uint vid [[vertex_id]], constant VertexIn* in
     return outVertex;
 };
 
-fragment half4 passThroughFragment(VertexOut inFrag [[stage_in]]) {
+fragment half4 basicFragment(VertexOut inFrag [[stage_in]]) {
     LightInfo light = {
-        float3(0.0, 10.0, 0.0),
+        float3(10.0, 10.0, 10.0),
         float3(1.0, 1.0, 1.0)
     };
     MaterialInfo material = {
@@ -104,7 +147,7 @@ fragment half4 passThroughFragment(VertexOut inFrag [[stage_in]]) {
     return half4(inFrag.color * float4(lighting, 1.0));
 };
 
-vertex TextureVertexOut textureVertex(uint vid [[vertex_id]], constant VertexIn* inVertex [[buffer(0)]], constant UniformIn& inUniform [[buffer(1)]]) {
+vertex TextureVertexOut textureVertex(uint vid [[vertex_id]], constant TextureVertexIn* inVertex [[buffer(0)]], constant UniformIn& inUniform [[buffer(1)]]) {
     float4 vertexPosition = float4(float3(inVertex[vid].position), 1.0);
     float3 vertexNormal = float3(inVertex[vid].normal);
     
@@ -120,7 +163,7 @@ vertex TextureVertexOut textureVertex(uint vid [[vertex_id]], constant VertexIn*
 
 fragment float4 textureFragment(TextureVertexOut inFrag [[stage_in]], texture2d<float> diffuseTexture [[texture(0)]], sampler samplr [[sampler(0)]]) {
     LightInfo light = {
-        float3(0.0, 10.0, 0.0),
+        float3(10.0, 10.0, 10.0),
         float3(1.0, 1.0, 1.0)
     };
     MaterialInfo material = {

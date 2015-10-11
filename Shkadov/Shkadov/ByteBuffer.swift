@@ -198,6 +198,13 @@ extension ByteBuffer {
         putNextValue(value.z)
     }
     
+    public func putNextValue(value: Color) {
+        putNextValue(value.red)
+        putNextValue(value.green)
+        putNextValue(value.blue)
+        putNextValue(value.alpha)
+    }
+    
     public func putNextValue(value: ColorRGBA8) {
         putNextValue(value.red)
         putNextValue(value.green)
