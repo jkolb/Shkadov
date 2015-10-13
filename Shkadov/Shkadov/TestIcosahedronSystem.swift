@@ -135,6 +135,13 @@ public final class TestIcosahedronSystem {
         
         let f00 = Triangle3D(p04, p08, p00)
         
+        /*
+           △▽△ 1
+           ▽△
+            ▽△▽△▽△▽△▽△
+                     ▽△
+                 20 ▽△▽
+        */
         let mesh = Mesh3D()
         mesh.append(q0, normal: n0, color1: ColorRGBA8.blue, color2: ColorRGBA8.cyan)
         mesh.append(q1, normal: n1, color1: ColorRGBA8.red, color2: ColorRGBA8.magenta)
