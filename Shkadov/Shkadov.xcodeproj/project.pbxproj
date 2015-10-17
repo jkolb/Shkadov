@@ -26,6 +26,8 @@
 		E535C8D71B9385E70048321F /* TestCubeSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E535C8D61B9385E70048321F /* TestCubeSystem.swift */; };
 		E535C8DA1B93A7490048321F /* RenderComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E535C8D91B93A7490048321F /* RenderComponent.swift */; };
 		E535C8DC1B93A8620048321F /* RenderSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E535C8DB1B93A8620048321F /* RenderSystem.swift */; };
+		E55018351BD2C40A00E0161F /* RenderBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55018341BD2C40A00E0161F /* RenderBuffer.swift */; settings = {ASSET_TAGS = (); }; };
+		E55018371BD2C57400E0161F /* MetalRenderBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55018361BD2C57400E0161F /* MetalRenderBuffer.swift */; settings = {ASSET_TAGS = (); }; };
 		E55033EB1BC3636900F1CF46 /* MenuInputContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55033EA1BC3636900F1CF46 /* MenuInputContext.swift */; settings = {ASSET_TAGS = (); }; };
 		E5523CDF1BC3640700DDB75A /* InputContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5523CDE1BC3640700DDB75A /* InputContext.swift */; settings = {ASSET_TAGS = (); }; };
 		E581CF741B892C6900D7174F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E581CF731B892C6900D7174F /* Assets.xcassets */; };
@@ -100,6 +102,8 @@
 		E535C8D61B9385E70048321F /* TestCubeSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestCubeSystem.swift; sourceTree = "<group>"; };
 		E535C8D91B93A7490048321F /* RenderComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderComponent.swift; sourceTree = "<group>"; };
 		E535C8DB1B93A8620048321F /* RenderSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderSystem.swift; sourceTree = "<group>"; };
+		E55018341BD2C40A00E0161F /* RenderBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderBuffer.swift; sourceTree = "<group>"; };
+		E55018361BD2C57400E0161F /* MetalRenderBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalRenderBuffer.swift; sourceTree = "<group>"; };
 		E55033EA1BC3636900F1CF46 /* MenuInputContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuInputContext.swift; sourceTree = "<group>"; };
 		E5523CDE1BC3640700DDB75A /* InputContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputContext.swift; sourceTree = "<group>"; };
 		E581CF6E1B892C6900D7174F /* Shkadov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shkadov.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -257,6 +261,7 @@
 				09F6094F1B9C45D3003B4A5B /* RawInputKeyCode.swift */,
 				E5E8B2821BA4CFC0004E9485 /* RenderableTriangle.swift */,
 				E581CF981B892C9F00D7174F /* Renderer.swift */,
+				E55018341BD2C40A00E0161F /* RenderBuffer.swift */,
 				E581CF9A1B892C9F00D7174F /* RenderState.swift */,
 				E535C8DB1B93A8620048321F /* RenderSystem.swift */,
 				09C3F4961BA26C410025FFE4 /* RTTI.swift */,
@@ -308,6 +313,7 @@
 			isa = PBXGroup;
 			children = (
 				E5D464471BBF3458009B4D5D /* MetalRenderer.swift */,
+				E55018361BD2C57400E0161F /* MetalRenderBuffer.swift */,
 				E5D464451BBF3447009B4D5D /* Shaders.metal */,
 				E5D464401BBF2E59009B4D5D /* ShaderUniform.h */,
 			);
@@ -411,6 +417,7 @@
 				E5AC4E311BA5C74A00134995 /* TextureData.swift in Sources */,
 				09C3F4971BA26C410025FFE4 /* RTTI.swift in Sources */,
 				E5D464481BBF3458009B4D5D /* MetalRenderer.swift in Sources */,
+				E55018371BD2C57400E0161F /* MetalRenderBuffer.swift in Sources */,
 				E5AC4E331BA5C77A00134995 /* TextureFormat.swift in Sources */,
 				E5AC4E2D1BA5C6A200134995 /* AssetLoader.swift in Sources */,
 				E535C8BB1B90608C0048321F /* Component.swift in Sources */,
@@ -447,6 +454,7 @@
 				E5AC4E2F1BA5C6EB00134995 /* PlatformOSX+AssetLoader.swift in Sources */,
 				E581CFAD1B892C9F00D7174F /* RenderState.swift in Sources */,
 				E592A5C11B8AAC220032D982 /* Synchronizable.swift in Sources */,
+				E55018351BD2C40A00E0161F /* RenderBuffer.swift in Sources */,
 				E59C5F0B1B9E7BF8003422FB /* PlatformOSX+NSApplicationDelegate.swift in Sources */,
 				E5E45B5E1BAF0A9100072EFF /* EngineEventKind.swift in Sources */,
 				E5AC4E351BA5CAB900134995 /* PixelSize.swift in Sources */,

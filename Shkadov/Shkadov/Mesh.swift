@@ -160,8 +160,8 @@ public final class Mesh3D : SequenceType {
         return box
     }
     
-    public func createBufferForVertexDescriptor(vertexDescriptor: VertexDescriptor) -> ByteBuffer {
-        let buffer = ByteBuffer(capacity: vertexCount * vertexDescriptor.size)
+    public func fillBuffer(buffer: RenderBuffer, vertexDescriptor: VertexDescriptor) {
+        let buffer = ByteBuffer(data: buffer.contents, length: buffer.length)
         
         for triangle in self {
             for vertex in triangle {
@@ -179,7 +179,5 @@ public final class Mesh3D : SequenceType {
                 }
             }
         }
-        
-        return buffer
     }
 }

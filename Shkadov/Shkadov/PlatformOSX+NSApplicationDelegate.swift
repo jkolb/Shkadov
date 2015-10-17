@@ -62,6 +62,7 @@ extension PlatformOSX : NSApplicationDelegate {
     
     public func applicationWillBecomeActive(notification: NSNotification) {
         NSLog("%@", __FUNCTION__)
+        mainWindow.makeFirstResponder(viewController)
     }
     
     public func applicationDidBecomeActive(notification: NSNotification) {

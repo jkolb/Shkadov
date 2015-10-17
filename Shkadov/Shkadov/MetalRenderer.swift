@@ -35,12 +35,6 @@ public final class MetalRenderer : NSObject, ContentViewSource, Synchronizable {
 
     private let programHandleFactory = HandleFactory()
     private var programs = [Handle : MTLRenderPipelineState]()
-
-    private let vertexArrayHandleFactory = HandleFactory()
-    private var vertexArrays = [Handle : MTLBuffer]()
-    
-    private let bufferHandleFactory = HandleFactory()
-    private var buffers = [Handle : MTLBuffer]()
     
     private let textureHandleFactory = HandleFactory()
     private var textures = [Handle : MTLTexture]()
@@ -122,7 +116,7 @@ extension MetalRenderer : MTKViewDelegate {
             let program = programs[state.program]!
             renderEncoder.setRenderPipelineState(program)
             
-            let vertexBuffer = vertexArrays[state.vertexArray]!
+            let vertexBuffer = state.vertexBuffer.rendererInfo as! MTLBuffer
             renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, atIndex: 0)
             
             if let texture = textures[state.texture] {
@@ -131,9 +125,9 @@ extension MetalRenderer : MTKViewDelegate {
             }
             
             for object in state.objects {
-                let uniformBuffer = buffers[object.uniformBuffer]!
+                let uniformBuffer = object.uniformBuffer.rendererInfo as! MTLBuffer
                 renderEncoder.setVertexBuffer(uniformBuffer, offset: object.uniformOffset, atIndex: 1)
-                renderEncoder.drawPrimitives(.Triangle, vertexStart: 0, vertexCount: 36)
+                renderEncoder.drawPrimitives(.Triangle, vertexStart: 0, vertexCount: object.vertexCount)
             }
         }
         
@@ -187,17 +181,6 @@ extension MetalRenderer : Renderer {
         textures.removeValueForKey(handle)
     }
     
-    public func createVertexArrayFromDescriptor(vertexDescriptor: VertexDescriptor, buffer: ByteBuffer) -> Handle {
-        let vertexArray = device.newBufferWithBytes(buffer.data, length: buffer.capacity, options: [])
-        let handle = vertexArrayHandleFactory.nextHandle()
-        vertexArrays[handle] = vertexArray
-        return handle
-    }
-    
-    public func destoryVertexArray(handle: Handle) {
-        vertexArrays.removeValueForKey(handle)
-    }
-    
     public func createProgramWithVertexPath(vertexPath: String, fragmentPath: String) -> Handle {
         let vertexProgram = library.newFunctionWithName(vertexPath)!
         let fragmentProgram = library.newFunctionWithName(fragmentPath)!
@@ -229,20 +212,9 @@ extension MetalRenderer : Renderer {
         programs.removeValueForKey(handle)
     }
     
-    public func createBufferWithName(name: String, length: Int) -> Handle {
+    public func createBufferWithName(name: String, length: Int) -> RenderBuffer {
         let buffer = device.newBufferWithLength(length, options: [])
         buffer.label = name
-        let handle = bufferHandleFactory.nextHandle()
-        buffers[handle] = buffer
-        return handle
-    }
-    
-    public func bufferContents(handle: Handle) -> UnsafeMutablePointer<Void> {
-        let buffer = buffers[handle]!
-        return buffer.contents()
-    }
-    
-    public func destroyBuffer(handle: Handle) {
-        buffers.removeValueForKey(handle)
+        return MetalRenderBuffer(buffer: buffer)
     }
 }

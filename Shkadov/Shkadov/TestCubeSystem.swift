@@ -27,8 +27,8 @@ public final class TestCubeSystem {
     private let assetLoader: AssetLoader
     private let entityComponents: EntityComponents
     private var program: Handle = Handle.invalid
-    private var vertexArray: Handle = Handle.invalid
-    private var uniformBuffer: Handle = Handle.invalid
+    private var vertexBuffer: RenderBuffer!
+    private var uniformBuffer: RenderBuffer!
     private var cubes: [Entity] = []
     
     public init(renderer: Renderer, assetLoader: AssetLoader, entityComponents: EntityComponents) {
@@ -39,7 +39,6 @@ public final class TestCubeSystem {
     
     deinit {
         renderer.destroyProgram(program)
-        renderer.destoryVertexArray(vertexArray)
     }
     
     public func configure() {
@@ -48,10 +47,10 @@ public final class TestCubeSystem {
         vertexDescriptor.addAttribute(.Normal, format: .Float3)
 
         let mesh = Mesh3D.cubeWithSize(1.0)
-        let meshData = mesh.createBufferForVertexDescriptor(vertexDescriptor)
+        vertexBuffer = renderer.createBufferWithName("Cube", length: mesh.vertexCount * vertexDescriptor.size)
+        mesh.fillBuffer(vertexBuffer, vertexDescriptor: vertexDescriptor)
         
         program = renderer.createProgramWithVertexPath("basicVertex", fragmentPath: "basicFragment")
-        vertexArray = renderer.createVertexArrayFromDescriptor(vertexDescriptor, buffer: meshData)
         
         let positions = [
             Point3D(0.0, 0.0, 0.0),
@@ -80,7 +79,7 @@ public final class TestCubeSystem {
         for index in 0..<positions.count {
             let cube = entityComponents.createEntity()
             entityComponents.addComponent(OrientationComponent(position: positions[index]), toEntity: cube)
-            entityComponents.addComponent(RenderComponent(uniformBuffer: uniformBuffer, uniformOffset: uniformOffset, diffuseColor: colors[index]), toEntity: cube)
+            entityComponents.addComponent(RenderComponent(vertexCount: mesh.vertexCount, uniformBuffer: uniformBuffer, uniformOffset: uniformOffset, diffuseColor: colors[index]), toEntity: cube)
             uniformOffset += uniformSize
             cubes.append(cube)
         }
@@ -110,7 +109,7 @@ public final class TestCubeSystem {
         
         return RenderState(
             program: program,
-            vertexArray: vertexArray,
+            vertexBuffer: vertexBuffer,
             uniformBuffer: uniformBuffer,
             texture: Handle.invalid,
             objects: objects

@@ -63,7 +63,7 @@ public final class RenderSystem {
             let normalMatrix = modelViewMatrix.matrix3x3
             let modelViewProjectionMatrix = projectionMatrix * modelViewMatrix
             
-            let bufferContents = UnsafeMutablePointer<UniformIn>(renderer.bufferContents(render.uniformBuffer).advancedBy(render.uniformOffset))
+            let bufferContents = UnsafeMutablePointer<UniformIn>(render.uniformBuffer.contents.advancedBy(render.uniformOffset))
             bufferContents.memory = UniformIn(
                 modelViewMatrix: modelViewMatrix.cmatrix,
                 projectionMatrix: projectionMatrix.cmatrix,

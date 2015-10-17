@@ -29,16 +29,28 @@ public struct ColorRGBA8 {
     public var alpha: UInt8
     
     public static var black = ColorRGBA8(red: 0, green: 0, blue: 0)
-    public static var darkGrey = ColorRGBA8(red: 64, green: 64, blue: 64)
     public static var grey = ColorRGBA8(red: 128, green: 128, blue: 128)
-    public static var lightGrey = ColorRGBA8(red: 192, green: 192, blue: 192)
     public static var white = ColorRGBA8(red: 255, green: 255, blue: 255)
     public static var red = ColorRGBA8(red: 255, green: 0, blue: 0)
-    public static var green = ColorRGBA8(red: 0, green: 255, blue: 0)
+    public static var green = ColorRGBA8(red: 0, green: 128, blue: 0)
     public static var blue = ColorRGBA8(red: 0, green: 0, blue: 255)
     public static var yellow = ColorRGBA8(red: 255, green: 255, blue: 0)
     public static var magenta = ColorRGBA8(red: 255, green: 0, blue: 255)
     public static var cyan = ColorRGBA8(red: 0, green: 255, blue: 255)
+    public static var brown = ColorRGBA8(red: 165, green: 42, blue: 42)
+    public static var pink = ColorRGBA8(red: 255, green: 192, blue: 203)
+    public static var lime = ColorRGBA8(red: 0, green: 255, blue: 0)
+    public static var orange = ColorRGBA8(red: 255, green: 165, blue: 0)
+    public static var silver = ColorRGBA8(red: 192, green: 192, blue: 192)
+    public static var teal = ColorRGBA8(red: 0, green: 128, blue: 128)
+    public static var olive = ColorRGBA8(red: 128, green: 128, blue: 0)
+    public static var purple = ColorRGBA8(red: 128, green: 0, blue: 128)
+    public static var navy = ColorRGBA8(red: 0, green: 0, blue: 128)
+    public static var maroon = ColorRGBA8(red: 128, green: 0, blue: 0)
+    public static var skyBlue = ColorRGBA8(red: 135, green: 206, blue: 235)
+    public static var forestGreen = ColorRGBA8(red: 34, green: 139, blue: 34)
+    public static var gold = ColorRGBA8(red: 255, green: 215, blue: 0)
+    public static var indigo = ColorRGBA8(red: 75, green: 0, blue: 130)
     
     public init(rgba: UInt32) {
         self.init(

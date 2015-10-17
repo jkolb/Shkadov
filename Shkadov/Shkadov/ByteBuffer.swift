@@ -26,6 +26,7 @@ public final class ByteBuffer {
     private static let undefinedMark = -1
     private var bytes: UnsafeMutablePointer<UInt8>
     public let capacity: Int
+    private let deallocOnDeinit: Bool
     private var bits: UnsafeMutablePointer<UInt8>
     public var position: Int {
         willSet {
@@ -63,12 +64,24 @@ public final class ByteBuffer {
         markedPosition = ByteBuffer.undefinedMark
     }
     
-    public init(capacity: Int) {
-        // The new buffer's position will be zero, its limit will be its capacity, its mark will be undefined.
+    public convenience init(capacity: Int) {
         precondition(capacity >= 0)
-        self.bytes = UnsafeMutablePointer<UInt8>.alloc(capacity)
-        self.capacity = capacity
+        
+        let data = UnsafeMutablePointer<UInt8>.alloc(capacity)
+        
+        self.init(data: data, length: capacity, deallocOnDeinit: true)
+    }
+    
+    public init(data: UnsafeMutablePointer<Void>, length: Int, deallocOnDeinit: Bool = false) {
+        precondition(length >= 0)
+        
+        self.bytes = UnsafeMutablePointer<UInt8>(data)
+        self.capacity = length
+        self.deallocOnDeinit = deallocOnDeinit
+        
         self.bits = UnsafeMutablePointer<UInt8>.alloc(sizeof(UIntMax))
+        
+        // The new buffer's position will be zero, its limit will be its capacity, its mark will be undefined.
         self.position = 0
         self.limit = capacity
         self.markedPosition = ByteBuffer.undefinedMark
@@ -76,7 +89,10 @@ public final class ByteBuffer {
     
     deinit {
         bits.dealloc(sizeof(UIntMax))
-        bytes.dealloc(capacity)
+        
+        if deallocOnDeinit {
+            bytes.dealloc(capacity)
+        }
     }
     
     public var data: UnsafePointer<Void> {

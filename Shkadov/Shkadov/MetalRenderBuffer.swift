@@ -22,22 +22,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public struct RenderComponent : Component {
-    public static let kind = Kind(dataType: RenderComponent.self)
-    public let vertexCount: Int
-    public let uniformBuffer: RenderBuffer
-    public let uniformOffset: Int
-    public let diffuseColor: Color
+import Metal
+
+public class MetalRenderBuffer : RenderBuffer {
+    private let buffer: MTLBuffer
     
-    public init(
-        vertexCount: Int,
-        uniformBuffer: RenderBuffer,
-        uniformOffset: Int,
-        diffuseColor: Color
-    ) {
-        self.vertexCount = vertexCount
-        self.uniformBuffer = uniformBuffer
-        self.uniformOffset = uniformOffset
-        self.diffuseColor = diffuseColor
+    public init(buffer: MTLBuffer) {
+        self.buffer = buffer
+    }
+    
+    public var label: String? {
+        return buffer.label
+    }
+    
+    public var length: Int {
+        return buffer.length
+    }
+    
+    public var contents: UnsafeMutablePointer<Void> {
+        return buffer.contents()
+    }
+    
+    public var rendererInfo: Any {
+        return buffer
     }
 }

@@ -27,8 +27,8 @@ public final class TerrainSystem {
     private let assetLoader: AssetLoader
     private let entityComponents: EntityComponents
     private var program: Handle = Handle.invalid
-    private var vertexArray: Handle = Handle.invalid
-    private var uniformBuffer: Handle = Handle.invalid
+    private var vertexBuffer: RenderBuffer!
+    private var uniformBuffer: RenderBuffer!
     private var texture: Handle = Handle.invalid
     private var floor: Entity!
     
@@ -40,7 +40,6 @@ public final class TerrainSystem {
     
     deinit {
         renderer.destroyProgram(program)
-        renderer.destoryVertexArray(vertexArray)
     }
     
     public func configure() {
@@ -53,16 +52,16 @@ public final class TerrainSystem {
         texture = renderer.createTextureFromData(grassTextureData)
         
         let mesh = Mesh3D.boxWithSize(Size3D(100.0, 0.25, 100.0))
-        let meshData = mesh.createBufferForVertexDescriptor(vertexDescriptor)
+        vertexBuffer = renderer.createBufferWithName("Floor", length: mesh.vertexCount * vertexDescriptor.size)
+        mesh.fillBuffer(vertexBuffer, vertexDescriptor: vertexDescriptor)
         
         program = renderer.createProgramWithVertexPath("textureVertex", fragmentPath: "textureFragment")
-        vertexArray = renderer.createVertexArrayFromDescriptor(vertexDescriptor, buffer: meshData)
         let uniformSize = strideof(UniformIn)
         uniformBuffer = renderer.createBufferWithName("Terrain Uniforms", length: uniformSize)
 
         floor = entityComponents.createEntity()
         entityComponents.addComponent(OrientationComponent(position: Point3D(0.0, -4.0, 0.0)), toEntity: floor)
-        entityComponents.addComponent(RenderComponent(uniformBuffer: uniformBuffer, uniformOffset: 0, diffuseColor: Color.tan), toEntity: floor)
+        entityComponents.addComponent(RenderComponent(vertexCount: mesh.vertexCount, uniformBuffer: uniformBuffer, uniformOffset: 0, diffuseColor: Color.tan), toEntity: floor)
     }
     
     public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
@@ -75,7 +74,7 @@ public final class TerrainSystem {
         
         return RenderState(
             program: program,
-            vertexArray: vertexArray,
+            vertexBuffer: vertexBuffer,
             uniformBuffer: uniformBuffer,
             texture: texture,
             objects: objects
