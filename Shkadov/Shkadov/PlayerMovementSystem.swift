@@ -65,10 +65,10 @@ public final class PlayerMovementSystem {
             }
             
             if direction.y == .Up {
-                vector += Vector3D.yAxis * 0.1
+                vector += Vector3D.yAxis * 10
             }
             else if direction.y == .Down {
-                vector += Vector3D.yAxis * -0.1
+                vector += Vector3D.yAxis * -10
             }
             
             if direction.z == .Forward {
