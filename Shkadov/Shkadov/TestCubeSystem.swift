@@ -46,7 +46,7 @@ public final class TestCubeSystem {
         vertexDescriptor.addAttribute(.Position, format: .Float3)
         vertexDescriptor.addAttribute(.Normal, format: .Float3)
 
-        let mesh = Mesh3D.cubeWithSize(1.0)
+        let mesh = Mesh3D.cubeWithSize(5000.0)
         vertexBuffer = renderer.createBufferWithName("Cube", length: mesh.vertexCount * vertexDescriptor.size)
         mesh.fillBuffer(vertexBuffer, vertexDescriptor: vertexDescriptor)
         
@@ -54,12 +54,12 @@ public final class TestCubeSystem {
         
         let positions = [
             Point3D(0.0, 0.0, 0.0),
-            Point3D(1.5, 0.0, 0.0),
-            Point3D(-1.5, 0.0, 0.0),
-            Point3D(0.0, 1.5, 0.0),
-            Point3D(0.0, -1.5, 0.0),
-            Point3D(0.0, 0.0, 1.5),
-            Point3D(0.0, 0.0, -1.5),
+            Point3D(1.5 * 5000, 0.0, 0.0),
+            Point3D(-1.5 * 5000, 0.0, 0.0),
+            Point3D(0.0, 1.5 * 5000, 0.0),
+            Point3D(0.0, -1.5 * 5000, 0.0),
+            Point3D(0.0, 0.0, 1.5 * 5000),
+            Point3D(0.0, 0.0, -1.5 * 5000),
         ]
         
         let colors = [

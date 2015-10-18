@@ -80,7 +80,7 @@ public final class TestIcosahedronSystem {
     
     public func generateMesh() -> Mesh3D {
         let goldenRatio = (1.0 + sqrtf(5.0)) / 2.0
-        let g = normalize(Vector3D(0.0, 1.0, goldenRatio))
+        let g = Vector3D(0.0, 1.0, goldenRatio) * 50000.0
         
         let s = g.y * 0.5
         let l = g.z * 0.5
@@ -109,15 +109,11 @@ public final class TestIcosahedronSystem {
         let z2 = Point3D(0.0, -s, -l)
         let z3 = Point3D(0.0, +s, -l)
         
-        let n0 = Vector3D(+1.0,  0.0,  0.0)
-        
         // Y = 0
         let x0 = Point3D(+l, 0.0, +s)
         let x1 = Point3D(+l, 0.0, -s)
         let x2 = Point3D(-l, 0.0, -s)
         let x3 = Point3D(-l, 0.0, +s)
-        
-        let n1 = Vector3D( 0.0, +1.0,  0.0)
         
         // Z = 0
         let y0 = Point3D(+s, +l, 0.0)
@@ -125,11 +121,17 @@ public final class TestIcosahedronSystem {
         let y2 = Point3D(-s, -l, 0.0)
         let y3 = Point3D(+s, -l, 0.0)
         
-        let n2 = Vector3D( 0.0,  0.0, +1.0)
-        
-        let q0 = Quad3D(z0, z1, z2, z3)
-        let q1 = Quad3D(x0, x1, x2, x3)
-        let q2 = Quad3D(y0, y1, y2, y3)
+        let t0 = y0.vector
+        let t1 = y1.vector
+        let tl = length(t1 - t0)
+        print(tl)
+//        let n0 = Vector3D(+1.0,  0.0,  0.0)
+//        let n1 = Vector3D( 0.0, +1.0,  0.0)
+//        let n2 = Vector3D( 0.0,  0.0, +1.0)
+//        
+//        let q0 = Quad3D(z0, z1, z2, z3)
+//        let q1 = Quad3D(x0, x1, x2, x3)
+//        let q2 = Quad3D(y0, y1, y2, y3)
         
         /*
            △▽△ 1
@@ -160,30 +162,51 @@ public final class TestIcosahedronSystem {
         let f19 = Triangle3D(z2, y2, y3)
         
         let mesh = Mesh3D()
-        mesh.append(q0, normal: n0, color1: ColorRGBA8.blue, color2: ColorRGBA8.cyan)
-        mesh.append(q1, normal: n1, color1: ColorRGBA8.red, color2: ColorRGBA8.magenta)
-        mesh.append(q2, normal: n2, color1: ColorRGBA8.green, color2: ColorRGBA8.yellow)
         
-        mesh.append(f00, normal: f00.normal(), color: ColorRGBA8.red)
-        mesh.append(f01, normal: f01.normal(), color: ColorRGBA8.green)
-        mesh.append(f02, normal: f02.normal(), color: ColorRGBA8.blue)
-        mesh.append(f03, normal: f03.normal(), color: ColorRGBA8.yellow)
-        mesh.append(f04, normal: f04.normal(), color: ColorRGBA8.magenta)
-        mesh.append(f05, normal: f05.normal(), color: ColorRGBA8.cyan)
-        mesh.append(f06, normal: f06.normal(), color: ColorRGBA8.brown)
-        mesh.append(f07, normal: f07.normal(), color: ColorRGBA8.pink)
-        mesh.append(f08, normal: f08.normal(), color: ColorRGBA8.lime)
-        mesh.append(f09, normal: f09.normal(), color: ColorRGBA8.orange)
-        mesh.append(f10, normal: f10.normal(), color: ColorRGBA8.silver)
-        mesh.append(f11, normal: f11.normal(), color: ColorRGBA8.teal)
-        mesh.append(f12, normal: f12.normal(), color: ColorRGBA8.olive)
-        mesh.append(f13, normal: f13.normal(), color: ColorRGBA8.purple)
-        mesh.append(f14, normal: f14.normal(), color: ColorRGBA8.navy)
-        mesh.append(f15, normal: f15.normal(), color: ColorRGBA8.maroon)
+//        mesh.append(q0, normal: n0, color1: ColorRGBA8.blue, color2: ColorRGBA8.cyan)
+//        mesh.append(q1, normal: n1, color1: ColorRGBA8.red, color2: ColorRGBA8.magenta)
+//        mesh.append(q2, normal: n2, color1: ColorRGBA8.green, color2: ColorRGBA8.yellow)
+        
+//        mesh.append(f00, normal: f00.normal(), color: ColorRGBA8.red)
+//        mesh.append(f01, normal: f01.normal(), color: ColorRGBA8.green)
+//        mesh.append(f02, normal: f02.normal(), color: ColorRGBA8.blue)
+//        mesh.append(f03, normal: f03.normal(), color: ColorRGBA8.yellow)
+//        mesh.append(f04, normal: f04.normal(), color: ColorRGBA8.magenta)
+//        mesh.append(f05, normal: f05.normal(), color: ColorRGBA8.cyan)
+//        mesh.append(f06, normal: f06.normal(), color: ColorRGBA8.brown)
+//        mesh.append(f07, normal: f07.normal(), color: ColorRGBA8.pink)
+//        mesh.append(f08, normal: f08.normal(), color: ColorRGBA8.lime)
+//        mesh.append(f09, normal: f09.normal(), color: ColorRGBA8.orange)
+//        mesh.append(f10, normal: f10.normal(), color: ColorRGBA8.silver)
+//        mesh.append(f11, normal: f11.normal(), color: ColorRGBA8.teal)
+//        mesh.append(f12, normal: f12.normal(), color: ColorRGBA8.olive)
+//        mesh.append(f13, normal: f13.normal(), color: ColorRGBA8.purple)
+//        mesh.append(f14, normal: f14.normal(), color: ColorRGBA8.navy)
+//        mesh.append(f15, normal: f15.normal(), color: ColorRGBA8.maroon)
+//        mesh.append(f16, normal: f16.normal(), color: ColorRGBA8.skyBlue)
+//        mesh.append(f17, normal: f17.normal(), color: ColorRGBA8.forestGreen)
+//        mesh.append(f18, normal: f18.normal(), color: ColorRGBA8.gold)
+//        mesh.append(f19, normal: f19.normal(), color: ColorRGBA8.indigo)
+        mesh.append(f00, normal: f00.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f01, normal: f01.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f02, normal: f02.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f03, normal: f03.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f04, normal: f04.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f05, normal: f05.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f06, normal: f06.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f07, normal: f07.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f08, normal: f08.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f09, normal: f09.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f10, normal: f10.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f11, normal: f11.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f12, normal: f12.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f13, normal: f13.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f14, normal: f14.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f15, normal: f15.normal(), color: ColorRGBA8.skyBlue)
         mesh.append(f16, normal: f16.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f17, normal: f17.normal(), color: ColorRGBA8.forestGreen)
-        mesh.append(f18, normal: f18.normal(), color: ColorRGBA8.gold)
-        mesh.append(f19, normal: f19.normal(), color: ColorRGBA8.indigo)
+        mesh.append(f17, normal: f17.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f18, normal: f18.normal(), color: ColorRGBA8.skyBlue)
+        mesh.append(f19, normal: f19.normal(), color: ColorRGBA8.skyBlue)
 
         return mesh
     }

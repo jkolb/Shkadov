@@ -32,7 +32,8 @@ public final class Engine : TimerDelegate, Synchronizable {
     private let entityComponents: EntityComponents
     private let playerMovementSystem: PlayerMovementSystem
     private let renderSystem: RenderSystem
-    private let testSystem: TestIcosahedronSystem
+    private let testSystem0: TestIcosahedronSystem
+    private let testSystem1: TestCubeSystem
     private let terrainSystem: TerrainSystem
     private let renderer: Renderer
     private var menuOpen = false
@@ -46,7 +47,8 @@ public final class Engine : TimerDelegate, Synchronizable {
         self.eventHandlers = [:]
         self.playerMovementSystem = PlayerMovementSystem(entityComponents: self.entityComponents)
         self.inputContext = MovementInputContext()
-        self.testSystem = TestIcosahedronSystem(renderer: renderer, assetLoader: assetLoader, entityComponents: entityComponents)
+        self.testSystem0 = TestIcosahedronSystem(renderer: renderer, assetLoader: assetLoader, entityComponents: entityComponents)
+        self.testSystem1 = TestCubeSystem(renderer: renderer, assetLoader: assetLoader, entityComponents: entityComponents)
         self.terrainSystem = TerrainSystem(renderer: renderer, assetLoader: assetLoader, entityComponents: entityComponents)
         self.renderSystem = RenderSystem(renderer: renderer, entityComponents: entityComponents)
         self.renderer = renderer
@@ -63,7 +65,8 @@ public final class Engine : TimerDelegate, Synchronizable {
             engine.platform.mousePositionRelative = true
             engine.renderSystem.configure()
             engine.terrainSystem.configure()
-            engine.testSystem.configure()
+            engine.testSystem0.configure()
+            engine.testSystem1.configure()
             engine.timer.delegate = self
             engine.timer.start()
         }
@@ -113,13 +116,15 @@ public final class Engine : TimerDelegate, Synchronizable {
             engine.handleInput()
             
             engine.terrainSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
-            engine.testSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
+            engine.testSystem0.updateWithTickCount(tickCount, tickDuration: tickDuration)
+            engine.testSystem1.updateWithTickCount(tickCount, tickDuration: tickDuration)
             engine.renderSystem.updateWithTickCount(tickCount, tickDuration: tickDuration)
             
             var states = [RenderState]()
             
+            states.append(engine.testSystem0.render())
+            states.append(engine.testSystem1.render())
             states.append(engine.terrainSystem.render())
-            states.append(engine.testSystem.render())
             
             engine.renderer.renderStates(states)
         }
