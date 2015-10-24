@@ -74,7 +74,7 @@ public final class TestIcosahedronSystem {
             uniformBuffer: uniformBuffer,
             texture: Handle.invalid,
             objects: objects,
-            cullMode: .None
+            cullMode: .Front
         )
     }
     
@@ -121,8 +121,8 @@ public final class TestIcosahedronSystem {
         let y2 = Point3D(-s, -l, 0.0)
         let y3 = Point3D(+s, -l, 0.0)
         
-        let t0 = y0.vector
-        let t1 = y1.vector
+        let t0 = y1.vector
+        let t1 = z0.vector
         let tl = length(t1 - t0)
         print(tl)
 //        let n0 = Vector3D(+1.0,  0.0,  0.0)
@@ -146,20 +146,20 @@ public final class TestIcosahedronSystem {
         let f03 = Triangle3D(z0, z1, x0)
         let f04 = Triangle3D(x0, y0, z0)
         let f05 = Triangle3D(x0, x1, y0)
-        let f06 = Triangle3D(x1, y0, z3)
-        let f07 = Triangle3D(z3, y0, y1)
-        let f08 = Triangle3D(z3, y1, x2)
-        let f09 = Triangle3D(x2, y1, x3)
-        let f10 = Triangle3D(x2, x3, y2)
+        let f06 = Triangle3D(y0, x1, z3)
+        let f07 = Triangle3D(y0, z3, y1)
+        let f08 = Triangle3D(y1, z3, x2)
+        let f09 = Triangle3D(y1, x2, x3)
+        let f10 = Triangle3D(x3, x2, y2)
         let f11 = Triangle3D(x3, y2, z1)
         let f12 = Triangle3D(z1, y2, y3)
-        let f13 = Triangle3D(y3, z1, x0)
+        let f13 = Triangle3D(z1, y3, x0)
         let f14 = Triangle3D(x0, y3, x1)
         let f15 = Triangle3D(x1, y3, z2)
-        let f16 = Triangle3D(z2, x1, z3)
+        let f16 = Triangle3D(x1, z2, z3)
         let f17 = Triangle3D(z3, z2, x2)
-        let f18 = Triangle3D(z2, x2, y2)
-        let f19 = Triangle3D(z2, y2, y3)
+        let f18 = Triangle3D(x2, z2, y2)
+        let f19 = Triangle3D(y2, z2, y3)
         
         let mesh = Mesh3D()
         

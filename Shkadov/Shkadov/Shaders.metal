@@ -103,7 +103,7 @@ vertex VertexOut colorVertex(uint vid [[vertex_id]], constant ColorVertexIn* inV
 
 fragment half4 colorFragment(VertexOut inFrag [[stage_in]]) {
     LightInfo light = {
-        float3(10.0, 10.0, 10.0),
+        float3(0.0, 0.0, 0.0),
         float3(1.0, 1.0, 1.0)
     };
     MaterialInfo material = {
@@ -133,7 +133,7 @@ vertex VertexOut basicVertex(uint vid [[vertex_id]], constant BasicVertexIn* inV
 
 fragment half4 basicFragment(VertexOut inFrag [[stage_in]]) {
     LightInfo light = {
-        float3(10.0, 10.0, 10.0),
+        float3(0.0, 0.0, 0.0),
         float3(1.0, 1.0, 1.0)
     };
     MaterialInfo material = {
@@ -163,7 +163,7 @@ vertex TextureVertexOut textureVertex(uint vid [[vertex_id]], constant TextureVe
 
 fragment float4 textureFragment(TextureVertexOut inFrag [[stage_in]], texture2d<float> diffuseTexture [[texture(0)]], sampler samplr [[sampler(0)]]) {
     LightInfo light = {
-        float3(10.0, 10.0, 10.0),
+        float3(0.0, 0.0, 0.0),
         float3(1.0, 1.0, 1.0)
     };
     MaterialInfo material = {

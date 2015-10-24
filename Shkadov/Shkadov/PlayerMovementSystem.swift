@@ -40,12 +40,12 @@ public final class PlayerMovementSystem {
         case .Look(let direction):
             pitch += direction.up
             
-            if pitch < Angle(degrees: -85.0) {
-                pitch = Angle(degrees: -85.0)
+            if pitch < Angle(degrees: -89.9) {
+                pitch = Angle(degrees: -89.9)
             }
             
-            if pitch > Angle(degrees: 85.0) {
-                pitch = Angle(degrees: 85.0)
+            if pitch > Angle(degrees: 89.9) {
+                pitch = Angle(degrees: 89.9)
             }
 
             yaw += direction.right
