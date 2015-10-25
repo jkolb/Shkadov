@@ -79,15 +79,17 @@ public final class TestIcosahedronSystem {
     }
     
     public func generateMesh() -> Mesh3D {
+        let size: Float = 65536.0
+        let divisions = 256
         let mesh = Mesh3D()
         var index = 0
-        let colors = [ColorRGBA8.olive, ColorRGBA8.forestGreen, ColorRGBA8.brown, ColorRGBA8.grey]
-        let surface = Surface.icosahedron(65536.0).subdivide(5) // Don't go over 5 unless Release mode is enabled
+        let colors = [ColorRGBA8.olive, ColorRGBA8.forestGreen, ColorRGBA8.brown, ColorRGBA8.grey, ColorRGBA8.green, ColorRGBA8.blue, ColorRGBA8.yellow]
+        let surface = Surface.icosahedron(size).subdivideBy(divisions)
         
         for triangle in surface.triangles() {
-            let a = (normalize(triangle.a.vector) * 65536.0).point
-            let b = (normalize(triangle.b.vector) * 65536.0).point
-            let c = (normalize(triangle.c.vector) * 65536.0).point
+            let a = (normalize(triangle.a.vector) * size).point
+            let b = (normalize(triangle.b.vector) * size).point
+            let c = (normalize(triangle.c.vector) * size).point
             let t = Triangle3D(a, b, c)
             mesh.append(t, color: colors[++index % colors.count])
         }

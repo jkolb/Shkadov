@@ -135,6 +135,83 @@ public final class Surface {
         return subdividedSurface
     }
     
+    public func subdivideBy(divisions: Int) -> Surface {
+        let subdividedSurface = Surface(reserveCapacity: faces.count * (divisions * divisions))
+        let edgeVertexCount = divisions + 1
+        let delta = 1.0 / Float(divisions)
+
+        var pAB = [Vector3D]()
+        var pAC = [Vector3D]()
+        var rows = [[Int]]()
+        
+        pAB.reserveCapacity(edgeVertexCount)
+        pAC.reserveCapacity(edgeVertexCount)
+        rows.reserveCapacity(edgeVertexCount)
+        
+        for face in faces {
+            let a = vertices[face.a]
+            let b = vertices[face.b]
+            let c = vertices[face.c]
+            
+            let deltaAB = (b - a) * delta
+            let deltaAC = (c - a) * delta
+            
+            var nextAB = a
+            var nextAC = a
+
+            for _ in 0..<divisions {
+                pAB.append(nextAB)
+                pAC.append(nextAC)
+                
+                nextAB += deltaAB
+                nextAC += deltaAC
+            }
+            
+            pAB.append(b)
+            pAC.append(c)
+
+            for row in 0..<edgeVertexCount {
+                var rowIndices = [Int]()
+                rowIndices.reserveCapacity(row + 1)
+                
+                let rb = pAB[row]
+                let rc = pAC[row]
+                let rowDelta = 1.0 / Float(row)
+                let deltaBC = (rc - rb) * rowDelta
+                var nextBC = rb
+                
+                for _ in 0..<row {
+                    let index = subdividedSurface.addVertex(nextBC)
+                    rowIndices.append(index)
+                    nextBC += deltaBC
+                }
+
+                let lastIndex = subdividedSurface.addVertex(rc)
+                rowIndices.append(lastIndex)
+                rows.append(rowIndices)
+            }
+            
+            for rowIndex in 0..<divisions {
+                let U = rows[rowIndex]
+                let L = rows[rowIndex + 1]
+                let lastIndex = U.count - 1
+                
+                for colIndex in 0..<lastIndex {
+                    subdividedSurface.addFace(U[colIndex], L[colIndex], L[colIndex + 1])
+                    subdividedSurface.addFace(U[colIndex], L[colIndex + 1], U[colIndex + 1])
+                }
+                
+                subdividedSurface.addFace(U[lastIndex], L[lastIndex], L[lastIndex + 1])
+            }
+            
+            pAB.removeAll(keepCapacity: true)
+            pAC.removeAll(keepCapacity: true)
+            rows.removeAll(keepCapacity: true)
+        }
+
+        return subdividedSurface
+    }
+    
     public static func icosahedron(size: Float) -> Surface {
         let goldenRatio = (1.0 + sqrtf(5.0)) / 2.0
         let g = Vector3D(0.0, 1.0, goldenRatio) * size

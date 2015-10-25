@@ -43,7 +43,7 @@ public final class RenderSystem {
     public func updateViewport(viewport: Rectangle2D) {
         // http://www.rjdown.co.uk/projects/bfbc2/fovcalculator.php
         let projection = ProjectionComponent(
-            projectionMatrix: Matrix4x4(fovy: Angle(degrees: 46.0), aspect: viewport.aspectRatio, zNear: 0.1, zFar: 100000.0)
+            projectionMatrix: Matrix4x4(fovy: Angle(degrees: 46.0), aspect: viewport.aspectRatio, zNear: 0.1, zFar: 147456.0)
         )
         entityComponents.replaceComponent(projection, forEntity: camera)
         renderer.updateViewport(viewport)
