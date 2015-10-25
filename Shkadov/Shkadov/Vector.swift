@@ -38,6 +38,10 @@ public extension Vector3D {
     public static var xAxis = Vector3D(1.0, 0.0, 0.0)
     public static var yAxis = Vector3D(0.0, 1.0, 0.0)
     public static var zAxis = Vector3D(0.0, 0.0, 1.0)
+    
+    public var point: Point3D {
+        return Point3D(x, y, z)
+    }
 }
 
 public extension Vector4D {

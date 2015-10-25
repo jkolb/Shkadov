@@ -291,7 +291,7 @@ public final class ViewController : NSViewController {
         //        if theEvent.momentumPhase.contains(NSEventPhase.Changed) || theEvent.momentumPhase.contains(NSEventPhase.Ended) {
         //            return
         //        }
-        NSLog("SCROLL: (\(theEvent)")
+//        NSLog("SCROLL: (\(theEvent)")
     }
 }
 

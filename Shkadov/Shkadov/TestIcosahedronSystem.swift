@@ -79,135 +79,19 @@ public final class TestIcosahedronSystem {
     }
     
     public func generateMesh() -> Mesh3D {
-        let goldenRatio = (1.0 + sqrtf(5.0)) / 2.0
-        let g = Vector3D(0.0, 1.0, goldenRatio) * 50000.0
-        
-        let s = g.y * 0.5
-        let l = g.z * 0.5
-        
-        /*
-        Right handed & Counter-clockwise
-        
-          Y+
-          |
-          |
-          o------X+
-         /
-        Z+
-        
-            X = 0            Y = 0         Z = 0
-        0-----------3    2-----------1    1-----0
-        |           |    |           |    |     |
-        |           |    |           |    |     |
-        1-----------2    3-----------0    |     |
-                                          2-----3
-        */
-
-        // X = 0
-        let z0 = Point3D(0.0, +s, +l)
-        let z1 = Point3D(0.0, -s, +l)
-        let z2 = Point3D(0.0, -s, -l)
-        let z3 = Point3D(0.0, +s, -l)
-        
-        // Y = 0
-        let x0 = Point3D(+l, 0.0, +s)
-        let x1 = Point3D(+l, 0.0, -s)
-        let x2 = Point3D(-l, 0.0, -s)
-        let x3 = Point3D(-l, 0.0, +s)
-        
-        // Z = 0
-        let y0 = Point3D(+s, +l, 0.0)
-        let y1 = Point3D(-s, +l, 0.0)
-        let y2 = Point3D(-s, -l, 0.0)
-        let y3 = Point3D(+s, -l, 0.0)
-        
-        let t0 = y1.vector
-        let t1 = z0.vector
-        let tl = length(t1 - t0)
-        print(tl)
-//        let n0 = Vector3D(+1.0,  0.0,  0.0)
-//        let n1 = Vector3D( 0.0, +1.0,  0.0)
-//        let n2 = Vector3D( 0.0,  0.0, +1.0)
-//        
-//        let q0 = Quad3D(z0, z1, z2, z3)
-//        let q1 = Quad3D(x0, x1, x2, x3)
-//        let q2 = Quad3D(y0, y1, y2, y3)
-        
-        /*
-           △▽△ 1
-           ▽△
-            ▽△▽△▽△▽△▽△
-                     ▽△
-                 20 ▽△▽
-        */
-        let f00 = Triangle3D(y0, y1, z0)
-        let f01 = Triangle3D(z0, y1, x3)
-        let f02 = Triangle3D(x3, z1, z0)
-        let f03 = Triangle3D(z0, z1, x0)
-        let f04 = Triangle3D(x0, y0, z0)
-        let f05 = Triangle3D(x0, x1, y0)
-        let f06 = Triangle3D(y0, x1, z3)
-        let f07 = Triangle3D(y0, z3, y1)
-        let f08 = Triangle3D(y1, z3, x2)
-        let f09 = Triangle3D(y1, x2, x3)
-        let f10 = Triangle3D(x3, x2, y2)
-        let f11 = Triangle3D(x3, y2, z1)
-        let f12 = Triangle3D(z1, y2, y3)
-        let f13 = Triangle3D(z1, y3, x0)
-        let f14 = Triangle3D(x0, y3, x1)
-        let f15 = Triangle3D(x1, y3, z2)
-        let f16 = Triangle3D(x1, z2, z3)
-        let f17 = Triangle3D(z3, z2, x2)
-        let f18 = Triangle3D(x2, z2, y2)
-        let f19 = Triangle3D(y2, z2, y3)
-        
         let mesh = Mesh3D()
+        var index = 0
+        let colors = [ColorRGBA8.olive, ColorRGBA8.forestGreen, ColorRGBA8.brown, ColorRGBA8.grey]
+        let surface = Surface.icosahedron(65536.0).subdivide(5) // Don't go over 5 unless Release mode is enabled
         
-//        mesh.append(q0, normal: n0, color1: ColorRGBA8.blue, color2: ColorRGBA8.cyan)
-//        mesh.append(q1, normal: n1, color1: ColorRGBA8.red, color2: ColorRGBA8.magenta)
-//        mesh.append(q2, normal: n2, color1: ColorRGBA8.green, color2: ColorRGBA8.yellow)
+        for triangle in surface.triangles() {
+            let a = (normalize(triangle.a.vector) * 65536.0).point
+            let b = (normalize(triangle.b.vector) * 65536.0).point
+            let c = (normalize(triangle.c.vector) * 65536.0).point
+            let t = Triangle3D(a, b, c)
+            mesh.append(t, color: colors[++index % colors.count])
+        }
         
-//        mesh.append(f00, normal: f00.normal(), color: ColorRGBA8.red)
-//        mesh.append(f01, normal: f01.normal(), color: ColorRGBA8.green)
-//        mesh.append(f02, normal: f02.normal(), color: ColorRGBA8.blue)
-//        mesh.append(f03, normal: f03.normal(), color: ColorRGBA8.yellow)
-//        mesh.append(f04, normal: f04.normal(), color: ColorRGBA8.magenta)
-//        mesh.append(f05, normal: f05.normal(), color: ColorRGBA8.cyan)
-//        mesh.append(f06, normal: f06.normal(), color: ColorRGBA8.brown)
-//        mesh.append(f07, normal: f07.normal(), color: ColorRGBA8.pink)
-//        mesh.append(f08, normal: f08.normal(), color: ColorRGBA8.lime)
-//        mesh.append(f09, normal: f09.normal(), color: ColorRGBA8.orange)
-//        mesh.append(f10, normal: f10.normal(), color: ColorRGBA8.silver)
-//        mesh.append(f11, normal: f11.normal(), color: ColorRGBA8.teal)
-//        mesh.append(f12, normal: f12.normal(), color: ColorRGBA8.olive)
-//        mesh.append(f13, normal: f13.normal(), color: ColorRGBA8.purple)
-//        mesh.append(f14, normal: f14.normal(), color: ColorRGBA8.navy)
-//        mesh.append(f15, normal: f15.normal(), color: ColorRGBA8.maroon)
-//        mesh.append(f16, normal: f16.normal(), color: ColorRGBA8.skyBlue)
-//        mesh.append(f17, normal: f17.normal(), color: ColorRGBA8.forestGreen)
-//        mesh.append(f18, normal: f18.normal(), color: ColorRGBA8.gold)
-//        mesh.append(f19, normal: f19.normal(), color: ColorRGBA8.indigo)
-        mesh.append(f00, normal: f00.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f01, normal: f01.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f02, normal: f02.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f03, normal: f03.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f04, normal: f04.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f05, normal: f05.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f06, normal: f06.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f07, normal: f07.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f08, normal: f08.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f09, normal: f09.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f10, normal: f10.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f11, normal: f11.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f12, normal: f12.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f13, normal: f13.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f14, normal: f14.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f15, normal: f15.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f16, normal: f16.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f17, normal: f17.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f18, normal: f18.normal(), color: ColorRGBA8.skyBlue)
-        mesh.append(f19, normal: f19.normal(), color: ColorRGBA8.skyBlue)
-
         return mesh
     }
 }
@@ -226,11 +110,11 @@ extension Mesh3D {
         append(RenderableTriangle(v3, v4, v5))
     }
     
-    public func append(triangle: Triangle3D, normal: Vector3D, color: ColorRGBA8) {
+    public func append(triangle: Triangle3D, color: ColorRGBA8) {
         let texCoord = Quad2D(Point2D(), Point2D(), Point2D(), Point2D())
-        let v0 = Vertex3D(position: triangle.a, normal: normal, texCoord: texCoord.a, color: color)
-        let v1 = Vertex3D(position: triangle.b, normal: normal, texCoord: texCoord.b, color: color)
-        let v2 = Vertex3D(position: triangle.c, normal: normal, texCoord: texCoord.c, color: color)
+        let v0 = Vertex3D(position: triangle.a, normal: normalize(triangle.a.vector), texCoord: texCoord.a, color: color)
+        let v1 = Vertex3D(position: triangle.b, normal: normalize(triangle.b.vector), texCoord: texCoord.b, color: color)
+        let v2 = Vertex3D(position: triangle.c, normal: normalize(triangle.c.vector), texCoord: texCoord.c, color: color)
         
         append(RenderableTriangle(v0, v1, v2))
     }
