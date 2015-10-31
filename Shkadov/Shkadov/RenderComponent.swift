@@ -22,20 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public struct RenderComponent : Component {
+public class RenderComponent : Component {
     public static let kind = Kind(dataType: RenderComponent.self)
     public let vertexCount: Int
+    public let indexCount: Int
     public let uniformBuffer: RenderBuffer
     public let uniformOffset: Int
     public let diffuseColor: Color
     
     public init(
         vertexCount: Int,
+        indexCount: Int,
         uniformBuffer: RenderBuffer,
         uniformOffset: Int,
         diffuseColor: Color
     ) {
         self.vertexCount = vertexCount
+        self.indexCount = indexCount
         self.uniformBuffer = uniformBuffer
         self.uniformOffset = uniformOffset
         self.diffuseColor = diffuseColor

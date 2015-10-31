@@ -41,6 +41,11 @@ struct MaterialInfo {
     float Shininess; // Specular shininess factor
 };
 
+struct TerrainVertexIn {
+    packed_float3 position;
+    packed_float4 color;
+};
+
 struct BasicVertexIn {
     packed_float3 position;
     packed_float3 normal;
@@ -120,7 +125,7 @@ fragment half4 colorFragment(VertexOut inFrag [[stage_in]]) {
 vertex VertexOut basicVertex(uint vid [[vertex_id]], constant BasicVertexIn* inVertex [[buffer(0)]], constant UniformIn& inUniform [[buffer(1)]]) {
     float4 vertexPosition = float4(float3(inVertex[vid].position), 1.0);
     float3 vertexNormal = float3(inVertex[vid].normal);
-    
+
     VertexOut outVertex;
     
     outVertex.position = inUniform.modelViewProjectionMatrix * vertexPosition;
@@ -145,6 +150,21 @@ fragment half4 basicFragment(VertexOut inFrag [[stage_in]]) {
     float3 lighting = calculateLight(inFrag.eyeCoords, inFrag.tnorm, light, material);
     
     return half4(inFrag.color * float4(lighting, 1.0));
+};
+
+vertex VertexOut terrainVertex(uint vid [[vertex_id]], constant TerrainVertexIn* inVertex [[buffer(0)]], constant UniformIn& inUniform [[buffer(1)]]) {
+    float4 vertexPosition = float4(float3(inVertex[vid].position), 1.0);
+    float3 vertexNormal = normalize(vertexPosition.xyz);
+    float4 vertexColor = float4(inVertex[vid].color);
+
+    VertexOut outVertex;
+    
+    outVertex.position = inUniform.modelViewProjectionMatrix * vertexPosition;
+    outVertex.color = inUniform.diffuseColor * vertexColor;
+    outVertex.eyeCoords = (inUniform.modelViewMatrix * vertexPosition).xyz;
+    outVertex.tnorm = normalize(inUniform.normalMatrix * vertexNormal);
+    
+    return outVertex;
 };
 
 vertex TextureVertexOut textureVertex(uint vid [[vertex_id]], constant TextureVertexIn* inVertex [[buffer(0)]], constant UniformIn& inUniform [[buffer(1)]]) {

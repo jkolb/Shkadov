@@ -25,15 +25,17 @@ SOFTWARE.
 public struct RenderState {
     public let program: Handle
     public let vertexBuffer: RenderBuffer
+    public let indexBuffer: RenderBuffer?
     public let uniformBuffer: RenderBuffer
     public let texture: Handle
     public let objects: [RenderComponent]
     public let cullMode: RenderCullMode
     public let winding: RenderWinding
     
-    public init(program: Handle, vertexBuffer: RenderBuffer, uniformBuffer: RenderBuffer, texture: Handle, objects: [RenderComponent], cullMode: RenderCullMode = .Back, winding: RenderWinding = .CounterClockwise) {
+    public init(program: Handle, vertexBuffer: RenderBuffer, indexBuffer: RenderBuffer?, uniformBuffer: RenderBuffer, texture: Handle, objects: [RenderComponent], cullMode: RenderCullMode = .Back, winding: RenderWinding = .CounterClockwise) {
         self.program = program
         self.vertexBuffer = vertexBuffer
+        self.indexBuffer = indexBuffer
         self.uniformBuffer = uniformBuffer
         self.texture = texture
         self.objects = objects

@@ -28,14 +28,15 @@ public final class TestIcosahedronSystem {
     private let entityComponents: EntityComponents
     private var program: Handle = Handle.invalid
     private var vertexBuffer: RenderBuffer!
+    private var indexBuffer: RenderBuffer!
     private var uniformBuffer: RenderBuffer!
-    private let rectangles: Entity
+    private let icosahedron: Entity
     
     public init(renderer: Renderer, assetLoader: AssetLoader, entityComponents: EntityComponents) {
         self.renderer = renderer
         self.assetLoader = assetLoader
         self.entityComponents = entityComponents
-        self.rectangles = entityComponents.createEntity()
+        self.icosahedron = entityComponents.createEntity()
     }
     
     deinit {
@@ -43,21 +44,35 @@ public final class TestIcosahedronSystem {
     }
     
     public func configure() {
-        var vertexDescriptor = VertexDescriptor()
-        vertexDescriptor.addAttribute(.Position, format: .Float3)
-        vertexDescriptor.addAttribute(.Normal, format: .Float3)
-        vertexDescriptor.addAttribute(.Color, format: .Float4)
+        let surface = generateSurface()
+        let vertices = surface.allVertices()
+        let faces = surface.allFaces()
         
-        let mesh = generateMesh()
-        vertexBuffer = renderer.createBufferWithName("Icosahedron", length: mesh.vertexCount * vertexDescriptor.size)
-        mesh.fillBuffer(vertexBuffer, vertexDescriptor: vertexDescriptor)
+        vertexBuffer = renderer.createBufferWithName("Icosahedron Vertex", length: vertices.count * strideof(Float32) * 7)
+        indexBuffer = renderer.createBufferWithName("Icosahedron Index", length: faces.count * 3 * strideof(UInt32))
         
-        program = renderer.createProgramWithVertexPath("colorVertex", fragmentPath: "colorFragment")
+        let colors = [ColorRGBA8.forestGreen, ColorRGBA8.green]
+
+        let vertexByteBuffer = ByteBuffer(data: vertexBuffer.contents, length: vertexBuffer.length)
+        let indexByteBuffer = ByteBuffer(data: indexBuffer.contents, length: indexBuffer.length)
+
+        for vertex in vertices {
+            vertexByteBuffer.putNextValue((normalize(vertex) * 65536.0).point)
+            vertexByteBuffer.putNextValue(Color(rgba8: colors[Int(arc4random() % UInt32(colors.count))]))
+        }
+        
+        for face in faces {
+            indexByteBuffer.putNextValue(UInt32(face.a))
+            indexByteBuffer.putNextValue(UInt32(face.b))
+            indexByteBuffer.putNextValue(UInt32(face.c))
+        }
+        
+        program = renderer.createProgramWithVertexPath("terrainVertex", fragmentPath: "colorFragment")
         let uniformSize = strideof(UniformIn)
-        uniformBuffer = renderer.createBufferWithName("Rectangles Uniforms", length: uniformSize)
+        uniformBuffer = renderer.createBufferWithName("Icosahedron Uniforms", length: uniformSize)
         
-        entityComponents.addComponent(OrientationComponent(position: Point3D()), toEntity: rectangles)
-        entityComponents.addComponent(RenderComponent(vertexCount: mesh.vertexCount, uniformBuffer: uniformBuffer, uniformOffset: 0, diffuseColor: Color.white), toEntity: rectangles)
+        entityComponents.addComponent(OrientationComponent(position: Point3D()), toEntity: icosahedron)
+        entityComponents.addComponent(RenderComponent(vertexCount: vertices.count, indexCount: faces.count * 3, uniformBuffer: uniformBuffer, uniformOffset: 0, diffuseColor: Color.white), toEntity: icosahedron)
     }
     
     public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
@@ -65,12 +80,13 @@ public final class TestIcosahedronSystem {
     
     public func render() -> RenderState {
         var objects = [RenderComponent]()
-        let renderObject = entityComponents.componentForEntity(rectangles, withComponentType: RenderComponent.self)
+        let renderObject = entityComponents.componentForEntity(icosahedron, withComponentType: RenderComponent.self)
         objects.append(renderObject)
         
         return RenderState(
             program: program,
             vertexBuffer: vertexBuffer,
+            indexBuffer: indexBuffer,
             uniformBuffer: uniformBuffer,
             texture: Handle.invalid,
             objects: objects,
@@ -78,23 +94,10 @@ public final class TestIcosahedronSystem {
         )
     }
     
-    public func generateMesh() -> Mesh3D {
+    public func generateSurface() -> Surface {
         let size: Float = 65536.0
         let divisions = 256
-        let mesh = Mesh3D()
-        var index = 0
-        let colors = [ColorRGBA8.olive, ColorRGBA8.forestGreen, ColorRGBA8.brown, ColorRGBA8.grey, ColorRGBA8.green, ColorRGBA8.blue, ColorRGBA8.yellow]
-        let surface = Surface.icosahedron(size).subdivideBy(divisions)
-        
-        for triangle in surface.triangles() {
-            let a = (normalize(triangle.a.vector) * size).point
-            let b = (normalize(triangle.b.vector) * size).point
-            let c = (normalize(triangle.c.vector) * size).point
-            let t = Triangle3D(a, b, c)
-            mesh.append(t, color: colors[++index % colors.count])
-        }
-        
-        return mesh
+        return Surface.icosahedron(size).subdivideBy(divisions)
     }
 }
 

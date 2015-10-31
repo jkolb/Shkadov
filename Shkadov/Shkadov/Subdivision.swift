@@ -65,6 +65,14 @@ public final class Surface {
         self.faces.reserveCapacity(reserveCapacity)
     }
     
+    public func allVertices() -> [Vector3D] {
+        return vertices
+    }
+    
+    public func allFaces() -> [Triangle] {
+        return faces
+    }
+    
     public func addVertex(vertex: Vector3D) -> Int {
         let index = vertices.count
         vertices.append(vertex)

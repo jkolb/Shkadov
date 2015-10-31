@@ -119,6 +119,8 @@ extension MetalRenderer : MTKViewDelegate {
             let vertexBuffer = state.vertexBuffer.rendererInfo as! MTLBuffer
             renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, atIndex: 0)
             
+            let indexBuffer = state.indexBuffer?.rendererInfo as? MTLBuffer
+            
             if let texture = textures[state.texture] {
                 renderEncoder.setFragmentTexture(texture, atIndex: 0)
                 renderEncoder.setFragmentSamplerState(sampler, atIndex: 0)
@@ -127,7 +129,13 @@ extension MetalRenderer : MTKViewDelegate {
             for object in state.objects {
                 let uniformBuffer = object.uniformBuffer.rendererInfo as! MTLBuffer
                 renderEncoder.setVertexBuffer(uniformBuffer, offset: object.uniformOffset, atIndex: 1)
-                renderEncoder.drawPrimitives(.Triangle, vertexStart: 0, vertexCount: object.vertexCount)
+                
+                if let indexBuffer = indexBuffer {
+                    renderEncoder.drawIndexedPrimitives(.Triangle, indexCount: object.indexCount, indexType: .UInt32, indexBuffer: indexBuffer, indexBufferOffset: 0)
+                }
+                else {
+                    renderEncoder.drawPrimitives(.Triangle, vertexStart: 0, vertexCount: object.vertexCount)
+                }
             }
         }
         

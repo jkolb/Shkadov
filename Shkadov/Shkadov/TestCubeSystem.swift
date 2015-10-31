@@ -80,7 +80,7 @@ public final class TestCubeSystem {
         for index in 0..<positions.count {
             let cube = entityComponents.createEntity()
             entityComponents.addComponent(OrientationComponent(position: positions[index]), toEntity: cube)
-            entityComponents.addComponent(RenderComponent(vertexCount: mesh.vertexCount, uniformBuffer: uniformBuffer, uniformOffset: uniformOffset, diffuseColor: colors[index]), toEntity: cube)
+            entityComponents.addComponent(RenderComponent(vertexCount: mesh.vertexCount, indexCount: 0, uniformBuffer: uniformBuffer, uniformOffset: uniformOffset, diffuseColor: colors[index]), toEntity: cube)
             uniformOffset += uniformSize
             cubes.append(cube)
         }
@@ -111,6 +111,7 @@ public final class TestCubeSystem {
         return RenderState(
             program: program,
             vertexBuffer: vertexBuffer,
+            indexBuffer: nil,
             uniformBuffer: uniformBuffer,
             texture: Handle.invalid,
             objects: objects

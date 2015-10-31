@@ -61,7 +61,7 @@ public final class TerrainSystem {
 
         floor = entityComponents.createEntity()
         entityComponents.addComponent(OrientationComponent(position: Point3D(0.0, -65500.0, 0.0)), toEntity: floor)
-        entityComponents.addComponent(RenderComponent(vertexCount: mesh.vertexCount, uniformBuffer: uniformBuffer, uniformOffset: 0, diffuseColor: Color.tan), toEntity: floor)
+        entityComponents.addComponent(RenderComponent(vertexCount: mesh.vertexCount, indexCount: 0, uniformBuffer: uniformBuffer, uniformOffset: 0, diffuseColor: Color.tan), toEntity: floor)
     }
     
     public func updateWithTickCount(tickCount: Int, tickDuration: Duration) {
@@ -75,6 +75,7 @@ public final class TerrainSystem {
         return RenderState(
             program: program,
             vertexBuffer: vertexBuffer,
+            indexBuffer: nil,
             uniformBuffer: uniformBuffer,
             texture: texture,
             objects: objects
