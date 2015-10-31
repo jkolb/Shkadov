@@ -29,17 +29,25 @@ public struct Edge : Hashable {
     public let b: Int
     
     public init(_ a: Int, _ b: Int) {
-        self.a = min(a, b)
-        self.b = max(a, b)
+        self.a = a
+        self.b = b
     }
     
     public var hashValue: Int {
-        return a.hashValue ^ b.hashValue
+        return (a * 7).hashValue ^ b.hashValue
+    }
+    
+    public func isReverseOf(other: Edge) -> Bool {
+        return a == other.b && b == other.a
+    }
+    
+    public func reverse() -> Edge {
+        return Edge(b, a)
     }
 }
 
 public func ==(lhs: Edge, rhs: Edge) -> Bool {
-    return lhs.a == rhs.a && rhs.b == lhs.b
+    return lhs.a == rhs.a && lhs.b == rhs.b
 }
 
 public struct Triangle {
@@ -94,90 +102,97 @@ public final class Surface {
         return triangles
     }
     
-    public func subdivide(count: Int) -> Surface {
-        if count == 0 {
-            return self
-        }
-        else {
-            return subdivide().subdivide(count - 1)
-        }
-    }
-    
-    public func subdivide() -> Surface {
-        NSLog("START: \(faces.count)")
-        let subdividedSurface = Surface(reserveCapacity: faces.count * 4)
-        var edgeMidpoint = [Edge:Vector3D](minimumCapacity: faces.count * 4 * 3 / 2)
-
-        for face in faces {
-            let a = vertices[face.a]
-            let b = vertices[face.b]
-            let c = vertices[face.c]
-
-            let AB = Edge(face.a, face.b)
-            let BC = Edge(face.b, face.c)
-            let CA = Edge(face.c, face.a)
-            
-            let ab = edgeMidpoint[AB] ?? (a + b) * 0.5
-            let bc = edgeMidpoint[BC] ?? (b + c) * 0.5
-            let ca = edgeMidpoint[CA] ?? (c + a) * 0.5
-
-            edgeMidpoint[AB] = ab
-            edgeMidpoint[BC] = bc
-            edgeMidpoint[CA] = ca
-            
-            let i0 = subdividedSurface.addVertex(a)
-            let i1 = subdividedSurface.addVertex(ab)
-            let i2 = subdividedSurface.addVertex(ca)
-            let i3 = subdividedSurface.addVertex(b)
-            let i4 = subdividedSurface.addVertex(bc)
-            let i5 = subdividedSurface.addVertex(c)
-            
-            subdividedSurface.addFace(i0, i1, i2)
-            subdividedSurface.addFace(i1, i3, i4)
-            subdividedSurface.addFace(i1, i4, i2)
-            subdividedSurface.addFace(i2, i4, i5)
-        }
-        
-        NSLog("END: \(faces.count)")
-
-        return subdividedSurface
-    }
-    
     public func subdivideBy(divisions: Int) -> Surface {
         let subdividedSurface = Surface(reserveCapacity: faces.count * (divisions * divisions))
         let edgeVertexCount = divisions + 1
         let delta = 1.0 / Float(divisions)
 
-        var pAB = [Vector3D]()
-        var pAC = [Vector3D]()
+        var pointsForEdge = [Edge:[Vector3D]]()
         var rows = [[Int]]()
         
-        pAB.reserveCapacity(edgeVertexCount)
-        pAC.reserveCapacity(edgeVertexCount)
         rows.reserveCapacity(edgeVertexCount)
         
         for face in faces {
-            let a = vertices[face.a]
-            let b = vertices[face.b]
-            let c = vertices[face.c]
+            let AB = Edge(face.a, face.b)
+            let AC = Edge(face.a, face.c)
             
-            let deltaAB = (b - a) * delta
-            let deltaAC = (c - a) * delta
-            
-            var nextAB = a
-            var nextAC = a
+            var pAB = pointsForEdge[AB] ?? [Vector3D]()
+            var pAC = pointsForEdge[AC] ?? [Vector3D]()
 
-            for _ in 0..<divisions {
-                pAB.append(nextAB)
-                pAC.append(nextAC)
+            if pAB.count == 0 && pAC.count == 0 {
+                pAB.reserveCapacity(edgeVertexCount)
+                pAC.reserveCapacity(edgeVertexCount)
                 
-                nextAB += deltaAB
-                nextAC += deltaAC
+                let a = vertices[face.a]
+                let b = vertices[face.b]
+                let c = vertices[face.c]
+                
+                let deltaAB = (b - a) * delta
+                let deltaAC = (c - a) * delta
+                
+                var nextAB = a
+                var nextAC = a
+                
+                for _ in 0..<divisions {
+                    pAB.append(nextAB)
+                    pAC.append(nextAC)
+                    
+                    nextAB += deltaAB
+                    nextAC += deltaAC
+                }
+                
+                pAB.append(b)
+                pAC.append(c)
+                
+                pointsForEdge[AB] = pAB
+                pointsForEdge[AB.reverse()] = pAB.reverse()
+                pointsForEdge[AC] = pAC
+                pointsForEdge[AC.reverse()] = pAC.reverse()
             }
+            else if pAB.count == 0 {
+                pAB.reserveCapacity(edgeVertexCount)
+                
+                let a = vertices[face.a]
+                let b = vertices[face.b]
+                
+                let deltaAB = (b - a) * delta
+                
+                var nextAB = a
+                
+                for _ in 0..<divisions {
+                    pAB.append(nextAB)
+                    
+                    nextAB += deltaAB
+                }
+                
+                pAB.append(b)
+                
+                pointsForEdge[AB] = pAB
+                pointsForEdge[AB.reverse()] = pAB.reverse()
+            }
+            else if pAC.count == 0 {
+                pAC.reserveCapacity(edgeVertexCount)
+                
+                let a = vertices[face.a]
+                let c = vertices[face.c]
+                
+                let deltaAC = (c - a) * delta
+                
+                var nextAC = a
+                
+                for _ in 0..<divisions {
+                    pAC.append(nextAC)
+                    
+                    nextAC += deltaAC
+                }
+                
+                pAC.append(c)
+                
+                pointsForEdge[AC] = pAC
+                pointsForEdge[AC.reverse()] = pAC.reverse()
+            }
+            // else both have previously been calculated
             
-            pAB.append(b)
-            pAC.append(c)
-
             for row in 0..<edgeVertexCount {
                 var rowIndices = [Int]()
                 rowIndices.reserveCapacity(row + 1)
@@ -212,8 +227,6 @@ public final class Surface {
                 subdividedSurface.addFace(U[lastIndex], L[lastIndex], L[lastIndex + 1])
             }
             
-            pAB.removeAll(keepCapacity: true)
-            pAC.removeAll(keepCapacity: true)
             rows.removeAll(keepCapacity: true)
         }
 
