@@ -63,13 +63,21 @@ public struct Triangle {
 }
 
 public final class Surface {
+    private static let numberOfBuckets: Int = 128
+    private let weldEpsilon: Float = 0.5
+    private let cellSize: Float = 10.0
+    private var buckets: [Int]
     private var vertices: [Vector3D]
+    private var nextVertex: [Int]
     private var faces: [Triangle]
     
     public init(reserveCapacity: Int) {
-        self.vertices = [float3]()
+        self.buckets = [Int](count: Surface.numberOfBuckets, repeatedValue: -1)
+        self.vertices = [Vector3D]()
+        self.nextVertex = [Int]()
         self.faces = [Triangle]()
         self.vertices.reserveCapacity(reserveCapacity)
+        self.nextVertex.reserveCapacity(reserveCapacity)
         self.faces.reserveCapacity(reserveCapacity)
     }
     
@@ -81,14 +89,79 @@ public final class Surface {
         return faces
     }
     
-    public func addVertex(vertex: Vector3D) -> Int {
-        let index = vertices.count
-        vertices.append(vertex)
-        return index
+    public func addVertex(vertex: Vector3D, unique: Bool = true) -> Int {
+        if unique {
+            return insertVertex(vertex)
+        }
+        else {
+            return weldVertex(vertex)
+        }
     }
     
     public func addFace(a: Int, _ b: Int, _ c: Int) {
         faces.append(Triangle(a, b, c))
+    }
+    
+    private func insertVertex(vertex: Vector3D) -> Int {
+        let x = Int(vertex.x / cellSize)
+        let y = Int(vertex.y / cellSize)
+        let z = Int(vertex.z / cellSize)
+        
+        let bucket = gridCellBucket(x, y, z)
+        let index = vertices.count
+        vertices.append(vertex)
+        nextVertex.append(buckets[bucket])
+        buckets[bucket] = index
+        
+        return index
+    }
+    
+    private func gridCellBucket(x: Int, _ y: Int, _ z: Int) -> Int {
+        let magic1: UInt = 0x8da6b343
+        let magic2: UInt = 0xd8163841
+        let magic3: UInt = 0xcb1ab31f
+        let index = (magic1 &* UInt(bitPattern: x)) &+ (magic2 &* UInt(bitPattern: y)) &+ (magic3 &* UInt(bitPattern: z))
+        return Int(index % UInt(Surface.numberOfBuckets))
+    }
+    
+    private func locateVertex(v: Vector3D, inBucket bucket: Int) -> Int? {
+        for var index = buckets[bucket]; index >= 0; index = nextVertex[index] {
+            if distance_squared(vertices[index], v) < weldEpsilon * weldEpsilon {
+                return index
+            }
+        }
+        
+        return nil
+    }
+    
+    private func weldVertex(vertex: Vector3D) -> Int {
+        let left = Int((vertex.x - weldEpsilon) / cellSize)
+        let right = Int((vertex.x + weldEpsilon) / cellSize)
+        let top = Int((vertex.y - weldEpsilon) / cellSize)
+        let bottom = Int((vertex.y + weldEpsilon) / cellSize)
+        let forward = Int((vertex.z - weldEpsilon) / cellSize)
+        let backward = Int((vertex.z + weldEpsilon) / cellSize)
+        var previouslyVisitedBucket = Set<Int>(minimumCapacity: 8)
+        
+        for i in left...right {
+            for j in top...bottom {
+                for k in forward...backward {
+                    let bucket = gridCellBucket(i, j, k)
+                    
+                    if previouslyVisitedBucket.contains(bucket) {
+                        continue
+                    }
+                    
+                    previouslyVisitedBucket.insert(bucket)
+                    
+                    if let index = locateVertex(vertex, inBucket: bucket) {
+                        return index
+                    }
+                }
+            }
+        }
+        
+        return insertVertex(vertex)
     }
     
     public func triangles() -> [Triangle3D] {
@@ -203,13 +276,13 @@ public final class Surface {
                 let deltaBC = (rc - rb) * rowDelta
                 var nextBC = rb
                 
-                for _ in 0..<row {
-                    let index = subdividedSurface.addVertex(nextBC)
+                for i in 0..<row {
+                    let index = subdividedSurface.addVertex(nextBC, unique: (i > 0))
                     rowIndices.append(index)
                     nextBC += deltaBC
                 }
 
-                let lastIndex = subdividedSurface.addVertex(rc)
+                let lastIndex = subdividedSurface.addVertex(rc, unique: false)
                 rowIndices.append(lastIndex)
                 rows.append(rowIndices)
             }
