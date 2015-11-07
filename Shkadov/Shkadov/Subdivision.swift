@@ -63,7 +63,7 @@ public struct Triangle {
 }
 
 public final class Surface {
-    private static let numberOfBuckets: Int = 128
+    private static let numberOfBuckets: Int = 65536
     private let weldEpsilon: Float = 0.5
     private let cellSize: Float = 10.0
     private var buckets: [Int]

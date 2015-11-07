@@ -58,24 +58,24 @@ public final class PlayerMovementSystem {
             var vector = Vector3D()
             
             if direction.x == .Right {
-                vector += sideways * 0.1
+                vector += sideways * 5
             }
             else if direction.x == .Left {
-                vector += sideways * -0.1
+                vector += sideways * -5
             }
             
             if direction.y == .Up {
-                vector += Vector3D.yAxis * 10
+                vector += Vector3D.yAxis * 5
             }
             else if direction.y == .Down {
-                vector += Vector3D.yAxis * -10
+                vector += Vector3D.yAxis * -5
             }
             
             if direction.z == .Forward {
-                vector += forward * 0.1
+                vector += forward * 5
             }
             else if direction.z == .Backward {
-                vector += forward * -0.1
+                vector += forward * -5
             }
             
             position = position + vector
