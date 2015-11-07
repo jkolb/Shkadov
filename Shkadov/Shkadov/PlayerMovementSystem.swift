@@ -81,7 +81,7 @@ public final class PlayerMovementSystem {
             position = position + vector
             
         case .ResetCamera:
-            position = Point3D(0.0, -65495.0, 0.0)
+            position = Point3D(0.0, -65400.0, 0.0)
             pitch = Angle()
             yaw = Angle()
             

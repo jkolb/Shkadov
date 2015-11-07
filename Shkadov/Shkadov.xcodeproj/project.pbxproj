@@ -30,6 +30,7 @@
 		E55018371BD2C57400E0161F /* MetalRenderBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55018361BD2C57400E0161F /* MetalRenderBuffer.swift */; };
 		E55033EB1BC3636900F1CF46 /* MenuInputContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55033EA1BC3636900F1CF46 /* MenuInputContext.swift */; };
 		E5523CDF1BC3640700DDB75A /* InputContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5523CDE1BC3640700DDB75A /* InputContext.swift */; };
+		E565533B1BEEB52A00FF6B3F /* Noise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E565533A1BEEB52A00FF6B3F /* Noise.swift */; };
 		E56AC6D11BDBF00C0078671F /* Subdivision.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56AC6D01BDBF00C0078671F /* Subdivision.swift */; };
 		E581CF741B892C6900D7174F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E581CF731B892C6900D7174F /* Assets.xcassets */; };
 		E581CFA01B892C9F00D7174F /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581CF8D1B892C9F00D7174F /* DispatchQueue.swift */; };
@@ -107,6 +108,7 @@
 		E55018361BD2C57400E0161F /* MetalRenderBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalRenderBuffer.swift; sourceTree = "<group>"; };
 		E55033EA1BC3636900F1CF46 /* MenuInputContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuInputContext.swift; sourceTree = "<group>"; };
 		E5523CDE1BC3640700DDB75A /* InputContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputContext.swift; sourceTree = "<group>"; };
+		E565533A1BEEB52A00FF6B3F /* Noise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Noise.swift; sourceTree = "<group>"; };
 		E56AC6D01BDBF00C0078671F /* Subdivision.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subdivision.swift; sourceTree = "<group>"; };
 		E581CF6E1B892C6900D7174F /* Shkadov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shkadov.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E581CF731B892C6900D7174F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 				E5D4643F1BBF2E59009B4D5D /* Shkadov-Bridging-Header.h */,
 				E5A7ED9F1BCAD915009AEEE2 /* TestIcosahedronSystem.swift */,
 				E56AC6D01BDBF00C0078671F /* Subdivision.swift */,
+				E565533A1BEEB52A00FF6B3F /* Noise.swift */,
 			);
 			name = Engine;
 			sourceTree = "<group>";
@@ -457,6 +460,7 @@
 				E5E8B2451BA48112004E9485 /* Vertex.swift in Sources */,
 				E5AC4E2F1BA5C6EB00134995 /* PlatformOSX+AssetLoader.swift in Sources */,
 				E581CFAD1B892C9F00D7174F /* RenderState.swift in Sources */,
+				E565533B1BEEB52A00FF6B3F /* Noise.swift in Sources */,
 				E592A5C11B8AAC220032D982 /* Synchronizable.swift in Sources */,
 				E55018351BD2C40A00E0161F /* RenderBuffer.swift in Sources */,
 				E59C5F0B1B9E7BF8003422FB /* PlatformOSX+NSApplicationDelegate.swift in Sources */,

@@ -50,18 +50,29 @@ public final class TestIcosahedronSystem {
         
         vertexBuffer = renderer.createBufferWithName("Icosahedron Vertex", length: vertices.count * strideof(Float32) * 7)
         indexBuffer = renderer.createBufferWithName("Icosahedron Index", length: faces.count * 3 * strideof(UInt32))
-        
-        let colors = [ColorRGBA8.forestGreen, ColorRGBA8.green]
 
         let vertexByteBuffer = ByteBuffer(data: vertexBuffer.contents, length: vertexBuffer.length)
         let indexByteBuffer = ByteBuffer(data: indexBuffer.contents, length: indexBuffer.length)
 
         for vertex in vertices {
             let normal = normalize(vertex)
-            let height = normal * Float(arc4random() % 256)
-            let adjustedVertex = (normal * 65536.0) + height
+            let position = normal * 65536.0
+            let noise = Noise.fbm(position, octaves: 8, lacunarity: 0.5, gain: 1.0)
+            let height = normal * (noise * 256.0)
+            let adjustedVertex = position + height
             vertexByteBuffer.putNextValue(adjustedVertex.point)
-            vertexByteBuffer.putNextValue(Color(rgba8: colors[Int(arc4random() % UInt32(colors.count))]))
+            let colorValue = (255 * abs(noise)) + 64
+            let color = colorValue > 255.0 ? UInt8.max : UInt8(colorValue)
+            
+            if -noise >= 0.45 {
+                vertexByteBuffer.putNextValue(Color(rgba8: ColorRGBA8(red: color, green: color, blue: color)))
+            }
+            else if -noise >= -0.2 {
+                vertexByteBuffer.putNextValue(Color(rgba8: ColorRGBA8(red: 0, green: color, blue: 0)))
+            }
+            else {
+                vertexByteBuffer.putNextValue(Color(rgba8: ColorRGBA8(red: 0, green: 0, blue: color)))
+            }
         }
         
         for face in faces {
@@ -99,7 +110,7 @@ public final class TestIcosahedronSystem {
     
     public func generateSurface() -> Surface {
         let size: Float = 65536.0
-        let divisions = 256
+        let divisions = 512
         return Surface.icosahedron(size).subdivideBy(divisions)
     }
 }

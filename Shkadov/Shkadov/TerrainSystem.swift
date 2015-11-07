@@ -60,7 +60,7 @@ public final class TerrainSystem {
         uniformBuffer = renderer.createBufferWithName("Terrain Uniforms", length: uniformSize)
 
         floor = entityComponents.createEntity()
-        entityComponents.addComponent(OrientationComponent(position: Point3D(0.0, -65500.0, 0.0)), toEntity: floor)
+        entityComponents.addComponent(OrientationComponent(position: Point3D(0.0, -65402.0, 0.0)), toEntity: floor)
         entityComponents.addComponent(RenderComponent(vertexCount: mesh.vertexCount, indexCount: 0, uniformBuffer: uniformBuffer, uniformOffset: 0, diffuseColor: Color.tan), toEntity: floor)
     }
     

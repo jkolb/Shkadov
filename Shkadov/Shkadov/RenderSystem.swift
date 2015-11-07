@@ -32,7 +32,7 @@ public final class RenderSystem {
         self.renderer = renderer
         self.entityComponents = entityComponents
         
-        entityComponents.addComponent(OrientationComponent(position: Point3D(0.0, -65495.0, 0.0)), toEntity: camera)
+        entityComponents.addComponent(OrientationComponent(position: Point3D(0.0, -65400.0, 0.0)), toEntity: camera)
         entityComponents.addComponent(ProjectionComponent(projectionMatrix: Matrix4x4(fovy: Angle(degrees: 90.0), aspect: 1.0, zNear: 0.1, zFar: 100.0)), toEntity: camera)
     }
     
