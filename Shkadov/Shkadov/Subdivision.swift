@@ -277,7 +277,7 @@ public final class Surface {
                 var nextBC = rb
                 
                 for i in 0..<row {
-                    let index = subdividedSurface.addVertex(nextBC, unique: (i > 0))
+                    let index = subdividedSurface.addVertex(nextBC, unique: (i > 0) && (row < divisions))
                     rowIndices.append(index)
                     nextBC += deltaBC
                 }

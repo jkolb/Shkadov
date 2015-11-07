@@ -57,7 +57,10 @@ public final class TestIcosahedronSystem {
         let indexByteBuffer = ByteBuffer(data: indexBuffer.contents, length: indexBuffer.length)
 
         for vertex in vertices {
-            vertexByteBuffer.putNextValue((normalize(vertex) * 65536.0).point)
+            let normal = normalize(vertex)
+            let height = normal * Float(arc4random() % 256)
+            let adjustedVertex = (normal * 65536.0) + height
+            vertexByteBuffer.putNextValue(adjustedVertex.point)
             vertexByteBuffer.putNextValue(Color(rgba8: colors[Int(arc4random() % UInt32(colors.count))]))
         }
         
@@ -96,7 +99,7 @@ public final class TestIcosahedronSystem {
     
     public func generateSurface() -> Surface {
         let size: Float = 65536.0
-        let divisions = 256
+        let divisions = 512
         return Surface.icosahedron(size).subdivideBy(divisions)
     }
 }
