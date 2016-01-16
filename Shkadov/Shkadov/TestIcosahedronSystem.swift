@@ -110,7 +110,7 @@ public final class TestIcosahedronSystem {
     
     public func generateSurface() -> Surface {
         let size: Float = 65536.0
-        let divisions = 512
+        let divisions = 64
         return Surface.icosahedron(size).subdivideBy(divisions)
     }
 }

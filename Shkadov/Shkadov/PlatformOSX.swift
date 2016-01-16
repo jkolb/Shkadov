@@ -31,6 +31,7 @@ public class PlatformOSX : NSObject {
     public let timeBaseDenominator: TimeType
     public private(set) var mainWindow: NSWindow!
     public private(set) var viewController: ViewController!
+    private var thread: GameThread!
     private var engine: Engine!
     public var relativeMouse = false
     
@@ -81,7 +82,8 @@ public class PlatformOSX : NSObject {
     
     public func startEngine() {
         engine.updateViewport(viewport)
-        engine.start()
+        thread = GameThread(engine: engine)
+        thread.start()
     }
     
     public func stopEngine() {

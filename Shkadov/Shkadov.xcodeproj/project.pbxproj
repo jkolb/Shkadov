@@ -82,6 +82,7 @@
 		E5E8B2451BA48112004E9485 /* Vertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E8B2441BA48112004E9485 /* Vertex.swift */; };
 		E5E8B2471BA48915004E9485 /* ByteBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E8B2461BA48915004E9485 /* ByteBuffer.swift */; };
 		E5E8B2831BA4CFC0004E9485 /* RenderableTriangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E8B2821BA4CFC0004E9485 /* RenderableTriangle.swift */; };
+		E5F2165B1C4A9D13009B643F /* GameThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F2165A1C4A9D13009B643F /* GameThread.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -164,6 +165,7 @@
 		E5E8B2441BA48112004E9485 /* Vertex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vertex.swift; sourceTree = "<group>"; };
 		E5E8B2461BA48915004E9485 /* ByteBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ByteBuffer.swift; sourceTree = "<group>"; };
 		E5E8B2821BA4CFC0004E9485 /* RenderableTriangle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderableTriangle.swift; sourceTree = "<group>"; };
+		E5F2165A1C4A9D13009B643F /* GameThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameThread.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -285,6 +287,7 @@
 				E5A7ED9F1BCAD915009AEEE2 /* TestIcosahedronSystem.swift */,
 				E56AC6D01BDBF00C0078671F /* Subdivision.swift */,
 				E565533A1BEEB52A00FF6B3F /* Noise.swift */,
+				E5F2165A1C4A9D13009B643F /* GameThread.swift */,
 			);
 			name = Engine;
 			sourceTree = "<group>";
@@ -407,6 +410,7 @@
 				09F609501B9C45D3003B4A5B /* RawInputKeyCode.swift in Sources */,
 				E59C5F0F1B9E7D2E003422FB /* Geometry+CoreGraphics.swift in Sources */,
 				E535C8C11B9158920048321F /* Handle.swift in Sources */,
+				E5F2165B1C4A9D13009B643F /* GameThread.swift in Sources */,
 				E5E8B2471BA48915004E9485 /* ByteBuffer.swift in Sources */,
 				E59C5F171B9E7F83003422FB /* PlatformOSX+NSUserDefaults.swift in Sources */,
 				E5011DAE1BBED7140002D854 /* ContentViewSource.swift in Sources */,
