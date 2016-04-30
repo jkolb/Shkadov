@@ -10,8 +10,6 @@
 		E55F275A1CD53D2E0062467C /* Shkadov.h in Headers */ = {isa = PBXBuildFile; fileRef = E55F27591CD53D2E0062467C /* Shkadov.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E55F27611CD53D2E0062467C /* Shkadov.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55F27561CD53D2E0062467C /* Shkadov.framework */; };
 		E55F27661CD53D2E0062467C /* ShkadovTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F27651CD53D2E0062467C /* ShkadovTests.swift */; };
-		E55F283C1CD53D890062467C /* BoxGeometryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F277A1CD53D890062467C /* BoxGeometryBuilder.swift */; };
-		E55F283D1CD53D890062467C /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F277D1CD53D890062467C /* Configuration.swift */; };
 		E55F283E1CD53D890062467C /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F277E1CD53D890062467C /* Engine.swift */; };
 		E55F283F1CD53D890062467C /* RawInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F27801CD53D890062467C /* RawInput.swift */; };
 		E55F28401CD53D890062467C /* RawInputButtonCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F27811CD53D890062467C /* RawInputButtonCode.swift */; };
@@ -183,6 +181,7 @@
 		E55F28E71CD53D890062467C /* StringParsingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F28391CD53D890062467C /* StringParsingError.swift */; };
 		E55F28E81CD53D890062467C /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F283A1CD53D890062467C /* Time.swift */; };
 		E55F28E91CD53D890062467C /* TreePointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F283B1CD53D890062467C /* TreePointer.swift */; };
+		E55F2A8E1CD54C640062467C /* BoxGeometryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F2A8D1CD54C640062467C /* BoxGeometryBuilder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -202,8 +201,6 @@
 		E55F27601CD53D2E0062467C /* ShkadovTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShkadovTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E55F27651CD53D2E0062467C /* ShkadovTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShkadovTests.swift; sourceTree = "<group>"; };
 		E55F27671CD53D2E0062467C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E55F277A1CD53D890062467C /* BoxGeometryBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoxGeometryBuilder.swift; sourceTree = "<group>"; };
-		E55F277D1CD53D890062467C /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		E55F277E1CD53D890062467C /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
 		E55F27801CD53D890062467C /* RawInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInput.swift; sourceTree = "<group>"; };
 		E55F27811CD53D890062467C /* RawInputButtonCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInputButtonCode.swift; sourceTree = "<group>"; };
@@ -375,6 +372,7 @@
 		E55F28391CD53D890062467C /* StringParsingError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringParsingError.swift; sourceTree = "<group>"; };
 		E55F283A1CD53D890062467C /* Time.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
 		E55F283B1CD53D890062467C /* TreePointer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreePointer.swift; sourceTree = "<group>"; };
+		E55F2A8D1CD54C640062467C /* BoxGeometryBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoxGeometryBuilder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -440,38 +438,13 @@
 			isa = PBXGroup;
 			children = (
 				E55F277E1CD53D890062467C /* Engine.swift */,
-				E55F27791CD53D890062467C /* asset */,
-				E55F277B1CD53D890062467C /* boundingvolumehierarchy */,
-				E55F277C1CD53D890062467C /* configuration */,
+				E55F2A8C1CD54C640062467C /* geometry */,
 				E55F277F1CD53D890062467C /* input */,
 				E55F27831CD53D890062467C /* math */,
 				E55F279E1CD53D890062467C /* renderer */,
 				E55F27F51CD53D890062467C /* scenegraph */,
 			);
 			path = engine;
-			sourceTree = "<group>";
-		};
-		E55F27791CD53D890062467C /* asset */ = {
-			isa = PBXGroup;
-			children = (
-				E55F277A1CD53D890062467C /* BoxGeometryBuilder.swift */,
-			);
-			path = asset;
-			sourceTree = "<group>";
-		};
-		E55F277B1CD53D890062467C /* boundingvolumehierarchy */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = boundingvolumehierarchy;
-			sourceTree = "<group>";
-		};
-		E55F277C1CD53D890062467C /* configuration */ = {
-			isa = PBXGroup;
-			children = (
-				E55F277D1CD53D890062467C /* Configuration.swift */,
-			);
-			path = configuration;
 			sourceTree = "<group>";
 		};
 		E55F277F1CD53D890062467C /* input */ = {
@@ -781,6 +754,14 @@
 			path = utility;
 			sourceTree = "<group>";
 		};
+		E55F2A8C1CD54C640062467C /* geometry */ = {
+			isa = PBXGroup;
+			children = (
+				E55F2A8D1CD54C640062467C /* BoxGeometryBuilder.swift */,
+			);
+			path = geometry;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -899,7 +880,6 @@
 				E55F28921CD53D890062467C /* ShaderLibrary.swift in Sources */,
 				E55F28721CD53D890062467C /* MetalFragmentShader.swift in Sources */,
 				E55F284D1CD53D890062467C /* Matrix4x4.swift in Sources */,
-				E55F283D1CD53D890062467C /* Configuration.swift in Sources */,
 				E55F285E1CD53D890062467C /* GPUMemory.swift in Sources */,
 				E55F28741CD53D890062467C /* MetalGPUMemory.swift in Sources */,
 				E55F28D41CD53D890062467C /* iOSFactory.swift in Sources */,
@@ -1041,7 +1021,6 @@
 				E55F28701CD53D890062467C /* MetalFaceWindingMapper.swift in Sources */,
 				E55F28671CD53D890062467C /* FillMode.swift in Sources */,
 				E55F28DA1CD53D890062467C /* MacViewController.swift in Sources */,
-				E55F283C1CD53D890062467C /* BoxGeometryBuilder.swift in Sources */,
 				E55F28681CD53D890062467C /* RasterizationState.swift in Sources */,
 				E55F285D1CD53D890062467C /* GPUBuffer.swift in Sources */,
 				E55F28BC1CD53D890062467C /* StaticGroupSceneNode.swift in Sources */,
@@ -1054,6 +1033,7 @@
 				E55F28DB1CD53D890062467C /* MouseCursorManager.swift in Sources */,
 				E55F28411CD53D890062467C /* RawInputKeyCode.swift in Sources */,
 				E55F286C1CD53D890062467C /* MetalBuffer.swift in Sources */,
+				E55F2A8E1CD54C640062467C /* BoxGeometryBuilder.swift in Sources */,
 				E55F289F1CD53D890062467C /* VertexStepFunction.swift in Sources */,
 				E55F28CF1CD53D890062467C /* SeekableByteChannel.swift in Sources */,
 				E55F28C41CD53D890062467C /* FileOpenOption.swift in Sources */,

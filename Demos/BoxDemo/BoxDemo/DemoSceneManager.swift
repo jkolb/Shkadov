@@ -28,8 +28,13 @@ public final class DemoSceneManager : SceneManager, RawInputListener {
     // MARK: - SceneManager
     
     public func setUp() {
-        scene.rootNode.addChildNode(scene.cameraNode)
+        setUpRenderPipeline()
+        setUpLineRenderPipeline()
+        setUpRasterizationState()
         
+        scene.cameraNode.localTransform.translation = Vector3D(0.0, 0.0, 4.0)
+        scene.rootNode.addChildNode(scene.cameraNode)
+        scene.rootNode.addChildNode(createOutlineBox(ColorRGBA8(red: 0, green: 128, blue: 0, alpha: 255)))
         scene.camera.projection.fovy = Angle(degrees: 30.0)
         scene.camera.projection.zNear = 0.5
         scene.camera.projection.zFar = 10000.0
@@ -38,7 +43,7 @@ public final class DemoSceneManager : SceneManager, RawInputListener {
     }
     
     public func update() {
-        let velocity = Vector3D(40.0/60.0)
+        let velocity = Vector3D(2.0 / 60.0)
         
         let rotateY = Quaternion.axis(Vector3D.xAxis, angle: pitch)
         let rotateX = Quaternion.axis(Vector3D.yAxis, angle: yaw)
@@ -292,5 +297,39 @@ public final class DemoSceneManager : SceneManager, RawInputListener {
         else {
             return direction
         }
+    }
+    
+    private func createOutlineBox(color: ColorRGBA8) -> StaticBasicSceneNode {
+        let mesh = boxGeometryBuilder.outlineUnitBox()
+        
+        let uniformBuffer = gpuMemory.perFrameBufferWithSize(sizeof(ColorUniform), storageMode: .Shared)
+        
+        let vertexBufferBinding = BufferBinding(index: 0, buffer: mesh.vertexBuffer.data)
+        let vertexUniformBinding = BufferBinding(index: 1, buffer: uniformBuffer)
+        let vertexBindings = ShaderBindings(bufferBindings: [vertexBufferBinding, vertexUniformBinding], samplerBindings: [], textureBindings: [])
+        
+        let fragmentUniformBinding = BufferBinding(index: 0, buffer: uniformBuffer)
+        let fragmentBindings = ShaderBindings(bufferBindings: [fragmentUniformBinding], samplerBindings: [], textureBindings: [])
+        
+        let indexedVertexDraw = mesh.indexBuffer.indexedVertexDrawWithInstaceCount(1)
+        
+        let renderable = Renderable(
+            name: "OutlineBox",
+            renderPipeline: lineRenderPipeline,
+            rasterizationState: rasterizationState,
+            vertexBindings: vertexBindings,
+            fragmentBindings: fragmentBindings,
+            vertexDraws: [],
+            indexedVertexDraws: [indexedVertexDraw]
+        )
+        let meshNode = StaticBasicSceneNode(name: renderable.name, bounds: mesh.bounds, renderable: renderable, collisionMesh: mesh.collisionMesh, updateUniforms: { (projectionMatrix, viewMatrix, modelMatrix) -> Void in
+            let modelViewMatrix = viewMatrix * modelMatrix
+            let modelViewProjectionMatrix = projectionMatrix * modelViewMatrix
+            let colorUniform = ColorUniform(modelViewProjectionMatrix: modelViewProjectionMatrix, color: color)
+            let colorUniformBuffer = uniformBuffer.nextBuffer()
+            let colorUniformPointer = UnsafeMutablePointer<ColorUniform>(colorUniformBuffer.sharedBuffer().data)
+            colorUniformPointer.memory = colorUniform
+        })
+        return meshNode
     }
 }

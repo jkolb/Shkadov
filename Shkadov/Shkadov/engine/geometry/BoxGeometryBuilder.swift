@@ -29,10 +29,17 @@ public final class BoxGeometryBuilder {
         self.gpuMemory = gpuMemory
     }
     
-    public func geometryForBox(box: AABB) -> Geometry {
-        let w = box.radius.x
-        let h = box.radius.y
-        let d = box.radius.z
+    public func outlineUnitBox() -> Geometry {
+        return outlineBox(width: 1.0, height: 1.0, depth: 1.0)
+    }
+    
+    public func outlineBox(width width: Float, height: Float, depth: Float) -> Geometry {
+        precondition(width > 0.0)
+        precondition(height > 0.0)
+        precondition(depth > 0.0)
+        let w = width * 0.5
+        let h = height * 0.5
+        let d = depth * 0.5
         
         /*
         Right handed & Counter-clockwise
@@ -54,14 +61,14 @@ public final class BoxGeometryBuilder {
         */
         
         let vertices = [
-            box.center + Vector3D(-w, +h, +d),
-            box.center + Vector3D(-w, -h, +d),
-            box.center + Vector3D(+w, -h, +d),
-            box.center + Vector3D(+w, +h, +d),
-            box.center + Vector3D(+w, +h, -d),
-            box.center + Vector3D(+w, -h, -d),
-            box.center + Vector3D(-w, -h, -d),
-            box.center + Vector3D(-w, +h, -d),
+            Vector3D(-w, +h, +d),
+            Vector3D(-w, -h, +d),
+            Vector3D(+w, -h, +d),
+            Vector3D(+w, +h, +d),
+            Vector3D(+w, +h, -d),
+            Vector3D(+w, -h, -d),
+            Vector3D(-w, -h, -d),
+            Vector3D(-w, +h, -d),
         ]
         let indices: [UInt16] = [
             3, 2,   2, 5,   5, 4,   4, 3,
@@ -83,12 +90,13 @@ public final class BoxGeometryBuilder {
         ]
         let layout = VertexBufferLayout(stepFunction: .PerVertex, stepRate: 1, stride: strideof(Vector3D))
         let descriptor = VertexDescriptor(attributes: attributes, layouts: [layout])
-        
         let vertexData = gpuMemory.bufferWithBytes(vertices, size: vertices.count * strideof(Vector3D), storageMode: .Shared)
         let vertexBuffer = VertexBuffer(descriptor: descriptor, count: vertices.count, data: vertexData)
         let indexDescriptor = IndexDescriptor(primitiveType: .Line, indexType: .UInt16)
         let indexData = gpuMemory.bufferWithBytes(indices, size: indices.count * strideof(UInt16), storageMode: .Shared)
         let indexBuffer = IndexBuffer(descriptor: indexDescriptor, count: indices.count, data: indexData)
-        return Geometry(vertexBuffer: vertexBuffer, indexBuffer: indexBuffer, bounds: box)
+        let bounds = AABB(center: Vector3D(), radius: Vector3D(w, h, d))
+        
+        return Geometry(vertexBuffer: vertexBuffer, indexBuffer: indexBuffer, bounds: bounds)
     }
 }
