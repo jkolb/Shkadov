@@ -81,7 +81,6 @@
 		E55F28801CD53D890062467C /* MetalSamplerMinMagFilterMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F27C71CD53D890062467C /* MetalSamplerMinMagFilterMapper.swift */; };
 		E55F28811CD53D890062467C /* MetalSamplerMipFilterMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F27C81CD53D890062467C /* MetalSamplerMipFilterMapper.swift */; };
 		E55F28821CD53D890062467C /* MetalShaderLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F27C91CD53D890062467C /* MetalShaderLibrary.swift */; };
-		E55F28831CD53D890062467C /* MetalShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = E55F27CA1CD53D890062467C /* MetalShaders.metal */; };
 		E55F28841CD53D890062467C /* MetalTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F27CB1CD53D890062467C /* MetalTexture.swift */; };
 		E55F28851CD53D890062467C /* MetalTextureDescriptorMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F27CC1CD53D890062467C /* MetalTextureDescriptorMapper.swift */; };
 		E55F28861CD53D890062467C /* MetalTextureTypeMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F27CD1CD53D890062467C /* MetalTextureTypeMapper.swift */; };
@@ -274,7 +273,6 @@
 		E55F27C71CD53D890062467C /* MetalSamplerMinMagFilterMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalSamplerMinMagFilterMapper.swift; sourceTree = "<group>"; };
 		E55F27C81CD53D890062467C /* MetalSamplerMipFilterMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalSamplerMipFilterMapper.swift; sourceTree = "<group>"; };
 		E55F27C91CD53D890062467C /* MetalShaderLibrary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalShaderLibrary.swift; sourceTree = "<group>"; };
-		E55F27CA1CD53D890062467C /* MetalShaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = MetalShaders.metal; sourceTree = "<group>"; };
 		E55F27CB1CD53D890062467C /* MetalTexture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalTexture.swift; sourceTree = "<group>"; };
 		E55F27CC1CD53D890062467C /* MetalTextureDescriptorMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalTextureDescriptorMapper.swift; sourceTree = "<group>"; };
 		E55F27CD1CD53D890062467C /* MetalTextureTypeMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalTextureTypeMapper.swift; sourceTree = "<group>"; };
@@ -598,7 +596,6 @@
 				E55F27C71CD53D890062467C /* MetalSamplerMinMagFilterMapper.swift */,
 				E55F27C81CD53D890062467C /* MetalSamplerMipFilterMapper.swift */,
 				E55F27C91CD53D890062467C /* MetalShaderLibrary.swift */,
-				E55F27CA1CD53D890062467C /* MetalShaders.metal */,
 				E55F27CB1CD53D890062467C /* MetalTexture.swift */,
 				E55F27CC1CD53D890062467C /* MetalTextureDescriptorMapper.swift */,
 				E55F27CD1CD53D890062467C /* MetalTextureTypeMapper.swift */,
@@ -907,7 +904,6 @@
 				E55F28741CD53D890062467C /* MetalGPUMemory.swift in Sources */,
 				E55F28D41CD53D890062467C /* iOSFactory.swift in Sources */,
 				E55F28E21CD53D890062467C /* FileOctetStream.swift in Sources */,
-				E55F28831CD53D890062467C /* MetalShaders.metal in Sources */,
 				E55F28C51CD53D890062467C /* FilePath.swift in Sources */,
 				E55F28571CD53D890062467C /* Transform3D.swift in Sources */,
 				E55F28E01CD53D890062467C /* BinaryTree.swift in Sources */,
@@ -1253,6 +1249,7 @@
 				E55F276C1CD53D2E0062467C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E55F276D1CD53D2E0062467C /* Build configuration list for PBXNativeTarget "ShkadovTests" */ = {
 			isa = XCConfigurationList;
@@ -1261,6 +1258,7 @@
 				E55F276F1CD53D2E0062467C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
