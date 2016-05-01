@@ -27,7 +27,7 @@ public struct Sphere : Equatable {
     public let radius: Float
 
     public init() {
-        self.init(center: Vector3D(), radius: 0.0)
+        self.init(center: Vector3D.zero, radius: 0.0)
     }
     
     public init(center: Vector3D, radius: Float) {
@@ -48,7 +48,7 @@ public struct Sphere : Equatable {
     }
     
     public var isNull: Bool {
-        return center == Vector3D() && radius == 0.0
+        return center == Vector3D.zero && radius == 0.0
     }
     
     public func union(other: Sphere) -> Sphere {

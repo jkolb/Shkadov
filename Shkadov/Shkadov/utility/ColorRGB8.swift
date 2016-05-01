@@ -23,6 +23,26 @@ SOFTWARE.
 */
 
 public struct ColorRGBA8 {
+    public static var black = ColorRGBA8(red: 0, green: 0, blue: 0)
+    public static var grey = ColorRGBA8(red: 128, green: 128, blue: 128)
+    public static var white = ColorRGBA8(red: 255, green: 255, blue: 255)
+    public static var red = ColorRGBA8(red: 255, green: 0, blue: 0)
+    public static var green = ColorRGBA8(red: 0, green: 128, blue: 0)
+    public static var blue = ColorRGBA8(red: 0, green: 0, blue: 255)
+    public static var yellow = ColorRGBA8(red: 255, green: 255, blue: 0)
+    public static var magenta = ColorRGBA8(red: 255, green: 0, blue: 255)
+    public static var cyan = ColorRGBA8(red: 0, green: 255, blue: 255)
+    public static var brown = ColorRGBA8(red: 165, green: 42, blue: 42)
+    public static var pink = ColorRGBA8(red: 255, green: 192, blue: 203)
+    public static var lime = ColorRGBA8(red: 0, green: 255, blue: 0)
+    public static var orange = ColorRGBA8(red: 255, green: 165, blue: 0)
+    public static var silver = ColorRGBA8(red: 192, green: 192, blue: 192)
+    public static var teal = ColorRGBA8(red: 0, green: 128, blue: 128)
+    public static var olive = ColorRGBA8(red: 128, green: 128, blue: 0)
+    public static var purple = ColorRGBA8(red: 128, green: 0, blue: 128)
+    public static var navy = ColorRGBA8(red: 0, green: 0, blue: 128)
+    public static var maroon = ColorRGBA8(red: 128, green: 0, blue: 0)
+    
     public var red: UInt8
     public var green: UInt8
     public var blue: UInt8

@@ -27,14 +27,14 @@ public struct Transform3D : Equatable, CustomStringConvertible {
     public var rotation: Quaternion
     public var translation: Vector3D
     
-    public init(translation: Vector3D = Vector3D(), rotation: Quaternion = Quaternion(), scale: Vector3D = Vector3D(1.0)) {
+    public init(translation: Vector3D = Vector3D.zero, rotation: Quaternion = Quaternion.identity, scale: Vector3D = Vector3D(1.0)) {
         self.scale = scale
         self.rotation = rotation
         self.translation = translation
     }
     
     public var isIdentity: Bool {
-        return scale == Vector3D(1.0) && rotation == Quaternion() && translation == Vector3D()
+        return scale == Vector3D(1.0) && rotation == Quaternion.identity && translation == Vector3D.zero
     }
     
     public var hasScale: Bool {
@@ -42,11 +42,11 @@ public struct Transform3D : Equatable, CustomStringConvertible {
     }
     
     public var hasRotation: Bool {
-        return rotation != Quaternion()
+        return rotation != Quaternion.identity
     }
     
     public var hasTranslation: Bool {
-        return translation != Vector3D()
+        return translation != Vector3D.zero
     }
 
     public var description: String {
@@ -113,7 +113,7 @@ public struct Transform3D : Equatable, CustomStringConvertible {
             ti = sri * -translation
         }
         else {
-            ti = Vector3D()
+            ti = Vector3D.zero
         }
         
         return Matrix4x4(

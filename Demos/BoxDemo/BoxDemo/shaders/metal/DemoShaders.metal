@@ -70,12 +70,12 @@ fragment float4 litTexturedFragment(ProjectedVertex vert [[ stage_in ]], texture
     return diffuseTexture.sample(samplr, vert.texcoord);
 }
 
-vertex float4 lineVertex(uint vid [[ vertex_id ]], const device VertexP* vertexIn [[ buffer(0) ]], constant ColorUniform& uniform [[ buffer(1) ]])
+vertex float4 colorVertex(uint vid [[ vertex_id ]], const device VertexP* vertexIn [[ buffer(0) ]], constant ColorUniform& uniform [[ buffer(1) ]])
 {
     return uniform.modelViewProjectionMatrix * float4(vertexIn[vid].position, 1.0);
 }
 
-fragment float4 lineFragment(constant ColorUniform& uniform [[buffer(0)]])
+fragment float4 colorFragment(constant ColorUniform& uniform [[buffer(0)]])
 {
     return float4(uniform.color);
 }

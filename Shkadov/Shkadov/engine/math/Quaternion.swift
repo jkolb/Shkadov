@@ -23,12 +23,9 @@ SOFTWARE.
 */
 
 public struct Quaternion : Equatable, CustomStringConvertible {
+    public static let identity = Quaternion(1.0, Vector3D.zero)
     public let w: Float
     public let xyz: Vector3D
-    
-    public init() {
-        self.init(1.0, Vector3D())
-    }
     
     public init(_ w: Float, _ x: Float, _ y: Float, _ z: Float) {
         self.init(w, Vector3D(x, y, z))

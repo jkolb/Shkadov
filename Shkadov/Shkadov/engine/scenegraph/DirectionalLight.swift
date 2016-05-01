@@ -27,8 +27,8 @@ public struct DirectionalLight {
     public var intensity: Vector3D
     
     public init() {
-        self.direction = Vector3D()
-        self.intensity = Vector3D()
+        self.direction = Vector3D.zero
+        self.intensity = Vector3D.zero
     }
     
     public init(direction: Vector3D, intensity: Vector3D) {

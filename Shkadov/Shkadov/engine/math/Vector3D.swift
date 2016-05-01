@@ -23,15 +23,12 @@ SOFTWARE.
 */
 
 public struct Vector3D : Equatable, CustomStringConvertible {
+    public static let zero = Vector3D(0.0, 0.0, 0.0)
     public static let xAxis = Vector3D(1.0, 0.0, 0.0)
     public static let yAxis = Vector3D(0.0, 1.0, 0.0)
     public static let zAxis = Vector3D(0.0, 0.0, 1.0)
     
     public var x, y, z: Float
-    
-    public init() {
-        self.init(0.0, 0.0, 0.0)
-    }
     
     public init(_ v: Float) {
         self.init(v, v, v)

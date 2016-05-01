@@ -27,7 +27,7 @@ public struct AABB : Equatable {
     public let radius: Vector3D
     
     public init() {
-        self.init(center: Vector3D(), radius: Vector3D())
+        self.init(center: Vector3D.zero, radius: Vector3D.zero)
     }
     
     public init(minimum: Vector3D, maximum: Vector3D) {
@@ -119,7 +119,7 @@ public struct AABB : Equatable {
     }
 
     public var isNull: Bool {
-        return center == Vector3D() && radius == Vector3D()
+        return center == Vector3D.zero && radius == Vector3D.zero
     }
     
     public func union(other: AABB) -> AABB {

@@ -27,8 +27,8 @@ public struct PointLight {
     public var intensity: Vector3D
 
     public init() {
-        self.position = Vector3D()
-        self.intensity = Vector3D()
+        self.position = Vector3D.zero
+        self.intensity = Vector3D.zero
     }
     
     public init(position: Vector3D, intensity: Vector3D) {

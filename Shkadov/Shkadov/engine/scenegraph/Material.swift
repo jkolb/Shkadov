@@ -29,7 +29,7 @@ public struct Material {
     public var shininess: Float
     
     public init() {
-        self.init(ambient: Vector3D(), diffuse: Vector3D(), specular: Vector3D(), shininess: 0.0)
+        self.init(ambient: Vector3D.zero, diffuse: Vector3D.zero, specular: Vector3D.zero, shininess: 0.0)
     }
     
     public init(ambient: Vector3D, diffuse: Vector3D, specular: Vector3D, shininess: Float) {

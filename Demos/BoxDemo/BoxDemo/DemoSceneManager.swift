@@ -28,13 +28,19 @@ public final class DemoSceneManager : SceneManager, RawInputListener {
     // MARK: - SceneManager
     
     public func setUp() {
-        setUpRenderPipeline()
-        setUpLineRenderPipeline()
+        setUpTextureRenderPipeline()
+        setUpColorRenderPipeline()
         setUpRasterizationState()
         
-        scene.cameraNode.localTransform.translation = Vector3D(0.0, 0.0, 4.0)
+        scene.cameraNode.localTransform.translation = Vector3D(0.0, 0.0, 10.0)
         scene.rootNode.addChildNode(scene.cameraNode)
-        scene.rootNode.addChildNode(createOutlineBox(ColorRGBA8(red: 0, green: 128, blue: 0, alpha: 255)))
+        
+        let axisCubes = createAxisCubes()
+        
+        for axisCube in axisCubes {
+            scene.rootNode.addChildNode(axisCube)
+        }
+
         scene.camera.projection.fovy = Angle(degrees: 30.0)
         scene.camera.projection.zNear = 0.5
         scene.camera.projection.zFar = 10000.0
@@ -53,8 +59,8 @@ public final class DemoSceneManager : SceneManager, RawInputListener {
         
         scene.update()
         
-        let cameraPosition = scene.cameraNode.worldTransform.applyTo(Vector3D())
-        let downRay = Ray3D(origin: cameraPosition, direction: -Vector3D.zAxis)
+        let cameraPosition = scene.cameraNode.worldTransform.applyTo(Vector3D.zero)
+        let downRay = Ray3D(origin: cameraPosition, direction: -Vector3D.yAxis)
         let collidingNodes = scene.potentiallyCollidingSceneNodes(downRay)
         var foundTriangles = [Triangle3D]()
         
@@ -164,8 +170,8 @@ public final class DemoSceneManager : SceneManager, RawInputListener {
     
     private var textures: [String : Texture]
     
-    private var renderPipeline: RenderPipeline!
-    private var lineRenderPipeline: RenderPipeline!
+    private var textureRenderPipeline: RenderPipeline!
+    private var colorRenderPipeline: RenderPipeline!
     private var rasterizationState: RasterizationState!
     private var sampler: Sampler!
     
@@ -192,7 +198,7 @@ public final class DemoSceneManager : SceneManager, RawInputListener {
         self.yaw = Angle()
     }
     
-    private func setUpRenderPipeline() {
+    private func setUpTextureRenderPipeline() {
         let vertexShader = shaderLibrary.vertexShaderForName("litTexturedVertex")
         let fragmentShader = shaderLibrary.fragmentShaderForName("litTexturedFragment")
         let renderPipelineDescriptor = RenderPipelineDescriptor(
@@ -200,7 +206,7 @@ public final class DemoSceneManager : SceneManager, RawInputListener {
             vertexDescriptor: nil,
             fragmentShader: fragmentShader
         )
-        renderPipeline = renderStateBuilder.renderPipelineForDescriptor(renderPipelineDescriptor)
+        textureRenderPipeline = renderStateBuilder.renderPipelineForDescriptor(renderPipelineDescriptor)
     }
     
     private func setUpRasterizationState() {
@@ -213,15 +219,15 @@ public final class DemoSceneManager : SceneManager, RawInputListener {
         rasterizationState = renderStateBuilder.rasterizationStateForDescriptor(rasterizationStateDescriptor)
     }
     
-    private func setUpLineRenderPipeline() {
-        let vertexShader = shaderLibrary.vertexShaderForName("lineVertex")
-        let fragmentShader = shaderLibrary.fragmentShaderForName("lineFragment")
+    private func setUpColorRenderPipeline() {
+        let vertexShader = shaderLibrary.vertexShaderForName("colorVertex")
+        let fragmentShader = shaderLibrary.fragmentShaderForName("colorFragment")
         let renderPipelineDescriptor = RenderPipelineDescriptor(
             vertexShader: vertexShader,
             vertexDescriptor: nil,
             fragmentShader: fragmentShader
         )
-        lineRenderPipeline = renderStateBuilder.renderPipelineForDescriptor(renderPipelineDescriptor)
+        colorRenderPipeline = renderStateBuilder.renderPipelineForDescriptor(renderPipelineDescriptor)
     }
     
     private func setUpSampler() {
@@ -259,7 +265,7 @@ public final class DemoSceneManager : SceneManager, RawInputListener {
     }
     
     private func movementDirection() -> Vector3D {
-        var direction = Vector3D()
+        var direction = Vector3D.zero
         
         if isKeyDown(.W) {
             // move forward
@@ -291,7 +297,7 @@ public final class DemoSceneManager : SceneManager, RawInputListener {
             direction.y += +1.0
         }
         
-        if direction != Vector3D() {
+        if direction != Vector3D.zero {
             return normalize(direction)
         }
         else {
@@ -299,30 +305,61 @@ public final class DemoSceneManager : SceneManager, RawInputListener {
         }
     }
     
-    private func createOutlineBox(color: ColorRGBA8) -> StaticBasicSceneNode {
-        let mesh = boxGeometryBuilder.outlineUnitBox()
+    private func createAxisCubes() -> [StaticBasicSceneNode] {
+        let cube = boxGeometryBuilder.unitFilledBox()
+        let positions = [
+            Vector3D(0.0, 0.0, 0.0),
+            Vector3D(1.5, 0.0, 0.0),
+            Vector3D(-1.5, 0.0, 0.0),
+            Vector3D(0.0, 1.5, 0.0),
+            Vector3D(0.0, -1.5, 0.0),
+            Vector3D(0.0, 0.0, 1.5),
+            Vector3D(0.0, 0.0, -1.5),
+            ]
         
+        let colors = [
+            ColorRGBA8.white,
+            ColorRGBA8.red,
+            ColorRGBA8.magenta,
+            ColorRGBA8.green,
+            ColorRGBA8.yellow,
+            ColorRGBA8.blue,
+            ColorRGBA8.cyan,
+            ]
+
+        var nodes = [StaticBasicSceneNode]()
+        nodes.reserveCapacity(positions.count)
+        
+        for (index, position) in positions.enumerate() {
+            let node = createBasicSceneNode("Box\(index)", position: position, geometry: cube, color: colors[index], renderPipeline: colorRenderPipeline)
+            nodes.append(node)
+        }
+        
+        return nodes
+    }
+    
+    private func createBasicSceneNode(name: String, position: Vector3D, geometry: Geometry, color: ColorRGBA8, renderPipeline: RenderPipeline) -> StaticBasicSceneNode {
         let uniformBuffer = gpuMemory.perFrameBufferWithSize(sizeof(ColorUniform), storageMode: .Shared)
         
-        let vertexBufferBinding = BufferBinding(index: 0, buffer: mesh.vertexBuffer.data)
+        let vertexBufferBinding = BufferBinding(index: 0, buffer: geometry.vertexBuffer.data)
         let vertexUniformBinding = BufferBinding(index: 1, buffer: uniformBuffer)
         let vertexBindings = ShaderBindings(bufferBindings: [vertexBufferBinding, vertexUniformBinding], samplerBindings: [], textureBindings: [])
         
         let fragmentUniformBinding = BufferBinding(index: 0, buffer: uniformBuffer)
         let fragmentBindings = ShaderBindings(bufferBindings: [fragmentUniformBinding], samplerBindings: [], textureBindings: [])
         
-        let indexedVertexDraw = mesh.indexBuffer.indexedVertexDrawWithInstaceCount(1)
+        let indexedVertexDraw = geometry.indexBuffer.indexedVertexDrawWithInstaceCount(1)
         
         let renderable = Renderable(
-            name: "OutlineBox",
-            renderPipeline: lineRenderPipeline,
+            name: name,
+            renderPipeline: renderPipeline,
             rasterizationState: rasterizationState,
             vertexBindings: vertexBindings,
             fragmentBindings: fragmentBindings,
             vertexDraws: [],
             indexedVertexDraws: [indexedVertexDraw]
         )
-        let meshNode = StaticBasicSceneNode(name: renderable.name, bounds: mesh.bounds, renderable: renderable, collisionMesh: mesh.collisionMesh, updateUniforms: { (projectionMatrix, viewMatrix, modelMatrix) -> Void in
+        let node = StaticBasicSceneNode(name: renderable.name, localTransform: Transform3D(translation: position), bounds: geometry.bounds, renderable: renderable, collisionMesh: geometry.collisionMesh, updateUniforms: { (projectionMatrix, viewMatrix, modelMatrix) -> Void in
             let modelViewMatrix = viewMatrix * modelMatrix
             let modelViewProjectionMatrix = projectionMatrix * modelViewMatrix
             let colorUniform = ColorUniform(modelViewProjectionMatrix: modelViewProjectionMatrix, color: color)
@@ -330,6 +367,6 @@ public final class DemoSceneManager : SceneManager, RawInputListener {
             let colorUniformPointer = UnsafeMutablePointer<ColorUniform>(colorUniformBuffer.sharedBuffer().data)
             colorUniformPointer.memory = colorUniform
         })
-        return meshNode
+        return node
     }
 }
