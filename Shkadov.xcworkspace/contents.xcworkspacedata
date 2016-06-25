@@ -5,6 +5,9 @@
       location = "container:"
       name = "Demos">
       <FileRef
+         location = "group:Demos/CastleDemo/CastleDemo.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:Demos/BoxDemo/BoxDemo.xcodeproj">
       </FileRef>
    </Group>

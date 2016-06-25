@@ -48,7 +48,7 @@ public final class MacFileManager : FileManager {
 
     private func bundlePath(path: String) -> String {
         let bundle = NSBundle.mainBundle()
-        let resourceURL = bundle.URLForResource(path, withExtension: "txt", subdirectory: "data/geometry")!
+        let resourceURL = bundle.URLForResource(path, withExtension: "txt", subdirectory: "assets/geometry")!
         precondition(resourceURL.fileURL)
         return resourceURL.path!
     }
@@ -77,7 +77,7 @@ public final class MacFileManager : FileManager {
     
     public func texturePathForName(name: String) -> String {
         let bundle = NSBundle.mainBundle()
-        let resourceURL = bundle.URLForResource(name, withExtension: "png", subdirectory: "data/textures")!
+        let resourceURL = bundle.URLForResource(name, withExtension: "png", subdirectory: "assets/textures")!
         precondition(resourceURL.fileURL)
         return resourceURL.path!
     }
