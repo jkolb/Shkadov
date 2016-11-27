@@ -1,1 +1,1 @@
-carthage update --platform macOS --use-ssh --use-submodules
+carthage update --platform macOS --no-build
