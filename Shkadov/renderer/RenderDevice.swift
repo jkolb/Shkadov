@@ -22,4 +22,6 @@
  SOFTWARE.
  */
 
-macOSFactory().platform().start()
+public protocol RenderDevice {
+    
+}

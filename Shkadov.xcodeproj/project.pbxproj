@@ -23,6 +23,8 @@
 		E55606BF1DEA71EB00D9F1F8 /* macOSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B31DEA71EB00D9F1F8 /* macOSViewController.swift */; };
 		E55606C01DEA71EB00D9F1F8 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B51DEA71EB00D9F1F8 /* Logger.swift */; };
 		E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B61DEA71EB00D9F1F8 /* Time.swift */; };
+		E55606C51DEA757200D9F1F8 /* RenderDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606C41DEA757200D9F1F8 /* RenderDevice.swift */; };
+		E55606C71DEA762B00D9F1F8 /* MetalRenderDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606C61DEA762B00D9F1F8 /* MetalRenderDevice.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +114,10 @@
 		E55606B31DEA71EB00D9F1F8 /* macOSViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSViewController.swift; sourceTree = "<group>"; };
 		E55606B51DEA71EB00D9F1F8 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		E55606B61DEA71EB00D9F1F8 /* Time.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
+		E55606C41DEA757200D9F1F8 /* RenderDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderDevice.swift; sourceTree = "<group>"; };
+		E55606C61DEA762B00D9F1F8 /* MetalRenderDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalRenderDevice.swift; sourceTree = "<group>"; };
+		E55606C81DEA76BA00D9F1F8 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
+		E55606C91DEA76BA00D9F1F8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,9 +167,12 @@
 		E556065E1DEA68F000D9F1F8 /* Shkadov */ = {
 			isa = PBXGroup;
 			children = (
+				E55606C81DEA76BA00D9F1F8 /* LICENSE */,
+				E55606C91DEA76BA00D9F1F8 /* README.md */,
 				E55606A91DEA71EB00D9F1F8 /* main.swift */,
 				E55606A61DEA71EB00D9F1F8 /* engine */,
 				E55606AA1DEA71EB00D9F1F8 /* platform */,
+				E55606C31DEA755C00D9F1F8 /* renderer */,
 				E55606B41DEA71EB00D9F1F8 /* utility */,
 				E556066A1DEA68F100D9F1F8 /* Info.plist */,
 			);
@@ -230,6 +239,7 @@
 				E55606AB1DEA71EB00D9F1F8 /* Darwin */,
 				E55606AD1DEA71EB00D9F1F8 /* MachO */,
 				E55606AF1DEA71EB00D9F1F8 /* macOS */,
+				E55606C21DEA753600D9F1F8 /* Metal */,
 			);
 			path = platform;
 			sourceTree = "<group>";
@@ -268,6 +278,22 @@
 				E55606B61DEA71EB00D9F1F8 /* Time.swift */,
 			);
 			path = utility;
+			sourceTree = "<group>";
+		};
+		E55606C21DEA753600D9F1F8 /* Metal */ = {
+			isa = PBXGroup;
+			children = (
+				E55606C61DEA762B00D9F1F8 /* MetalRenderDevice.swift */,
+			);
+			path = Metal;
+			sourceTree = "<group>";
+		};
+		E55606C31DEA755C00D9F1F8 /* renderer */ = {
+			isa = PBXGroup;
+			children = (
+				E55606C41DEA757200D9F1F8 /* RenderDevice.swift */,
+			);
+			path = renderer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -451,6 +477,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E55606BC1DEA71EB00D9F1F8 /* macOSFactory.swift in Sources */,
+				E55606C51DEA757200D9F1F8 /* RenderDevice.swift in Sources */,
 				E55606B71DEA71EB00D9F1F8 /* Camera.swift in Sources */,
 				E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */,
 				E55606B81DEA71EB00D9F1F8 /* Engine.swift in Sources */,
@@ -461,6 +488,7 @@
 				E55606BE1DEA71EB00D9F1F8 /* macOSPlatform.swift in Sources */,
 				E55606BB1DEA71EB00D9F1F8 /* MachOTimeSource.swift in Sources */,
 				E55606BF1DEA71EB00D9F1F8 /* macOSViewController.swift in Sources */,
+				E55606C71DEA762B00D9F1F8 /* MetalRenderDevice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
