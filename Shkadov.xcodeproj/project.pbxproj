@@ -7,16 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E55606601DEA68F000D9F1F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556065F1DEA68F000D9F1F8 /* AppDelegate.swift */; };
-		E55606621DEA68F000D9F1F8 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606611DEA68F000D9F1F8 /* GameViewController.swift */; };
-		E55606641DEA68F000D9F1F8 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = E55606631DEA68F000D9F1F8 /* Shaders.metal */; };
-		E55606661DEA68F100D9F1F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E55606651DEA68F100D9F1F8 /* Assets.xcassets */; };
-		E55606691DEA68F100D9F1F8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E55606671DEA68F100D9F1F8 /* MainMenu.xib */; };
 		E55606741DEA68F100D9F1F8 /* ShkadovTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606731DEA68F100D9F1F8 /* ShkadovTests.swift */; };
 		E55606A21DEA6F4900D9F1F8 /* FieryCrucible.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55606841DEA6F2500D9F1F8 /* FieryCrucible.framework */; };
 		E55606A31DEA6F4900D9F1F8 /* FranticApparatus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E556068D1DEA6F2C00D9F1F8 /* FranticApparatus.framework */; };
 		E55606A41DEA6F4900D9F1F8 /* Lilliput.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55606961DEA6F3100D9F1F8 /* Lilliput.framework */; };
 		E55606A51DEA6F4900D9F1F8 /* Swiftish.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E556069F1DEA6F3600D9F1F8 /* Swiftish.framework */; };
+		E55606B71DEA71EB00D9F1F8 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606A71DEA71EB00D9F1F8 /* Camera.swift */; };
+		E55606B81DEA71EB00D9F1F8 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606A81DEA71EB00D9F1F8 /* Engine.swift */; };
+		E55606B91DEA71EB00D9F1F8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606A91DEA71EB00D9F1F8 /* main.swift */; };
+		E55606BA1DEA71EB00D9F1F8 /* DarwinMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606AC1DEA71EB00D9F1F8 /* DarwinMath.swift */; };
+		E55606BB1DEA71EB00D9F1F8 /* MachOTimeSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606AE1DEA71EB00D9F1F8 /* MachOTimeSource.swift */; };
+		E55606BC1DEA71EB00D9F1F8 /* macOSFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B01DEA71EB00D9F1F8 /* macOSFactory.swift */; };
+		E55606BD1DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B11DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift */; };
+		E55606BE1DEA71EB00D9F1F8 /* macOSPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B21DEA71EB00D9F1F8 /* macOSPlatform.swift */; };
+		E55606BF1DEA71EB00D9F1F8 /* macOSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B31DEA71EB00D9F1F8 /* macOSViewController.swift */; };
+		E55606C01DEA71EB00D9F1F8 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B51DEA71EB00D9F1F8 /* Logger.swift */; };
+		E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B61DEA71EB00D9F1F8 /* Time.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,11 +93,6 @@
 
 /* Begin PBXFileReference section */
 		E556065C1DEA68F000D9F1F8 /* Shkadov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shkadov.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		E556065F1DEA68F000D9F1F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E55606611DEA68F000D9F1F8 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
-		E55606631DEA68F000D9F1F8 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
-		E55606651DEA68F100D9F1F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E55606681DEA68F100D9F1F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		E556066A1DEA68F100D9F1F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E556066F1DEA68F100D9F1F8 /* ShkadovTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShkadovTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E55606731DEA68F100D9F1F8 /* ShkadovTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShkadovTests.swift; sourceTree = "<group>"; };
@@ -100,6 +101,17 @@
 		E55606871DEA6F2C00D9F1F8 /* FranticApparatus.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FranticApparatus.xcodeproj; path = Carthage/Checkouts/FranticApparatus/FranticApparatus.xcodeproj; sourceTree = "<group>"; };
 		E55606901DEA6F3100D9F1F8 /* Lilliput.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lilliput.xcodeproj; path = Carthage/Checkouts/Lilliput/Lilliput.xcodeproj; sourceTree = "<group>"; };
 		E55606991DEA6F3500D9F1F8 /* Swiftish.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Swiftish.xcodeproj; path = Carthage/Checkouts/Swiftish/Swiftish.xcodeproj; sourceTree = "<group>"; };
+		E55606A71DEA71EB00D9F1F8 /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		E55606A81DEA71EB00D9F1F8 /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
+		E55606A91DEA71EB00D9F1F8 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		E55606AC1DEA71EB00D9F1F8 /* DarwinMath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DarwinMath.swift; sourceTree = "<group>"; };
+		E55606AE1DEA71EB00D9F1F8 /* MachOTimeSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MachOTimeSource.swift; sourceTree = "<group>"; };
+		E55606B01DEA71EB00D9F1F8 /* macOSFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSFactory.swift; sourceTree = "<group>"; };
+		E55606B11DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSMouseCursorManager.swift; sourceTree = "<group>"; };
+		E55606B21DEA71EB00D9F1F8 /* macOSPlatform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSPlatform.swift; sourceTree = "<group>"; };
+		E55606B31DEA71EB00D9F1F8 /* macOSViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSViewController.swift; sourceTree = "<group>"; };
+		E55606B51DEA71EB00D9F1F8 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		E55606B61DEA71EB00D9F1F8 /* Time.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,11 +161,10 @@
 		E556065E1DEA68F000D9F1F8 /* Shkadov */ = {
 			isa = PBXGroup;
 			children = (
-				E556065F1DEA68F000D9F1F8 /* AppDelegate.swift */,
-				E55606611DEA68F000D9F1F8 /* GameViewController.swift */,
-				E55606631DEA68F000D9F1F8 /* Shaders.metal */,
-				E55606651DEA68F100D9F1F8 /* Assets.xcassets */,
-				E55606671DEA68F100D9F1F8 /* MainMenu.xib */,
+				E55606A91DEA71EB00D9F1F8 /* main.swift */,
+				E55606A61DEA71EB00D9F1F8 /* engine */,
+				E55606AA1DEA71EB00D9F1F8 /* platform */,
+				E55606B41DEA71EB00D9F1F8 /* utility */,
 				E556066A1DEA68F100D9F1F8 /* Info.plist */,
 			);
 			path = Shkadov;
@@ -202,6 +213,61 @@
 				E55606A11DEA6F3600D9F1F8 /* SwiftishTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E55606A61DEA71EB00D9F1F8 /* engine */ = {
+			isa = PBXGroup;
+			children = (
+				E55606A71DEA71EB00D9F1F8 /* Camera.swift */,
+				E55606A81DEA71EB00D9F1F8 /* Engine.swift */,
+			);
+			path = engine;
+			sourceTree = "<group>";
+		};
+		E55606AA1DEA71EB00D9F1F8 /* platform */ = {
+			isa = PBXGroup;
+			children = (
+				E55606AB1DEA71EB00D9F1F8 /* Darwin */,
+				E55606AD1DEA71EB00D9F1F8 /* MachO */,
+				E55606AF1DEA71EB00D9F1F8 /* macOS */,
+			);
+			path = platform;
+			sourceTree = "<group>";
+		};
+		E55606AB1DEA71EB00D9F1F8 /* Darwin */ = {
+			isa = PBXGroup;
+			children = (
+				E55606AC1DEA71EB00D9F1F8 /* DarwinMath.swift */,
+			);
+			path = Darwin;
+			sourceTree = "<group>";
+		};
+		E55606AD1DEA71EB00D9F1F8 /* MachO */ = {
+			isa = PBXGroup;
+			children = (
+				E55606AE1DEA71EB00D9F1F8 /* MachOTimeSource.swift */,
+			);
+			path = MachO;
+			sourceTree = "<group>";
+		};
+		E55606AF1DEA71EB00D9F1F8 /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				E55606B01DEA71EB00D9F1F8 /* macOSFactory.swift */,
+				E55606B11DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift */,
+				E55606B21DEA71EB00D9F1F8 /* macOSPlatform.swift */,
+				E55606B31DEA71EB00D9F1F8 /* macOSViewController.swift */,
+			);
+			path = macOS;
+			sourceTree = "<group>";
+		};
+		E55606B41DEA71EB00D9F1F8 /* utility */ = {
+			isa = PBXGroup;
+			children = (
+				E55606B51DEA71EB00D9F1F8 /* Logger.swift */,
+				E55606B61DEA71EB00D9F1F8 /* Time.swift */,
+			);
+			path = utility;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -255,6 +321,7 @@
 					E556065B1DEA68F000D9F1F8 = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = 3M27LW784R;
+						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 					};
 					E556066E1DEA68F100D9F1F8 = {
@@ -366,8 +433,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E55606661DEA68F100D9F1F8 /* Assets.xcassets in Resources */,
-				E55606691DEA68F100D9F1F8 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,9 +450,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E55606641DEA68F000D9F1F8 /* Shaders.metal in Sources */,
-				E55606621DEA68F000D9F1F8 /* GameViewController.swift in Sources */,
-				E55606601DEA68F000D9F1F8 /* AppDelegate.swift in Sources */,
+				E55606BC1DEA71EB00D9F1F8 /* macOSFactory.swift in Sources */,
+				E55606B71DEA71EB00D9F1F8 /* Camera.swift in Sources */,
+				E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */,
+				E55606B81DEA71EB00D9F1F8 /* Engine.swift in Sources */,
+				E55606BA1DEA71EB00D9F1F8 /* DarwinMath.swift in Sources */,
+				E55606B91DEA71EB00D9F1F8 /* main.swift in Sources */,
+				E55606C01DEA71EB00D9F1F8 /* Logger.swift in Sources */,
+				E55606BD1DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift in Sources */,
+				E55606BE1DEA71EB00D9F1F8 /* macOSPlatform.swift in Sources */,
+				E55606BB1DEA71EB00D9F1F8 /* MachOTimeSource.swift in Sources */,
+				E55606BF1DEA71EB00D9F1F8 /* macOSViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,17 +481,6 @@
 			targetProxy = E55606701DEA68F100D9F1F8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		E55606671DEA68F100D9F1F8 /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E55606681DEA68F100D9F1F8 /* Base */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		E55606761DEA68F100D9F1F8 /* Debug */ = {
@@ -515,12 +577,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 3M27LW784R;
 				INFOPLIST_FILE = Shkadov/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.franticapparatus.Shkadov;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -529,6 +593,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 3M27LW784R;
 				INFOPLIST_FILE = Shkadov/Info.plist;
