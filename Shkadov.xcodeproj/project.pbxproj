@@ -13,6 +13,10 @@
 		E55606661DEA68F100D9F1F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E55606651DEA68F100D9F1F8 /* Assets.xcassets */; };
 		E55606691DEA68F100D9F1F8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E55606671DEA68F100D9F1F8 /* MainMenu.xib */; };
 		E55606741DEA68F100D9F1F8 /* ShkadovTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606731DEA68F100D9F1F8 /* ShkadovTests.swift */; };
+		E55606A21DEA6F4900D9F1F8 /* FieryCrucible.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55606841DEA6F2500D9F1F8 /* FieryCrucible.framework */; };
+		E55606A31DEA6F4900D9F1F8 /* FranticApparatus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E556068D1DEA6F2C00D9F1F8 /* FranticApparatus.framework */; };
+		E55606A41DEA6F4900D9F1F8 /* Lilliput.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55606961DEA6F3100D9F1F8 /* Lilliput.framework */; };
+		E55606A51DEA6F4900D9F1F8 /* Swiftish.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E556069F1DEA6F3600D9F1F8 /* Swiftish.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -22,6 +26,62 @@
 			proxyType = 1;
 			remoteGlobalIDString = E556065B1DEA68F000D9F1F8;
 			remoteInfo = Shkadov;
+		};
+		E55606831DEA6F2500D9F1F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E556067E1DEA6F2500D9F1F8 /* FieryCrucible.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = "_____Product_FieryCrucible";
+			remoteInfo = FieryCrucible;
+		};
+		E55606851DEA6F2500D9F1F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E556067E1DEA6F2500D9F1F8 /* FieryCrucible.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = "_____Product_FieryCrucibleTests";
+			remoteInfo = FieryCrucibleTests;
+		};
+		E556068C1DEA6F2C00D9F1F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E55606871DEA6F2C00D9F1F8 /* FranticApparatus.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E55CA21119C676DC00E66980;
+			remoteInfo = FranticApparatus;
+		};
+		E556068E1DEA6F2C00D9F1F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E55606871DEA6F2C00D9F1F8 /* FranticApparatus.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E55CA21C19C676DC00E66980;
+			remoteInfo = FranticApparatusTests;
+		};
+		E55606951DEA6F3100D9F1F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E55606901DEA6F3100D9F1F8 /* Lilliput.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = OBJ_29;
+			remoteInfo = Lilliput;
+		};
+		E55606971DEA6F3100D9F1F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E55606901DEA6F3100D9F1F8 /* Lilliput.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = OBJ_30;
+			remoteInfo = LilliputTests;
+		};
+		E556069E1DEA6F3600D9F1F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E55606991DEA6F3500D9F1F8 /* Swiftish.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = "_____Product_Swiftish";
+			remoteInfo = Swiftish;
+		};
+		E55606A01DEA6F3600D9F1F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E55606991DEA6F3500D9F1F8 /* Swiftish.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = "_____Product_SwiftishTests";
+			remoteInfo = SwiftishTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -36,6 +96,10 @@
 		E556066F1DEA68F100D9F1F8 /* ShkadovTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShkadovTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E55606731DEA68F100D9F1F8 /* ShkadovTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShkadovTests.swift; sourceTree = "<group>"; };
 		E55606751DEA68F100D9F1F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E556067E1DEA6F2500D9F1F8 /* FieryCrucible.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FieryCrucible.xcodeproj; path = Carthage/Checkouts/FieryCrucible/FieryCrucible.xcodeproj; sourceTree = "<group>"; };
+		E55606871DEA6F2C00D9F1F8 /* FranticApparatus.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FranticApparatus.xcodeproj; path = Carthage/Checkouts/FranticApparatus/FranticApparatus.xcodeproj; sourceTree = "<group>"; };
+		E55606901DEA6F3100D9F1F8 /* Lilliput.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lilliput.xcodeproj; path = Carthage/Checkouts/Lilliput/Lilliput.xcodeproj; sourceTree = "<group>"; };
+		E55606991DEA6F3500D9F1F8 /* Swiftish.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Swiftish.xcodeproj; path = Carthage/Checkouts/Swiftish/Swiftish.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +107,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E55606A21DEA6F4900D9F1F8 /* FieryCrucible.framework in Frameworks */,
+				E55606A31DEA6F4900D9F1F8 /* FranticApparatus.framework in Frameworks */,
+				E55606A41DEA6F4900D9F1F8 /* Lilliput.framework in Frameworks */,
+				E55606A51DEA6F4900D9F1F8 /* Swiftish.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +127,10 @@
 		E55606531DEA68F000D9F1F8 = {
 			isa = PBXGroup;
 			children = (
+				E556067E1DEA6F2500D9F1F8 /* FieryCrucible.xcodeproj */,
+				E55606871DEA6F2C00D9F1F8 /* FranticApparatus.xcodeproj */,
+				E55606901DEA6F3100D9F1F8 /* Lilliput.xcodeproj */,
+				E55606991DEA6F3500D9F1F8 /* Swiftish.xcodeproj */,
 				E556065E1DEA68F000D9F1F8 /* Shkadov */,
 				E55606721DEA68F100D9F1F8 /* ShkadovTests */,
 				E556065D1DEA68F000D9F1F8 /* Products */,
@@ -94,6 +166,42 @@
 				E55606751DEA68F100D9F1F8 /* Info.plist */,
 			);
 			path = ShkadovTests;
+			sourceTree = "<group>";
+		};
+		E556067F1DEA6F2500D9F1F8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E55606841DEA6F2500D9F1F8 /* FieryCrucible.framework */,
+				E55606861DEA6F2500D9F1F8 /* FieryCrucibleTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E55606881DEA6F2C00D9F1F8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E556068D1DEA6F2C00D9F1F8 /* FranticApparatus.framework */,
+				E556068F1DEA6F2C00D9F1F8 /* FranticApparatusTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E55606911DEA6F3100D9F1F8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E55606961DEA6F3100D9F1F8 /* Lilliput.framework */,
+				E55606981DEA6F3100D9F1F8 /* LilliputTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E556069A1DEA6F3500D9F1F8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E556069F1DEA6F3600D9F1F8 /* Swiftish.framework */,
+				E55606A11DEA6F3600D9F1F8 /* SwiftishTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -168,6 +276,24 @@
 			mainGroup = E55606531DEA68F000D9F1F8;
 			productRefGroup = E556065D1DEA68F000D9F1F8 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = E556067F1DEA6F2500D9F1F8 /* Products */;
+					ProjectRef = E556067E1DEA6F2500D9F1F8 /* FieryCrucible.xcodeproj */;
+				},
+				{
+					ProductGroup = E55606881DEA6F2C00D9F1F8 /* Products */;
+					ProjectRef = E55606871DEA6F2C00D9F1F8 /* FranticApparatus.xcodeproj */;
+				},
+				{
+					ProductGroup = E55606911DEA6F3100D9F1F8 /* Products */;
+					ProjectRef = E55606901DEA6F3100D9F1F8 /* Lilliput.xcodeproj */;
+				},
+				{
+					ProductGroup = E556069A1DEA6F3500D9F1F8 /* Products */;
+					ProjectRef = E55606991DEA6F3500D9F1F8 /* Swiftish.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				E556065B1DEA68F000D9F1F8 /* Shkadov */,
@@ -175,6 +301,65 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		E55606841DEA6F2500D9F1F8 /* FieryCrucible.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FieryCrucible.framework;
+			remoteRef = E55606831DEA6F2500D9F1F8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E55606861DEA6F2500D9F1F8 /* FieryCrucibleTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = file;
+			path = FieryCrucibleTests.xctest;
+			remoteRef = E55606851DEA6F2500D9F1F8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E556068D1DEA6F2C00D9F1F8 /* FranticApparatus.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FranticApparatus.framework;
+			remoteRef = E556068C1DEA6F2C00D9F1F8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E556068F1DEA6F2C00D9F1F8 /* FranticApparatusTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FranticApparatusTests.xctest;
+			remoteRef = E556068E1DEA6F2C00D9F1F8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E55606961DEA6F3100D9F1F8 /* Lilliput.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Lilliput.framework;
+			remoteRef = E55606951DEA6F3100D9F1F8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E55606981DEA6F3100D9F1F8 /* LilliputTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = file;
+			path = LilliputTests.xctest;
+			remoteRef = E55606971DEA6F3100D9F1F8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E556069F1DEA6F3600D9F1F8 /* Swiftish.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Swiftish.framework;
+			remoteRef = E556069E1DEA6F3600D9F1F8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E55606A11DEA6F3600D9F1F8 /* SwiftishTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = file;
+			path = SwiftishTests.xctest;
+			remoteRef = E55606A01DEA6F3600D9F1F8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		E556065A1DEA68F000D9F1F8 /* Resources */ = {

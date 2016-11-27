@@ -1,0 +1,51 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "FD0C2CBA79FA25342E16BB824999B29BD440342D",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "E97C3022F85E372460430A4717768314FDF1CB86" : 9223372036854775807,
+    "E546750FD2F0F626775A683A958153F4B6CF8E3A" : 9223372036854775807,
+    "46E5D706F03FD0A3D2EA32D12A439FE59E5B6922" : 9223372036854775807,
+    "FD0C2CBA79FA25342E16BB824999B29BD440342D" : 9223372036854775807,
+    "F94126D0F2594FB31E784A9C29CF993F60FBAC50" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "5F559138-51DC-4038-A541-3C3E83E5B000",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "E97C3022F85E372460430A4717768314FDF1CB86" : "Shkadov\/Carthage\/Checkouts\/FranticApparatus\/",
+    "E546750FD2F0F626775A683A958153F4B6CF8E3A" : "Shkadov\/Carthage\/Checkouts\/Lilliput\/",
+    "46E5D706F03FD0A3D2EA32D12A439FE59E5B6922" : "Shkadov\/Carthage\/Checkouts\/Swiftish\/",
+    "FD0C2CBA79FA25342E16BB824999B29BD440342D" : "Shkadov\/",
+    "F94126D0F2594FB31E784A9C29CF993F60FBAC50" : "Shkadov\/Carthage\/Checkouts\/FieryCrucible\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Shkadov",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Shkadov.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "ssh:\/\/github.com\/jkolb\/Swiftish.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "46E5D706F03FD0A3D2EA32D12A439FE59E5B6922"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "ssh:\/\/github.com\/jkolb\/Lilliput.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E546750FD2F0F626775A683A958153F4B6CF8E3A"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "ssh:\/\/github.com\/jkolb\/FranticApparatus.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E97C3022F85E372460430A4717768314FDF1CB86"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "ssh:\/\/github.com\/jkolb\/FieryCrucible.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "F94126D0F2594FB31E784A9C29CF993F60FBAC50"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:jkolb\/Shkadov.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "FD0C2CBA79FA25342E16BB824999B29BD440342D"
+    }
+  ]
+}
