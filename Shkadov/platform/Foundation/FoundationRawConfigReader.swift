@@ -24,11 +24,11 @@
 
 import Foundation
 
-public final class FoundationConfigReader : ConfigReader {
-    public func read(path: String) throws -> Config {
+public final class FoundationRawConfigReader : RawConfigReader {
+    public func read(path: String) throws -> RawConfig {
         let data = try Data(contentsOf: URL(fileURLWithPath: path))
         let configObject = try JSONSerialization.jsonObject(with: data, options: [])
-        let config = Config()
+        let config = RawConfig()
         
         if let sections = configObject as? [String:Any] {
             for (section, sectionObject) in sections {

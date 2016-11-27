@@ -22,6 +22,9 @@
  SOFTWARE.
  */
 
-public protocol ConfigReader : class {
-    func read(path: String) throws -> Config
+public enum RendererType : String {
+    case directx
+    case metal
+    case opengl
+    case vulkan
 }

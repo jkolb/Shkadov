@@ -22,26 +22,18 @@
  SOFTWARE.
  */
 
-import Foundation
-
-public final class FoundationConfigWriter : ConfigWriter {
-    public func write(config: Config, path: String) throws {
-        var object = [String:[String:Any]]()
-        
-        for section in config.sections {
-            for name in config.names(section: section) {
-                if let value = config.getAny(section: section, name: name) {
-                    if object[section] == nil {
-                        object[section] = [name: value]
-                    }
-                    else {
-                        object[section]![name] = value
-                    }
-                }
-            }
+public final class macOSRendererFactory : RendererFactory {
+    public let supportedRendererTypes: Set<RendererType>
+    
+    public init(supportedRendererTypes: Set<RendererType>) {
+        self.supportedRendererTypes = supportedRendererTypes
+    }
+    
+    public func renderer(type: RendererType) -> RenderDevice {
+        if !supportedRendererTypes.contains(type) {
+            fatalError("\(type) renderer not supported")
         }
         
-        let data = try JSONSerialization.data(withJSONObject: object, options: .prettyPrinted)
-        try data.write(to: URL(fileURLWithPath: path))
+        fatalError("Not implemented")
     }
 }

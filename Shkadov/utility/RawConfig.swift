@@ -22,7 +22,7 @@
  SOFTWARE.
  */
 
-public final class Config {
+public final class RawConfig {
     private var config: [String:[String:Any]]
     
     public init() {

@@ -22,7 +22,6 @@
  SOFTWARE.
  */
 
-public protocol Platform : class {
-    weak var delegate: PlatformDelegate? { get set }
-    func start()
+public protocol PlatformDelegate : class {
+    func platformWillTerminate(platform: Platform)
 }

@@ -22,6 +22,6 @@
  SOFTWARE.
  */
 
-public protocol ConfigWriter : class {
-    func write(config: Config, path: String) throws
+public protocol RawConfigReader : class {
+    func read(path: String) throws -> RawConfig
 }

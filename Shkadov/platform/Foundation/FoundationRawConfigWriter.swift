@@ -22,7 +22,26 @@
  SOFTWARE.
  */
 
-public protocol Platform : class {
-    weak var delegate: PlatformDelegate? { get set }
-    func start()
+import Foundation
+
+public final class FoundationRawConfigWriter : RawConfigWriter {
+    public func write(config: RawConfig, path: String) throws {
+        var object = [String:[String:Any]]()
+        
+        for section in config.sections {
+            for name in config.names(section: section) {
+                if let value = config.getAny(section: section, name: name) {
+                    if object[section] == nil {
+                        object[section] = [name: value]
+                    }
+                    else {
+                        object[section]![name] = value
+                    }
+                }
+            }
+        }
+        
+        let data = try JSONSerialization.data(withJSONObject: object, options: .prettyPrinted)
+        try data.write(to: URL(fileURLWithPath: path))
+    }
 }

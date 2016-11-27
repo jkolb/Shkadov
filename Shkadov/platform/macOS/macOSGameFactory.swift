@@ -25,17 +25,20 @@
 import FieryCrucible
 
 public class macOSGameFactory : DependencyFactory, GameFactory {
-    private let config: Config
+    private let config: RawConfig
     
-    public init(config: Config) {
+    public init(config: RawConfig) {
         self.config = config
     }
     
     public func game() -> Game {
         return shared(
             Game(
-                platform: platform_macOS(),
+                platform: platform(),
+                rendererFactory: macOSRendererFactory(supportedRendererTypes: [.metal]),
+                paths: FoundationFilePaths(applicationName: FoundationApplicationNameProvider().applicationName),
                 config: config,
+                configWriter: FoundationRawConfigWriter(),
                 logger: makeLogger(level: .debug)
             )
         )
@@ -50,11 +53,14 @@ public class macOSGameFactory : DependencyFactory, GameFactory {
         )
     }
     
-    private func platform_macOS() -> macOSPlatform {
+    private func platform() -> macOSPlatform {
         return shared(
             macOSPlatform(
                 logger: makeLogger(level: .debug)
-            )
+            ),
+            configure: { (instance) in
+                instance.delegate = self.game()
+            }
         )
     }
     

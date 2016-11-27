@@ -22,14 +22,20 @@
  SOFTWARE.
  */
 
-public final class Game : RawInputListener {
+open class Game : PlatformDelegate, RawInputListener {
     private let platform: Platform
-    private var config: Config
+    private let rendererFactory: RendererFactory
+    private let paths: FilePaths
+    private let config: RawConfig
+    private let configWriter: RawConfigWriter
     private let logger: Logger
     
-    public init(platform: Platform, config: Config, logger: Logger) {
+    public init(platform: Platform, rendererFactory: RendererFactory, paths: FilePaths, config: RawConfig, configWriter: RawConfigWriter, logger: Logger) {
         self.platform = platform
+        self.rendererFactory = rendererFactory
+        self.paths = paths
         self.config = config
+        self.configWriter = configWriter
         self.logger = logger
     }
     
@@ -37,6 +43,15 @@ public final class Game : RawInputListener {
         platform.start()
     }
     
+    public func platformWillTerminate(platform: Platform) {
+        do {
+            try configWriter.write(config: config, path: paths.configPath)
+        }
+        catch {
+            logger.error("\(error)")
+        }
+    }
+
     public func receivedRawInput(_ rawInput: RawInput) {
         logger.trace("\(rawInput)")
     }

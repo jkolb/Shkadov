@@ -22,7 +22,10 @@
  SOFTWARE.
  */
 
-public protocol Platform : class {
-    weak var delegate: PlatformDelegate? { get set }
-    func start()
+public final class LinuxPlatform : Platform {
+    public weak var delegate: PlatformDelegate?
+    
+    public func start() {
+        fatalError("Not implemented")
+    }
 }

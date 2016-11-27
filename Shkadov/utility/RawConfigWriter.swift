@@ -22,7 +22,6 @@
  SOFTWARE.
  */
 
-public protocol Platform : class {
-    weak var delegate: PlatformDelegate? { get set }
-    func start()
+public protocol RawConfigWriter : class {
+    func write(config: RawConfig, path: String) throws
 }

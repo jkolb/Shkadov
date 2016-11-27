@@ -25,6 +25,7 @@
 import AppKit
 
 public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NSWindowDelegate {
+    public weak var delegate: PlatformDelegate?
     fileprivate let logger: Logger
 
     public init(logger: Logger) {
@@ -122,6 +123,7 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     
     public func applicationWillTerminate(_ notification: Notification) {
         logger.debug("\(#function)")
+        delegate?.platformWillTerminate(platform: self)
     }
     
     public func windowDidBecomeKey(_ notification: Notification) {

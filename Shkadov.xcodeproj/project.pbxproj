@@ -24,12 +24,11 @@
 		E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B61DEA71EB00D9F1F8 /* Time.swift */; };
 		E55606C51DEA757200D9F1F8 /* RenderDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606C41DEA757200D9F1F8 /* RenderDevice.swift */; };
 		E55606C71DEA762B00D9F1F8 /* MetalRenderDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606C61DEA762B00D9F1F8 /* MetalRenderDevice.swift */; };
-		E55606CF1DEA79A700D9F1F8 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606CE1DEA79A700D9F1F8 /* Config.swift */; };
 		E55606D11DEA7A0000D9F1F8 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D01DEA7A0000D9F1F8 /* Platform.swift */; };
-		E55606D31DEA7A9900D9F1F8 /* ConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D21DEA7A9900D9F1F8 /* ConfigReader.swift */; };
-		E55606D51DEA7ACD00D9F1F8 /* ConfigWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D41DEA7ACD00D9F1F8 /* ConfigWriter.swift */; };
-		E55606D81DEA7B4200D9F1F8 /* FoundationConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D71DEA7B4200D9F1F8 /* FoundationConfigReader.swift */; };
-		E55606DA1DEA7B4E00D9F1F8 /* FoundationConfigWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D91DEA7B4E00D9F1F8 /* FoundationConfigWriter.swift */; };
+		E55606D31DEA7A9900D9F1F8 /* RawConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D21DEA7A9900D9F1F8 /* RawConfigReader.swift */; };
+		E55606D51DEA7ACD00D9F1F8 /* RawConfigWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D41DEA7ACD00D9F1F8 /* RawConfigWriter.swift */; };
+		E55606D81DEA7B4200D9F1F8 /* FoundationRawConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D71DEA7B4200D9F1F8 /* FoundationRawConfigReader.swift */; };
+		E55606DA1DEA7B4E00D9F1F8 /* FoundationRawConfigWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D91DEA7B4E00D9F1F8 /* FoundationRawConfigWriter.swift */; };
 		E55606DC1DEA7DF500D9F1F8 /* FilePaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606DB1DEA7DF500D9F1F8 /* FilePaths.swift */; };
 		E55606DE1DEA7E6100D9F1F8 /* FoundationFilePaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606DD1DEA7E6100D9F1F8 /* FoundationFilePaths.swift */; };
 		E55606E01DEA93E300D9F1F8 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606DF1DEA93E300D9F1F8 /* Game.swift */; };
@@ -41,6 +40,16 @@
 		E55606EE1DEB607700D9F1F8 /* Bootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606ED1DEB607700D9F1F8 /* Bootstrap.swift */; };
 		E55606F01DEB618900D9F1F8 /* GameFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606EF1DEB618900D9F1F8 /* GameFactory.swift */; };
 		E55606F21DEB61F200D9F1F8 /* macOSBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606F11DEB61F200D9F1F8 /* macOSBootstrap.swift */; };
+		E55606F61DEB669800D9F1F8 /* OpenGLRenderDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606F51DEB669800D9F1F8 /* OpenGLRenderDevice.swift */; };
+		E55606F81DEB66AD00D9F1F8 /* VulkanRenderDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606F71DEB66AD00D9F1F8 /* VulkanRenderDevice.swift */; };
+		E55606FB1DEB671600D9F1F8 /* DirectXRenderDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606FA1DEB671600D9F1F8 /* DirectXRenderDevice.swift */; };
+		E55606FD1DEB674500D9F1F8 /* RendererType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606FC1DEB674500D9F1F8 /* RendererType.swift */; };
+		E55607011DEB686200D9F1F8 /* LinuxPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607001DEB686200D9F1F8 /* LinuxPlatform.swift */; };
+		E55607031DEB68BA00D9F1F8 /* WindowsPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607021DEB68BA00D9F1F8 /* WindowsPlatform.swift */; };
+		E55607051DEB697C00D9F1F8 /* RendererFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607041DEB697C00D9F1F8 /* RendererFactory.swift */; };
+		E55607071DEB6B2900D9F1F8 /* macOSRendererFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607061DEB6B2900D9F1F8 /* macOSRendererFactory.swift */; };
+		E55607091DEB6F0C00D9F1F8 /* RawConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607081DEB6F0C00D9F1F8 /* RawConfig.swift */; };
+		E556070B1DEB6FC600D9F1F8 /* PlatformDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556070A1DEB6FC600D9F1F8 /* PlatformDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,12 +142,11 @@
 		E55606C61DEA762B00D9F1F8 /* MetalRenderDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalRenderDevice.swift; sourceTree = "<group>"; };
 		E55606C81DEA76BA00D9F1F8 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		E55606C91DEA76BA00D9F1F8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
-		E55606CE1DEA79A700D9F1F8 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		E55606D01DEA7A0000D9F1F8 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
-		E55606D21DEA7A9900D9F1F8 /* ConfigReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigReader.swift; sourceTree = "<group>"; };
-		E55606D41DEA7ACD00D9F1F8 /* ConfigWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigWriter.swift; sourceTree = "<group>"; };
-		E55606D71DEA7B4200D9F1F8 /* FoundationConfigReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationConfigReader.swift; sourceTree = "<group>"; };
-		E55606D91DEA7B4E00D9F1F8 /* FoundationConfigWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationConfigWriter.swift; sourceTree = "<group>"; };
+		E55606D21DEA7A9900D9F1F8 /* RawConfigReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawConfigReader.swift; sourceTree = "<group>"; };
+		E55606D41DEA7ACD00D9F1F8 /* RawConfigWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawConfigWriter.swift; sourceTree = "<group>"; };
+		E55606D71DEA7B4200D9F1F8 /* FoundationRawConfigReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationRawConfigReader.swift; sourceTree = "<group>"; };
+		E55606D91DEA7B4E00D9F1F8 /* FoundationRawConfigWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationRawConfigWriter.swift; sourceTree = "<group>"; };
 		E55606DB1DEA7DF500D9F1F8 /* FilePaths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilePaths.swift; sourceTree = "<group>"; };
 		E55606DD1DEA7E6100D9F1F8 /* FoundationFilePaths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationFilePaths.swift; sourceTree = "<group>"; };
 		E55606DF1DEA93E300D9F1F8 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
@@ -150,6 +158,16 @@
 		E55606ED1DEB607700D9F1F8 /* Bootstrap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bootstrap.swift; sourceTree = "<group>"; };
 		E55606EF1DEB618900D9F1F8 /* GameFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameFactory.swift; sourceTree = "<group>"; };
 		E55606F11DEB61F200D9F1F8 /* macOSBootstrap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSBootstrap.swift; sourceTree = "<group>"; };
+		E55606F51DEB669800D9F1F8 /* OpenGLRenderDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGLRenderDevice.swift; sourceTree = "<group>"; };
+		E55606F71DEB66AD00D9F1F8 /* VulkanRenderDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VulkanRenderDevice.swift; sourceTree = "<group>"; };
+		E55606FA1DEB671600D9F1F8 /* DirectXRenderDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectXRenderDevice.swift; sourceTree = "<group>"; };
+		E55606FC1DEB674500D9F1F8 /* RendererType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererType.swift; sourceTree = "<group>"; };
+		E55607001DEB686200D9F1F8 /* LinuxPlatform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxPlatform.swift; sourceTree = "<group>"; };
+		E55607021DEB68BA00D9F1F8 /* WindowsPlatform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowsPlatform.swift; sourceTree = "<group>"; };
+		E55607041DEB697C00D9F1F8 /* RendererFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererFactory.swift; sourceTree = "<group>"; };
+		E55607061DEB6B2900D9F1F8 /* macOSRendererFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSRendererFactory.swift; sourceTree = "<group>"; };
+		E55607081DEB6F0C00D9F1F8 /* RawConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawConfig.swift; sourceTree = "<group>"; };
+		E556070A1DEB6FC600D9F1F8 /* PlatformDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlatformDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,11 +279,11 @@
 			children = (
 				E55606ED1DEB607700D9F1F8 /* Bootstrap.swift */,
 				E55606A71DEA71EB00D9F1F8 /* Camera.swift */,
-				E55606CE1DEA79A700D9F1F8 /* Config.swift */,
 				E55606A81DEA71EB00D9F1F8 /* Engine.swift */,
 				E55606DF1DEA93E300D9F1F8 /* Game.swift */,
 				E55606EF1DEB618900D9F1F8 /* GameFactory.swift */,
 				E55606D01DEA7A0000D9F1F8 /* Platform.swift */,
+				E556070A1DEB6FC600D9F1F8 /* PlatformDelegate.swift */,
 			);
 			path = engine;
 			sourceTree = "<group>";
@@ -273,12 +291,17 @@
 		E55606AA1DEA71EB00D9F1F8 /* platform */ = {
 			isa = PBXGroup;
 			children = (
+				E55606F91DEB670300D9F1F8 /* DirectX */,
 				E55606D61DEA7B3200D9F1F8 /* Foundation */,
+				E55606FE1DEB684400D9F1F8 /* Linux */,
 				E55606AD1DEA71EB00D9F1F8 /* MachO */,
 				E55606AF1DEA71EB00D9F1F8 /* macOS */,
 				E55606C21DEA753600D9F1F8 /* Metal */,
+				E55606F31DEB667D00D9F1F8 /* OpenGL */,
 				E55606E41DEB3E0100D9F1F8 /* POSIX */,
 				E55606E11DEB3DD100D9F1F8 /* Unix */,
+				E55606F41DEB667D00D9F1F8 /* Vulkan */,
+				E55606FF1DEB684400D9F1F8 /* Windows */,
 			);
 			path = platform;
 			sourceTree = "<group>";
@@ -298,6 +321,7 @@
 				E55606B01DEA71EB00D9F1F8 /* macOSGameFactory.swift */,
 				E55606B11DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift */,
 				E55606B21DEA71EB00D9F1F8 /* macOSPlatform.swift */,
+				E55607061DEB6B2900D9F1F8 /* macOSRendererFactory.swift */,
 				E55606B31DEA71EB00D9F1F8 /* macOSViewController.swift */,
 			);
 			path = macOS;
@@ -306,12 +330,13 @@
 		E55606B41DEA71EB00D9F1F8 /* utility */ = {
 			isa = PBXGroup;
 			children = (
-				E55606D21DEA7A9900D9F1F8 /* ConfigReader.swift */,
-				E55606D41DEA7ACD00D9F1F8 /* ConfigWriter.swift */,
 				E55606DB1DEA7DF500D9F1F8 /* FilePaths.swift */,
 				E55606B51DEA71EB00D9F1F8 /* Logger.swift */,
-				E55606B61DEA71EB00D9F1F8 /* Time.swift */,
 				E55606EB1DEB4CEB00D9F1F8 /* MouseCursorManager.swift */,
+				E55607081DEB6F0C00D9F1F8 /* RawConfig.swift */,
+				E55606D21DEA7A9900D9F1F8 /* RawConfigReader.swift */,
+				E55606D41DEA7ACD00D9F1F8 /* RawConfigWriter.swift */,
+				E55606B61DEA71EB00D9F1F8 /* Time.swift */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -328,6 +353,8 @@
 			isa = PBXGroup;
 			children = (
 				E55606C41DEA757200D9F1F8 /* RenderDevice.swift */,
+				E55607041DEB697C00D9F1F8 /* RendererFactory.swift */,
+				E55606FC1DEB674500D9F1F8 /* RendererType.swift */,
 			);
 			path = renderer;
 			sourceTree = "<group>";
@@ -336,8 +363,8 @@
 			isa = PBXGroup;
 			children = (
 				E55606E91DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift */,
-				E55606D71DEA7B4200D9F1F8 /* FoundationConfigReader.swift */,
-				E55606D91DEA7B4E00D9F1F8 /* FoundationConfigWriter.swift */,
+				E55606D71DEA7B4200D9F1F8 /* FoundationRawConfigReader.swift */,
+				E55606D91DEA7B4E00D9F1F8 /* FoundationRawConfigWriter.swift */,
 				E55606DD1DEA7E6100D9F1F8 /* FoundationFilePaths.swift */,
 				E55606E71DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift */,
 			);
@@ -358,6 +385,46 @@
 				E55606E51DEB3E1500D9F1F8 /* POSIXThreadIDProvider.swift */,
 			);
 			path = POSIX;
+			sourceTree = "<group>";
+		};
+		E55606F31DEB667D00D9F1F8 /* OpenGL */ = {
+			isa = PBXGroup;
+			children = (
+				E55606F51DEB669800D9F1F8 /* OpenGLRenderDevice.swift */,
+			);
+			path = OpenGL;
+			sourceTree = "<group>";
+		};
+		E55606F41DEB667D00D9F1F8 /* Vulkan */ = {
+			isa = PBXGroup;
+			children = (
+				E55606F71DEB66AD00D9F1F8 /* VulkanRenderDevice.swift */,
+			);
+			path = Vulkan;
+			sourceTree = "<group>";
+		};
+		E55606F91DEB670300D9F1F8 /* DirectX */ = {
+			isa = PBXGroup;
+			children = (
+				E55606FA1DEB671600D9F1F8 /* DirectXRenderDevice.swift */,
+			);
+			path = DirectX;
+			sourceTree = "<group>";
+		};
+		E55606FE1DEB684400D9F1F8 /* Linux */ = {
+			isa = PBXGroup;
+			children = (
+				E55607001DEB686200D9F1F8 /* LinuxPlatform.swift */,
+			);
+			path = Linux;
+			sourceTree = "<group>";
+		};
+		E55606FF1DEB684400D9F1F8 /* Windows */ = {
+			isa = PBXGroup;
+			children = (
+				E55607021DEB68BA00D9F1F8 /* WindowsPlatform.swift */,
+			);
+			path = Windows;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -540,19 +607,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E55606D51DEA7ACD00D9F1F8 /* ConfigWriter.swift in Sources */,
-				E55606D81DEA7B4200D9F1F8 /* FoundationConfigReader.swift in Sources */,
+				E55606D51DEA7ACD00D9F1F8 /* RawConfigWriter.swift in Sources */,
+				E55607011DEB686200D9F1F8 /* LinuxPlatform.swift in Sources */,
+				E55606D81DEA7B4200D9F1F8 /* FoundationRawConfigReader.swift in Sources */,
+				E55607051DEB697C00D9F1F8 /* RendererFactory.swift in Sources */,
 				E55606E01DEA93E300D9F1F8 /* Game.swift in Sources */,
 				E55606D11DEA7A0000D9F1F8 /* Platform.swift in Sources */,
 				E55606BC1DEA71EB00D9F1F8 /* macOSGameFactory.swift in Sources */,
-				E55606DA1DEA7B4E00D9F1F8 /* FoundationConfigWriter.swift in Sources */,
-				E55606D31DEA7A9900D9F1F8 /* ConfigReader.swift in Sources */,
+				E55606DA1DEA7B4E00D9F1F8 /* FoundationRawConfigWriter.swift in Sources */,
+				E55606D31DEA7A9900D9F1F8 /* RawConfigReader.swift in Sources */,
 				E55606EC1DEB4CEB00D9F1F8 /* MouseCursorManager.swift in Sources */,
 				E55606DE1DEA7E6100D9F1F8 /* FoundationFilePaths.swift in Sources */,
 				E55606C51DEA757200D9F1F8 /* RenderDevice.swift in Sources */,
+				E55606F61DEB669800D9F1F8 /* OpenGLRenderDevice.swift in Sources */,
 				E55606B71DEA71EB00D9F1F8 /* Camera.swift in Sources */,
-				E55606CF1DEA79A700D9F1F8 /* Config.swift in Sources */,
 				E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */,
+				E55607031DEB68BA00D9F1F8 /* WindowsPlatform.swift in Sources */,
 				E55606DC1DEA7DF500D9F1F8 /* FilePaths.swift in Sources */,
 				E55606EA1DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift in Sources */,
 				E55606B81DEA71EB00D9F1F8 /* Engine.swift in Sources */,
@@ -562,13 +632,19 @@
 				E55606E81DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift in Sources */,
 				E55606EE1DEB607700D9F1F8 /* Bootstrap.swift in Sources */,
 				E55606BD1DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift in Sources */,
+				E55607071DEB6B2900D9F1F8 /* macOSRendererFactory.swift in Sources */,
+				E55606FB1DEB671600D9F1F8 /* DirectXRenderDevice.swift in Sources */,
 				E55606F21DEB61F200D9F1F8 /* macOSBootstrap.swift in Sources */,
 				E55606BE1DEA71EB00D9F1F8 /* macOSPlatform.swift in Sources */,
+				E55607091DEB6F0C00D9F1F8 /* RawConfig.swift in Sources */,
 				E55606BB1DEA71EB00D9F1F8 /* MachOTimeSource.swift in Sources */,
 				E55606BF1DEA71EB00D9F1F8 /* macOSViewController.swift in Sources */,
+				E55606F81DEB66AD00D9F1F8 /* VulkanRenderDevice.swift in Sources */,
 				E55606E61DEB3E1500D9F1F8 /* POSIXThreadIDProvider.swift in Sources */,
+				E55606FD1DEB674500D9F1F8 /* RendererType.swift in Sources */,
 				E55606F01DEB618900D9F1F8 /* GameFactory.swift in Sources */,
 				E55606C71DEA762B00D9F1F8 /* MetalRenderDevice.swift in Sources */,
+				E556070B1DEB6FC600D9F1F8 /* PlatformDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
