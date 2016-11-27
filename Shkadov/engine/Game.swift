@@ -26,26 +26,29 @@ open class Game : PlatformDelegate, RawInputListener {
     private let platform: Platform
     private let rendererFactory: RendererFactory
     private let paths: FilePaths
-    private let config: RawConfig
+    private let rawConfig: RawConfig
     private let configWriter: RawConfigWriter
     private let logger: Logger
+    private var renderDevice: RenderDevice!
     
-    public init(platform: Platform, rendererFactory: RendererFactory, paths: FilePaths, config: RawConfig, configWriter: RawConfigWriter, logger: Logger) {
+    public init(platform: Platform, rendererFactory: RendererFactory, paths: FilePaths, rawConfig: RawConfig, configWriter: RawConfigWriter, logger: Logger) {
         self.platform = platform
         self.rendererFactory = rendererFactory
         self.paths = paths
-        self.config = config
+        self.rawConfig = rawConfig
         self.configWriter = configWriter
         self.logger = logger
     }
     
     public func start() {
+        let rendererConfig = StandardRendererConfig(rawConfig: rawConfig, supportedRendererTypes: rendererFactory.supportedRendererTypes)
+        renderDevice = rendererFactory.renderer(type: rendererConfig.type)
         platform.start()
     }
     
     public func platformWillTerminate(platform: Platform) {
         do {
-            try configWriter.write(config: config, path: paths.configPath)
+            try configWriter.write(config: rawConfig, path: paths.configPath)
         }
         catch {
             logger.error("\(error)")

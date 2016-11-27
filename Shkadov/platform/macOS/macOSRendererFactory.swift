@@ -30,10 +30,24 @@ public final class macOSRendererFactory : RendererFactory {
     }
     
     public func renderer(type: RendererType) -> RenderDevice {
-        if !supportedRendererTypes.contains(type) {
-            fatalError("\(type) renderer not supported")
+        if supportedRendererTypes.count == 0 {
+            fatalError("No supported renderers found")
         }
         
-        fatalError("Not implemented")
+        let selectedType: RendererType
+        
+        if !supportedRendererTypes.contains(type) {
+            selectedType = supportedRendererTypes.first!
+        }
+        else {
+            selectedType = type
+        }
+        
+        switch selectedType {
+        case .metal:
+            return MetalRenderDevice()
+        default:
+            fatalError("Not implemented")
+        }
     }
 }

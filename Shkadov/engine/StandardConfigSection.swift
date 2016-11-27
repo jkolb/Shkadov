@@ -22,32 +22,6 @@
  SOFTWARE.
  */
 
-import Metal
-
-public final class macOSBootstrap : Bootstrap {
-    public func gameFactory() -> GameFactory {
-        let paths = FoundationFilePaths(applicationName: FoundationApplicationNameProvider().applicationName)
-        let configReader = FoundationRawConfigReader()
-        let rawConfig: RawConfig
-        
-        do {
-            rawConfig = try configReader.read(path: paths.configPath)
-        }
-        catch {
-            print("\(error)")
-            rawConfig = RawConfig()
-        }
-        
-        return macOSGameFactory(rawConfig: rawConfig, supportedRendererTypes: determineSupportedRendererTypes())
-    }
-    
-    private func determineSupportedRendererTypes() -> Set<RendererType> {
-        var types = Set<RendererType>()
-        
-        if let _ = MTLCreateSystemDefaultDevice() {
-            types.insert(.metal)
-        }
-        
-        return types
-    }
+public enum StandardConfigSection : String {
+    case renderer
 }

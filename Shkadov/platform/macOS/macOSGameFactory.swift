@@ -25,19 +25,21 @@
 import FieryCrucible
 
 public class macOSGameFactory : DependencyFactory, GameFactory {
-    private let config: RawConfig
+    private let rawConfig: RawConfig
+    private let supportedRendererTypes: Set<RendererType>
     
-    public init(config: RawConfig) {
-        self.config = config
+    public init(rawConfig: RawConfig, supportedRendererTypes: Set<RendererType>) {
+        self.rawConfig = rawConfig
+        self.supportedRendererTypes = supportedRendererTypes
     }
     
     public func game() -> Game {
         return shared(
             Game(
                 platform: platform(),
-                rendererFactory: macOSRendererFactory(supportedRendererTypes: [.metal]),
+                rendererFactory: macOSRendererFactory(supportedRendererTypes: supportedRendererTypes),
                 paths: FoundationFilePaths(applicationName: FoundationApplicationNameProvider().applicationName),
-                config: config,
+                rawConfig: rawConfig,
                 configWriter: FoundationRawConfigWriter(),
                 logger: makeLogger(level: .debug)
             )

@@ -50,6 +50,8 @@
 		E55607071DEB6B2900D9F1F8 /* macOSRendererFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607061DEB6B2900D9F1F8 /* macOSRendererFactory.swift */; };
 		E55607091DEB6F0C00D9F1F8 /* RawConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607081DEB6F0C00D9F1F8 /* RawConfig.swift */; };
 		E556070B1DEB6FC600D9F1F8 /* PlatformDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556070A1DEB6FC600D9F1F8 /* PlatformDelegate.swift */; };
+		E556070D1DEB819500D9F1F8 /* StandardRendererConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556070C1DEB819500D9F1F8 /* StandardRendererConfig.swift */; };
+		E556070F1DEB820B00D9F1F8 /* StandardConfigSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556070E1DEB820B00D9F1F8 /* StandardConfigSection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -168,6 +170,8 @@
 		E55607061DEB6B2900D9F1F8 /* macOSRendererFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSRendererFactory.swift; sourceTree = "<group>"; };
 		E55607081DEB6F0C00D9F1F8 /* RawConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawConfig.swift; sourceTree = "<group>"; };
 		E556070A1DEB6FC600D9F1F8 /* PlatformDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlatformDelegate.swift; sourceTree = "<group>"; };
+		E556070C1DEB819500D9F1F8 /* StandardRendererConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardRendererConfig.swift; sourceTree = "<group>"; };
+		E556070E1DEB820B00D9F1F8 /* StandardConfigSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardConfigSection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -284,6 +288,7 @@
 				E55606EF1DEB618900D9F1F8 /* GameFactory.swift */,
 				E55606D01DEA7A0000D9F1F8 /* Platform.swift */,
 				E556070A1DEB6FC600D9F1F8 /* PlatformDelegate.swift */,
+				E556070E1DEB820B00D9F1F8 /* StandardConfigSection.swift */,
 			);
 			path = engine;
 			sourceTree = "<group>";
@@ -355,6 +360,7 @@
 				E55606C41DEA757200D9F1F8 /* RenderDevice.swift */,
 				E55607041DEB697C00D9F1F8 /* RendererFactory.swift */,
 				E55606FC1DEB674500D9F1F8 /* RendererType.swift */,
+				E556070C1DEB819500D9F1F8 /* StandardRendererConfig.swift */,
 			);
 			path = renderer;
 			sourceTree = "<group>";
@@ -621,6 +627,7 @@
 				E55606C51DEA757200D9F1F8 /* RenderDevice.swift in Sources */,
 				E55606F61DEB669800D9F1F8 /* OpenGLRenderDevice.swift in Sources */,
 				E55606B71DEA71EB00D9F1F8 /* Camera.swift in Sources */,
+				E556070F1DEB820B00D9F1F8 /* StandardConfigSection.swift in Sources */,
 				E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */,
 				E55607031DEB68BA00D9F1F8 /* WindowsPlatform.swift in Sources */,
 				E55606DC1DEA7DF500D9F1F8 /* FilePaths.swift in Sources */,
@@ -641,6 +648,7 @@
 				E55606BF1DEA71EB00D9F1F8 /* macOSViewController.swift in Sources */,
 				E55606F81DEB66AD00D9F1F8 /* VulkanRenderDevice.swift in Sources */,
 				E55606E61DEB3E1500D9F1F8 /* POSIXThreadIDProvider.swift in Sources */,
+				E556070D1DEB819500D9F1F8 /* StandardRendererConfig.swift in Sources */,
 				E55606FD1DEB674500D9F1F8 /* RendererType.swift in Sources */,
 				E55606F01DEB618900D9F1F8 /* GameFactory.swift in Sources */,
 				E55606C71DEA762B00D9F1F8 /* MetalRenderDevice.swift in Sources */,
