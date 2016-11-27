@@ -22,4 +22,6 @@
  SOFTWARE.
  */
 
-macOSFactory().game().start()
+public protocol FilePaths : class {
+    var configPath: String { get }
+}

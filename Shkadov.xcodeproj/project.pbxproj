@@ -25,6 +25,15 @@
 		E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B61DEA71EB00D9F1F8 /* Time.swift */; };
 		E55606C51DEA757200D9F1F8 /* RenderDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606C41DEA757200D9F1F8 /* RenderDevice.swift */; };
 		E55606C71DEA762B00D9F1F8 /* MetalRenderDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606C61DEA762B00D9F1F8 /* MetalRenderDevice.swift */; };
+		E55606CF1DEA79A700D9F1F8 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606CE1DEA79A700D9F1F8 /* Config.swift */; };
+		E55606D11DEA7A0000D9F1F8 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D01DEA7A0000D9F1F8 /* Platform.swift */; };
+		E55606D31DEA7A9900D9F1F8 /* ConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D21DEA7A9900D9F1F8 /* ConfigReader.swift */; };
+		E55606D51DEA7ACD00D9F1F8 /* ConfigWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D41DEA7ACD00D9F1F8 /* ConfigWriter.swift */; };
+		E55606D81DEA7B4200D9F1F8 /* FoundationConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D71DEA7B4200D9F1F8 /* FoundationConfigReader.swift */; };
+		E55606DA1DEA7B4E00D9F1F8 /* FoundationConfigWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D91DEA7B4E00D9F1F8 /* FoundationConfigWriter.swift */; };
+		E55606DC1DEA7DF500D9F1F8 /* FilePaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606DB1DEA7DF500D9F1F8 /* FilePaths.swift */; };
+		E55606DE1DEA7E6100D9F1F8 /* FoundationFilePaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606DD1DEA7E6100D9F1F8 /* FoundationFilePaths.swift */; };
+		E55606E01DEA93E300D9F1F8 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606DF1DEA93E300D9F1F8 /* Game.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,6 +127,15 @@
 		E55606C61DEA762B00D9F1F8 /* MetalRenderDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalRenderDevice.swift; sourceTree = "<group>"; };
 		E55606C81DEA76BA00D9F1F8 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		E55606C91DEA76BA00D9F1F8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		E55606CE1DEA79A700D9F1F8 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		E55606D01DEA7A0000D9F1F8 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
+		E55606D21DEA7A9900D9F1F8 /* ConfigReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigReader.swift; sourceTree = "<group>"; };
+		E55606D41DEA7ACD00D9F1F8 /* ConfigWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigWriter.swift; sourceTree = "<group>"; };
+		E55606D71DEA7B4200D9F1F8 /* FoundationConfigReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationConfigReader.swift; sourceTree = "<group>"; };
+		E55606D91DEA7B4E00D9F1F8 /* FoundationConfigWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationConfigWriter.swift; sourceTree = "<group>"; };
+		E55606DB1DEA7DF500D9F1F8 /* FilePaths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilePaths.swift; sourceTree = "<group>"; };
+		E55606DD1DEA7E6100D9F1F8 /* FoundationFilePaths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationFilePaths.swift; sourceTree = "<group>"; };
+		E55606DF1DEA93E300D9F1F8 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,7 +246,10 @@
 			isa = PBXGroup;
 			children = (
 				E55606A71DEA71EB00D9F1F8 /* Camera.swift */,
+				E55606CE1DEA79A700D9F1F8 /* Config.swift */,
 				E55606A81DEA71EB00D9F1F8 /* Engine.swift */,
+				E55606DF1DEA93E300D9F1F8 /* Game.swift */,
+				E55606D01DEA7A0000D9F1F8 /* Platform.swift */,
 			);
 			path = engine;
 			sourceTree = "<group>";
@@ -237,6 +258,7 @@
 			isa = PBXGroup;
 			children = (
 				E55606AB1DEA71EB00D9F1F8 /* Darwin */,
+				E55606D61DEA7B3200D9F1F8 /* Foundation */,
 				E55606AD1DEA71EB00D9F1F8 /* MachO */,
 				E55606AF1DEA71EB00D9F1F8 /* macOS */,
 				E55606C21DEA753600D9F1F8 /* Metal */,
@@ -274,6 +296,9 @@
 		E55606B41DEA71EB00D9F1F8 /* utility */ = {
 			isa = PBXGroup;
 			children = (
+				E55606D21DEA7A9900D9F1F8 /* ConfigReader.swift */,
+				E55606D41DEA7ACD00D9F1F8 /* ConfigWriter.swift */,
+				E55606DB1DEA7DF500D9F1F8 /* FilePaths.swift */,
 				E55606B51DEA71EB00D9F1F8 /* Logger.swift */,
 				E55606B61DEA71EB00D9F1F8 /* Time.swift */,
 			);
@@ -294,6 +319,16 @@
 				E55606C41DEA757200D9F1F8 /* RenderDevice.swift */,
 			);
 			path = renderer;
+			sourceTree = "<group>";
+		};
+		E55606D61DEA7B3200D9F1F8 /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				E55606D71DEA7B4200D9F1F8 /* FoundationConfigReader.swift */,
+				E55606D91DEA7B4E00D9F1F8 /* FoundationConfigWriter.swift */,
+				E55606DD1DEA7E6100D9F1F8 /* FoundationFilePaths.swift */,
+			);
+			path = Foundation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -476,10 +511,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E55606D51DEA7ACD00D9F1F8 /* ConfigWriter.swift in Sources */,
+				E55606D81DEA7B4200D9F1F8 /* FoundationConfigReader.swift in Sources */,
+				E55606E01DEA93E300D9F1F8 /* Game.swift in Sources */,
+				E55606D11DEA7A0000D9F1F8 /* Platform.swift in Sources */,
 				E55606BC1DEA71EB00D9F1F8 /* macOSFactory.swift in Sources */,
+				E55606DA1DEA7B4E00D9F1F8 /* FoundationConfigWriter.swift in Sources */,
+				E55606D31DEA7A9900D9F1F8 /* ConfigReader.swift in Sources */,
+				E55606DE1DEA7E6100D9F1F8 /* FoundationFilePaths.swift in Sources */,
 				E55606C51DEA757200D9F1F8 /* RenderDevice.swift in Sources */,
 				E55606B71DEA71EB00D9F1F8 /* Camera.swift in Sources */,
+				E55606CF1DEA79A700D9F1F8 /* Config.swift in Sources */,
 				E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */,
+				E55606DC1DEA7DF500D9F1F8 /* FilePaths.swift in Sources */,
 				E55606B81DEA71EB00D9F1F8 /* Engine.swift in Sources */,
 				E55606BA1DEA71EB00D9F1F8 /* DarwinMath.swift in Sources */,
 				E55606B91DEA71EB00D9F1F8 /* main.swift in Sources */,

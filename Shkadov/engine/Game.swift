@@ -22,4 +22,31 @@
  SOFTWARE.
  */
 
-macOSFactory().game().start()
+public final class Game {
+    private let paths: FilePaths
+    private let configReader: ConfigReader
+    private let configWriter: ConfigWriter
+    private let logger: Logger
+    private var config: Config
+    
+    public init(paths: FilePaths, configReader: ConfigReader, configWriter: ConfigWriter, logger: Logger) {
+        self.paths = paths
+        self.configReader = configReader
+        self.configWriter = configWriter
+        self.logger = logger
+        self.config = Config()
+    }
+    
+    public func start() {
+        loadConfig()
+    }
+    
+    private func loadConfig() {
+        do {
+            config = try configReader.read(path: paths.configPath)
+        }
+        catch {
+            logger.error("\(error)")
+        }
+    }
+}

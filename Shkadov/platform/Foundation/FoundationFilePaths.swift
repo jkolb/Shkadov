@@ -22,4 +22,21 @@
  SOFTWARE.
  */
 
-macOSFactory().game().start()
+import Foundation
+
+public final class FoundationFilePaths : FilePaths {
+    public let configPath: String
+    
+    public init(applicationName: String) {
+        let fileManager = FileManager.default
+        do {
+            let applicationSupportURL = try fileManager.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let applicationURL = applicationSupportURL.appendingPathComponent(applicationName, isDirectory: true)
+            try fileManager.createDirectory(at: applicationURL, withIntermediateDirectories: true, attributes: nil)
+            self.configPath = "/" + applicationURL.appendingPathComponent("config.json").path
+        }
+        catch {
+            fatalError("\(error)")
+        }
+    }
+}

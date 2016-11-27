@@ -22,4 +22,6 @@
  SOFTWARE.
  */
 
-macOSFactory().game().start()
+public protocol ConfigWriter : class {
+    func write(config: Config, path: String) throws
+}

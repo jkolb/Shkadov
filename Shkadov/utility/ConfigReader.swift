@@ -22,4 +22,6 @@
  SOFTWARE.
  */
 
-macOSFactory().game().start()
+public protocol ConfigReader : class {
+    func read(path: String) throws -> Config
+}

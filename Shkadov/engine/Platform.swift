@@ -22,4 +22,6 @@
  SOFTWARE.
  */
 
-macOSFactory().game().start()
+public protocol Platform : class {
+    func start()
+}

@@ -25,10 +25,6 @@
 import AppKit
 import MetalKit
 
-public protocol Platform : class {
-    func start()
-}
-
 public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NSWindowDelegate, MTKViewDelegate {
     fileprivate let application: NSApplication
     fileprivate let window: NSWindow

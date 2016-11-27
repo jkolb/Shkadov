@@ -28,9 +28,36 @@ import Metal
 import MetalKit
 
 public class macOSFactory : DependencyFactory {
-    fileprivate let windowSize = CGSize(width: 1280, height: 720)
+    private let windowSize = CGSize(width: 1280, height: 720)
     
-    fileprivate func engine() -> Engine {
+    public func game() -> Game {
+        return shared(
+            Game(
+                paths: paths(),
+                configReader: configReader(),
+                configWriter: configWriter(),
+                logger: gameLogger()
+            )
+        )
+    }
+    
+    public func paths() -> FilePaths {
+        return unshared(FoundationFilePaths(applicationName: applicationName()))
+    }
+    
+    public func configReader() -> ConfigReader {
+        return unshared(FoundationConfigReader())
+    }
+    
+    public func configWriter() -> ConfigWriter {
+        return unshared(FoundationConfigWriter())
+    }
+    
+    public func platform() -> Platform {
+        return platform_macOS()
+    }
+    
+    private func engine() -> Engine {
         return scoped(
             Engine(
                 timeSource: timeSource(),
@@ -39,17 +66,13 @@ public class macOSFactory : DependencyFactory {
         )
     }
     
-    fileprivate func timeSource() -> TimeSource {
+    private func timeSource() -> TimeSource {
         return scoped(
             MachOTimeSource()
         )
     }
-
-    public func platform() -> Platform {
-        return platform_macOS()
-    }
     
-    public func platform_macOS() -> macOSPlatform {
+    private func platform_macOS() -> macOSPlatform {
         return shared(
             macOSPlatform(
                 application: application(),
@@ -61,13 +84,13 @@ public class macOSFactory : DependencyFactory {
         )
     }
 
-    fileprivate func applicationName() -> String {
+    private func applicationName() -> String {
         return scoped(
             ProcessInfo.processInfo.processName
         )
     }
     
-    fileprivate func application() -> NSApplication {
+    private func application() -> NSApplication {
         return scoped(
             NSApplication.shared(),
             configure: { instance in
@@ -78,7 +101,7 @@ public class macOSFactory : DependencyFactory {
         )
     }
     
-    fileprivate func mainMenu() -> NSMenu {
+    private func mainMenu() -> NSMenu {
         return scoped(
             factory: {
                 let instance = NSMenu()
@@ -104,31 +127,35 @@ public class macOSFactory : DependencyFactory {
         )
     }
     
-    fileprivate func engineLogger() -> Logger {
+    private func gameLogger() -> Logger {
         return scoped(Logger(level: .debug))
     }
     
-    fileprivate func platformLogger() -> Logger {
+    private func engineLogger() -> Logger {
         return scoped(Logger(level: .debug))
     }
     
-    fileprivate func rendererLogger() -> Logger {
+    private func platformLogger() -> Logger {
         return scoped(Logger(level: .debug))
     }
     
-    fileprivate func viewControllerLogger() -> Logger {
+    private func rendererLogger() -> Logger {
         return scoped(Logger(level: .debug))
     }
     
-    fileprivate func inputLogger() -> Logger {
+    private func viewControllerLogger() -> Logger {
         return scoped(Logger(level: .debug))
     }
     
-    fileprivate func sceneManagerLogger() -> Logger {
+    private func inputLogger() -> Logger {
+        return scoped(Logger(level: .debug))
+    }
+    
+    private func sceneManagerLogger() -> Logger {
         return scoped(Logger(level: .debug))
     }
 
-    fileprivate func window() -> NSWindow {
+    private func window() -> NSWindow {
         return scoped(
             NSWindow(
                 contentRect: CGRect(x: 0, y: 0, width: windowSize.width, height: windowSize.height),
@@ -147,11 +174,11 @@ public class macOSFactory : DependencyFactory {
         )
     }
     
-    fileprivate func windowDelegate() -> NSWindowDelegate {
+    private func windowDelegate() -> NSWindowDelegate {
         return platform_macOS()
     }
     
-    fileprivate func viewController() -> macOSViewController {
+    private func viewController() -> macOSViewController {
         return scoped(
             macOSViewController(
                 mouseCursorManager: mouseCursorManager(),
@@ -164,7 +191,7 @@ public class macOSFactory : DependencyFactory {
         )
     }
     
-    fileprivate func mouseCursorManager() -> MouseCursorManager {
+    private func mouseCursorManager() -> MouseCursorManager {
         return scoped(
             macOSMouseCursorManager(),
             configure: { instance in
@@ -173,17 +200,17 @@ public class macOSFactory : DependencyFactory {
         )
     }
     
-    fileprivate func metalDevice() -> MTLDevice {
+    private func metalDevice() -> MTLDevice {
         return scoped(
             MTLCreateSystemDefaultDevice()!
         )
     }
     
-    fileprivate func metalViewDelegate() -> MTKViewDelegate {
+    private func metalViewDelegate() -> MTKViewDelegate {
         return platform_macOS()
     }
     
-    fileprivate func metalView() -> MTKView {
+    private func metalView() -> MTKView {
         return scoped(
             factory: {
                 let instance = MTKView(frame: CGRect(x: 0.0, y: 0.0, width: windowSize.width, height: windowSize.height), device: metalDevice())
