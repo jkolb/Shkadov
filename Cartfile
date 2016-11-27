@@ -1,0 +1,4 @@
+github "jkolb/Lilliput" >= 4.0.0
+github "jkolb/Swiftish" >= 2.0.0
+github "jkolb/FieryCrucible" >= 2.0.0
+github "jkolb/FranticApparatus" >= 6.0.0

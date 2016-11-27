@@ -1,0 +1,12 @@
+[submodule "Carthage/Checkouts/FieryCrucible"]
+	path = Carthage/Checkouts/FieryCrucible
+	url = ssh://git@github.com/jkolb/FieryCrucible.git
+[submodule "Carthage/Checkouts/FranticApparatus"]
+	path = Carthage/Checkouts/FranticApparatus
+	url = ssh://git@github.com/jkolb/FranticApparatus.git
+[submodule "Carthage/Checkouts/Lilliput"]
+	path = Carthage/Checkouts/Lilliput
+	url = ssh://git@github.com/jkolb/Lilliput.git
+[submodule "Carthage/Checkouts/Swiftish"]
+	path = Carthage/Checkouts/Swiftish
+	url = ssh://git@github.com/jkolb/Swiftish.git
