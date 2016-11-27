@@ -22,4 +22,6 @@
  SOFTWARE.
  */
 
-macOSBootstrap().gameFactory().game().start()
+public protocol GameFactory : class {
+    func game() -> Game
+}

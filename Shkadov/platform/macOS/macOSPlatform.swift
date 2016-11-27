@@ -23,27 +23,50 @@
  */
 
 import AppKit
-import MetalKit
 
-public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NSWindowDelegate, MTKViewDelegate {
-    fileprivate let application: NSApplication
-    fileprivate let window: NSWindow
-    fileprivate let viewController: NSViewController
-    fileprivate let engine: Engine
+public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NSWindowDelegate {
     fileprivate let logger: Logger
 
-    public init(application: NSApplication, window: NSWindow, viewController: NSViewController, engine: Engine, logger: Logger) {
-        self.application = application
-        self.window = window
-        self.viewController = viewController
-        self.engine = engine
+    public init(logger: Logger) {
         self.logger = logger
     }
     
     public func start() {
         logger.debug("\(#function)")
-        window.makeKeyAndOrderFront(nil)
+        let application = makeApplication()
+//        window.makeKeyAndOrderFront(nil)
         application.run()
+    }
+
+    private func makeApplication() -> NSApplication {
+        let application = NSApplication.shared()
+        application.setActivationPolicy(.regular)
+        application.mainMenu = makeMainMenu()
+        application.delegate = self
+        return application
+    }
+    
+    private func makeMainMenu() -> NSMenu {
+        let mainMenu = NSMenu()
+        
+        let applicationMenuItem = NSMenuItem()
+        mainMenu.addItem(applicationMenuItem)
+        
+        let applicationMenu = NSMenu()
+        applicationMenuItem.submenu = applicationMenu
+        
+        let applicationName = ProcessInfo.processInfo.processName
+        applicationMenu.addItem(withTitle: "Quit \(applicationName)", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        
+        let viewMenuItem = NSMenuItem()
+        mainMenu.addItem(viewMenuItem)
+        
+        let viewMenu = NSMenu(title: "View")
+        viewMenuItem.submenu = viewMenu
+        
+        viewMenu.addItem(withTitle: "Toggle Full Screen", action: #selector(NSWindow.toggleFullScreen(_:)), keyEquivalent: "f")
+        
+        return mainMenu
     }
     
     public func applicationShouldTerminate(_ sender: NSApplication) -> NSApplicationTerminateReply {
@@ -62,7 +85,7 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     
     public func applicationDidFinishLaunching(_ notification: Notification) {
         logger.debug("\(#function)")
-        engine.start()
+//        engine.start()
     }
     
     public func applicationWillHide(_ notification: Notification) {
@@ -103,7 +126,7 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     
     public func windowDidBecomeKey(_ notification: Notification) {
         logger.debug("\(#function)")
-        window.makeFirstResponder(viewController)
+//        window.makeFirstResponder(viewController)
     }
     
     public func windowDidResignKey(_ notification: Notification) {
@@ -153,13 +176,5 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     
     public func windowDidMove(_ notification: Notification) {
         logger.debug("\(#function)")
-    }
-    
-    public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        
-    }
-    
-    public func draw(in view: MTKView) {
-        engine.renderFrame()
     }
 }

@@ -24,7 +24,7 @@
 
 import Swiftish
 
-public final class Engine : RawInputListener {
+public final class Engine {
     fileprivate let timeSource: TimeSource
     fileprivate let logger: Logger
     
@@ -48,10 +48,6 @@ public final class Engine : RawInputListener {
         camera.worldTransform.t = Vector3<Float>(0.0, 0.0, 0.0)
         camera.worldTransform.r = rotation(pitch: Angle<Float>(), yaw: Angle<Float>(), roll: Angle<Float>())
         previousTime = timeSource.currentTime
-    }
-    
-    public func receivedRawInput(_ rawInput: RawInput) {
-        logger.trace("\(rawInput)")
     }
 
     public func renderFrame() {

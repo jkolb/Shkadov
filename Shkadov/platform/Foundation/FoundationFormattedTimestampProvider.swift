@@ -22,4 +22,22 @@
  SOFTWARE.
  */
 
-macOSBootstrap().gameFactory().game().start()
+import Foundation
+
+public final class FoundationFormattedTimestampProvider : FormattedTimestampProvider {
+    private let dateFormatter: DateFormatter
+    
+    public convenience init() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+        self.init(dateFormatter: dateFormatter)
+    }
+    
+    public init(dateFormatter: DateFormatter) {
+        self.dateFormatter = dateFormatter
+    }
+    
+    public var currentFormattedTimestamp: String {
+        return dateFormatter.string(from: Date())
+    }
+}

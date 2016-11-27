@@ -22,4 +22,12 @@
  SOFTWARE.
  */
 
-macOSBootstrap().gameFactory().game().start()
+import Darwin.POSIX
+
+public final class POSIXThreadIDProvider : ThreadIDProvider {
+    public var currentThreadID: UInt64 {
+        var ID: UInt64 = 0
+        pthread_threadid_np(nil, &ID)
+        return ID
+    }
+}

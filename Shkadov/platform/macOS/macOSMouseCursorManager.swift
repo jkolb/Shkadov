@@ -25,13 +25,6 @@
 import CoreGraphics
 import Swiftish
 
-public protocol MouseCursorManager : class {
-    var hidden: Bool { get set }
-    var followsMouse: Bool { get set }
-    
-    func moveToPoint(_ point: Vector2<Float>)
-}
-
 public final class macOSMouseCursorManager : MouseCursorManager {
     public weak var delegate: macOSMouseCursorManagerDelegate!
     public var hidden: Bool {
@@ -57,7 +50,7 @@ public final class macOSMouseCursorManager : MouseCursorManager {
         }
     }
     
-    public func moveToPoint(_ point: Vector2<Float>) {
+    public func move(to point: Vector2<Float>) {
         CGWarpMouseCursorPosition(CGPoint(x: CGFloat(point.x), y: CGFloat(point.y)))
     }
     

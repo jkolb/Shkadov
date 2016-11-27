@@ -22,7 +22,17 @@
  SOFTWARE.
  */
 
-import Foundation
+public protocol ApplicationNameProvider {
+    var applicationName: String { get }
+}
+
+public protocol ThreadIDProvider {
+    var currentThreadID: UInt64 { get }
+}
+
+public protocol FormattedTimestampProvider {
+    var currentFormattedTimestamp: String { get }
+}
 
 public protocol LogFormatter {
     func format(_ record: LogRecord) -> String
@@ -33,18 +43,18 @@ public protocol LogHandler {
 }
 
 open class LogRecord {
-    open let timestamp: Date
+    open let formattedTimestamp: String
     open let level: LogLevel
-    open let processName: String
+    open let applicationName: String
     open let threadID: UInt64
     open let fileName: String
     open let lineNumber: Int
     open let message: String
     
-    public init(timestamp: Date, level: LogLevel, processName: String, threadID: UInt64, fileName: String, lineNumber: Int, message: String) {
-        self.timestamp = timestamp
+    public init(formattedTimestamp: String, level: LogLevel, applicationName: String, threadID: UInt64, fileName: String, lineNumber: Int, message: String) {
+        self.formattedTimestamp = formattedTimestamp
         self.level = level
-        self.processName = processName
+        self.applicationName = applicationName
         self.threadID = threadID
         self.fileName = fileName
         self.lineNumber = lineNumber
@@ -72,29 +82,22 @@ public enum LogLevel : UInt8, Comparable {
             return "\(self)".uppercased() + " "
         }
     }
+    
+    public static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
 }
 
-open class LogStringFormatter : LogFormatter {
-    fileprivate let dateFormatter: DateFormatter
-    
-    public init() {
-        self.dateFormatter = DateFormatter()
-        self.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
-    }
-    
-    public init(dateFormatter: DateFormatter) {
-        self.dateFormatter = dateFormatter
-    }
-    
+open class StandardLogFormatter : LogFormatter {
     open func format(_ record: LogRecord) -> String {
-        return "\(dateFormatter.string(from: record.timestamp)) \(record.processName)[\(record.threadID)] \(record.level.formatted) \(record.fileName):\(record.lineNumber) \(record.message)"
+        return "\(record.formattedTimestamp) \(record.applicationName)[\(record.threadID)] \(record.level.formatted) \(record.fileName):\(record.lineNumber) \(record.message)"
     }
 }
 
-open class LogConsoleHandler : LogHandler {
+open class ConsoleLogHandler : LogHandler {
     fileprivate let formatter: LogFormatter
     
-    public init(formatter: LogFormatter = LogStringFormatter()) {
+    public init(formatter: LogFormatter = StandardLogFormatter()) {
         self.formatter = formatter
     }
     
@@ -118,30 +121,31 @@ open class LogCompositeHandler : LogHandler {
 }
 
 open class Logger {
-    open let level: LogLevel
-    fileprivate let handler: LogHandler
-    fileprivate let processName = ProcessInfo.processInfo.processName
+    private let applicationName: String
+    open var level: LogLevel
+    private let threadIDProvider: ThreadIDProvider
+    private let formattedTimestampProvider: FormattedTimestampProvider
+    private let pathSeparator: String
+    private let handler: LogHandler
     
-    public init(level: LogLevel, handler: LogHandler = LogConsoleHandler()) {
-        self.level = level
+    public init(applicationNameProvider: ApplicationNameProvider, threadIDProvider: ThreadIDProvider, formattedTimestampProvider: FormattedTimestampProvider, pathSeparator: String, handler: LogHandler = ConsoleLogHandler()) {
+        self.applicationName = applicationNameProvider.applicationName
+        self.level = .debug
+        self.threadIDProvider = threadIDProvider
+        self.formattedTimestampProvider = formattedTimestampProvider
+        self.pathSeparator = pathSeparator
         self.handler = handler
-    }
-    
-    fileprivate var threadID: UInt64 {
-        var ID: __uint64_t = 0
-        pthread_threadid_np(nil, &ID)
-        return ID
     }
     
     fileprivate func log(_ message: @autoclosure () -> String, level: LogLevel, fileName: String = #file, lineNumber: Int = #line) {
         if level > self.level { return }
         
         let record = LogRecord(
-            timestamp: Date(),
+            formattedTimestamp: formattedTimestampProvider.currentFormattedTimestamp,
             level: level,
-            processName: processName,
-            threadID: self.threadID,
-            fileName: NSString(string: fileName).lastPathComponent,
+            applicationName: applicationName,
+            threadID: threadIDProvider.currentThreadID,
+            fileName: fileName.components(separatedBy: pathSeparator).last ?? "Unknown",
             lineNumber: lineNumber,
             message: message()
         )
@@ -188,8 +192,4 @@ open class Logger {
     open func trace(_ fileName: String = #file, lineNumber: Int = #line, message: () -> String) {
         log(message(), level: .trace, fileName: fileName, lineNumber: lineNumber)
     }
-}
-
-public func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
-    return lhs.rawValue < rhs.rawValue
 }

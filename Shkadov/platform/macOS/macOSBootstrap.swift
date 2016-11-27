@@ -22,4 +22,20 @@
  SOFTWARE.
  */
 
-macOSBootstrap().gameFactory().game().start()
+public final class macOSBootstrap : Bootstrap {
+    public func gameFactory() -> GameFactory {
+        let paths = FoundationFilePaths(applicationName: FoundationApplicationNameProvider().applicationName)
+        let configReader = FoundationConfigReader()
+        let config: Config
+        
+        do {
+            config = try configReader.read(path: paths.configPath)
+        }
+        catch {
+            print("\(error)")
+            config = Config()
+        }
+        
+        return macOSGameFactory(config: config)
+    }
+}

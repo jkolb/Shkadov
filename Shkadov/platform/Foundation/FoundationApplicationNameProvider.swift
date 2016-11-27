@@ -22,4 +22,10 @@
  SOFTWARE.
  */
 
-macOSBootstrap().gameFactory().game().start()
+import Foundation
+
+public final class FoundationApplicationNameProvider : ApplicationNameProvider {
+    public var applicationName: String {
+        return ProcessInfo.processInfo.processName
+    }
+}

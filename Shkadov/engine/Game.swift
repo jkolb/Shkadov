@@ -22,31 +22,22 @@
  SOFTWARE.
  */
 
-public final class Game {
-    private let paths: FilePaths
-    private let configReader: ConfigReader
-    private let configWriter: ConfigWriter
-    private let logger: Logger
+public final class Game : RawInputListener {
+    private let platform: Platform
     private var config: Config
+    private let logger: Logger
     
-    public init(paths: FilePaths, configReader: ConfigReader, configWriter: ConfigWriter, logger: Logger) {
-        self.paths = paths
-        self.configReader = configReader
-        self.configWriter = configWriter
+    public init(platform: Platform, config: Config, logger: Logger) {
+        self.platform = platform
+        self.config = config
         self.logger = logger
-        self.config = Config()
     }
     
     public func start() {
-        loadConfig()
+        platform.start()
     }
     
-    private func loadConfig() {
-        do {
-            config = try configReader.read(path: paths.configPath)
-        }
-        catch {
-            logger.error("\(error)")
-        }
+    public func receivedRawInput(_ rawInput: RawInput) {
+        logger.trace("\(rawInput)")
     }
 }

@@ -15,9 +15,8 @@
 		E55606B71DEA71EB00D9F1F8 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606A71DEA71EB00D9F1F8 /* Camera.swift */; };
 		E55606B81DEA71EB00D9F1F8 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606A81DEA71EB00D9F1F8 /* Engine.swift */; };
 		E55606B91DEA71EB00D9F1F8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606A91DEA71EB00D9F1F8 /* main.swift */; };
-		E55606BA1DEA71EB00D9F1F8 /* DarwinMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606AC1DEA71EB00D9F1F8 /* DarwinMath.swift */; };
 		E55606BB1DEA71EB00D9F1F8 /* MachOTimeSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606AE1DEA71EB00D9F1F8 /* MachOTimeSource.swift */; };
-		E55606BC1DEA71EB00D9F1F8 /* macOSFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B01DEA71EB00D9F1F8 /* macOSFactory.swift */; };
+		E55606BC1DEA71EB00D9F1F8 /* macOSGameFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B01DEA71EB00D9F1F8 /* macOSGameFactory.swift */; };
 		E55606BD1DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B11DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift */; };
 		E55606BE1DEA71EB00D9F1F8 /* macOSPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B21DEA71EB00D9F1F8 /* macOSPlatform.swift */; };
 		E55606BF1DEA71EB00D9F1F8 /* macOSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B31DEA71EB00D9F1F8 /* macOSViewController.swift */; };
@@ -34,6 +33,14 @@
 		E55606DC1DEA7DF500D9F1F8 /* FilePaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606DB1DEA7DF500D9F1F8 /* FilePaths.swift */; };
 		E55606DE1DEA7E6100D9F1F8 /* FoundationFilePaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606DD1DEA7E6100D9F1F8 /* FoundationFilePaths.swift */; };
 		E55606E01DEA93E300D9F1F8 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606DF1DEA93E300D9F1F8 /* Game.swift */; };
+		E55606E31DEB3DD100D9F1F8 /* UnixMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606E21DEB3DD100D9F1F8 /* UnixMath.swift */; };
+		E55606E61DEB3E1500D9F1F8 /* POSIXThreadIDProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606E51DEB3E1500D9F1F8 /* POSIXThreadIDProvider.swift */; };
+		E55606E81DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606E71DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift */; };
+		E55606EA1DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606E91DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift */; };
+		E55606EC1DEB4CEB00D9F1F8 /* MouseCursorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606EB1DEB4CEB00D9F1F8 /* MouseCursorManager.swift */; };
+		E55606EE1DEB607700D9F1F8 /* Bootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606ED1DEB607700D9F1F8 /* Bootstrap.swift */; };
+		E55606F01DEB618900D9F1F8 /* GameFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606EF1DEB618900D9F1F8 /* GameFactory.swift */; };
+		E55606F21DEB61F200D9F1F8 /* macOSBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606F11DEB61F200D9F1F8 /* macOSBootstrap.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,9 +122,8 @@
 		E55606A71DEA71EB00D9F1F8 /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		E55606A81DEA71EB00D9F1F8 /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
 		E55606A91DEA71EB00D9F1F8 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		E55606AC1DEA71EB00D9F1F8 /* DarwinMath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DarwinMath.swift; sourceTree = "<group>"; };
 		E55606AE1DEA71EB00D9F1F8 /* MachOTimeSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MachOTimeSource.swift; sourceTree = "<group>"; };
-		E55606B01DEA71EB00D9F1F8 /* macOSFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSFactory.swift; sourceTree = "<group>"; };
+		E55606B01DEA71EB00D9F1F8 /* macOSGameFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSGameFactory.swift; sourceTree = "<group>"; };
 		E55606B11DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSMouseCursorManager.swift; sourceTree = "<group>"; };
 		E55606B21DEA71EB00D9F1F8 /* macOSPlatform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSPlatform.swift; sourceTree = "<group>"; };
 		E55606B31DEA71EB00D9F1F8 /* macOSViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSViewController.swift; sourceTree = "<group>"; };
@@ -136,6 +142,14 @@
 		E55606DB1DEA7DF500D9F1F8 /* FilePaths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilePaths.swift; sourceTree = "<group>"; };
 		E55606DD1DEA7E6100D9F1F8 /* FoundationFilePaths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationFilePaths.swift; sourceTree = "<group>"; };
 		E55606DF1DEA93E300D9F1F8 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		E55606E21DEB3DD100D9F1F8 /* UnixMath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnixMath.swift; sourceTree = "<group>"; };
+		E55606E51DEB3E1500D9F1F8 /* POSIXThreadIDProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POSIXThreadIDProvider.swift; sourceTree = "<group>"; };
+		E55606E71DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationFormattedTimestampProvider.swift; sourceTree = "<group>"; };
+		E55606E91DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationApplicationNameProvider.swift; sourceTree = "<group>"; };
+		E55606EB1DEB4CEB00D9F1F8 /* MouseCursorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MouseCursorManager.swift; sourceTree = "<group>"; };
+		E55606ED1DEB607700D9F1F8 /* Bootstrap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bootstrap.swift; sourceTree = "<group>"; };
+		E55606EF1DEB618900D9F1F8 /* GameFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameFactory.swift; sourceTree = "<group>"; };
+		E55606F11DEB61F200D9F1F8 /* macOSBootstrap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSBootstrap.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -245,10 +259,12 @@
 		E55606A61DEA71EB00D9F1F8 /* engine */ = {
 			isa = PBXGroup;
 			children = (
+				E55606ED1DEB607700D9F1F8 /* Bootstrap.swift */,
 				E55606A71DEA71EB00D9F1F8 /* Camera.swift */,
 				E55606CE1DEA79A700D9F1F8 /* Config.swift */,
 				E55606A81DEA71EB00D9F1F8 /* Engine.swift */,
 				E55606DF1DEA93E300D9F1F8 /* Game.swift */,
+				E55606EF1DEB618900D9F1F8 /* GameFactory.swift */,
 				E55606D01DEA7A0000D9F1F8 /* Platform.swift */,
 			);
 			path = engine;
@@ -257,21 +273,14 @@
 		E55606AA1DEA71EB00D9F1F8 /* platform */ = {
 			isa = PBXGroup;
 			children = (
-				E55606AB1DEA71EB00D9F1F8 /* Darwin */,
 				E55606D61DEA7B3200D9F1F8 /* Foundation */,
 				E55606AD1DEA71EB00D9F1F8 /* MachO */,
 				E55606AF1DEA71EB00D9F1F8 /* macOS */,
 				E55606C21DEA753600D9F1F8 /* Metal */,
+				E55606E41DEB3E0100D9F1F8 /* POSIX */,
+				E55606E11DEB3DD100D9F1F8 /* Unix */,
 			);
 			path = platform;
-			sourceTree = "<group>";
-		};
-		E55606AB1DEA71EB00D9F1F8 /* Darwin */ = {
-			isa = PBXGroup;
-			children = (
-				E55606AC1DEA71EB00D9F1F8 /* DarwinMath.swift */,
-			);
-			path = Darwin;
 			sourceTree = "<group>";
 		};
 		E55606AD1DEA71EB00D9F1F8 /* MachO */ = {
@@ -285,7 +294,8 @@
 		E55606AF1DEA71EB00D9F1F8 /* macOS */ = {
 			isa = PBXGroup;
 			children = (
-				E55606B01DEA71EB00D9F1F8 /* macOSFactory.swift */,
+				E55606F11DEB61F200D9F1F8 /* macOSBootstrap.swift */,
+				E55606B01DEA71EB00D9F1F8 /* macOSGameFactory.swift */,
 				E55606B11DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift */,
 				E55606B21DEA71EB00D9F1F8 /* macOSPlatform.swift */,
 				E55606B31DEA71EB00D9F1F8 /* macOSViewController.swift */,
@@ -301,6 +311,7 @@
 				E55606DB1DEA7DF500D9F1F8 /* FilePaths.swift */,
 				E55606B51DEA71EB00D9F1F8 /* Logger.swift */,
 				E55606B61DEA71EB00D9F1F8 /* Time.swift */,
+				E55606EB1DEB4CEB00D9F1F8 /* MouseCursorManager.swift */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -324,11 +335,29 @@
 		E55606D61DEA7B3200D9F1F8 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				E55606E91DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift */,
 				E55606D71DEA7B4200D9F1F8 /* FoundationConfigReader.swift */,
 				E55606D91DEA7B4E00D9F1F8 /* FoundationConfigWriter.swift */,
 				E55606DD1DEA7E6100D9F1F8 /* FoundationFilePaths.swift */,
+				E55606E71DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift */,
 			);
 			path = Foundation;
+			sourceTree = "<group>";
+		};
+		E55606E11DEB3DD100D9F1F8 /* Unix */ = {
+			isa = PBXGroup;
+			children = (
+				E55606E21DEB3DD100D9F1F8 /* UnixMath.swift */,
+			);
+			path = Unix;
+			sourceTree = "<group>";
+		};
+		E55606E41DEB3E0100D9F1F8 /* POSIX */ = {
+			isa = PBXGroup;
+			children = (
+				E55606E51DEB3E1500D9F1F8 /* POSIXThreadIDProvider.swift */,
+			);
+			path = POSIX;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -515,23 +544,30 @@
 				E55606D81DEA7B4200D9F1F8 /* FoundationConfigReader.swift in Sources */,
 				E55606E01DEA93E300D9F1F8 /* Game.swift in Sources */,
 				E55606D11DEA7A0000D9F1F8 /* Platform.swift in Sources */,
-				E55606BC1DEA71EB00D9F1F8 /* macOSFactory.swift in Sources */,
+				E55606BC1DEA71EB00D9F1F8 /* macOSGameFactory.swift in Sources */,
 				E55606DA1DEA7B4E00D9F1F8 /* FoundationConfigWriter.swift in Sources */,
 				E55606D31DEA7A9900D9F1F8 /* ConfigReader.swift in Sources */,
+				E55606EC1DEB4CEB00D9F1F8 /* MouseCursorManager.swift in Sources */,
 				E55606DE1DEA7E6100D9F1F8 /* FoundationFilePaths.swift in Sources */,
 				E55606C51DEA757200D9F1F8 /* RenderDevice.swift in Sources */,
 				E55606B71DEA71EB00D9F1F8 /* Camera.swift in Sources */,
 				E55606CF1DEA79A700D9F1F8 /* Config.swift in Sources */,
 				E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */,
 				E55606DC1DEA7DF500D9F1F8 /* FilePaths.swift in Sources */,
+				E55606EA1DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift in Sources */,
 				E55606B81DEA71EB00D9F1F8 /* Engine.swift in Sources */,
-				E55606BA1DEA71EB00D9F1F8 /* DarwinMath.swift in Sources */,
 				E55606B91DEA71EB00D9F1F8 /* main.swift in Sources */,
+				E55606E31DEB3DD100D9F1F8 /* UnixMath.swift in Sources */,
 				E55606C01DEA71EB00D9F1F8 /* Logger.swift in Sources */,
+				E55606E81DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift in Sources */,
+				E55606EE1DEB607700D9F1F8 /* Bootstrap.swift in Sources */,
 				E55606BD1DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift in Sources */,
+				E55606F21DEB61F200D9F1F8 /* macOSBootstrap.swift in Sources */,
 				E55606BE1DEA71EB00D9F1F8 /* macOSPlatform.swift in Sources */,
 				E55606BB1DEA71EB00D9F1F8 /* MachOTimeSource.swift in Sources */,
 				E55606BF1DEA71EB00D9F1F8 /* macOSViewController.swift in Sources */,
+				E55606E61DEB3E1500D9F1F8 /* POSIXThreadIDProvider.swift in Sources */,
+				E55606F01DEB618900D9F1F8 /* GameFactory.swift in Sources */,
 				E55606C71DEA762B00D9F1F8 /* MetalRenderDevice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

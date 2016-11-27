@@ -22,4 +22,11 @@
  SOFTWARE.
  */
 
-macOSBootstrap().gameFactory().game().start()
+import Swiftish
+
+public protocol MouseCursorManager : class {
+    var hidden: Bool { get set }
+    var followsMouse: Bool { get set }
+    
+    func move(to point: Vector2<Float>)
+}
