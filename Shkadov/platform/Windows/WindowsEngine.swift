@@ -22,6 +22,14 @@
  SOFTWARE.
  */
 
-public final class DirectXRenderDevice : RenderDevice {
+public final class WindowsEngine : Engine {
+    private unowned(unsafe) let listener: EngineListener
     
+    public init(listener: EngineListener) {
+        self.listener = listener
+    }
+    
+    public func writeConfig() throws {
+        fatalError("Not implemented")
+    }
 }

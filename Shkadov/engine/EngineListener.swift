@@ -22,6 +22,7 @@
  SOFTWARE.
  */
 
-public final class MetalRenderDevice : RenderDevice {
-    
+public protocol EngineListener : RawInputListener, RendererListener {
+    func didStartup(engine: Engine)
+    func willShutdown()
 }

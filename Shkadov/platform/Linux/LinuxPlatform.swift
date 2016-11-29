@@ -22,10 +22,14 @@
  SOFTWARE.
  */
 
-public final class LinuxPlatform : Platform {
-    public weak var delegate: PlatformDelegate?
+public final class LinuxEngine : Engine {
+    private unowned(unsafe) let listener: EngineListener
     
-    public func start() {
+    public init(listener: EngineListener) {
+        self.listener = listener
+    }
+    
+    public func writeConfig() throws {
         fatalError("Not implemented")
     }
 }

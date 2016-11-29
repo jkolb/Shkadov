@@ -22,6 +22,6 @@
  SOFTWARE.
  */
 
-public protocol GameFactory : class {
-    func game() -> Game
+public protocol RawInputListener : class {
+    func received(input: RawInput)
 }

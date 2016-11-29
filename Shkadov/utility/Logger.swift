@@ -45,16 +45,16 @@ public protocol LogHandler {
 open class LogRecord {
     open let formattedTimestamp: String
     open let level: LogLevel
-    open let applicationName: String
+    open let name: String
     open let threadID: UInt64
     open let fileName: String
     open let lineNumber: Int
     open let message: String
     
-    public init(formattedTimestamp: String, level: LogLevel, applicationName: String, threadID: UInt64, fileName: String, lineNumber: Int, message: String) {
+    public init(formattedTimestamp: String, level: LogLevel, name: String, threadID: UInt64, fileName: String, lineNumber: Int, message: String) {
         self.formattedTimestamp = formattedTimestamp
         self.level = level
-        self.applicationName = applicationName
+        self.name = name
         self.threadID = threadID
         self.fileName = fileName
         self.lineNumber = lineNumber
@@ -90,7 +90,7 @@ public enum LogLevel : UInt8, Comparable {
 
 open class StandardLogFormatter : LogFormatter {
     open func format(_ record: LogRecord) -> String {
-        return "\(record.formattedTimestamp) \(record.applicationName)[\(record.threadID)] \(record.level.formatted) \(record.fileName):\(record.lineNumber) \(record.message)"
+        return "\(record.formattedTimestamp) \(record.name)[\(record.threadID)] \(record.level.formatted) \(record.fileName):\(record.lineNumber) \(record.message)"
     }
 }
 
@@ -121,16 +121,16 @@ open class LogCompositeHandler : LogHandler {
 }
 
 open class Logger {
-    private let applicationName: String
     open var level: LogLevel
+    private let name: String
     private let threadIDProvider: ThreadIDProvider
     private let formattedTimestampProvider: FormattedTimestampProvider
     private let pathSeparator: String
     private let handler: LogHandler
     
-    public init(applicationNameProvider: ApplicationNameProvider, threadIDProvider: ThreadIDProvider, formattedTimestampProvider: FormattedTimestampProvider, pathSeparator: String, handler: LogHandler = ConsoleLogHandler()) {
-        self.applicationName = applicationNameProvider.applicationName
-        self.level = .debug
+    public init(name: String, threadIDProvider: ThreadIDProvider, formattedTimestampProvider: FormattedTimestampProvider, pathSeparator: String, handler: LogHandler = ConsoleLogHandler()) {
+        self.level = .warn
+        self.name = name
         self.threadIDProvider = threadIDProvider
         self.formattedTimestampProvider = formattedTimestampProvider
         self.pathSeparator = pathSeparator
@@ -143,7 +143,7 @@ open class Logger {
         let record = LogRecord(
             formattedTimestamp: formattedTimestampProvider.currentFormattedTimestamp,
             level: level,
-            applicationName: applicationName,
+            name: name,
             threadID: threadIDProvider.currentThreadID,
             fileName: fileName.components(separatedBy: pathSeparator).last ?? "Unknown",
             lineNumber: lineNumber,

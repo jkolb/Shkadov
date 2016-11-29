@@ -22,6 +22,10 @@
  SOFTWARE.
  */
 
-public final class OpenGLRenderDevice : RenderDevice {
+public final class VulkanRenderer : Renderer {
+    public unowned(unsafe) let listener: RendererListener
     
+    public init(listener: RendererListener) {
+        self.listener = listener
+    }
 }

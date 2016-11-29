@@ -22,8 +22,6 @@
  SOFTWARE.
  */
 
-public protocol RendererFactory : class {
-    // The first renderer returned will be the chosen renderer when the game is launched for the first time
-    var supportedRendererTypes: Set<RendererType> { get }
-    func renderer(type: RendererType) -> RenderDevice
+public protocol RendererListener : class {
+    func processFrame()
 }

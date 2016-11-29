@@ -22,6 +22,17 @@
  SOFTWARE.
  */
 
-public enum StandardConfigSection : String {
-    case renderer
+public final class macOSLoggerFactory : LoggerFactory {
+    private let applicationNameProvider = FoundationApplicationNameProvider()
+    private let threadIDProvider = POSIXThreadIDProvider()
+    private let formattedTimestampProvider = FoundationFormattedTimestampProvider()
+    
+    public func makeLogger(name: String) -> Logger {
+        return Logger(
+            name: applicationNameProvider.applicationName + ":" + name,
+            threadIDProvider: threadIDProvider,
+            formattedTimestampProvider: formattedTimestampProvider,
+            pathSeparator: "/"
+        )
+    }
 }

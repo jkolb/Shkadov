@@ -22,30 +22,28 @@
  SOFTWARE.
  */
 
-import AppKit
+import Metal
+import MetalKit
 
-public final class macOSRendererFactory {
-    public func makeRenderer(windowSystem: macOSWindowSystem, listener: RendererListener, config: RendererConfig, logger: Logger) -> Renderer {
-        if config.supportedRendererTypes.count == 0 {
-            fatalError("No supported renderers found")
+public final class MetalRenderer : Renderer {
+    private let device: MTLDevice
+    public let view: MTKView
+    private let config: RendererConfig
+    public unowned(unsafe) let listener: RendererListener
+    
+    public init(listener: RendererListener, config: RendererConfig) {
+        self.listener = listener
+        self.device = MTLCreateSystemDefaultDevice()!
+        let frame = CGRect(x: 0, y: 0, width: config.width, height: config.height)
+        self.view = MTKView(frame: frame, device: device)
+        self.config = config
+    }
+    
+    public static func isSupported() -> Bool {
+        if let _ = MTLCreateSystemDefaultDevice() {
+            return true
         }
         
-        let selectedType: RendererType
-        
-        if !config.supportedRendererTypes.contains(config.type) {
-            selectedType = config.supportedRendererTypes.first!
-        }
-        else {
-            selectedType = config.type
-        }
-        
-        switch selectedType {
-        case .metal:
-            let renderer = MetalRenderer(listener: listener, config: config)
-            windowSystem.attach(metalRenderer: renderer)
-            return renderer
-        default:
-            fatalError("\(config.type) renderer not implemented for macOS")
-        }
+        return false
     }
 }

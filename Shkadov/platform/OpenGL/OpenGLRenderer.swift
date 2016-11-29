@@ -22,10 +22,10 @@
  SOFTWARE.
  */
 
-public final class WindowsPlatform : Platform {
-    public weak var delegate: PlatformDelegate?
-
-    public func start() {
-        fatalError("Not implemented")
+public final class OpenGLRenderer : Renderer {
+    public unowned(unsafe) let listener: RendererListener
+    
+    public init(listener: RendererListener) {
+        self.listener = listener
     }
 }

@@ -22,6 +22,25 @@
  SOFTWARE.
  */
 
-public protocol Bootstrap : class {
-    func gameFactory() -> GameFactory
+public enum RawInputButtonCode : UInt8 {
+    case invalid = 0
+    
+    case mouse0  = 1
+    case mouse1  = 2
+    case mouse2  = 3
+    case mouse3  = 4
+    case mouse4  = 5
+    case mouse5  = 6
+    case mouse6  = 7
+    case mouse7  = 8
+    case mouse8  = 9
+    case mouse9  = 10
+    case mouse10 = 11
+    case mouse11 = 12
+    case mouse12 = 13
+    case mouse13 = 14
+    case mouse14 = 15
+    case mouse15 = 16
+    
+    case unknown = 255
 }

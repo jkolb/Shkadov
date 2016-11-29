@@ -22,6 +22,10 @@
  SOFTWARE.
  */
 
-public protocol PlatformDelegate : class {
-    func platformWillTerminate(platform: Platform)
+public final class DirectXRenderer : Renderer {
+    public unowned(unsafe) let listener: RendererListener
+    
+    public init(listener: RendererListener) {
+        self.listener = listener
+    }
 }

@@ -24,27 +24,21 @@
 
 import AppKit
 
-public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NSWindowDelegate {
-    public weak var delegate: PlatformDelegate?
-    fileprivate let logger: Logger
-
-    public init(logger: Logger) {
+public final class macOSApplication : NSObject, NSApplicationDelegate {
+    private unowned(unsafe) let listener: EngineListener
+    private let logger: Logger
+    
+    public init(listener: EngineListener, logger: Logger) {
+        self.listener = listener
         self.logger = logger
     }
     
-    public func start() {
-        logger.debug("\(#function)")
-        let application = makeApplication()
-//        window.makeKeyAndOrderFront(nil)
-        application.run()
-    }
-
-    private func makeApplication() -> NSApplication {
+    public func run() {
         let application = NSApplication.shared()
         application.setActivationPolicy(.regular)
         application.mainMenu = makeMainMenu()
         application.delegate = self
-        return application
+        application.run()
     }
     
     private func makeMainMenu() -> NSMenu {
@@ -86,7 +80,7 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     
     public func applicationDidFinishLaunching(_ notification: Notification) {
         logger.debug("\(#function)")
-//        engine.start()
+        listener.didStartup()
     }
     
     public func applicationWillHide(_ notification: Notification) {
@@ -123,60 +117,6 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     
     public func applicationWillTerminate(_ notification: Notification) {
         logger.debug("\(#function)")
-        delegate?.platformWillTerminate(platform: self)
-    }
-    
-    public func windowDidBecomeKey(_ notification: Notification) {
-        logger.debug("\(#function)")
-//        window.makeFirstResponder(viewController)
-    }
-    
-    public func windowDidResignKey(_ notification: Notification) {
-        logger.debug("\(#function)")
-    }
-    
-    public func windowDidBecomeMain(_ notification: Notification) {
-        logger.debug("\(#function)")
-    }
-    
-    public func windowDidResignMain(_ notification: Notification) {
-        logger.debug("\(#function)")
-    }
-    
-    public func windowWillResize(_ sender: NSWindow, to frameSize: NSSize) -> NSSize {
-        logger.debug("\(#function) \(frameSize)")
-        return frameSize
-    }
-    
-    public func windowDidResize(_ notification: Notification) {
-        logger.debug("\(#function)")
-    }
-    
-    public func windowWillClose(_ notification: Notification) {
-        logger.debug("\(#function)")
-    }
-    
-    public func windowWillEnterFullScreen(_ notification: Notification) {
-        logger.debug("\(#function)")
-    }
-    
-    public func windowDidEnterFullScreen(_ notification: Notification) {
-        logger.debug("\(#function)")
-    }
-    
-    public func windowWillExitFullScreen(_ notification: Notification) {
-        logger.debug("\(#function)")
-    }
-    
-    public func windowDidExitFullScreen(_ notification: Notification) {
-        logger.debug("\(#function)")
-    }
-    
-    public func windowWillMove(_ notification: Notification) {
-        logger.debug("\(#function)")
-    }
-    
-    public func windowDidMove(_ notification: Notification) {
-        logger.debug("\(#function)")
+        listener.willShutdown()
     }
 }

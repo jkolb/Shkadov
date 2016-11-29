@@ -22,7 +22,6 @@
  SOFTWARE.
  */
 
-public protocol Platform : class {
-    weak var delegate: PlatformDelegate? { get set }
-    func start()
+public protocol LoggerFactory : class {
+    func makeLogger(name: String) -> Logger
 }

@@ -22,4 +22,6 @@
  SOFTWARE.
  */
 
-macOSBootstrap().gameFactory().game().start()
+let game = Game()
+
+macOSEngine(listener: game).startup()

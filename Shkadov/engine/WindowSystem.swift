@@ -22,6 +22,6 @@
  SOFTWARE.
  */
 
-public protocol RenderDevice {
-    
+public protocol WindowSystem {
+    func showWindow()
 }

@@ -22,6 +22,15 @@
  SOFTWARE.
  */
 
-public final class VulkanRenderDevice : RenderDevice {
-    
+import Swiftish
+
+public enum RawInput {
+    case buttonDown(RawInputButtonCode)
+    case buttonUp(RawInputButtonCode)
+    case joystickAxis(Vector2<Float>)
+    case keyDown(RawInputKeyCode)
+    case keyUp(RawInputKeyCode)
+    case mousePosition(Vector2<Float>)
+    case mouseDelta(Vector2<Float>)
+    case scrollDelta(Vector2<Float>)
 }

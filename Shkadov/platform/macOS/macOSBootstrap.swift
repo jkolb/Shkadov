@@ -22,29 +22,45 @@
  SOFTWARE.
  */
 
-import Metal
+import AppKit
 
-public final class macOSBootstrap : Bootstrap {
-    public func gameFactory() -> GameFactory {
-        let paths = FoundationFilePaths(applicationName: FoundationApplicationNameProvider().applicationName)
+public final class macOSBootstrap {
+    public init() { }
+    
+    public func startup<T : Engine>(engineType: T.Type) {
+        let loggerFactory = macOSLoggerFactory()
+        let logger = loggerFactory.makeLogger(name: "BOOTSTRAP")
+        let timeSource = MachOTimeSource()
+        let applicationNameProvider = FoundationApplicationNameProvider()
+        let paths = FoundationFilePaths(applicationNameProvider: applicationNameProvider)
+        let rawConfig = readConfig(path: paths.configPath)
+        let rendererConfig = RendererConfig(rawConfig: rawConfig, supportedRendererTypes: determineSupportedRendererTypes())
+        let windowConfig = WindowConfig(rawConfig: rawConfig, title: FoundationApplicationNameProvider().applicationName)
+        let config = EngineConfig(rawConfig: rawConfig, paths: paths, renderer: rendererConfig, window: windowConfig)
+        logger.level = config.loglevel
+        let windowSystem = macOSWindowSystem(config: windowConfig, logger: loggerFactory.makeLogger(name: "WINDOW"))
+        let renderer = macOSRendererFactory().makeRenderer(windowSystem: windowSystem, listener: listener, config: rendererConfig, logger: loggerFactory.makeLogger(name: "RENDERER"))
+        windowSystem.showWindow()
+        let application = macOSApplication(listener: listener, logger: loggerFactory.makeLogger(name: "APPLICATION"))
+        runApplication()
+    }
+    
+    private func readConfig(path: String) -> RawConfig {
         let configReader = FoundationRawConfigReader()
-        let rawConfig: RawConfig
         
         do {
-            rawConfig = try configReader.read(path: paths.configPath)
+            return try configReader.read(path: path)
         }
         catch {
-            print("\(error)")
-            rawConfig = RawConfig()
+            logger.error("\(error)")
+            return RawConfig()
         }
-        
-        return macOSGameFactory(rawConfig: rawConfig, supportedRendererTypes: determineSupportedRendererTypes())
     }
     
     private func determineSupportedRendererTypes() -> Set<RendererType> {
         var types = Set<RendererType>()
         
-        if let _ = MTLCreateSystemDefaultDevice() {
+        if MetalRenderer.isSupported() {
             types.insert(.metal)
         }
         
