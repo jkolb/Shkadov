@@ -22,15 +22,68 @@
  SOFTWARE.
  */
 
-public protocol Engine {
-    var rawConfig: RawConfig { get }
-    var config: EngineConfig { get }
-    var timeSource: TimeSource { get }
-    var renderer: Renderer { get }
-    var mouseCursorManager: MouseCursorManager { get }
-    var logger: Logger { get }
+import Swiftish
+
+public final class Engine {
+    public weak var listener: EngineListener?
     
-    func shutdown()
+    private let rawConfig: RawConfig
+    private let config: EngineConfig
+    private let windowSystem: WindowSystem
+    private let timeSource: TimeSource
+    private let renderer: Renderer
+    private let mouseCursorManager: MouseCursorManager
+    private let logger: Logger
     
-    func writeConfig() throws
+    public init(rawConfig: RawConfig, config: EngineConfig, windowSystem: WindowSystem, timeSource: TimeSource, renderer: Renderer, mouseCursorManager: MouseCursorManager, logger: Logger) {
+        self.rawConfig = rawConfig
+        self.config = config
+        self.windowSystem = windowSystem
+        self.timeSource = timeSource
+        self.renderer = renderer
+        self.mouseCursorManager = mouseCursorManager
+        self.logger = logger
+    }
+    
+    public func startup() {
+        logger.trace("\(#function)")
+        windowSystem.startup()
+    }
+    
+    public func shutdown() {
+        logger.trace("\(#function)")
+        windowSystem.shutdown()
+    }
+    
+    public func writeConfig() throws {
+        logger.trace("\(#function)")
+        
+    }
+    
+    public var currentTime: Time {
+        return timeSource.currentTime
+    }
+    
+    public var mouseCursorHidden: Bool {
+        get {
+            return mouseCursorManager.hidden
+        }
+        set {
+            mouseCursorManager.hidden = newValue
+        }
+    }
+    
+    public var followsMouseCursor: Bool {
+        get {
+            return mouseCursorManager.followsMouse
+        }
+        set {
+            mouseCursorManager.followsMouse = newValue
+        }
+    }
+    
+    public func moveMouseCursor(to point: Vector2<Float>) {
+        mouseCursorManager.move(to: point)
+    }
+
 }

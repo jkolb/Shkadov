@@ -26,7 +26,7 @@ import CoreGraphics
 import Swiftish
 
 public final class macOSMouseCursorManager : MouseCursorManager {
-    public unowned(unsafe) let listener: macOSMouseCursorListener
+    public weak var listener: macOSMouseCursorListener?
     public var hidden: Bool {
         didSet {
             if hidden {
@@ -46,7 +46,7 @@ public final class macOSMouseCursorManager : MouseCursorManager {
                 CGAssociateMouseAndMouseCursorPosition(0)
             }
             
-            listener.updated(followsMouse: followsMouse)
+            listener?.updated(followsMouse: followsMouse)
         }
     }
     
@@ -54,8 +54,7 @@ public final class macOSMouseCursorManager : MouseCursorManager {
         CGWarpMouseCursorPosition(CGPoint(x: CGFloat(point.x), y: CGFloat(point.y)))
     }
     
-    public init(listener: macOSMouseCursorListener) {
-        self.listener = listener
+    public init() {
         self.hidden = false
         self.followsMouse = true
     }

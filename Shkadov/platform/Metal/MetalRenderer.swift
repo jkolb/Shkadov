@@ -27,15 +27,16 @@ import MetalKit
 
 public final class MetalRenderer : Renderer {
     private let device: MTLDevice
-    public let view: MTKView
+    private let metalView: macOSMetalView
+    public var view: MTKView {
+        return metalView
+    }
     private let config: RendererConfig
-    public unowned(unsafe) let listener: RendererListener
     
-    public init(listener: RendererListener, config: RendererConfig) {
-        self.listener = listener
+    public init(config: RendererConfig, logger: Logger) {
         self.device = MTLCreateSystemDefaultDevice()!
         let frame = CGRect(x: 0, y: 0, width: config.width, height: config.height)
-        self.view = MTKView(frame: frame, device: device)
+        self.metalView = macOSMetalView(frame: frame, device: device, logger: logger)
         self.config = config
     }
     

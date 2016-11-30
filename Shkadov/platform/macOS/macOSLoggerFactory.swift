@@ -29,7 +29,7 @@ public final class macOSLoggerFactory : LoggerFactory {
     
     public func makeLogger(name: String) -> Logger {
         return Logger(
-            name: applicationNameProvider.applicationName + ":" + name,
+            name: name.isEmpty ? applicationNameProvider.applicationName : applicationNameProvider.applicationName + ":" + name,
             threadIDProvider: threadIDProvider,
             formattedTimestampProvider: formattedTimestampProvider,
             pathSeparator: "/"

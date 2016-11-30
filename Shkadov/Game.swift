@@ -25,8 +25,9 @@
 import Swiftish
 
 public final class Game : EngineListener {
-    private var engine: Engine!
-    
+    private let engine: Engine
+    private let logger: Logger
+
     private var totalDuration = Duration.zero
     private var previousTime = Time.zero
     private var accumulatedTime = Duration.zero
@@ -34,48 +35,49 @@ public final class Game : EngineListener {
     private let maxFrameDuration = Duration(seconds: 0.25)
     private let camera = Camera()
 
-    public init() { }
-    
-    public func didStartup(engine: Engine) {
+    public init(engine: Engine, logger: Logger) {
         self.engine = engine
-        
-        engine.logger.trace("")
+        self.logger = logger
+    }
+    
+    public func didStartup() {
+        logger.trace("\(#function)")
         camera.projection.fovy = Angle<Float>(degrees: 30.0)
         camera.projection.zNear = 0.1
         camera.projection.zFar = 1000.0
         camera.worldTransform.t = Vector3<Float>(0.0, 0.0, 0.0)
         camera.worldTransform.r = rotation(pitch: Angle<Float>(), yaw: Angle<Float>(), roll: Angle<Float>())
-        previousTime = engine.timeSource.currentTime
+        previousTime = engine.currentTime
     }
     
     public func willShutdown() {
-        engine.logger.trace("")
+        logger.trace("\(#function)")
         
         do {
             try engine.writeConfig()
         }
         catch {
-            engine.logger.error("\(error)")
+            logger.error("\(error)")
         }
     }
     
     public  func received(input: RawInput) {
-        engine.logger.trace("\(input)")
+        logger.trace("\(#function)")
     }
     
     public func processFrame() {
-        engine.logger.trace("")
+        logger.trace("\(#function)")
         //        renderer.waitForNextFrame()
         // var previousState
         
         // var currentState
         
-        let currentTime = engine.timeSource.currentTime
+        let currentTime = engine.currentTime
         var frameDuration = currentTime - previousTime
-        engine.logger.trace("FRAME DURATION: \(frameDuration)")
+        logger.trace("FRAME DURATION: \(frameDuration)")
         
         if frameDuration > maxFrameDuration {
-            engine.logger.debug("EXCEEDED FRAME DURATION")
+            logger.debug("EXCEEDED FRAME DURATION")
             frameDuration = maxFrameDuration
         }
         
@@ -101,10 +103,10 @@ public final class Game : EngineListener {
     }
     
     private func update(elapsed: Duration) {
-        engine.logger.trace("")
+        logger.trace("\(#function)")
     }
     
     private func render() {
-        engine.logger.trace("")
+        logger.trace("\(#function)")
     }
 }

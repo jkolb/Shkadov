@@ -22,14 +22,7 @@
  SOFTWARE.
  */
 
-public final class LinuxEngine : Engine {
-    private unowned(unsafe) let listener: EngineListener
-    
-    public init(listener: EngineListener) {
-        self.listener = listener
-    }
-    
-    public func writeConfig() throws {
-        fatalError("Not implemented")
-    }
+public protocol WindowSystemListener : class {
+    func didStartup()
+    func willShutdown()
 }

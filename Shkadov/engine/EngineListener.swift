@@ -22,7 +22,6 @@
  SOFTWARE.
  */
 
-public protocol EngineListener : RawInputListener, RendererListener {
-    func didStartup(engine: Engine)
-    func willShutdown()
+public protocol EngineListener : WindowSystemListener, RawInputListener, RendererListener {
+    init(engine: Engine, logger: Logger)
 }

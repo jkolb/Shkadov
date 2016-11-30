@@ -23,9 +23,4 @@
  */
 
 public final class OpenGLRenderer : Renderer {
-    public unowned(unsafe) let listener: RendererListener
-    
-    public init(listener: RendererListener) {
-        self.listener = listener
-    }
 }

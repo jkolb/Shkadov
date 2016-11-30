@@ -22,6 +22,4 @@
  SOFTWARE.
  */
 
-let game = Game()
-
-macOSEngine(listener: game).startup()
+macOSBootstrap<Game>().makeEngine().startup()

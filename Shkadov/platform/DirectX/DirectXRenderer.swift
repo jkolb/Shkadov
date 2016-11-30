@@ -23,9 +23,5 @@
  */
 
 public final class DirectXRenderer : Renderer {
-    public unowned(unsafe) let listener: RendererListener
-    
-    public init(listener: RendererListener) {
-        self.listener = listener
-    }
+    public weak var listener: RendererListener?
 }

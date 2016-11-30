@@ -29,20 +29,17 @@ import Swiftish
 typealias NSEventButtonNumberType = Int
 typealias NSEventKeyCodeType = UInt16
 
-public class macOSMetalView : MTKView {
-    private let mouseCursorManager: MouseCursorManager
+public class macOSMetalView : MTKView, macOSMouseCursorListener {
     private let logger: Logger
-    private unowned(unsafe) let rendererListener: RendererListener
-    private unowned(unsafe) let rawInputListener: RawInputListener
+    public weak var rendererListener: RendererListener?
+    public weak var rawInputListener: RawInputListener?
+    private var followsMouse = false
     private var ignoreFirstDelta = false
     private var currentDownModifierKeyCodes = Set<NSEventKeyCodeType>()
     private var startingEventModifierFlags = NSEvent.modifierFlags().intersection([.deviceIndependentFlagsMask])
     private var currentDownEventModifierFlags = NSEvent.modifierFlags().intersection([.deviceIndependentFlagsMask])
     
-    public init(frame: CGRect, device: MTLDevice, rendererListener: RendererListener, rawInputListener: RawInputListener, mouseCursorManager: MouseCursorManager, logger: Logger) {
-        self.rendererListener = rendererListener
-        self.rawInputListener = rawInputListener
-        self.mouseCursorManager = mouseCursorManager
+    public init(frame: CGRect, device: MTLDevice, logger: Logger) {
         self.logger = logger
         super.init(frame: frame, device: device)
     }
@@ -65,7 +62,7 @@ public class macOSMetalView : MTKView {
 //    }
     
     public override func draw(_ dirtyRect: NSRect) {
-        rendererListener.processFrame()
+        rendererListener?.processFrame()
     }
     
     public override var acceptsFirstResponder: Bool {
@@ -180,9 +177,8 @@ public class macOSMetalView : MTKView {
         logger.trace("SCROLL WHEEL: \(theEvent)")
     }
     
-    // MARK: - macOSMouseCursorManagerDelegate
-    
-    public func macOSMouseCursorManager(_ macOSMouseCursorManager: macOSMouseCursorManager, updatedFollowsMouse followsMouse: Bool) {
+    public func updated(followsMouse: Bool) {
+        self.followsMouse = followsMouse
         ignoreFirstDelta = !followsMouse
     }
     
@@ -207,13 +203,13 @@ public class macOSMetalView : MTKView {
     private func postButtonDownEvent(_ event: NSEvent) {
         let rawButtonCode = transformButtonNumber(event.buttonNumber)
         if rawButtonCode == .unknown { return }
-        rawInputListener.received(input: .buttonDown(rawButtonCode))
+        rawInputListener?.received(input: .buttonDown(rawButtonCode))
     }
     
     private func postButtonUpEvent(_ event: NSEvent) {
         let rawButtonCode = transformButtonNumber(event.buttonNumber)
         if rawButtonCode == .unknown { return }
-        rawInputListener.received(input: .buttonUp(rawButtonCode))
+        rawInputListener?.received(input: .buttonUp(rawButtonCode))
     }
     
     private func postKeyDownEvent(_ event: NSEvent) {
@@ -227,20 +223,20 @@ public class macOSMetalView : MTKView {
     private func postKeyDownCode(_ keyCode: NSEventKeyCodeType) {
         let rawKeyCode = transformKeyCode(keyCode)
         if rawKeyCode == .unknown { return }
-        rawInputListener.received(input: .keyDown(rawKeyCode))
+        rawInputListener?.received(input: .keyDown(rawKeyCode))
     }
     
     private func postKeyUpCode(_ keyCode: NSEventKeyCodeType) {
         let rawKeyCode = transformKeyCode(keyCode)
         if rawKeyCode == .unknown { return }
-        rawInputListener.received(input: .keyUp(rawKeyCode))
+        rawInputListener?.received(input: .keyUp(rawKeyCode))
     }
     
     private func postMousePositionEvent(_ event: NSEvent) {
-        if mouseCursorManager.followsMouse {
+        if followsMouse {
             let contentPoint = convert(event.locationInWindow, from: nil)
             let position = Vector2<Float>(Float(contentPoint.x), Float(contentPoint.y))
-            rawInputListener.received(input: .mousePosition(position))
+            rawInputListener?.received(input: .mousePosition(position))
         }
         else {
             if ignoreFirstDelta {
@@ -250,7 +246,7 @@ public class macOSMetalView : MTKView {
             }
             
             let delta = Vector2<Float>(Float(event.deltaX), Float(event.deltaY))
-            rawInputListener.received(input: .mouseDelta(delta))
+            rawInputListener?.received(input: .mouseDelta(delta))
         }
     }
     

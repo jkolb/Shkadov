@@ -22,30 +22,16 @@
  SOFTWARE.
  */
 
-import AppKit
-
-public final class macOSRendererFactory {
-    public func makeRenderer(windowSystem: macOSWindowSystem, config: RendererConfig, logger: Logger) -> Renderer {
-        if config.supportedRendererTypes.count == 0 {
-            fatalError("No supported renderers found")
-        }
-        
-        let selectedType: RendererType
-        
-        if !config.supportedRendererTypes.contains(config.type) {
-            selectedType = config.supportedRendererTypes.first!
-        }
-        else {
-            selectedType = config.type
-        }
-        
-        switch selectedType {
-        case .metal:
-            let renderer = MetalRenderer(config: config, logger: logger)
-            windowSystem.attach(metalRenderer: renderer)
-            return renderer
-        default:
-            fatalError("\(config.type) renderer not implemented for macOS")
-        }
+public final class WindowsEngine : WindowSystem {
+    public func startup() {
+        fatalError("Not implemented")
+    }
+    
+    public func shutdown() {
+        fatalError("Not implemented")
+    }
+    
+    public func showWindow() {
+        fatalError("Not implemented")
     }
 }

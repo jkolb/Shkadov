@@ -23,5 +23,7 @@
  */
 
 public protocol WindowSystem {
+    func startup()
+    func shutdown()
     func showWindow()
 }

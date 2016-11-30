@@ -23,13 +23,14 @@
  */
 
 import AppKit
+import FieryCrucible
 
-public final class macOSBootstrap {
-    public init() { }
+public final class macOSBootstrap<T : EngineListener> : DependencyFactory, Bootstrap {
+    public typealias EngineListenerType = T
+    private let logger = macOSLoggerFactory().makeLogger(name: "BOOTSTRAP")
     
-    public func startup<T : Engine>(engineType: T.Type) {
+    public func makeEngine() -> Engine {
         let loggerFactory = macOSLoggerFactory()
-        let logger = loggerFactory.makeLogger(name: "BOOTSTRAP")
         let timeSource = MachOTimeSource()
         let applicationNameProvider = FoundationApplicationNameProvider()
         let paths = FoundationFilePaths(applicationNameProvider: applicationNameProvider)
@@ -39,10 +40,15 @@ public final class macOSBootstrap {
         let config = EngineConfig(rawConfig: rawConfig, paths: paths, renderer: rendererConfig, window: windowConfig)
         logger.level = config.loglevel
         let windowSystem = macOSWindowSystem(config: windowConfig, logger: loggerFactory.makeLogger(name: "WINDOW"))
-        let renderer = macOSRendererFactory().makeRenderer(windowSystem: windowSystem, listener: listener, config: rendererConfig, logger: loggerFactory.makeLogger(name: "RENDERER"))
+        let renderer = macOSRendererFactory().makeRenderer(windowSystem: windowSystem, config: rendererConfig, logger: loggerFactory.makeLogger(name: "RENDERER"))
         windowSystem.showWindow()
-        let application = macOSApplication(listener: listener, logger: loggerFactory.makeLogger(name: "APPLICATION"))
-        runApplication()
+        let engine = Engine(rawConfig: rawConfig, config: config, windowSystem: windowSystem, timeSource: timeSource, renderer: renderer, mouseCursorManager: macOSMouseCursorManager(), logger: loggerFactory.makeLogger(name: "WINDOW"))
+        
+        return engine
+    }
+    
+    public func makeLogger() -> Logger {
+        return macOSLoggerFactory().makeLogger(name: "")
     }
     
     private func readConfig(path: String) -> RawConfig {

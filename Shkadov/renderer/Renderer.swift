@@ -23,5 +23,4 @@
  */
 
 public protocol Renderer : class {
-    unowned(unsafe) var listener: RendererListener { get }
 }

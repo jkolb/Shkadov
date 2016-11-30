@@ -22,14 +22,16 @@
  SOFTWARE.
  */
 
-public final class WindowsEngine : Engine {
-    private unowned(unsafe) let listener: EngineListener
-    
-    public init(listener: EngineListener) {
-        self.listener = listener
+public final class LinuxWindowSystem : WindowSystem {
+    public func startup() {
+        fatalError("Not implemented")
     }
     
-    public func writeConfig() throws {
+    public func shutdown() {
+        fatalError("Not implemented")
+    }
+    
+    public func showWindow() {
         fatalError("Not implemented")
     }
 }

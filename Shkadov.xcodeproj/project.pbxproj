@@ -37,8 +37,8 @@
 		E55606F81DEB66AD00D9F1F8 /* VulkanRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606F71DEB66AD00D9F1F8 /* VulkanRenderer.swift */; };
 		E55606FB1DEB671600D9F1F8 /* DirectXRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606FA1DEB671600D9F1F8 /* DirectXRenderer.swift */; };
 		E55606FD1DEB674500D9F1F8 /* RendererType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606FC1DEB674500D9F1F8 /* RendererType.swift */; };
-		E55607011DEB686200D9F1F8 /* LinuxPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607001DEB686200D9F1F8 /* LinuxPlatform.swift */; };
-		E55607031DEB68BA00D9F1F8 /* WindowsEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607021DEB68BA00D9F1F8 /* WindowsEngine.swift */; };
+		E55607011DEB686200D9F1F8 /* LinuxWindowSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607001DEB686200D9F1F8 /* LinuxWindowSystem.swift */; };
+		E55607031DEB68BA00D9F1F8 /* WindowsWindowSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607021DEB68BA00D9F1F8 /* WindowsWindowSystem.swift */; };
 		E55607071DEB6B2900D9F1F8 /* macOSRendererFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607061DEB6B2900D9F1F8 /* macOSRendererFactory.swift */; };
 		E55607091DEB6F0C00D9F1F8 /* RawConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607081DEB6F0C00D9F1F8 /* RawConfig.swift */; };
 		E556070D1DEB819500D9F1F8 /* RendererConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556070C1DEB819500D9F1F8 /* RendererConfig.swift */; };
@@ -57,7 +57,8 @@
 		E55607371DED351100D9F1F8 /* EngineListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607361DED351100D9F1F8 /* EngineListener.swift */; };
 		E55607391DED381800D9F1F8 /* LoggerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607381DED381800D9F1F8 /* LoggerFactory.swift */; };
 		E556073B1DED387200D9F1F8 /* macOSLoggerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556073A1DED387200D9F1F8 /* macOSLoggerFactory.swift */; };
-		E556073F1DED513500D9F1F8 /* macOSApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556073E1DED513500D9F1F8 /* macOSApplication.swift */; };
+		E579BA5F1DEE957A007DC0FE /* Bootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA5E1DEE957A007DC0FE /* Bootstrap.swift */; };
+		E579BA611DEE997C007DC0FE /* WindowSystemListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA601DEE997C007DC0FE /* WindowSystemListener.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -163,8 +164,8 @@
 		E55606F71DEB66AD00D9F1F8 /* VulkanRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VulkanRenderer.swift; sourceTree = "<group>"; };
 		E55606FA1DEB671600D9F1F8 /* DirectXRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectXRenderer.swift; sourceTree = "<group>"; };
 		E55606FC1DEB674500D9F1F8 /* RendererType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererType.swift; sourceTree = "<group>"; };
-		E55607001DEB686200D9F1F8 /* LinuxPlatform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxPlatform.swift; sourceTree = "<group>"; };
-		E55607021DEB68BA00D9F1F8 /* WindowsEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowsEngine.swift; sourceTree = "<group>"; };
+		E55607001DEB686200D9F1F8 /* LinuxWindowSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxWindowSystem.swift; sourceTree = "<group>"; };
+		E55607021DEB68BA00D9F1F8 /* WindowsWindowSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowsWindowSystem.swift; sourceTree = "<group>"; };
 		E55607061DEB6B2900D9F1F8 /* macOSRendererFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSRendererFactory.swift; sourceTree = "<group>"; };
 		E55607081DEB6F0C00D9F1F8 /* RawConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawConfig.swift; sourceTree = "<group>"; };
 		E556070C1DEB819500D9F1F8 /* RendererConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererConfig.swift; sourceTree = "<group>"; };
@@ -183,7 +184,8 @@
 		E55607361DED351100D9F1F8 /* EngineListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineListener.swift; sourceTree = "<group>"; };
 		E55607381DED381800D9F1F8 /* LoggerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerFactory.swift; sourceTree = "<group>"; };
 		E556073A1DED387200D9F1F8 /* macOSLoggerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSLoggerFactory.swift; sourceTree = "<group>"; };
-		E556073E1DED513500D9F1F8 /* macOSApplication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSApplication.swift; sourceTree = "<group>"; };
+		E579BA5E1DEE957A007DC0FE /* Bootstrap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bootstrap.swift; sourceTree = "<group>"; };
+		E579BA601DEE997C007DC0FE /* WindowSystemListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowSystemListener.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -295,12 +297,14 @@
 			isa = PBXGroup;
 			children = (
 				E55607141DEBE00D00D9F1F8 /* input */,
+				E579BA5E1DEE957A007DC0FE /* Bootstrap.swift */,
 				E55606A71DEA71EB00D9F1F8 /* Camera.swift */,
 				E556070E1DEB820B00D9F1F8 /* ConfigSection.swift */,
 				E55606A81DEA71EB00D9F1F8 /* Engine.swift */,
 				E55607271DECFE7900D9F1F8 /* EngineConfig.swift */,
 				E55607361DED351100D9F1F8 /* EngineListener.swift */,
 				E55607211DECEF1600D9F1F8 /* WindowSystem.swift */,
+				E579BA601DEE997C007DC0FE /* WindowSystemListener.swift */,
 				E55607251DECF65000D9F1F8 /* WindowConfig.swift */,
 			);
 			path = engine;
@@ -335,7 +339,6 @@
 		E55606AF1DEA71EB00D9F1F8 /* macOS */ = {
 			isa = PBXGroup;
 			children = (
-				E556073E1DED513500D9F1F8 /* macOSApplication.swift */,
 				E55606B21DEA71EB00D9F1F8 /* macOSBootstrap.swift */,
 				E556073A1DED387200D9F1F8 /* macOSLoggerFactory.swift */,
 				E55607121DEBDFAF00D9F1F8 /* macOSMetalView.swift */,
@@ -435,7 +438,7 @@
 		E55606FE1DEB684400D9F1F8 /* Linux */ = {
 			isa = PBXGroup;
 			children = (
-				E55607001DEB686200D9F1F8 /* LinuxPlatform.swift */,
+				E55607001DEB686200D9F1F8 /* LinuxWindowSystem.swift */,
 			);
 			path = Linux;
 			sourceTree = "<group>";
@@ -443,7 +446,7 @@
 		E55606FF1DEB684400D9F1F8 /* Windows */ = {
 			isa = PBXGroup;
 			children = (
-				E55607021DEB68BA00D9F1F8 /* WindowsEngine.swift */,
+				E55607021DEB68BA00D9F1F8 /* WindowsWindowSystem.swift */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
@@ -642,7 +645,7 @@
 				E55607391DED381800D9F1F8 /* LoggerFactory.swift in Sources */,
 				E55606D51DEA7ACD00D9F1F8 /* RawConfigWriter.swift in Sources */,
 				E556073B1DED387200D9F1F8 /* macOSLoggerFactory.swift in Sources */,
-				E55607011DEB686200D9F1F8 /* LinuxPlatform.swift in Sources */,
+				E55607011DEB686200D9F1F8 /* LinuxWindowSystem.swift in Sources */,
 				E55606D81DEA7B4200D9F1F8 /* FoundationRawConfigReader.swift in Sources */,
 				E55607221DECEF1600D9F1F8 /* WindowSystem.swift in Sources */,
 				E556071C1DEBE0D900D9F1F8 /* RawInputListener.swift in Sources */,
@@ -654,6 +657,7 @@
 				E55606EC1DEB4CEB00D9F1F8 /* MouseCursorManager.swift in Sources */,
 				E55606DE1DEA7E6100D9F1F8 /* FoundationFilePaths.swift in Sources */,
 				E556071A1DEBE09B00D9F1F8 /* RawInput.swift in Sources */,
+				E579BA611DEE997C007DC0FE /* WindowSystemListener.swift in Sources */,
 				E55606C51DEA757200D9F1F8 /* Renderer.swift in Sources */,
 				E55607131DEBDFAF00D9F1F8 /* macOSMetalView.swift in Sources */,
 				E55606F61DEB669800D9F1F8 /* OpenGLRenderer.swift in Sources */,
@@ -663,15 +667,15 @@
 				E55607351DED34D400D9F1F8 /* Game.swift in Sources */,
 				E556072A1DED0AAA00D9F1F8 /* RendererListener.swift in Sources */,
 				E55607371DED351100D9F1F8 /* EngineListener.swift in Sources */,
-				E55607031DEB68BA00D9F1F8 /* WindowsEngine.swift in Sources */,
+				E55607031DEB68BA00D9F1F8 /* WindowsWindowSystem.swift in Sources */,
 				E55606DC1DEA7DF500D9F1F8 /* FilePaths.swift in Sources */,
 				E55606EA1DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift in Sources */,
 				E55606B81DEA71EB00D9F1F8 /* Engine.swift in Sources */,
 				E55606B91DEA71EB00D9F1F8 /* main.swift in Sources */,
 				E55606E31DEB3DD100D9F1F8 /* UnixMath.swift in Sources */,
 				E55606C01DEA71EB00D9F1F8 /* Logger.swift in Sources */,
-				E556073F1DED513500D9F1F8 /* macOSApplication.swift in Sources */,
 				E55606E81DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift in Sources */,
+				E579BA5F1DEE957A007DC0FE /* Bootstrap.swift in Sources */,
 				E55606BD1DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift in Sources */,
 				E55607071DEB6B2900D9F1F8 /* macOSRendererFactory.swift in Sources */,
 				E55606FB1DEB671600D9F1F8 /* DirectXRenderer.swift in Sources */,
@@ -879,6 +883,7 @@
 				E556067A1DEA68F100D9F1F8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E556067B1DEA68F100D9F1F8 /* Build configuration list for PBXNativeTarget "ShkadovTests" */ = {
 			isa = XCConfigurationList;
@@ -887,6 +892,7 @@
 				E556067D1DEA68F100D9F1F8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
