@@ -24,8 +24,10 @@
 
 import AppKit
 
-public final class macOSWindowSystem : NSObject, WindowSystem, NSWindowDelegate, NSApplicationDelegate {
-    public weak var listener: WindowSystemListener?
+public typealias ViewType = NSView
+
+public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NSWindowDelegate {
+    public weak var listener: PlatformListener?
     private let config: WindowConfig
     private let logger: Logger
     public let window: NSWindow
@@ -53,13 +55,9 @@ public final class macOSWindowSystem : NSObject, WindowSystem, NSWindowDelegate,
         window.contentView = metalRenderer.view
     }
     
-    public func showWindow() {
-        window.makeKeyAndOrderFront(nil)
-    }
-    
     public func windowDidBecomeKey(_ notification: Notification) {
         logger.debug("\(#function)")
-        //        window.makeFirstResponder(viewController)
+//        window.makeFirstResponder(viewController)
     }
     
     public func windowDidResignKey(_ notification: Notification) {
@@ -116,6 +114,7 @@ public final class macOSWindowSystem : NSObject, WindowSystem, NSWindowDelegate,
         application.setActivationPolicy(.regular)
         application.mainMenu = makeMainMenu()
         application.delegate = self
+        window.makeKeyAndOrderFront(nil)
         application.run()
     }
     

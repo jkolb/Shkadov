@@ -25,7 +25,7 @@
 import AppKit
 
 public final class macOSRendererFactory {
-    public func makeRenderer(windowSystem: macOSWindowSystem, config: RendererConfig, logger: Logger) -> Renderer {
+    public func makeRenderer(config: RendererConfig, logger: Logger) -> macOSRenderer {
         if config.supportedRendererTypes.count == 0 {
             fatalError("No supported renderers found")
         }
@@ -41,9 +41,7 @@ public final class macOSRendererFactory {
         
         switch selectedType {
         case .metal:
-            let renderer = MetalRenderer(config: config, logger: logger)
-            windowSystem.attach(metalRenderer: renderer)
-            return renderer
+            return MetalRenderer(config: config, logger: logger)
         default:
             fatalError("\(config.type) renderer not implemented for macOS")
         }

@@ -22,6 +22,5 @@
  SOFTWARE.
  */
 
-public protocol EngineListener : WindowSystemListener, RawInputListener, RendererListener {
-    init(engine: Engine, logger: Logger)
+public protocol EngineListener : PlatformListener, RawInputListener, RendererListener {
 }

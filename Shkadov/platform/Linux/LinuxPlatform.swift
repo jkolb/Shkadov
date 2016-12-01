@@ -22,8 +22,16 @@
  SOFTWARE.
  */
 
-macOSBootstrap<Game>(
-    factory: { (engine, loggerFactory) in
-        return Game(engine: engine, logger: loggerFactory.makeLogger(name: "GAME"))
+public final class LinuxPlatform : Platform {
+    public func startup() {
+        fatalError("Not implemented")
     }
-).makeEngine().startup()
+    
+    public func shutdown() {
+        fatalError("Not implemented")
+    }
+    
+    public func showWindow() {
+        fatalError("Not implemented")
+    }
+}

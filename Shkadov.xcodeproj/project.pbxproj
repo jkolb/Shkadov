@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		095DBCBC1DEFD48C00D1A868 /* macOSRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095DBCBB1DEFD48C00D1A868 /* macOSRenderer.swift */; };
 		E55606741DEA68F100D9F1F8 /* ShkadovTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606731DEA68F100D9F1F8 /* ShkadovTests.swift */; };
 		E55606A21DEA6F4900D9F1F8 /* FieryCrucible.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55606841DEA6F2500D9F1F8 /* FieryCrucible.framework */; };
 		E55606A31DEA6F4900D9F1F8 /* FranticApparatus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E556068D1DEA6F2C00D9F1F8 /* FranticApparatus.framework */; };
@@ -37,8 +38,8 @@
 		E55606F81DEB66AD00D9F1F8 /* VulkanRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606F71DEB66AD00D9F1F8 /* VulkanRenderer.swift */; };
 		E55606FB1DEB671600D9F1F8 /* DirectXRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606FA1DEB671600D9F1F8 /* DirectXRenderer.swift */; };
 		E55606FD1DEB674500D9F1F8 /* RendererType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606FC1DEB674500D9F1F8 /* RendererType.swift */; };
-		E55607011DEB686200D9F1F8 /* LinuxWindowSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607001DEB686200D9F1F8 /* LinuxWindowSystem.swift */; };
-		E55607031DEB68BA00D9F1F8 /* WindowsWindowSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607021DEB68BA00D9F1F8 /* WindowsWindowSystem.swift */; };
+		E55607011DEB686200D9F1F8 /* LinuxPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607001DEB686200D9F1F8 /* LinuxPlatform.swift */; };
+		E55607031DEB68BA00D9F1F8 /* WindowsPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607021DEB68BA00D9F1F8 /* WindowsPlatform.swift */; };
 		E55607071DEB6B2900D9F1F8 /* macOSRendererFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607061DEB6B2900D9F1F8 /* macOSRendererFactory.swift */; };
 		E55607091DEB6F0C00D9F1F8 /* RawConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607081DEB6F0C00D9F1F8 /* RawConfig.swift */; };
 		E556070D1DEB819500D9F1F8 /* RendererConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556070C1DEB819500D9F1F8 /* RendererConfig.swift */; };
@@ -48,8 +49,8 @@
 		E55607181DEBE05A00D9F1F8 /* RawInputKeyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607171DEBE05A00D9F1F8 /* RawInputKeyCode.swift */; };
 		E556071A1DEBE09B00D9F1F8 /* RawInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607191DEBE09B00D9F1F8 /* RawInput.swift */; };
 		E556071C1DEBE0D900D9F1F8 /* RawInputListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556071B1DEBE0D900D9F1F8 /* RawInputListener.swift */; };
-		E55607221DECEF1600D9F1F8 /* WindowSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607211DECEF1600D9F1F8 /* WindowSystem.swift */; };
-		E55607241DECEF2900D9F1F8 /* macOSWindowSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607231DECEF2900D9F1F8 /* macOSWindowSystem.swift */; };
+		E55607221DECEF1600D9F1F8 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607211DECEF1600D9F1F8 /* Platform.swift */; };
+		E55607241DECEF2900D9F1F8 /* macOSPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607231DECEF2900D9F1F8 /* macOSPlatform.swift */; };
 		E55607261DECF65000D9F1F8 /* WindowConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607251DECF65000D9F1F8 /* WindowConfig.swift */; };
 		E55607281DECFE7900D9F1F8 /* EngineConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607271DECFE7900D9F1F8 /* EngineConfig.swift */; };
 		E556072A1DED0AAA00D9F1F8 /* RendererListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607291DED0AAA00D9F1F8 /* RendererListener.swift */; };
@@ -58,7 +59,7 @@
 		E55607391DED381800D9F1F8 /* LoggerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607381DED381800D9F1F8 /* LoggerFactory.swift */; };
 		E556073B1DED387200D9F1F8 /* macOSLoggerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556073A1DED387200D9F1F8 /* macOSLoggerFactory.swift */; };
 		E579BA5F1DEE957A007DC0FE /* Bootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA5E1DEE957A007DC0FE /* Bootstrap.swift */; };
-		E579BA611DEE997C007DC0FE /* WindowSystemListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA601DEE997C007DC0FE /* WindowSystemListener.swift */; };
+		E579BA611DEE997C007DC0FE /* PlatformListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA601DEE997C007DC0FE /* PlatformListener.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -128,6 +129,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		095DBCBB1DEFD48C00D1A868 /* macOSRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSRenderer.swift; sourceTree = "<group>"; };
 		E556065C1DEA68F000D9F1F8 /* Shkadov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shkadov.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E556066A1DEA68F100D9F1F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E556066F1DEA68F100D9F1F8 /* ShkadovTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShkadovTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -164,8 +166,8 @@
 		E55606F71DEB66AD00D9F1F8 /* VulkanRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VulkanRenderer.swift; sourceTree = "<group>"; };
 		E55606FA1DEB671600D9F1F8 /* DirectXRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectXRenderer.swift; sourceTree = "<group>"; };
 		E55606FC1DEB674500D9F1F8 /* RendererType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererType.swift; sourceTree = "<group>"; };
-		E55607001DEB686200D9F1F8 /* LinuxWindowSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxWindowSystem.swift; sourceTree = "<group>"; };
-		E55607021DEB68BA00D9F1F8 /* WindowsWindowSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowsWindowSystem.swift; sourceTree = "<group>"; };
+		E55607001DEB686200D9F1F8 /* LinuxPlatform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxPlatform.swift; sourceTree = "<group>"; };
+		E55607021DEB68BA00D9F1F8 /* WindowsPlatform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowsPlatform.swift; sourceTree = "<group>"; };
 		E55607061DEB6B2900D9F1F8 /* macOSRendererFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSRendererFactory.swift; sourceTree = "<group>"; };
 		E55607081DEB6F0C00D9F1F8 /* RawConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawConfig.swift; sourceTree = "<group>"; };
 		E556070C1DEB819500D9F1F8 /* RendererConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererConfig.swift; sourceTree = "<group>"; };
@@ -175,8 +177,8 @@
 		E55607171DEBE05A00D9F1F8 /* RawInputKeyCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInputKeyCode.swift; sourceTree = "<group>"; };
 		E55607191DEBE09B00D9F1F8 /* RawInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInput.swift; sourceTree = "<group>"; };
 		E556071B1DEBE0D900D9F1F8 /* RawInputListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInputListener.swift; sourceTree = "<group>"; };
-		E55607211DECEF1600D9F1F8 /* WindowSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowSystem.swift; sourceTree = "<group>"; };
-		E55607231DECEF2900D9F1F8 /* macOSWindowSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSWindowSystem.swift; sourceTree = "<group>"; };
+		E55607211DECEF1600D9F1F8 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
+		E55607231DECEF2900D9F1F8 /* macOSPlatform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSPlatform.swift; sourceTree = "<group>"; };
 		E55607251DECF65000D9F1F8 /* WindowConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowConfig.swift; sourceTree = "<group>"; };
 		E55607271DECFE7900D9F1F8 /* EngineConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineConfig.swift; sourceTree = "<group>"; };
 		E55607291DED0AAA00D9F1F8 /* RendererListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererListener.swift; sourceTree = "<group>"; };
@@ -185,7 +187,7 @@
 		E55607381DED381800D9F1F8 /* LoggerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerFactory.swift; sourceTree = "<group>"; };
 		E556073A1DED387200D9F1F8 /* macOSLoggerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSLoggerFactory.swift; sourceTree = "<group>"; };
 		E579BA5E1DEE957A007DC0FE /* Bootstrap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bootstrap.swift; sourceTree = "<group>"; };
-		E579BA601DEE997C007DC0FE /* WindowSystemListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowSystemListener.swift; sourceTree = "<group>"; };
+		E579BA601DEE997C007DC0FE /* PlatformListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlatformListener.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -303,8 +305,8 @@
 				E55606A81DEA71EB00D9F1F8 /* Engine.swift */,
 				E55607271DECFE7900D9F1F8 /* EngineConfig.swift */,
 				E55607361DED351100D9F1F8 /* EngineListener.swift */,
-				E55607211DECEF1600D9F1F8 /* WindowSystem.swift */,
-				E579BA601DEE997C007DC0FE /* WindowSystemListener.swift */,
+				E55607211DECEF1600D9F1F8 /* Platform.swift */,
+				E579BA601DEE997C007DC0FE /* PlatformListener.swift */,
 				E55607251DECF65000D9F1F8 /* WindowConfig.swift */,
 			);
 			path = engine;
@@ -343,8 +345,9 @@
 				E556073A1DED387200D9F1F8 /* macOSLoggerFactory.swift */,
 				E55607121DEBDFAF00D9F1F8 /* macOSMetalView.swift */,
 				E55606B11DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift */,
+				E55607231DECEF2900D9F1F8 /* macOSPlatform.swift */,
+				095DBCBB1DEFD48C00D1A868 /* macOSRenderer.swift */,
 				E55607061DEB6B2900D9F1F8 /* macOSRendererFactory.swift */,
-				E55607231DECEF2900D9F1F8 /* macOSWindowSystem.swift */,
 			);
 			path = macOS;
 			sourceTree = "<group>";
@@ -438,7 +441,7 @@
 		E55606FE1DEB684400D9F1F8 /* Linux */ = {
 			isa = PBXGroup;
 			children = (
-				E55607001DEB686200D9F1F8 /* LinuxWindowSystem.swift */,
+				E55607001DEB686200D9F1F8 /* LinuxPlatform.swift */,
 			);
 			path = Linux;
 			sourceTree = "<group>";
@@ -446,7 +449,7 @@
 		E55606FF1DEB684400D9F1F8 /* Windows */ = {
 			isa = PBXGroup;
 			children = (
-				E55607021DEB68BA00D9F1F8 /* WindowsWindowSystem.swift */,
+				E55607021DEB68BA00D9F1F8 /* WindowsPlatform.swift */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
@@ -645,11 +648,11 @@
 				E55607391DED381800D9F1F8 /* LoggerFactory.swift in Sources */,
 				E55606D51DEA7ACD00D9F1F8 /* RawConfigWriter.swift in Sources */,
 				E556073B1DED387200D9F1F8 /* macOSLoggerFactory.swift in Sources */,
-				E55607011DEB686200D9F1F8 /* LinuxWindowSystem.swift in Sources */,
+				E55607011DEB686200D9F1F8 /* LinuxPlatform.swift in Sources */,
 				E55606D81DEA7B4200D9F1F8 /* FoundationRawConfigReader.swift in Sources */,
-				E55607221DECEF1600D9F1F8 /* WindowSystem.swift in Sources */,
+				E55607221DECEF1600D9F1F8 /* Platform.swift in Sources */,
 				E556071C1DEBE0D900D9F1F8 /* RawInputListener.swift in Sources */,
-				E55607241DECEF2900D9F1F8 /* macOSWindowSystem.swift in Sources */,
+				E55607241DECEF2900D9F1F8 /* macOSPlatform.swift in Sources */,
 				E55607281DECFE7900D9F1F8 /* EngineConfig.swift in Sources */,
 				E55607261DECF65000D9F1F8 /* WindowConfig.swift in Sources */,
 				E55606DA1DEA7B4E00D9F1F8 /* FoundationRawConfigWriter.swift in Sources */,
@@ -657,7 +660,7 @@
 				E55606EC1DEB4CEB00D9F1F8 /* MouseCursorManager.swift in Sources */,
 				E55606DE1DEA7E6100D9F1F8 /* FoundationFilePaths.swift in Sources */,
 				E556071A1DEBE09B00D9F1F8 /* RawInput.swift in Sources */,
-				E579BA611DEE997C007DC0FE /* WindowSystemListener.swift in Sources */,
+				E579BA611DEE997C007DC0FE /* PlatformListener.swift in Sources */,
 				E55606C51DEA757200D9F1F8 /* Renderer.swift in Sources */,
 				E55607131DEBDFAF00D9F1F8 /* macOSMetalView.swift in Sources */,
 				E55606F61DEB669800D9F1F8 /* OpenGLRenderer.swift in Sources */,
@@ -666,8 +669,9 @@
 				E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */,
 				E55607351DED34D400D9F1F8 /* Game.swift in Sources */,
 				E556072A1DED0AAA00D9F1F8 /* RendererListener.swift in Sources */,
+				095DBCBC1DEFD48C00D1A868 /* macOSRenderer.swift in Sources */,
 				E55607371DED351100D9F1F8 /* EngineListener.swift in Sources */,
-				E55607031DEB68BA00D9F1F8 /* WindowsWindowSystem.swift in Sources */,
+				E55607031DEB68BA00D9F1F8 /* WindowsPlatform.swift in Sources */,
 				E55606DC1DEA7DF500D9F1F8 /* FilePaths.swift in Sources */,
 				E55606EA1DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift in Sources */,
 				E55606B81DEA71EB00D9F1F8 /* Engine.swift in Sources */,

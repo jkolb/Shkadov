@@ -22,8 +22,7 @@
  SOFTWARE.
  */
 
-public protocol WindowSystem {
-    func startup()
-    func shutdown()
-    func showWindow()
+public protocol PlatformListener : class {
+    func didStartup()
+    func willShutdown()
 }

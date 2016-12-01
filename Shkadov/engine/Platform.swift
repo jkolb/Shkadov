@@ -22,16 +22,7 @@
  SOFTWARE.
  */
 
-public final class LinuxWindowSystem : WindowSystem {
-    public func startup() {
-        fatalError("Not implemented")
-    }
-    
-    public func shutdown() {
-        fatalError("Not implemented")
-    }
-    
-    public func showWindow() {
-        fatalError("Not implemented")
-    }
+public protocol Platform {
+    func startup()
+    func shutdown()
 }

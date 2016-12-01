@@ -22,7 +22,8 @@
  SOFTWARE.
  */
 
-public protocol WindowSystemListener : class {
-    func didStartup()
-    func willShutdown()
+public protocol macOSRenderer : Renderer {
+    var view: ViewType { get }
+    weak var rendererListener: RendererListener? { get set }
+    weak var rawInputListener: RawInputListener? { get set }
 }

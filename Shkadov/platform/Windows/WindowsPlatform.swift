@@ -22,7 +22,7 @@
  SOFTWARE.
  */
 
-public final class WindowsEngine : WindowSystem {
+public final class WindowsPlatform : Platform {
     public func startup() {
         fatalError("Not implemented")
     }

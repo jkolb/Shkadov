@@ -25,13 +25,29 @@
 import Metal
 import MetalKit
 
-public final class MetalRenderer : Renderer {
+public final class MetalRenderer : macOSRenderer {
     private let device: MTLDevice
     private let metalView: macOSMetalView
-    public var view: MTKView {
+    public var view: ViewType {
         return metalView
     }
     private let config: RendererConfig
+    public weak var rendererListener: RendererListener? {
+        get {
+            return metalView.rendererListener
+        }
+        set {
+            metalView.rendererListener = newValue
+        }
+    }
+    public weak var rawInputListener: RawInputListener? {
+        get {
+            return metalView.rawInputListener
+        }
+        set {
+            metalView.rawInputListener = newValue
+        }
+    }
     
     public init(config: RendererConfig, logger: Logger) {
         self.device = MTLCreateSystemDefaultDevice()!

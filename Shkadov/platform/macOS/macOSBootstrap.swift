@@ -28,39 +28,111 @@ import FieryCrucible
 public final class macOSBootstrap<T : EngineListener> : DependencyFactory, Bootstrap {
     public typealias EngineListenerType = T
     private let logger = macOSLoggerFactory().makeLogger(name: "BOOTSTRAP")
+    private let factory: (Engine, LoggerFactory) -> T
+    
+    public init(factory: @escaping (Engine, LoggerFactory) -> T) {
+        self.factory = factory
+    }
     
     public func makeEngine() -> Engine {
-        let loggerFactory = macOSLoggerFactory()
-        let timeSource = MachOTimeSource()
-        let applicationNameProvider = FoundationApplicationNameProvider()
-        let paths = FoundationFilePaths(applicationNameProvider: applicationNameProvider)
-        let rawConfig = readConfig(path: paths.configPath)
-        let rendererConfig = RendererConfig(rawConfig: rawConfig, supportedRendererTypes: determineSupportedRendererTypes())
-        let windowConfig = WindowConfig(rawConfig: rawConfig, title: FoundationApplicationNameProvider().applicationName)
-        let config = EngineConfig(rawConfig: rawConfig, paths: paths, renderer: rendererConfig, window: windowConfig)
-        logger.level = config.loglevel
-        let windowSystem = macOSWindowSystem(config: windowConfig, logger: loggerFactory.makeLogger(name: "WINDOW"))
-        let renderer = macOSRendererFactory().makeRenderer(windowSystem: windowSystem, config: rendererConfig, logger: loggerFactory.makeLogger(name: "RENDERER"))
-        windowSystem.showWindow()
-        let engine = Engine(rawConfig: rawConfig, config: config, windowSystem: windowSystem, timeSource: timeSource, renderer: renderer, mouseCursorManager: macOSMouseCursorManager(), logger: loggerFactory.makeLogger(name: "WINDOW"))
-        
-        return engine
+        return engine()
+    }
+
+    private func engine() -> Engine {
+        return scoped(
+            Engine(
+                rawConfig: rawConfig(),
+                config: config(),
+                platform: platform(),
+                timeSource: timeSource(),
+                renderer: renderer(),
+                mouseCursorManager: mouseCursorManager(),
+                logger: makeLogger(name: "WINDOW")
+            ),
+            configure: { (instance) in
+                instance.listener = self.engineListener()
+                self.platform().window.contentView = self.renderer().view
+            }
+        )
     }
     
-    public func makeLogger() -> Logger {
-        return macOSLoggerFactory().makeLogger(name: "")
+    private func engineListener() -> EngineListener {
+        return scoped(
+            factory: {
+                factory(engine(), loggerFactory())
+            }
+        )
+    }
+
+    private func makeLogger(name: String) -> Logger {
+        return loggerFactory().makeLogger(name: name)
     }
     
-    private func readConfig(path: String) -> RawConfig {
-        let configReader = FoundationRawConfigReader()
-        
-        do {
-            return try configReader.read(path: path)
-        }
-        catch {
-            logger.error("\(error)")
-            return RawConfig()
-        }
+    private func loggerFactory() -> LoggerFactory {
+        return scoped(macOSLoggerFactory())
+    }
+    
+    private func timeSource() -> TimeSource {
+        return scoped(MachOTimeSource())
+    }
+    
+    private func applicationNameProvider() -> ApplicationNameProvider {
+        return scoped(FoundationApplicationNameProvider())
+    }
+    
+    private func filePaths() -> FilePaths {
+        return scoped(FoundationFilePaths(applicationNameProvider: applicationNameProvider()))
+    }
+    
+    private func rawConfig() -> RawConfig {
+        return scoped(
+            factory : { () -> RawConfig in
+                let configReader = FoundationRawConfigReader()
+                
+                do {
+                    return try configReader.read(path: filePaths().configPath)
+                }
+                catch {
+                    logger.error("\(error)")
+                    return RawConfig()
+                }
+            }
+        )
+    }
+    
+    private func config() -> EngineConfig {
+        return scoped(EngineConfig(rawConfig: rawConfig(), paths: filePaths(), renderer: rendererConfig(), window: windowConfig()))
+    }
+    
+    private func rendererConfig() -> RendererConfig {
+        return scoped(RendererConfig(rawConfig: rawConfig(), supportedRendererTypes: determineSupportedRendererTypes()))
+    }
+    
+    private func windowConfig() -> WindowConfig {
+        return scoped(WindowConfig(rawConfig: rawConfig(), title: applicationNameProvider().applicationName))
+    }
+    
+    private func platform() -> macOSPlatform {
+        return scoped(
+            macOSPlatform(config: config().window, logger: makeLogger(name: "PLATFORM")),
+            configure: { (instance) in
+                instance.listener = self.engineListener()
+            }
+        )
+    }
+    
+    private func mouseCursorManager() -> MouseCursorManager {
+        return scoped(macOSMouseCursorManager())
+    }
+    
+    private func renderer() -> macOSRenderer {
+        return scoped(
+            macOSRendererFactory().makeRenderer(config: config().renderer, logger: makeLogger(name: "RENDERER")),
+            configure: { (instance) in
+                instance.rendererListener = self.engineListener()
+                instance.rawInputListener = self.engineListener()
+            }
+        )
     }
     
     private func determineSupportedRendererTypes() -> Set<RendererType> {

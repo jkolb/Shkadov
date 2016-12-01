@@ -25,20 +25,20 @@
 import Swiftish
 
 public final class Engine {
-    public weak var listener: EngineListener?
+    public var listener: EngineListener?
     
     private let rawConfig: RawConfig
     private let config: EngineConfig
-    private let windowSystem: WindowSystem
+    private let platform: Platform
     private let timeSource: TimeSource
     private let renderer: Renderer
     private let mouseCursorManager: MouseCursorManager
     private let logger: Logger
     
-    public init(rawConfig: RawConfig, config: EngineConfig, windowSystem: WindowSystem, timeSource: TimeSource, renderer: Renderer, mouseCursorManager: MouseCursorManager, logger: Logger) {
+    public init(rawConfig: RawConfig, config: EngineConfig, platform: Platform, timeSource: TimeSource, renderer: Renderer, mouseCursorManager: MouseCursorManager, logger: Logger) {
         self.rawConfig = rawConfig
         self.config = config
-        self.windowSystem = windowSystem
+        self.platform = platform
         self.timeSource = timeSource
         self.renderer = renderer
         self.mouseCursorManager = mouseCursorManager
@@ -47,12 +47,12 @@ public final class Engine {
     
     public func startup() {
         logger.trace("\(#function)")
-        windowSystem.startup()
+        platform.startup()
     }
     
     public func shutdown() {
         logger.trace("\(#function)")
-        windowSystem.shutdown()
+        platform.shutdown()
     }
     
     public func writeConfig() throws {
