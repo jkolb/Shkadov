@@ -25,12 +25,11 @@
 import AppKit
 import FieryCrucible
 
-public final class macOSBootstrap<T : EngineListener> : DependencyFactory, Bootstrap {
-    public typealias EngineListenerType = T
+public final class macOSBootstrap : DependencyFactory, Bootstrap {
     private let logger = macOSLoggerFactory().makeLogger(name: "BOOTSTRAP")
-    private let factory: (Engine, LoggerFactory) -> T
+    private let factory: (Engine, LoggerFactory) -> EngineListener
     
-    public init(factory: @escaping (Engine, LoggerFactory) -> T) {
+    public init(factory: @escaping (Engine, LoggerFactory) -> EngineListener) {
         self.factory = factory
     }
     

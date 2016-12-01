@@ -23,7 +23,5 @@
  */
 
 public protocol Bootstrap : class {
-    associatedtype EngineListenerType : EngineListener
-    
     func makeEngine() -> Engine
 }
