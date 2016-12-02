@@ -27,9 +27,9 @@ public final class macOSLoggerFactory : LoggerFactory {
     private let threadIDProvider = POSIXThreadIDProvider()
     private let formattedTimestampProvider = FoundationFormattedTimestampProvider()
     
-    public func makeLogger(name: String) -> Logger {
+    public func makeLogger() -> Logger {
         return Logger(
-            name: name.isEmpty ? applicationNameProvider.applicationName : applicationNameProvider.applicationName + ":" + name,
+            name: applicationNameProvider.applicationName,
             threadIDProvider: threadIDProvider,
             formattedTimestampProvider: formattedTimestampProvider,
             pathSeparator: "/"

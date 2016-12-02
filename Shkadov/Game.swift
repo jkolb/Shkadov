@@ -41,7 +41,7 @@ public final class Game : EngineListener {
     }
     
     public func didStartup() {
-        logger.trace("\(#function)")
+        logger.debug("\(#function)")
         camera.projection.fovy = Angle<Float>(degrees: 30.0)
         camera.projection.zNear = 0.1
         camera.projection.zFar = 1000.0
@@ -51,7 +51,7 @@ public final class Game : EngineListener {
     }
     
     public func willShutdown() {
-        logger.trace("\(#function)")
+        logger.debug("\(#function)")
         
         do {
             try engine.writeConfig()
@@ -61,8 +61,13 @@ public final class Game : EngineListener {
         }
     }
     
+    public func willResizeScreen(size: Vector2<Int>) -> Vector2<Int> {
+        logger.debug("\(#function) \(size)")
+        return size
+    }
+    
     public  func received(input: RawInput) {
-        logger.trace("\(#function)")
+        logger.debug("\(#function)")
     }
     
     public func processFrame() {

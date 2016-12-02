@@ -23,6 +23,7 @@
  */
 
 import AppKit
+import Swiftish
 
 public typealias ViewType = NSView
 
@@ -47,8 +48,10 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
             backing: .buffered,
             defer: false
         )
+        super.init()
         window.title = config.title
         window.collectionBehavior = .fullScreenPrimary
+        window.delegate = self
     }
     
     public func attach(metalRenderer: MetalRenderer) {
@@ -74,6 +77,13 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     
     public func windowWillResize(_ sender: NSWindow, to frameSize: NSSize) -> NSSize {
         logger.debug("\(#function) \(frameSize)")
+        
+        if let listener = listener {
+            let updatedSize = listener.willResizeScreen(size: Vector2<Int>(Int(frameSize.width), Int(frameSize.height)))
+            logger.debug("\(updatedSize)")
+            return NSSize(width: updatedSize.width, height: updatedSize.height)
+        }
+        
         return frameSize
     }
     

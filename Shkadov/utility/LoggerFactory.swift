@@ -23,5 +23,5 @@
  */
 
 public protocol LoggerFactory : class {
-    func makeLogger(name: String) -> Logger
+    func makeLogger() -> Logger
 }

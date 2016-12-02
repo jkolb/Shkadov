@@ -129,7 +129,7 @@ open class Logger {
     private let handler: LogHandler
     
     public init(name: String, threadIDProvider: ThreadIDProvider, formattedTimestampProvider: FormattedTimestampProvider, pathSeparator: String, handler: LogHandler = ConsoleLogHandler()) {
-        self.level = .warn
+        self.level = .debug
         self.name = name
         self.threadIDProvider = threadIDProvider
         self.formattedTimestampProvider = formattedTimestampProvider

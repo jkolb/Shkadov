@@ -34,8 +34,9 @@ public final class Engine {
     private let renderer: Renderer
     private let mouseCursorManager: MouseCursorManager
     private let logger: Logger
+    private let configWriter: RawConfigWriter
     
-    public init(rawConfig: RawConfig, config: EngineConfig, platform: Platform, timeSource: TimeSource, renderer: Renderer, mouseCursorManager: MouseCursorManager, logger: Logger) {
+    public init(rawConfig: RawConfig, config: EngineConfig, platform: Platform, timeSource: TimeSource, renderer: Renderer, mouseCursorManager: MouseCursorManager, logger: Logger, configWriter: RawConfigWriter) {
         self.rawConfig = rawConfig
         self.config = config
         self.platform = platform
@@ -43,21 +44,22 @@ public final class Engine {
         self.renderer = renderer
         self.mouseCursorManager = mouseCursorManager
         self.logger = logger
+        self.configWriter = configWriter
     }
     
     public func startup() {
-        logger.trace("\(#function)")
+        logger.debug("\(#function)")
         platform.startup()
     }
     
     public func shutdown() {
-        logger.trace("\(#function)")
+        logger.debug("\(#function)")
         platform.shutdown()
     }
     
     public func writeConfig() throws {
-        logger.trace("\(#function)")
-        
+        logger.debug("\(#function)")
+        try configWriter.write(config: rawConfig, path: config.paths.configPath)
     }
     
     public var currentTime: Time {

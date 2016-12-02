@@ -22,7 +22,10 @@
  SOFTWARE.
  */
 
+import Swiftish
+
 public protocol PlatformListener : class {
     func didStartup()
     func willShutdown()
+    func willResizeScreen(size: Vector2<Int>) -> Vector2<Int>
 }

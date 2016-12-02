@@ -24,6 +24,6 @@
 
 macOSBootstrap(
     factory: { (engine, loggerFactory) in
-        return Game(engine: engine, logger: loggerFactory.makeLogger(name: "GAME"))
+        return Game(engine: engine, logger: loggerFactory.makeLogger())
     }
 ).makeEngine().startup()

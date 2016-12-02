@@ -26,7 +26,7 @@ import AppKit
 import FieryCrucible
 
 public final class macOSBootstrap : DependencyFactory, Bootstrap {
-    private let logger = macOSLoggerFactory().makeLogger(name: "BOOTSTRAP")
+    private let logger = macOSLoggerFactory().makeLogger()
     private let factory: (Engine, LoggerFactory) -> EngineListener
     
     public init(factory: @escaping (Engine, LoggerFactory) -> EngineListener) {
@@ -46,7 +46,8 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
                 timeSource: timeSource(),
                 renderer: renderer(),
                 mouseCursorManager: mouseCursorManager(),
-                logger: makeLogger(name: "WINDOW")
+                logger: makeLogger(),
+                configWriter: rawConfigWriter()
             ),
             configure: { (instance) in
                 instance.listener = self.engineListener()
@@ -63,8 +64,8 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
         )
     }
 
-    private func makeLogger(name: String) -> Logger {
-        return loggerFactory().makeLogger(name: name)
+    private func makeLogger() -> Logger {
+        return loggerFactory().makeLogger()
     }
     
     private func loggerFactory() -> LoggerFactory {
@@ -113,7 +114,7 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
     
     private func platform() -> macOSPlatform {
         return scoped(
-            macOSPlatform(config: config().window, logger: makeLogger(name: "PLATFORM")),
+            macOSPlatform(config: config().window, logger: makeLogger()),
             configure: { (instance) in
                 instance.listener = self.engineListener()
             }
@@ -126,12 +127,16 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
     
     private func renderer() -> macOSRenderer {
         return scoped(
-            macOSRendererFactory().makeRenderer(config: config().renderer, logger: makeLogger(name: "RENDERER")),
+            macOSRendererFactory().makeRenderer(config: config().renderer, logger: makeLogger()),
             configure: { (instance) in
                 instance.rendererListener = self.engineListener()
                 instance.rawInputListener = self.engineListener()
             }
         )
+    }
+    
+    private func rawConfigWriter() -> RawConfigWriter {
+        return scoped(FoundationRawConfigWriter())
     }
     
     private func determineSupportedRendererTypes() -> Set<RendererType> {
