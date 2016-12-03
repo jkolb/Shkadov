@@ -36,14 +36,8 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
         self.started = false
         self.config = config
         self.logger = logger
-        let contentRect = NSRect(
-            x: 0,
-            y: 0,
-            width: config.width,
-            height: config.height
-        )
         self.window = NSWindow(
-            contentRect: contentRect,
+            contentRect: CGRect.engineMinimum,
             styleMask: [.titled, .closable, .miniaturizable, .resizable],
             backing: .buffered,
             defer: false
@@ -286,5 +280,11 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
 extension CGSize {
     public func toVector() -> Vector2<Int> {
         return Vector2<Int>(Int(width), Int(height))
+    }
+}
+
+extension CGRect {
+    public static var engineMinimum: CGRect {
+        return CGRect(x: 0, y: 0, width: Engine.minimumWidth, height: Engine.minimumHeight)
     }
 }

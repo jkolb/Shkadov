@@ -181,7 +181,7 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
     
     private func contentView() -> macOSInputView {
         return scoped(
-            macOSInputView(frame: CGRect(x: 0, y: 0, width: Engine.minimumWidth, height: Engine.minimumHeight), logger: makeLogger()),
+            macOSInputView(frame: CGRect.engineMinimum, logger: makeLogger()),
             configure: { (instance) in
                 instance.listener = self.engineListener()
             }

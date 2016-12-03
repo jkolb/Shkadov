@@ -33,7 +33,7 @@ public class MetalView : MTKView {
     
     public static func make() -> MetalView {
         return MetalView(
-            frame: CGRect(x: 0, y: 0, width: Engine.minimumWidth, height: Engine.minimumHeight),
+            frame: CGRect.engineMinimum,
             device: MTLCreateSystemDefaultDevice()
         )
     }
