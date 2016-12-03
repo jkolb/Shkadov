@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		095DBCBC1DEFD48C00D1A868 /* macOSRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095DBCBB1DEFD48C00D1A868 /* macOSRenderer.swift */; };
 		09C2B85E1DF114DE0098B147 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C2B85D1DF114DE0098B147 /* Screen.swift */; };
 		E55606741DEA68F100D9F1F8 /* ShkadovTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606731DEA68F100D9F1F8 /* ShkadovTests.swift */; };
 		E55606A21DEA6F4900D9F1F8 /* FieryCrucible.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55606841DEA6F2500D9F1F8 /* FieryCrucible.framework */; };
@@ -23,7 +22,6 @@
 		E55606C01DEA71EB00D9F1F8 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B51DEA71EB00D9F1F8 /* Logger.swift */; };
 		E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B61DEA71EB00D9F1F8 /* Time.swift */; };
 		E55606C51DEA757200D9F1F8 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606C41DEA757200D9F1F8 /* Renderer.swift */; };
-		E55606C71DEA762B00D9F1F8 /* MetalRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606C61DEA762B00D9F1F8 /* MetalRenderer.swift */; };
 		E55606D31DEA7A9900D9F1F8 /* RawConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D21DEA7A9900D9F1F8 /* RawConfigReader.swift */; };
 		E55606D51DEA7ACD00D9F1F8 /* RawConfigWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D41DEA7ACD00D9F1F8 /* RawConfigWriter.swift */; };
 		E55606D81DEA7B4200D9F1F8 /* FoundationRawConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606D71DEA7B4200D9F1F8 /* FoundationRawConfigReader.swift */; };
@@ -41,11 +39,9 @@
 		E55606FD1DEB674500D9F1F8 /* RendererType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606FC1DEB674500D9F1F8 /* RendererType.swift */; };
 		E55607011DEB686200D9F1F8 /* LinuxPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607001DEB686200D9F1F8 /* LinuxPlatform.swift */; };
 		E55607031DEB68BA00D9F1F8 /* WindowsPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607021DEB68BA00D9F1F8 /* WindowsPlatform.swift */; };
-		E55607071DEB6B2900D9F1F8 /* macOSRendererFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607061DEB6B2900D9F1F8 /* macOSRendererFactory.swift */; };
 		E55607091DEB6F0C00D9F1F8 /* RawConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607081DEB6F0C00D9F1F8 /* RawConfig.swift */; };
 		E556070D1DEB819500D9F1F8 /* RendererConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556070C1DEB819500D9F1F8 /* RendererConfig.swift */; };
 		E556070F1DEB820B00D9F1F8 /* ConfigSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556070E1DEB820B00D9F1F8 /* ConfigSection.swift */; };
-		E55607131DEBDFAF00D9F1F8 /* macOSMetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607121DEBDFAF00D9F1F8 /* macOSMetalView.swift */; };
 		E55607161DEBE02B00D9F1F8 /* RawInputButtonCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607151DEBE02B00D9F1F8 /* RawInputButtonCode.swift */; };
 		E55607181DEBE05A00D9F1F8 /* RawInputKeyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607171DEBE05A00D9F1F8 /* RawInputKeyCode.swift */; };
 		E556071A1DEBE09B00D9F1F8 /* RawInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607191DEBE09B00D9F1F8 /* RawInput.swift */; };
@@ -61,6 +57,8 @@
 		E579BA5F1DEE957A007DC0FE /* Bootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA5E1DEE957A007DC0FE /* Bootstrap.swift */; };
 		E579BA611DEE997C007DC0FE /* PlatformListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA601DEE997C007DC0FE /* PlatformListener.swift */; };
 		E579BA711DF334EA007DC0FE /* macOSInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA701DF334EA007DC0FE /* macOSInputView.swift */; };
+		E579BA751DF3440D007DC0FE /* MetalRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA741DF3440D007DC0FE /* MetalRenderer.swift */; };
+		E579BAAC1DF349DB007DC0FE /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BAAB1DF349DB007DC0FE /* MetalView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,7 +128,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		095DBCBB1DEFD48C00D1A868 /* macOSRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSRenderer.swift; sourceTree = "<group>"; };
 		09C2B85D1DF114DE0098B147 /* Screen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
 		E556065C1DEA68F000D9F1F8 /* Shkadov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shkadov.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E556066A1DEA68F100D9F1F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -150,7 +147,6 @@
 		E55606B51DEA71EB00D9F1F8 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		E55606B61DEA71EB00D9F1F8 /* Time.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
 		E55606C41DEA757200D9F1F8 /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
-		E55606C61DEA762B00D9F1F8 /* MetalRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalRenderer.swift; sourceTree = "<group>"; };
 		E55606C81DEA76BA00D9F1F8 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		E55606C91DEA76BA00D9F1F8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		E55606D21DEA7A9900D9F1F8 /* RawConfigReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawConfigReader.swift; sourceTree = "<group>"; };
@@ -170,11 +166,9 @@
 		E55606FC1DEB674500D9F1F8 /* RendererType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererType.swift; sourceTree = "<group>"; };
 		E55607001DEB686200D9F1F8 /* LinuxPlatform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxPlatform.swift; sourceTree = "<group>"; };
 		E55607021DEB68BA00D9F1F8 /* WindowsPlatform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowsPlatform.swift; sourceTree = "<group>"; };
-		E55607061DEB6B2900D9F1F8 /* macOSRendererFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSRendererFactory.swift; sourceTree = "<group>"; };
 		E55607081DEB6F0C00D9F1F8 /* RawConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawConfig.swift; sourceTree = "<group>"; };
 		E556070C1DEB819500D9F1F8 /* RendererConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererConfig.swift; sourceTree = "<group>"; };
 		E556070E1DEB820B00D9F1F8 /* ConfigSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigSection.swift; sourceTree = "<group>"; };
-		E55607121DEBDFAF00D9F1F8 /* macOSMetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSMetalView.swift; sourceTree = "<group>"; };
 		E55607151DEBE02B00D9F1F8 /* RawInputButtonCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInputButtonCode.swift; sourceTree = "<group>"; };
 		E55607171DEBE05A00D9F1F8 /* RawInputKeyCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInputKeyCode.swift; sourceTree = "<group>"; };
 		E55607191DEBE09B00D9F1F8 /* RawInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawInput.swift; sourceTree = "<group>"; };
@@ -190,6 +184,8 @@
 		E579BA5E1DEE957A007DC0FE /* Bootstrap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bootstrap.swift; sourceTree = "<group>"; };
 		E579BA601DEE997C007DC0FE /* PlatformListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlatformListener.swift; sourceTree = "<group>"; };
 		E579BA701DF334EA007DC0FE /* macOSInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSInputView.swift; sourceTree = "<group>"; };
+		E579BA741DF3440D007DC0FE /* MetalRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalRenderer.swift; sourceTree = "<group>"; };
+		E579BAAB1DF349DB007DC0FE /* MetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -346,11 +342,8 @@
 			children = (
 				E55606B21DEA71EB00D9F1F8 /* macOSBootstrap.swift */,
 				E579BA701DF334EA007DC0FE /* macOSInputView.swift */,
-				E55607121DEBDFAF00D9F1F8 /* macOSMetalView.swift */,
 				E55606B11DEA71EB00D9F1F8 /* macOSMouseCursor.swift */,
 				E55607231DECEF2900D9F1F8 /* macOSPlatform.swift */,
-				095DBCBB1DEFD48C00D1A868 /* macOSRenderer.swift */,
-				E55607061DEB6B2900D9F1F8 /* macOSRendererFactory.swift */,
 			);
 			path = macOS;
 			sourceTree = "<group>";
@@ -373,7 +366,8 @@
 		E55606C21DEA753600D9F1F8 /* Metal */ = {
 			isa = PBXGroup;
 			children = (
-				E55606C61DEA762B00D9F1F8 /* MetalRenderer.swift */,
+				E579BA741DF3440D007DC0FE /* MetalRenderer.swift */,
+				E579BAAB1DF349DB007DC0FE /* MetalView.swift */,
 			);
 			path = Metal;
 			sourceTree = "<group>";
@@ -664,14 +658,12 @@
 				E556071A1DEBE09B00D9F1F8 /* RawInput.swift in Sources */,
 				E579BA611DEE997C007DC0FE /* PlatformListener.swift in Sources */,
 				E55606C51DEA757200D9F1F8 /* Renderer.swift in Sources */,
-				E55607131DEBDFAF00D9F1F8 /* macOSMetalView.swift in Sources */,
 				E55606F61DEB669800D9F1F8 /* OpenGLRenderer.swift in Sources */,
 				E55606B71DEA71EB00D9F1F8 /* Camera.swift in Sources */,
 				E556070F1DEB820B00D9F1F8 /* ConfigSection.swift in Sources */,
 				E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */,
 				E55607351DED34D400D9F1F8 /* Game.swift in Sources */,
 				E556072A1DED0AAA00D9F1F8 /* RendererListener.swift in Sources */,
-				095DBCBC1DEFD48C00D1A868 /* macOSRenderer.swift in Sources */,
 				E55607371DED351100D9F1F8 /* EngineListener.swift in Sources */,
 				E55607031DEB68BA00D9F1F8 /* WindowsPlatform.swift in Sources */,
 				E55606DC1DEA7DF500D9F1F8 /* FilePaths.swift in Sources */,
@@ -685,18 +677,18 @@
 				E55606E81DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift in Sources */,
 				E579BA5F1DEE957A007DC0FE /* Bootstrap.swift in Sources */,
 				E55606BD1DEA71EB00D9F1F8 /* macOSMouseCursor.swift in Sources */,
-				E55607071DEB6B2900D9F1F8 /* macOSRendererFactory.swift in Sources */,
 				E55606FB1DEB671600D9F1F8 /* DirectXRenderer.swift in Sources */,
 				E55606BE1DEA71EB00D9F1F8 /* macOSBootstrap.swift in Sources */,
 				E55607091DEB6F0C00D9F1F8 /* RawConfig.swift in Sources */,
 				E55607161DEBE02B00D9F1F8 /* RawInputButtonCode.swift in Sources */,
 				E55606BB1DEA71EB00D9F1F8 /* MachOTimeSource.swift in Sources */,
+				E579BA751DF3440D007DC0FE /* MetalRenderer.swift in Sources */,
 				E55606F81DEB66AD00D9F1F8 /* VulkanRenderer.swift in Sources */,
 				E55607181DEBE05A00D9F1F8 /* RawInputKeyCode.swift in Sources */,
 				E55606E61DEB3E1500D9F1F8 /* POSIXThreadIDProvider.swift in Sources */,
+				E579BAAC1DF349DB007DC0FE /* MetalView.swift in Sources */,
 				E556070D1DEB819500D9F1F8 /* RendererConfig.swift in Sources */,
 				E55606FD1DEB674500D9F1F8 /* RendererType.swift in Sources */,
-				E55606C71DEA762B00D9F1F8 /* MetalRenderer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

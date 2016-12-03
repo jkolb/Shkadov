@@ -24,20 +24,10 @@
 
 import MetalKit
 
-public class macOSMetalView : MTKView {
-    private let logger: Logger
+public class MetalView : MTKView {
     internal weak var listener: RendererListener?
     
-    public init(frame: CGRect, device: MTLDevice, logger: Logger) {
-        self.logger = logger
-        super.init(frame: frame, device: device)
-    }
-
-    public required init(coder: NSCoder) {
-        fatalError()
-    }
-    
-    public override func draw(_ dirtyRect: NSRect) {
+    public override func draw(_ rect: CGRect) {
         listener?.processFrame()
     }
 }

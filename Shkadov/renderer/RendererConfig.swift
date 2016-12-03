@@ -30,11 +30,11 @@ private enum RendererConfigName : String {
 
 open class RendererConfig {
     private let rawConfig: RawConfig
-    public let supportedRendererTypes: Set<RendererType>
+    public let availableRendererTypes: Set<RendererType>
     
-    public init(rawConfig: RawConfig, supportedRendererTypes: Set<RendererType>) {
+    public init(rawConfig: RawConfig, availableRendererTypes: Set<RendererType>) {
         self.rawConfig = rawConfig
-        self.supportedRendererTypes = supportedRendererTypes
+        self.availableRendererTypes = availableRendererTypes
     }
     
     public var type: RendererType {
@@ -43,11 +43,11 @@ open class RendererConfig {
                 return value
             }
             
-            if supportedRendererTypes.count == 0 {
-                fatalError("No supported renderers found")
+            if availableRendererTypes.count == 0 {
+                fatalError("No available renderers found")
             }
             
-            let fallback = supportedRendererTypes.first!
+            let fallback = availableRendererTypes.first!
             self.type = fallback
             
             return fallback

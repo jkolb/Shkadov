@@ -25,27 +25,17 @@
 import Metal
 import MetalKit
 
-public final class MetalRenderer : macOSRenderer {
+public final class MetalRenderer : Renderer {
     private let device: MTLDevice
-    private let view: macOSMetalView
-    public var rendererView: ViewType {
-        return view
-    }
+    private let view: MetalView
     private let config: RendererConfig
-    public weak var listener: RendererListener? {
-        get {
-            return view.listener
-        }
-        set {
-            view.listener = newValue
-        }
-    }
-
-    public init(config: RendererConfig, logger: Logger) {
-        self.device = MTLCreateSystemDefaultDevice()!
-        let frame = CGRect(x: 0, y: 0, width: config.width, height: config.height)
-        self.view = macOSMetalView(frame: frame, device: device, logger: logger)
+    private let logger: Logger
+    
+    public init(view: MetalView, config: RendererConfig, logger: Logger) {
+        self.device = view.device!
+        self.view = view
         self.config = config
+        self.logger = logger
     }
     
     public static func isSupported() -> Bool {

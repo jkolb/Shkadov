@@ -50,11 +50,6 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
             ),
             configure: { (instance) in
                 instance.listener = self.engineListener()
-                
-                let inputView = self.inputView()
-                let rendererView = self.renderer().rendererView
-                rendererView.frame = inputView.bounds
-                inputView.addSubview(rendererView)
             }
         )
     }
@@ -103,7 +98,7 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
     
     private func rawConfig() -> RawConfig {
         return scoped(
-            factory : { () -> RawConfig in
+            factory: { () -> RawConfig in
                 let configReader = FoundationRawConfigReader()
                 
                 do {
@@ -122,7 +117,7 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
     }
     
     private func rendererConfig() -> RendererConfig {
-        return scoped(RendererConfig(rawConfig: rawConfig(), supportedRendererTypes: macOSRendererFactory.determineSupportedRendererTypes()))
+        return scoped(RendererConfig(rawConfig: rawConfig(), availableRendererTypes: availableRendererTypes()))
     }
     
     private func windowConfig() -> WindowConfig {
@@ -131,7 +126,7 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
     
     private func platform() -> Platform {
         return scoped(
-            macOSPlatform(config: config().window, inputView: inputView(), logger: makeLogger()),
+            macOSPlatform(config: config().window, contentView: contentView(), logger: makeLogger()),
             configure: { (instance) in
                 instance.listener = self.engineListener()
             }
@@ -142,16 +137,43 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
         return scoped(
             macOSMouseCursor(),
             configure: { (instance) in
-                instance.listener = self.inputView()
+                instance.listener = self.contentView()
             }
         )
     }
     
-    private func renderer() -> macOSRenderer {
+    private func renderer() -> Renderer {
         return scoped(
-            macOSRendererFactory().makeRenderer(config: config().renderer, logger: makeLogger()),
+            factory: { () -> Renderer in
+                let config = rendererConfig()
+                let rendererTypes = availableRendererTypes()
+                
+                if !rendererTypes.contains(config.type) {
+                    fatalError("\(config.type) renderer not available")
+                }
+                
+                switch config.type {
+                case .metal:
+                    return MetalRenderer(view: metalView(), config: config, logger: makeLogger())
+                default:
+                    fatalError("\(config.type) renderer not supported")
+                }
+            }
+        )
+    }
+    
+    private func metalView() -> MetalView {
+        return scoped(
+            MetalView(
+                frame: CGRect(x: 0, y: 0, width: Engine.minimumWidth, height: Engine.minimumHeight),
+                device: MTLCreateSystemDefaultDevice()
+            ),
             configure: { (instance) in
                 instance.listener = self.engineListener()
+                
+                let parentView = self.contentView()
+                instance.frame = parentView.bounds
+                parentView.addSubview(instance)
             }
         )
     }
@@ -160,11 +182,25 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
         return scoped(FoundationRawConfigWriter())
     }
     
-    private func inputView() -> macOSInputView {
+    private func contentView() -> macOSInputView {
         return scoped(
             macOSInputView(frame: CGRect(x: 0, y: 0, width: Engine.minimumWidth, height: Engine.minimumHeight), logger: makeLogger()),
             configure: { (instance) in
                 instance.listener = self.engineListener()
+            }
+        )
+    }
+    
+    private func availableRendererTypes() -> Set<RendererType> {
+        return scoped(
+            factory: { () -> Set<RendererType> in
+                var types = Set<RendererType>()
+                
+                if MetalRenderer.isSupported() {
+                    types.insert(.metal)
+                }
+                
+                return types
             }
         )
     }

@@ -25,8 +25,6 @@
 import AppKit
 import Swiftish
 
-public typealias ViewType = NSView
-
 public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NSWindowDelegate {
     public weak var listener: PlatformListener?
     private let config: WindowConfig
@@ -34,7 +32,7 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     private let window: NSWindow
     private var started: Bool
     
-    public init(config: WindowConfig, inputView: NSView, logger: Logger) {
+    public init(config: WindowConfig, contentView: NSView, logger: Logger) {
         self.started = false
         self.config = config
         self.logger = logger
@@ -53,7 +51,7 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
         super.init()
         window.title = config.title
         window.collectionBehavior = .fullScreenPrimary
-        window.contentView = inputView
+        window.contentView = contentView
         window.delegate = self
         window.center()
     }
@@ -285,7 +283,7 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     }
 }
 
-extension NSSize {
+extension CGSize {
     public func toVector() -> Vector2<Int> {
         return Vector2<Int>(Int(width), Int(height))
     }
