@@ -22,44 +22,11 @@
  SOFTWARE.
  */
 
-import CoreGraphics
 import Swiftish
 
-public final class macOSMouseCursorManager : MouseCursorManager {
-    public weak var listener: macOSMouseCursorListener?
-    public var hidden: Bool {
-        didSet {
-            if hidden {
-                CGDisplayHideCursor(CGMainDisplayID())
-            }
-            else {
-                CGDisplayShowCursor(CGMainDisplayID())
-            }
-        }
-    }
-    public var followsMouse: Bool {
-        didSet {
-            if followsMouse {
-                CGAssociateMouseAndMouseCursorPosition(1)
-            }
-            else {
-                CGAssociateMouseAndMouseCursorPosition(0)
-            }
-            
-            listener?.updated(followsMouse: followsMouse)
-        }
-    }
+public protocol MouseCursor : class {
+    var hidden: Bool { get set }
+    var followsMouse: Bool { get set }
     
-    public func move(to point: Vector2<Float>) {
-        CGWarpMouseCursorPosition(CGPoint(x: CGFloat(point.x), y: CGFloat(point.y)))
-    }
-    
-    public init() {
-        self.hidden = false
-        self.followsMouse = true
-    }
-}
-
-public protocol macOSMouseCursorListener : class {
-    func updated(followsMouse: Bool)
+    func move(to point: Vector2<Float>)
 }

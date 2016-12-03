@@ -25,6 +25,8 @@
 import Swiftish
 
 public final class Engine {
+    public static let minimumWidth = 640
+    public static let minimumHeight = 360
     public var listener: EngineListener?
     
     private let rawConfig: RawConfig
@@ -32,17 +34,17 @@ public final class Engine {
     private let platform: Platform
     private let timeSource: TimeSource
     private let renderer: Renderer
-    private let mouseCursorManager: MouseCursorManager
+    private let mouseCursor: MouseCursor
     private let logger: Logger
     private let configWriter: RawConfigWriter
     
-    public init(rawConfig: RawConfig, config: EngineConfig, platform: Platform, timeSource: TimeSource, renderer: Renderer, mouseCursorManager: MouseCursorManager, logger: Logger, configWriter: RawConfigWriter) {
+    public init(rawConfig: RawConfig, config: EngineConfig, platform: Platform, timeSource: TimeSource, renderer: Renderer, mouseCursor: MouseCursor, logger: Logger, configWriter: RawConfigWriter) {
         self.rawConfig = rawConfig
         self.config = config
         self.platform = platform
         self.timeSource = timeSource
         self.renderer = renderer
-        self.mouseCursorManager = mouseCursorManager
+        self.mouseCursor = mouseCursor
         self.logger = logger
         self.configWriter = configWriter
     }
@@ -88,24 +90,24 @@ public final class Engine {
     
     public var mouseCursorHidden: Bool {
         get {
-            return mouseCursorManager.hidden
+            return mouseCursor.hidden
         }
         set {
-            mouseCursorManager.hidden = newValue
+            mouseCursor.hidden = newValue
         }
     }
     
-    public var followsMouseCursor: Bool {
+    public var mouseCursorFollowsMouse: Bool {
         get {
-            return mouseCursorManager.followsMouse
+            return mouseCursor.followsMouse
         }
         set {
-            mouseCursorManager.followsMouse = newValue
+            mouseCursor.followsMouse = newValue
         }
     }
     
     public func moveMouseCursor(to point: Vector2<Float>) {
-        mouseCursorManager.move(to: point)
+        mouseCursor.move(to: point)
     }
 
 }

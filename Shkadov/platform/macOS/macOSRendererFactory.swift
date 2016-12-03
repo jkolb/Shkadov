@@ -46,4 +46,14 @@ public final class macOSRendererFactory {
             fatalError("\(config.type) renderer not implemented for macOS")
         }
     }
+    
+    internal static func determineSupportedRendererTypes() -> Set<RendererType> {
+        var types = Set<RendererType>()
+        
+        if MetalRenderer.isSupported() {
+            types.insert(.metal)
+        }
+        
+        return types
+    }
 }

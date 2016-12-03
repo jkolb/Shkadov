@@ -27,35 +27,24 @@ import MetalKit
 
 public final class MetalRenderer : macOSRenderer {
     private let device: MTLDevice
-    private let metalView: macOSMetalView
-    public var view: ViewType {
-        return metalView
+    private let view: macOSMetalView
+    public var rendererView: ViewType {
+        return view
     }
     private let config: RendererConfig
-    public weak var rendererListener: RendererListener? {
+    public weak var listener: RendererListener? {
         get {
-            return metalView.rendererListener
+            return view.listener
         }
         set {
-            metalView.rendererListener = newValue
+            view.listener = newValue
         }
-    }
-    public weak var rawInputListener: RawInputListener? {
-        get {
-            return metalView.rawInputListener
-        }
-        set {
-            metalView.rawInputListener = newValue
-        }
-    }
-    public var mouseCursorListener: macOSMouseCursorListener {
-        return metalView
     }
 
     public init(config: RendererConfig, logger: Logger) {
         self.device = MTLCreateSystemDefaultDevice()!
         let frame = CGRect(x: 0, y: 0, width: config.width, height: config.height)
-        self.metalView = macOSMetalView(frame: frame, device: device, logger: logger)
+        self.view = macOSMetalView(frame: frame, device: device, logger: logger)
         self.config = config
     }
     

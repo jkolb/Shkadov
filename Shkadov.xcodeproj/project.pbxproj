@@ -18,7 +18,7 @@
 		E55606B81DEA71EB00D9F1F8 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606A81DEA71EB00D9F1F8 /* Engine.swift */; };
 		E55606B91DEA71EB00D9F1F8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606A91DEA71EB00D9F1F8 /* main.swift */; };
 		E55606BB1DEA71EB00D9F1F8 /* MachOTimeSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606AE1DEA71EB00D9F1F8 /* MachOTimeSource.swift */; };
-		E55606BD1DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B11DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift */; };
+		E55606BD1DEA71EB00D9F1F8 /* macOSMouseCursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B11DEA71EB00D9F1F8 /* macOSMouseCursor.swift */; };
 		E55606BE1DEA71EB00D9F1F8 /* macOSBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B21DEA71EB00D9F1F8 /* macOSBootstrap.swift */; };
 		E55606C01DEA71EB00D9F1F8 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B51DEA71EB00D9F1F8 /* Logger.swift */; };
 		E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606B61DEA71EB00D9F1F8 /* Time.swift */; };
@@ -34,7 +34,7 @@
 		E55606E61DEB3E1500D9F1F8 /* POSIXThreadIDProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606E51DEB3E1500D9F1F8 /* POSIXThreadIDProvider.swift */; };
 		E55606E81DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606E71DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift */; };
 		E55606EA1DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606E91DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift */; };
-		E55606EC1DEB4CEB00D9F1F8 /* MouseCursorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606EB1DEB4CEB00D9F1F8 /* MouseCursorManager.swift */; };
+		E55606EC1DEB4CEB00D9F1F8 /* MouseCursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606EB1DEB4CEB00D9F1F8 /* MouseCursor.swift */; };
 		E55606F61DEB669800D9F1F8 /* OpenGLRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606F51DEB669800D9F1F8 /* OpenGLRenderer.swift */; };
 		E55606F81DEB66AD00D9F1F8 /* VulkanRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606F71DEB66AD00D9F1F8 /* VulkanRenderer.swift */; };
 		E55606FB1DEB671600D9F1F8 /* DirectXRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606FA1DEB671600D9F1F8 /* DirectXRenderer.swift */; };
@@ -60,6 +60,7 @@
 		E55607391DED381800D9F1F8 /* LoggerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607381DED381800D9F1F8 /* LoggerFactory.swift */; };
 		E579BA5F1DEE957A007DC0FE /* Bootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA5E1DEE957A007DC0FE /* Bootstrap.swift */; };
 		E579BA611DEE997C007DC0FE /* PlatformListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA601DEE997C007DC0FE /* PlatformListener.swift */; };
+		E579BA711DF334EA007DC0FE /* macOSInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA701DF334EA007DC0FE /* macOSInputView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,7 +145,7 @@
 		E55606A81DEA71EB00D9F1F8 /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
 		E55606A91DEA71EB00D9F1F8 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		E55606AE1DEA71EB00D9F1F8 /* MachOTimeSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MachOTimeSource.swift; sourceTree = "<group>"; };
-		E55606B11DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSMouseCursorManager.swift; sourceTree = "<group>"; };
+		E55606B11DEA71EB00D9F1F8 /* macOSMouseCursor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSMouseCursor.swift; sourceTree = "<group>"; };
 		E55606B21DEA71EB00D9F1F8 /* macOSBootstrap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSBootstrap.swift; sourceTree = "<group>"; };
 		E55606B51DEA71EB00D9F1F8 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		E55606B61DEA71EB00D9F1F8 /* Time.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
@@ -162,7 +163,7 @@
 		E55606E51DEB3E1500D9F1F8 /* POSIXThreadIDProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POSIXThreadIDProvider.swift; sourceTree = "<group>"; };
 		E55606E71DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationFormattedTimestampProvider.swift; sourceTree = "<group>"; };
 		E55606E91DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationApplicationNameProvider.swift; sourceTree = "<group>"; };
-		E55606EB1DEB4CEB00D9F1F8 /* MouseCursorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MouseCursorManager.swift; sourceTree = "<group>"; };
+		E55606EB1DEB4CEB00D9F1F8 /* MouseCursor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MouseCursor.swift; sourceTree = "<group>"; };
 		E55606F51DEB669800D9F1F8 /* OpenGLRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGLRenderer.swift; sourceTree = "<group>"; };
 		E55606F71DEB66AD00D9F1F8 /* VulkanRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VulkanRenderer.swift; sourceTree = "<group>"; };
 		E55606FA1DEB671600D9F1F8 /* DirectXRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectXRenderer.swift; sourceTree = "<group>"; };
@@ -188,6 +189,7 @@
 		E55607381DED381800D9F1F8 /* LoggerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerFactory.swift; sourceTree = "<group>"; };
 		E579BA5E1DEE957A007DC0FE /* Bootstrap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bootstrap.swift; sourceTree = "<group>"; };
 		E579BA601DEE997C007DC0FE /* PlatformListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlatformListener.swift; sourceTree = "<group>"; };
+		E579BA701DF334EA007DC0FE /* macOSInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSInputView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -343,8 +345,9 @@
 			isa = PBXGroup;
 			children = (
 				E55606B21DEA71EB00D9F1F8 /* macOSBootstrap.swift */,
+				E579BA701DF334EA007DC0FE /* macOSInputView.swift */,
 				E55607121DEBDFAF00D9F1F8 /* macOSMetalView.swift */,
-				E55606B11DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift */,
+				E55606B11DEA71EB00D9F1F8 /* macOSMouseCursor.swift */,
 				E55607231DECEF2900D9F1F8 /* macOSPlatform.swift */,
 				095DBCBB1DEFD48C00D1A868 /* macOSRenderer.swift */,
 				E55607061DEB6B2900D9F1F8 /* macOSRendererFactory.swift */,
@@ -358,7 +361,7 @@
 				E55606DB1DEA7DF500D9F1F8 /* FilePaths.swift */,
 				E55606B51DEA71EB00D9F1F8 /* Logger.swift */,
 				E55607381DED381800D9F1F8 /* LoggerFactory.swift */,
-				E55606EB1DEB4CEB00D9F1F8 /* MouseCursorManager.swift */,
+				E55606EB1DEB4CEB00D9F1F8 /* MouseCursor.swift */,
 				E55607081DEB6F0C00D9F1F8 /* RawConfig.swift */,
 				E55606D21DEA7A9900D9F1F8 /* RawConfigReader.swift */,
 				E55606D41DEA7ACD00D9F1F8 /* RawConfigWriter.swift */,
@@ -656,7 +659,7 @@
 				E55607261DECF65000D9F1F8 /* WindowConfig.swift in Sources */,
 				E55606DA1DEA7B4E00D9F1F8 /* FoundationRawConfigWriter.swift in Sources */,
 				E55606D31DEA7A9900D9F1F8 /* RawConfigReader.swift in Sources */,
-				E55606EC1DEB4CEB00D9F1F8 /* MouseCursorManager.swift in Sources */,
+				E55606EC1DEB4CEB00D9F1F8 /* MouseCursor.swift in Sources */,
 				E55606DE1DEA7E6100D9F1F8 /* FoundationFilePaths.swift in Sources */,
 				E556071A1DEBE09B00D9F1F8 /* RawInput.swift in Sources */,
 				E579BA611DEE997C007DC0FE /* PlatformListener.swift in Sources */,
@@ -677,10 +680,11 @@
 				E55606B81DEA71EB00D9F1F8 /* Engine.swift in Sources */,
 				E55606B91DEA71EB00D9F1F8 /* main.swift in Sources */,
 				E55606E31DEB3DD100D9F1F8 /* UnixMath.swift in Sources */,
+				E579BA711DF334EA007DC0FE /* macOSInputView.swift in Sources */,
 				E55606C01DEA71EB00D9F1F8 /* Logger.swift in Sources */,
 				E55606E81DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift in Sources */,
 				E579BA5F1DEE957A007DC0FE /* Bootstrap.swift in Sources */,
-				E55606BD1DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift in Sources */,
+				E55606BD1DEA71EB00D9F1F8 /* macOSMouseCursor.swift in Sources */,
 				E55607071DEB6B2900D9F1F8 /* macOSRendererFactory.swift in Sources */,
 				E55606FB1DEB671600D9F1F8 /* DirectXRenderer.swift in Sources */,
 				E55606BE1DEA71EB00D9F1F8 /* macOSBootstrap.swift in Sources */,
@@ -733,6 +737,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -782,6 +787,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

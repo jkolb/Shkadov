@@ -63,7 +63,7 @@ open class RendererConfig {
                 return value
             }
             
-            let fallback = 800
+            let fallback = Engine.minimumWidth
             self.width = fallback
             
             return fallback
@@ -79,7 +79,7 @@ open class RendererConfig {
                 return value
             }
             
-            let fallback = 600
+            let fallback = Engine.minimumHeight
             self.height = fallback
             
             return fallback

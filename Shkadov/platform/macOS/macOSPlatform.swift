@@ -31,10 +31,10 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     public weak var listener: PlatformListener?
     private let config: WindowConfig
     private let logger: Logger
-    public let window: NSWindow
+    private let window: NSWindow
     private var started: Bool
     
-    public init(config: WindowConfig, logger: Logger) {
+    public init(config: WindowConfig, inputView: NSView, logger: Logger) {
         self.started = false
         self.config = config
         self.logger = logger
@@ -53,6 +53,7 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
         super.init()
         window.title = config.title
         window.collectionBehavior = .fullScreenPrimary
+        window.contentView = inputView
         window.delegate = self
         window.center()
     }
@@ -84,14 +85,9 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
         
         toggleFullScreen()
     }
-
-    public func attach(metalRenderer: MetalRenderer) {
-        window.contentView = metalRenderer.view
-    }
     
     public func windowDidBecomeKey(_ notification: Notification) {
         logger.debug("\(#function)")
-//        window.makeFirstResponder(viewController)
     }
     
     public func windowDidResignKey(_ notification: Notification) {
@@ -109,10 +105,12 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     public func windowWillResize(_ sender: NSWindow, to frameSize: NSSize) -> NSSize {
         logger.debug("\(#function) \(frameSize)")
         
-        if let listener = listener {
-            let updatedSize = listener.willResizeScreen(size: Vector2<Int>(Int(frameSize.width), Int(frameSize.height)))
-            logger.debug("\(updatedSize)")
-            return NSSize(width: updatedSize.width, height: updatedSize.height)
+        if started {
+            if let listener = listener {
+                let updatedSize = listener.willResizeScreen(size: Vector2<Int>(Int(frameSize.width), Int(frameSize.height)))
+                logger.debug("\(updatedSize)")
+                return NSSize(width: updatedSize.width, height: updatedSize.height)
+            }
         }
         
         return frameSize
@@ -120,7 +118,10 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     
     public func windowDidResize(_ notification: Notification) {
         logger.debug("\(#function)")
-        listener?.didResizeScreen()
+        
+        if started {
+            listener?.didResizeScreen()
+        }
     }
     
     public func windowWillClose(_ notification: Notification) {
@@ -129,15 +130,17 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     
     public func windowWillEnterFullScreen(_ notification: Notification) {
         logger.debug("\(#function)")
-        listener?.willEnterFullScreen()
+
+        if started {
+            listener?.willEnterFullScreen()
+        }
     }
     
     public func windowDidEnterFullScreen(_ notification: Notification) {
         logger.debug("\(#function)")
         
         if !started {
-            started = true
-            listener?.didStartup()
+            didStartup()
         }
         else {
             listener?.didEnterFullScreen()
@@ -146,22 +149,34 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     
     public func windowWillExitFullScreen(_ notification: Notification) {
         logger.debug("\(#function)")
-        listener?.willExitFullScreen()
+        
+        if started {
+            listener?.willExitFullScreen()
+        }
     }
     
     public func windowDidExitFullScreen(_ notification: Notification) {
         logger.debug("\(#function)")
-        listener?.didExitFullScreen()
+        
+        if started {
+            listener?.didExitFullScreen()
+        }
     }
     
     public func windowWillMove(_ notification: Notification) {
         logger.debug("\(#function)")
-        listener?.willMoveScreen()
+        
+        if started {
+            listener?.willMoveScreen()
+        }
     }
     
     public func windowDidMove(_ notification: Notification) {
         logger.debug("\(#function)")
-        listener?.didMoveScreen()
+        
+        if started {
+            listener?.didMoveScreen()
+        }
     }
     
     public func startup() {
@@ -172,6 +187,11 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
         application.delegate = self
         window.makeKeyAndOrderFront(nil)
         application.run()
+    }
+    
+    private func didStartup() {
+        started = true
+        listener?.didStartup()
     }
     
     public func shutdown() {
@@ -220,11 +240,10 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
         logger.debug("\(#function)")
         
         if config.fullscreen {
-            toggleFullScreen()
+            enterFullScreen()
         }
         else {
-            started = true
-            listener?.didStartup()
+            didStartup()
         }
     }
     

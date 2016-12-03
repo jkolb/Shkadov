@@ -44,13 +44,17 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
                 platform: platform(),
                 timeSource: timeSource(),
                 renderer: renderer(),
-                mouseCursorManager: mouseCursorManager(),
+                mouseCursor: mouseCursor(),
                 logger: makeLogger(),
                 configWriter: rawConfigWriter()
             ),
             configure: { (instance) in
                 instance.listener = self.engineListener()
-                self.platform().window.contentView = self.renderer().view
+                
+                let inputView = self.inputView()
+                let rendererView = self.renderer().rendererView
+                rendererView.frame = inputView.bounds
+                inputView.addSubview(rendererView)
             }
         )
     }
@@ -118,27 +122,27 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
     }
     
     private func rendererConfig() -> RendererConfig {
-        return scoped(RendererConfig(rawConfig: rawConfig(), supportedRendererTypes: determineSupportedRendererTypes()))
+        return scoped(RendererConfig(rawConfig: rawConfig(), supportedRendererTypes: macOSRendererFactory.determineSupportedRendererTypes()))
     }
     
     private func windowConfig() -> WindowConfig {
         return scoped(WindowConfig(rawConfig: rawConfig(), title: applicationNameProvider().applicationName))
     }
     
-    private func platform() -> macOSPlatform {
+    private func platform() -> Platform {
         return scoped(
-            macOSPlatform(config: config().window, logger: makeLogger()),
+            macOSPlatform(config: config().window, inputView: inputView(), logger: makeLogger()),
             configure: { (instance) in
                 instance.listener = self.engineListener()
             }
         )
     }
     
-    private func mouseCursorManager() -> MouseCursorManager {
+    private func mouseCursor() -> MouseCursor {
         return scoped(
-            macOSMouseCursorManager(),
+            macOSMouseCursor(),
             configure: { (instance) in
-                instance.listener = self.renderer().mouseCursorListener
+                instance.listener = self.inputView()
             }
         )
     }
@@ -147,8 +151,7 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
         return scoped(
             macOSRendererFactory().makeRenderer(config: config().renderer, logger: makeLogger()),
             configure: { (instance) in
-                instance.rendererListener = self.engineListener()
-                instance.rawInputListener = self.engineListener()
+                instance.listener = self.engineListener()
             }
         )
     }
@@ -157,13 +160,12 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
         return scoped(FoundationRawConfigWriter())
     }
     
-    private func determineSupportedRendererTypes() -> Set<RendererType> {
-        var types = Set<RendererType>()
-        
-        if MetalRenderer.isSupported() {
-            types.insert(.metal)
-        }
-        
-        return types
+    private func inputView() -> macOSInputView {
+        return scoped(
+            macOSInputView(frame: CGRect(x: 0, y: 0, width: Engine.minimumWidth, height: Engine.minimumHeight), logger: makeLogger()),
+            configure: { (instance) in
+                instance.listener = self.engineListener()
+            }
+        )
     }
 }

@@ -48,7 +48,7 @@ public final class Game : EngineListener {
         camera.projection.zFar = 1000.0
         camera.worldTransform.t = Vector3<Float>(0.0, 0.0, 0.0)
         camera.worldTransform.r = rotation(pitch: Angle<Float>(), yaw: Angle<Float>(), roll: Angle<Float>())
-        engine.followsMouseCursor = true
+        engine.mouseCursorFollowsMouse = true
         engine.mouseCursorHidden = true
         previousTime = engine.currentTime
     }
