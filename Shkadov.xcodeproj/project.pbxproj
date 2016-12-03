@@ -58,7 +58,6 @@
 		E55607351DED34D400D9F1F8 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607341DED34D400D9F1F8 /* Game.swift */; };
 		E55607371DED351100D9F1F8 /* EngineListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607361DED351100D9F1F8 /* EngineListener.swift */; };
 		E55607391DED381800D9F1F8 /* LoggerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607381DED381800D9F1F8 /* LoggerFactory.swift */; };
-		E556073B1DED387200D9F1F8 /* macOSLoggerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556073A1DED387200D9F1F8 /* macOSLoggerFactory.swift */; };
 		E579BA5F1DEE957A007DC0FE /* Bootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA5E1DEE957A007DC0FE /* Bootstrap.swift */; };
 		E579BA611DEE997C007DC0FE /* PlatformListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA601DEE997C007DC0FE /* PlatformListener.swift */; };
 /* End PBXBuildFile section */
@@ -187,7 +186,6 @@
 		E55607341DED34D400D9F1F8 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		E55607361DED351100D9F1F8 /* EngineListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineListener.swift; sourceTree = "<group>"; };
 		E55607381DED381800D9F1F8 /* LoggerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerFactory.swift; sourceTree = "<group>"; };
-		E556073A1DED387200D9F1F8 /* macOSLoggerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSLoggerFactory.swift; sourceTree = "<group>"; };
 		E579BA5E1DEE957A007DC0FE /* Bootstrap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bootstrap.swift; sourceTree = "<group>"; };
 		E579BA601DEE997C007DC0FE /* PlatformListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlatformListener.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -345,7 +343,6 @@
 			isa = PBXGroup;
 			children = (
 				E55606B21DEA71EB00D9F1F8 /* macOSBootstrap.swift */,
-				E556073A1DED387200D9F1F8 /* macOSLoggerFactory.swift */,
 				E55607121DEBDFAF00D9F1F8 /* macOSMetalView.swift */,
 				E55606B11DEA71EB00D9F1F8 /* macOSMouseCursorManager.swift */,
 				E55607231DECEF2900D9F1F8 /* macOSPlatform.swift */,
@@ -650,7 +647,6 @@
 			files = (
 				E55607391DED381800D9F1F8 /* LoggerFactory.swift in Sources */,
 				E55606D51DEA7ACD00D9F1F8 /* RawConfigWriter.swift in Sources */,
-				E556073B1DED387200D9F1F8 /* macOSLoggerFactory.swift in Sources */,
 				E55607011DEB686200D9F1F8 /* LinuxPlatform.swift in Sources */,
 				E55606D81DEA7B4200D9F1F8 /* FoundationRawConfigReader.swift in Sources */,
 				E55607221DECEF1600D9F1F8 /* Platform.swift in Sources */,

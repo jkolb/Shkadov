@@ -22,6 +22,23 @@
  SOFTWARE.
  */
 
-public protocol LoggerFactory : class {
-    func makeLogger() -> Logger
+public final class LoggerFactory {
+    private let applicationNameProvider: ApplicationNameProvider
+    private let threadIDProvider: ThreadIDProvider
+    private let formattedTimestampProvider: FormattedTimestampProvider
+    
+    public init(applicationNameProvider: ApplicationNameProvider, threadIDProvider: ThreadIDProvider, formattedTimestampProvider: FormattedTimestampProvider) {
+        self.applicationNameProvider = applicationNameProvider
+        self.threadIDProvider = threadIDProvider
+        self.formattedTimestampProvider = formattedTimestampProvider
+    }
+    
+    public func makeLogger() -> Logger {
+        return Logger(
+            name: applicationNameProvider.applicationName,
+            threadIDProvider: threadIDProvider,
+            formattedTimestampProvider: formattedTimestampProvider,
+            pathSeparator: "/"
+        )
+    }
 }

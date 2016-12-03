@@ -26,7 +26,6 @@ import AppKit
 import FieryCrucible
 
 public final class macOSBootstrap : DependencyFactory, Bootstrap {
-    private let logger = macOSLoggerFactory().makeLogger()
     private let factory: (Engine, LoggerFactory) -> EngineListener
     
     public init(factory: @escaping (Engine, LoggerFactory) -> EngineListener) {
@@ -69,7 +68,21 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
     }
     
     private func loggerFactory() -> LoggerFactory {
-        return scoped(macOSLoggerFactory())
+        return scoped(
+            LoggerFactory(
+                applicationNameProvider: applicationNameProvider(),
+                threadIDProvider: threadIDProvider(),
+                formattedTimestampProvider: formattedTimestampProvider()
+            )
+        )
+    }
+    
+    private func threadIDProvider() -> ThreadIDProvider {
+        return scoped(POSIXThreadIDProvider())
+    }
+    
+    private func formattedTimestampProvider() -> FormattedTimestampProvider {
+        return scoped(FoundationFormattedTimestampProvider())
     }
     
     private func timeSource() -> TimeSource {
@@ -93,7 +106,7 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
                     return try configReader.read(path: filePaths().configPath)
                 }
                 catch {
-                    logger.error("\(error)")
+                    print("\(error)")
                     return RawConfig()
                 }
             }
