@@ -85,7 +85,7 @@ open class RendererConfig {
             return fallback
         }
         set {
-            putInt(value: newValue, name: .width)
+            putInt(value: newValue, name: .height)
         }
     }
     

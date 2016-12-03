@@ -50,7 +50,6 @@ public final class Game : EngineListener {
         camera.worldTransform.r = rotation(pitch: Angle<Float>(), yaw: Angle<Float>(), roll: Angle<Float>())
         engine.followsMouseCursor = true
         engine.mouseCursorHidden = true
-        engine.enterFullScreen()
         previousTime = engine.currentTime
     }
     

@@ -32,8 +32,10 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     private let config: WindowConfig
     private let logger: Logger
     public let window: NSWindow
+    private var started: Bool
     
     public init(config: WindowConfig, logger: Logger) {
+        self.started = false
         self.config = config
         self.logger = logger
         let contentRect = NSRect(
@@ -132,7 +134,14 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     
     public func windowDidEnterFullScreen(_ notification: Notification) {
         logger.debug("\(#function)")
-        listener?.didEnterFullScreen()
+        
+        if !started {
+            started = true
+            listener?.didStartup()
+        }
+        else {
+            listener?.didEnterFullScreen()
+        }
     }
     
     public func windowWillExitFullScreen(_ notification: Notification) {
@@ -156,6 +165,7 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     }
     
     public func startup() {
+        precondition(!started)
         let application = NSApplication.shared()
         application.setActivationPolicy(.regular)
         application.mainMenu = makeMainMenu()
@@ -165,6 +175,7 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     }
     
     public func shutdown() {
+        precondition(started)
         NSApplication.shared().terminate(nil)
     }
     
@@ -207,7 +218,14 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     
     public func applicationDidFinishLaunching(_ notification: Notification) {
         logger.debug("\(#function)")
-        listener?.didStartup()
+        
+        if config.fullscreen {
+            toggleFullScreen()
+        }
+        else {
+            started = true
+            listener?.didStartup()
+        }
     }
     
     public func applicationWillHide(_ notification: Notification) {
