@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		095DBCBC1DEFD48C00D1A868 /* macOSRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095DBCBB1DEFD48C00D1A868 /* macOSRenderer.swift */; };
+		09C2B85E1DF114DE0098B147 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C2B85D1DF114DE0098B147 /* Screen.swift */; };
 		E55606741DEA68F100D9F1F8 /* ShkadovTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606731DEA68F100D9F1F8 /* ShkadovTests.swift */; };
 		E55606A21DEA6F4900D9F1F8 /* FieryCrucible.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55606841DEA6F2500D9F1F8 /* FieryCrucible.framework */; };
 		E55606A31DEA6F4900D9F1F8 /* FranticApparatus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E556068D1DEA6F2C00D9F1F8 /* FranticApparatus.framework */; };
@@ -130,6 +131,7 @@
 
 /* Begin PBXFileReference section */
 		095DBCBB1DEFD48C00D1A868 /* macOSRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSRenderer.swift; sourceTree = "<group>"; };
+		09C2B85D1DF114DE0098B147 /* Screen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
 		E556065C1DEA68F000D9F1F8 /* Shkadov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shkadov.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E556066A1DEA68F100D9F1F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E556066F1DEA68F100D9F1F8 /* ShkadovTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShkadovTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -307,6 +309,7 @@
 				E55607361DED351100D9F1F8 /* EngineListener.swift */,
 				E55607211DECEF1600D9F1F8 /* Platform.swift */,
 				E579BA601DEE997C007DC0FE /* PlatformListener.swift */,
+				09C2B85D1DF114DE0098B147 /* Screen.swift */,
 				E55607251DECF65000D9F1F8 /* WindowConfig.swift */,
 			);
 			path = engine;
@@ -673,6 +676,7 @@
 				E55607371DED351100D9F1F8 /* EngineListener.swift in Sources */,
 				E55607031DEB68BA00D9F1F8 /* WindowsPlatform.swift in Sources */,
 				E55606DC1DEA7DF500D9F1F8 /* FilePaths.swift in Sources */,
+				09C2B85E1DF114DE0098B147 /* Screen.swift in Sources */,
 				E55606EA1DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift in Sources */,
 				E55606B81DEA71EB00D9F1F8 /* Engine.swift in Sources */,
 				E55606B91DEA71EB00D9F1F8 /* main.swift in Sources */,

@@ -24,36 +24,7 @@
 
 import Swiftish
 
-public final class LinuxPlatform : Platform {
-    public var screensSize: Vector2<Int> {
-        fatalError("Not implemented")
-    }
-    
-    public var isFullScreen: Bool {
-        fatalError("Not implemented")
-    }
-    
-    public func toggleFullScreen() {
-        fatalError("Not implemented")
-    }
-    
-    public func enterFullScreen() {
-        fatalError("Not implemented")
-    }
-    
-    public func exitFullScreen() {
-        fatalError("Not implemented")
-    }
-    
-    public func startup() {
-        fatalError("Not implemented")
-    }
-    
-    public func shutdown() {
-        fatalError("Not implemented")
-    }
-    
-    public func showWindow() {
-        fatalError("Not implemented")
-    }
+public protocol Screen : class {
+    var size: Vector2<Int> { get }
+    var scale: Float { get }
 }

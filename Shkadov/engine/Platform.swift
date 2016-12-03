@@ -22,7 +22,14 @@
  SOFTWARE.
  */
 
-public protocol Platform {
+import Swiftish
+
+public protocol Platform : class {
+    var screensSize: Vector2<Int> { get }
+    var isFullScreen: Bool { get }
+    func toggleFullScreen()
+    func enterFullScreen()
+    func exitFullScreen()
     func startup()
     func shutdown()
 }

@@ -47,6 +47,26 @@ public final class Engine {
         self.configWriter = configWriter
     }
     
+    public var screensSize: Vector2<Int> {
+        return platform.screensSize
+    }
+
+    public var isFullScreen: Bool {
+        return platform.isFullScreen
+    }
+    
+    public func toggleFullScreen() {
+        platform.toggleFullScreen()
+    }
+    
+    public func enterFullScreen() {
+        platform.enterFullScreen()
+    }
+    
+    public func exitFullScreen() {
+        platform.exitFullScreen()
+    }
+    
     public func startup() {
         logger.debug("\(#function)")
         platform.startup()

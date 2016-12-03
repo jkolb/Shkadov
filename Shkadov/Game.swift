@@ -42,11 +42,15 @@ public final class Game : EngineListener {
     
     public func didStartup() {
         logger.debug("\(#function)")
+        logger.debug("Screen Size: \(engine.screensSize)")
         camera.projection.fovy = Angle<Float>(degrees: 30.0)
         camera.projection.zNear = 0.1
         camera.projection.zFar = 1000.0
         camera.worldTransform.t = Vector3<Float>(0.0, 0.0, 0.0)
         camera.worldTransform.r = rotation(pitch: Angle<Float>(), yaw: Angle<Float>(), roll: Angle<Float>())
+        engine.followsMouseCursor = true
+        engine.mouseCursorHidden = true
+        engine.enterFullScreen()
         previousTime = engine.currentTime
     }
     
@@ -65,9 +69,37 @@ public final class Game : EngineListener {
         logger.debug("\(#function) \(size)")
         return size
     }
-    
-    public  func received(input: RawInput) {
+
+    public func didResizeScreen() {
         logger.debug("\(#function)")
+    }
+    
+    public func willMoveScreen() {
+        logger.debug("\(#function)")
+    }
+    
+    public func didMoveScreen() {
+        logger.debug("\(#function)")
+    }
+    
+    public func willEnterFullScreen() {
+        logger.debug("\(#function)")
+    }
+    
+    public func didEnterFullScreen() {
+        logger.debug("\(#function)")
+    }
+    
+    public func willExitFullScreen() {
+        logger.debug("\(#function)")
+    }
+    
+    public func didExitFullScreen() {
+        logger.debug("\(#function)")
+    }
+
+    public  func received(input: RawInput) {
+        logger.debug("\(#function) \(input)")
     }
     
     public func processFrame() {

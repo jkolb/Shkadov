@@ -42,24 +42,20 @@ public class macOSMetalView : MTKView, macOSMouseCursorListener {
     public init(frame: CGRect, device: MTLDevice, logger: Logger) {
         self.logger = logger
         super.init(frame: frame, device: device)
+        
+        let options: NSTrackingAreaOptions = [
+            NSTrackingAreaOptions.mouseEnteredAndExited,
+            NSTrackingAreaOptions.mouseMoved,
+            NSTrackingAreaOptions.inVisibleRect,
+            NSTrackingAreaOptions.activeInKeyWindow
+        ]
+        let trackingArea = NSTrackingArea(rect: CGRect.zero, options: options, owner: self, userInfo: nil)
+        addTrackingArea(trackingArea)
     }
 
     public required init(coder: NSCoder) {
         fatalError()
     }
-    
-//    public override func viewDidLoad() {
-//        super.viewDidLoad()
-//        
-//        let options: NSTrackingAreaOptions = [
-//            NSTrackingAreaOptions.mouseEnteredAndExited,
-//            NSTrackingAreaOptions.mouseMoved,
-//            NSTrackingAreaOptions.inVisibleRect,
-//            NSTrackingAreaOptions.activeInKeyWindow
-//        ]
-//        let trackingArea = NSTrackingArea(rect: CGRect.zero, options: options, owner: view, userInfo: nil)
-//        view.addTrackingArea(trackingArea)
-//    }
     
     public override func draw(_ dirtyRect: NSRect) {
         rendererListener?.processFrame()

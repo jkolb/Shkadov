@@ -28,4 +28,11 @@ public protocol PlatformListener : class {
     func didStartup()
     func willShutdown()
     func willResizeScreen(size: Vector2<Int>) -> Vector2<Int>
+    func didResizeScreen()
+    func willMoveScreen()
+    func didMoveScreen()
+    func willEnterFullScreen()
+    func didEnterFullScreen()
+    func willExitFullScreen()
+    func didExitFullScreen()
 }

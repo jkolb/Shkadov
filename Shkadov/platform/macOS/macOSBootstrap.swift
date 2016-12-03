@@ -122,7 +122,12 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
     }
     
     private func mouseCursorManager() -> MouseCursorManager {
-        return scoped(macOSMouseCursorManager())
+        return scoped(
+            macOSMouseCursorManager(),
+            configure: { (instance) in
+                instance.listener = self.renderer().mouseCursorListener
+            }
+        )
     }
     
     private func renderer() -> macOSRenderer {

@@ -48,7 +48,10 @@ public final class MetalRenderer : macOSRenderer {
             metalView.rawInputListener = newValue
         }
     }
-    
+    public var mouseCursorListener: macOSMouseCursorListener {
+        return metalView
+    }
+
     public init(config: RendererConfig, logger: Logger) {
         self.device = MTLCreateSystemDefaultDevice()!
         let frame = CGRect(x: 0, y: 0, width: config.width, height: config.height)
