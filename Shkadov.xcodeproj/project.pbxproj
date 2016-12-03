@@ -33,12 +33,7 @@
 		E55606E81DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606E71DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift */; };
 		E55606EA1DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606E91DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift */; };
 		E55606EC1DEB4CEB00D9F1F8 /* MouseCursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606EB1DEB4CEB00D9F1F8 /* MouseCursor.swift */; };
-		E55606F61DEB669800D9F1F8 /* OpenGLRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606F51DEB669800D9F1F8 /* OpenGLRenderer.swift */; };
-		E55606F81DEB66AD00D9F1F8 /* VulkanRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606F71DEB66AD00D9F1F8 /* VulkanRenderer.swift */; };
-		E55606FB1DEB671600D9F1F8 /* DirectXRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606FA1DEB671600D9F1F8 /* DirectXRenderer.swift */; };
 		E55606FD1DEB674500D9F1F8 /* RendererType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606FC1DEB674500D9F1F8 /* RendererType.swift */; };
-		E55607011DEB686200D9F1F8 /* LinuxPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607001DEB686200D9F1F8 /* LinuxPlatform.swift */; };
-		E55607031DEB68BA00D9F1F8 /* WindowsPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607021DEB68BA00D9F1F8 /* WindowsPlatform.swift */; };
 		E55607091DEB6F0C00D9F1F8 /* RawConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607081DEB6F0C00D9F1F8 /* RawConfig.swift */; };
 		E556070D1DEB819500D9F1F8 /* RendererConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556070C1DEB819500D9F1F8 /* RendererConfig.swift */; };
 		E556070F1DEB820B00D9F1F8 /* ConfigSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556070E1DEB820B00D9F1F8 /* ConfigSection.swift */; };
@@ -59,6 +54,7 @@
 		E579BA711DF334EA007DC0FE /* macOSInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA701DF334EA007DC0FE /* macOSInputView.swift */; };
 		E579BA751DF3440D007DC0FE /* MetalRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA741DF3440D007DC0FE /* MetalRenderer.swift */; };
 		E579BAAC1DF349DB007DC0FE /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BAAB1DF349DB007DC0FE /* MetalView.swift */; };
+		E5E14D891DF358DA00D08AAD /* OpenGLRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606F51DEB669800D9F1F8 /* OpenGLRenderer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -643,8 +639,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E55607391DED381800D9F1F8 /* LoggerFactory.swift in Sources */,
+				E5E14D891DF358DA00D08AAD /* OpenGLRenderer.swift in Sources */,
 				E55606D51DEA7ACD00D9F1F8 /* RawConfigWriter.swift in Sources */,
-				E55607011DEB686200D9F1F8 /* LinuxPlatform.swift in Sources */,
 				E55606D81DEA7B4200D9F1F8 /* FoundationRawConfigReader.swift in Sources */,
 				E55607221DECEF1600D9F1F8 /* Platform.swift in Sources */,
 				E556071C1DEBE0D900D9F1F8 /* RawInputListener.swift in Sources */,
@@ -658,14 +654,12 @@
 				E556071A1DEBE09B00D9F1F8 /* RawInput.swift in Sources */,
 				E579BA611DEE997C007DC0FE /* PlatformListener.swift in Sources */,
 				E55606C51DEA757200D9F1F8 /* Renderer.swift in Sources */,
-				E55606F61DEB669800D9F1F8 /* OpenGLRenderer.swift in Sources */,
 				E55606B71DEA71EB00D9F1F8 /* Camera.swift in Sources */,
 				E556070F1DEB820B00D9F1F8 /* ConfigSection.swift in Sources */,
 				E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */,
 				E55607351DED34D400D9F1F8 /* Game.swift in Sources */,
 				E556072A1DED0AAA00D9F1F8 /* RendererListener.swift in Sources */,
 				E55607371DED351100D9F1F8 /* EngineListener.swift in Sources */,
-				E55607031DEB68BA00D9F1F8 /* WindowsPlatform.swift in Sources */,
 				E55606DC1DEA7DF500D9F1F8 /* FilePaths.swift in Sources */,
 				09C2B85E1DF114DE0098B147 /* Screen.swift in Sources */,
 				E55606EA1DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift in Sources */,
@@ -677,13 +671,11 @@
 				E55606E81DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift in Sources */,
 				E579BA5F1DEE957A007DC0FE /* Bootstrap.swift in Sources */,
 				E55606BD1DEA71EB00D9F1F8 /* macOSMouseCursor.swift in Sources */,
-				E55606FB1DEB671600D9F1F8 /* DirectXRenderer.swift in Sources */,
 				E55606BE1DEA71EB00D9F1F8 /* macOSBootstrap.swift in Sources */,
 				E55607091DEB6F0C00D9F1F8 /* RawConfig.swift in Sources */,
 				E55607161DEBE02B00D9F1F8 /* RawInputButtonCode.swift in Sources */,
 				E55606BB1DEA71EB00D9F1F8 /* MachOTimeSource.swift in Sources */,
 				E579BA751DF3440D007DC0FE /* MetalRenderer.swift in Sources */,
-				E55606F81DEB66AD00D9F1F8 /* VulkanRenderer.swift in Sources */,
 				E55607181DEBE05A00D9F1F8 /* RawInputKeyCode.swift in Sources */,
 				E55606E61DEB3E1500D9F1F8 /* POSIXThreadIDProvider.swift in Sources */,
 				E579BAAC1DF349DB007DC0FE /* MetalView.swift in Sources */,

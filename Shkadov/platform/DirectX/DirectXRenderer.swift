@@ -23,5 +23,4 @@
  */
 
 public final class DirectXRenderer : Renderer {
-    public weak var listener: RendererListener?
 }
