@@ -30,4 +30,11 @@ public class MetalView : MTKView {
     public override func draw(_ rect: CGRect) {
         listener?.processFrame()
     }
+    
+    public static func make() -> MetalView {
+        return MetalView(
+            frame: CGRect(x: 0, y: 0, width: Engine.minimumWidth, height: Engine.minimumHeight),
+            device: MTLCreateSystemDefaultDevice()
+        )
+    }
 }

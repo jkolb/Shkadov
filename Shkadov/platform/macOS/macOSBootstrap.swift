@@ -164,10 +164,7 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
     
     private func metalView() -> MetalView {
         return scoped(
-            MetalView(
-                frame: CGRect(x: 0, y: 0, width: Engine.minimumWidth, height: Engine.minimumHeight),
-                device: MTLCreateSystemDefaultDevice()
-            ),
+            MetalView.make(),
             configure: { (instance) in
                 instance.listener = self.engineListener()
                 
