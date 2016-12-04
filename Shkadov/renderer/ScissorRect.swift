@@ -22,22 +22,20 @@
  SOFTWARE.
  */
 
-public protocol Renderer : class {
-    func makeCommandQueue() -> CommandQueue
+public struct ScissorRect {
+    public var x: Int
+    public var y: Int
+    public var width: Int
+    public var height: Int
     
-    func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer
+    public init() {
+        self.init(x: 0, y: 0, width: 0, height: 0)
+    }
     
-    func makeTexture(descriptor: TextureDescriptor) -> Texture
-    
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
-    
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+    public init(x: Int, y: Int, width: Int, height: Int) {
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+    }
 }

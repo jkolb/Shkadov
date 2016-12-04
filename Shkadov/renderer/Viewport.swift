@@ -22,22 +22,24 @@
  SOFTWARE.
  */
 
-public protocol Renderer : class {
-    func makeCommandQueue() -> CommandQueue
+public struct Viewport {
+    public var originX: Double
+    public var originY: Double
+    public var width: Double
+    public var height: Double
+    public var znear: Double
+    public var zfar: Double
+
+    public init() {
+        self.init(originX: 0.0, originY: 0.0, width: 0.0, height: 0.0, znear: 0.0, zfar: 0.0)
+    }
     
-    func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer
-    
-    func makeTexture(descriptor: TextureDescriptor) -> Texture
-    
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
-    
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+    public init(originX: Double, originY: Double, width: Double, height: Double, znear: Double, zfar: Double) {
+        self.originX = originX
+        self.originY = originY
+        self.width = width
+        self.height = height
+        self.znear = znear
+        self.zfar = zfar
+    }
 }

@@ -22,22 +22,20 @@
  SOFTWARE.
  */
 
-public protocol Renderer : class {
-    func makeCommandQueue() -> CommandQueue
-    
-    func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer
-    
-    func makeTexture(descriptor: TextureDescriptor) -> Texture
-    
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
-    
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+public enum BlendFactor {
+    case zero
+    case one
+    case sourceColor
+    case oneMinusSourceColor
+    case sourceAlpha
+    case oneMinusSourceAlpha
+    case destinationColor
+    case oneMinusDestinationColor
+    case destinationAlpha
+    case oneMinusDestinationAlpha
+    case sourceAlphaSaturated
+    case blendColor
+    case oneMinusBlendColor
+    case blendAlpha
+    case oneMinusBlendAlpha
 }

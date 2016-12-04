@@ -22,22 +22,32 @@
  SOFTWARE.
  */
 
-public protocol Renderer : class {
-    func makeCommandQueue() -> CommandQueue
+import Metal
+
+public final class MetalCommandBuffer : CommandBuffer {
+    public let instance: MTLCommandBuffer
     
-    func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer
+    public init(instance: MTLCommandBuffer) {
+        self.instance = instance
+    }
     
-    func makeTexture(descriptor: TextureDescriptor) -> Texture
+    public func makeRenderCommandEncoder(descriptor renderPassDescriptor: RenderPassDescriptor) -> RenderCommandEncoder {
+        if let metalDescriptor = renderPassDescriptor as? MetalRenderPassDescriptor {
+            let metalRenderCommandEncoder = instance.makeRenderCommandEncoder(descriptor: metalDescriptor.metalRenderPassDescriptor)
+            return MetalRenderCommandEncoder(instance: metalRenderCommandEncoder)
+        }
+        else {
+            fatalError("Unexpected implementation: \(renderPassDescriptor)")
+        }
+    }
     
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
+    public func addCompletedHandler(_ block: @escaping (CommandBuffer) -> Void) {
+        instance.addCompletedHandler { (metalCommandBuffer) in
+            block(self)
+        }
+    }
     
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+    public func commit() {
+        instance.commit()
+    }
 }

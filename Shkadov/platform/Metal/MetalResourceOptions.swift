@@ -22,22 +22,28 @@
  SOFTWARE.
  */
 
-public protocol Renderer : class {
-    func makeCommandQueue() -> CommandQueue
-    
-    func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer
-    
-    func makeTexture(descriptor: TextureDescriptor) -> Texture
-    
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
-    
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+import Metal
+
+public final class MetalResourceOptions {
+    public static func map(_ options: ResourceOptions) -> MTLResourceOptions {
+        var metalOptions = MTLResourceOptions()
+        
+        if options.contains(.storageModeShared) {
+            metalOptions.formUnion(.storageModeShared)
+        }
+        
+        if options.contains(.storageModeManaged) {
+            metalOptions.formUnion(.storageModeManaged)
+        }
+        
+        if options.contains(.storageModePrivate) {
+            metalOptions.formUnion(.storageModePrivate)
+        }
+        
+        if options.contains(.cpuCacheModeWriteCombined) {
+            metalOptions.formUnion(.cpuCacheModeWriteCombined)
+        }
+        
+        return metalOptions
+    }
 }

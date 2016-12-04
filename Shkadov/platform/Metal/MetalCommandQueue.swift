@@ -22,22 +22,16 @@
  SOFTWARE.
  */
 
-public protocol Renderer : class {
-    func makeCommandQueue() -> CommandQueue
+import Metal
+
+public final class MetalCommandQueue : CommandQueue {
+    public let instance: MTLCommandQueue
     
-    func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer
+    public init(instance: MTLCommandQueue) {
+        self.instance = instance
+    }
     
-    func makeTexture(descriptor: TextureDescriptor) -> Texture
-    
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
-    
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+    public func makeCommandBuffer() -> CommandBuffer {
+        return MetalCommandBuffer(instance: instance.makeCommandBuffer())
+    }
 }

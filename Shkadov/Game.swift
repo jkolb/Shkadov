@@ -34,10 +34,12 @@ public final class Game : EngineListener {
     private let tickDuration = Duration(seconds: 1.0 / 60.0)
     private let maxFrameDuration = Duration(seconds: 0.25)
     private let camera = Camera()
-
+    private let commandQueue: CommandQueue
+    
     public init(engine: Engine, logger: Logger) {
         self.engine = engine
         self.logger = logger
+        self.commandQueue = engine.makeCommandQueue()
     }
     
     public func didStartup() {
@@ -103,7 +105,8 @@ public final class Game : EngineListener {
     
     public func processFrame() {
         logger.trace("\(#function)")
-        //        renderer.waitForNextFrame()
+        engine.waitForGPUIfNeeded()
+
         // var previousState
         
         // var currentState
@@ -144,5 +147,8 @@ public final class Game : EngineListener {
     
     private func render() {
         logger.trace("\(#function)")
+        let commandBuffer = commandQueue.makeCommandBuffer()
+        engine.present(commandBuffer: commandBuffer)
+        commandBuffer.commit()
     }
 }

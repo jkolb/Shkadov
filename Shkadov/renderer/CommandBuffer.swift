@@ -22,22 +22,12 @@
  SOFTWARE.
  */
 
-public protocol Renderer : class {
-    func makeCommandQueue() -> CommandQueue
+public protocol CommandBuffer {
+//    func makeBlitCommandEncoder() -> BlitCommandEncoder
+//    func makeComputeCommandEncoder() -> ComputeCommandEncoder
+    func makeRenderCommandEncoder(descriptor renderPassDescriptor: RenderPassDescriptor) -> RenderCommandEncoder
     
-    func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer
+    func addCompletedHandler(_ block: @escaping (CommandBuffer) -> Void)
     
-    func makeTexture(descriptor: TextureDescriptor) -> Texture
-    
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
-    
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+    func commit()
 }

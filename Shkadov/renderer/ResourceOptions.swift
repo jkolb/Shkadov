@@ -22,22 +22,26 @@
  SOFTWARE.
  */
 
-public protocol Renderer : class {
-    func makeCommandQueue() -> CommandQueue
+public struct ResourceOptions : OptionSet {
+    public let rawValue: UInt8
     
-    func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer
+    public init(rawValue: UInt8) {
+        self.rawValue = rawValue
+    }
     
-    func makeTexture(descriptor: TextureDescriptor) -> Texture
+    public static var storageModeShared: ResourceOptions {
+        return ResourceOptions(rawValue: 1 << 0)
+    }
     
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
+    public static var storageModeManaged: ResourceOptions {
+        return ResourceOptions(rawValue: 1 << 1)
+    }
     
-    func newDefaultLibrary() -> ShaderLibrary?
+    public static var storageModePrivate: ResourceOptions {
+        return ResourceOptions(rawValue: 1 << 2)
+    }
     
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+    public static var cpuCacheModeWriteCombined: ResourceOptions {
+        return ResourceOptions(rawValue: 1 << 3)
+    }
 }

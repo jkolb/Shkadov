@@ -22,22 +22,17 @@
  SOFTWARE.
  */
 
-public protocol Renderer : class {
-    func makeCommandQueue() -> CommandQueue
-    
-    func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer
-    
-    func makeTexture(descriptor: TextureDescriptor) -> Texture
-    
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
-    
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+import Metal
+
+public final class MetalRenderPipelineColorAttachmentDescriptor {
+    public static func map(_ descriptor: RenderPipelineColorAttachmentDescriptor, to metalDescriptor: MTLRenderPipelineColorAttachmentDescriptor) {
+        metalDescriptor.pixelFormat = MetalPixelFormat.map(descriptor.pixelFormat)
+        metalDescriptor.isBlendingEnabled = descriptor.isBlendingEnabled
+        metalDescriptor.sourceRGBBlendFactor = MetalBlendFactor.map(descriptor.sourceRGBBlendFactor)
+        metalDescriptor.destinationRGBBlendFactor = MetalBlendFactor.map(descriptor.destinationRGBBlendFactor)
+        metalDescriptor.rgbBlendOperation = MetalBlendOperation.map(descriptor.rgbBlendOperation)
+        metalDescriptor.sourceAlphaBlendFactor = MetalBlendFactor.map(descriptor.sourceAlphaBlendFactor)
+        metalDescriptor.destinationAlphaBlendFactor = MetalBlendFactor.map(descriptor.destinationAlphaBlendFactor)
+        metalDescriptor.alphaBlendOperation = MetalBlendOperation.map(descriptor.alphaBlendOperation)
+    }
 }

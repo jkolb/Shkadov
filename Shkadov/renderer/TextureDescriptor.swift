@@ -22,22 +22,25 @@
  SOFTWARE.
  */
 
-public protocol Renderer : class {
-    func makeCommandQueue() -> CommandQueue
+public struct TextureDescriptor {
+    public var textureType: TextureType = .type2D
+    public var pixelFormat: PixelFormat = .rgba8Unorm
+    public var width: Int = 1
+    public var height: Int = 1
+    public var depth: Int = 1
+    public var mipmapLevelCount: Int = 1
+    public var storageMode: ResourceOptions = [.storageModeShared]
+    public var textureUsage: TextureUsage = [.shaderRead]
     
-    func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer
+    public static func texture2DDescriptor(pixelFormat: PixelFormat, width: Int, height: Int, mipmapped: Bool) -> TextureDescriptor {
+        var descriptor = TextureDescriptor()
+        descriptor.pixelFormat = pixelFormat
+        descriptor.width = width
+        descriptor.height = height
+        descriptor.mipmapLevelCount = mipmapped ? Int(Float.floor(Float.log2(Float(max(width, height))))) + 1 : 1
+        return descriptor
+    }
     
-    func makeTexture(descriptor: TextureDescriptor) -> Texture
-    
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
-    
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+    public init() {
+    }
 }

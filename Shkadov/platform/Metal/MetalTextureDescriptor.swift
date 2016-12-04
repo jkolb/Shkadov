@@ -22,22 +22,18 @@
  SOFTWARE.
  */
 
-public protocol Renderer : class {
-    func makeCommandQueue() -> CommandQueue
-    
-    func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer
-    
-    func makeTexture(descriptor: TextureDescriptor) -> Texture
-    
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
-    
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+import Metal
+
+public final class MetalTextureDescriptor {
+    public static func map(_ textureDescriptor: TextureDescriptor) -> MTLTextureDescriptor {
+        let metalTextureDescriptor = MTLTextureDescriptor()
+        metalTextureDescriptor.textureType = MetalTextureType.map(textureDescriptor.textureType)
+        metalTextureDescriptor.pixelFormat = MetalPixelFormat.map(textureDescriptor.pixelFormat)
+        metalTextureDescriptor.width = textureDescriptor.width
+        metalTextureDescriptor.height = textureDescriptor.height
+        metalTextureDescriptor.depth = textureDescriptor.depth
+        metalTextureDescriptor.mipmapLevelCount = textureDescriptor.mipmapLevelCount
+        metalTextureDescriptor.usage = MetalTextureUsage.map(textureDescriptor.textureUsage)
+        return metalTextureDescriptor
+    }
 }

@@ -22,22 +22,38 @@
  SOFTWARE.
  */
 
-public protocol Renderer : class {
-    func makeCommandQueue() -> CommandQueue
+import Metal
+
+public final class MetalTextureType {
+    public static func map(_ textureType: TextureType) -> MTLTextureType {
+        switch textureType {
+        case .type1D:
+            return .type1D
+        case .type2D:
+            return .type2D
+        case .type3D:
+            return .type3D
+        }
+    }
     
-    func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer
-    
-    func makeTexture(descriptor: TextureDescriptor) -> Texture
-    
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
-    
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+    public static func map(_ textureType: MTLTextureType) -> TextureType {
+        switch textureType {
+        case .type1D:
+            return .type1D
+        case .type1DArray:
+            return .type1D
+        case .type2D:
+            return .type2D
+        case .type2DArray:
+            return .type2D
+        case .type2DMultisample:
+            return .type2D
+        case .typeCube:
+            return .type2D
+        case .typeCubeArray:
+            return .type2D
+        case .type3D:
+            return .type3D
+        }
+    }
 }

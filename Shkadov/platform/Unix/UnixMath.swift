@@ -68,4 +68,16 @@ public extension Float {
     public static func sqrt(_ x: Float) -> Float {
         return x.squareRoot()
     }
+    
+    public static func floor(_ x: Float) -> Float {
+        return Darwin.floor(x)
+    }
+    
+    public static func ceil(_ x: Float) -> Float {
+        return Darwin.ceil(x)
+    }
+    
+    public static func log2(_ x: Float) -> Float {
+        return Darwin.log2(x)
+    }
 }

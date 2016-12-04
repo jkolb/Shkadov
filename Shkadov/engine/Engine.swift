@@ -110,4 +110,39 @@ public final class Engine {
         mouseCursor.move(to: point)
     }
 
+    public func makeCommandQueue() -> CommandQueue {
+        return renderer.makeCommandQueue()
+    }
+    
+    public func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer {
+        return renderer.makeBuffer(length: length, options: options)
+    }
+    
+    public func makeTexture(descriptor: TextureDescriptor) -> Texture {
+        return renderer.makeTexture(descriptor: descriptor)
+    }
+    
+    public func makeSampler(descriptor: SamplerDescriptor) -> Sampler {
+        return renderer.makeSampler(descriptor: descriptor)
+    }
+    
+    public func newDefaultLibrary() -> ShaderLibrary? {
+        return renderer.newDefaultLibrary()
+    }
+    
+    public func makeLibrary(filepath: String) throws -> ShaderLibrary {
+        return try renderer.makeLibrary(filepath: filepath)
+    }
+    
+    public func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState {
+        return try renderer.makeRenderPipelineState(descriptor: descriptor)
+    }
+    
+    public func waitForGPUIfNeeded() {
+        renderer.waitForGPUIfNeeded()
+    }
+    
+    public func present(commandBuffer: CommandBuffer) {
+        renderer.present(commandBuffer: commandBuffer)
+    }
 }

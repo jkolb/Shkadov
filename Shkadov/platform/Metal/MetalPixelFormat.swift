@@ -22,22 +22,28 @@
  SOFTWARE.
  */
 
-public protocol Renderer : class {
-    func makeCommandQueue() -> CommandQueue
+import Metal
+
+public final class MetalPixelFormat {
+    public static func map(_ pixelFormat: PixelFormat) -> MTLPixelFormat {
+        switch pixelFormat {
+        case .rgba8Unorm:
+            return .rgba8Unorm
+        case .bgra8Unorm:
+            return .bgra8Unorm
+        default:
+            fatalError("Unsupported pixelFormat: \(pixelFormat)")
+        }
+    }
     
-    func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer
-    
-    func makeTexture(descriptor: TextureDescriptor) -> Texture
-    
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
-    
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+    public static func map(_ pixelFormat: MTLPixelFormat) -> PixelFormat {
+        switch pixelFormat {
+        case .rgba8Unorm:
+            return .rgba8Unorm
+        case .bgra8Unorm:
+            return .bgra8Unorm
+        default:
+            fatalError("Unsupported pixelFormat: \(pixelFormat)")
+        }
+    }
 }

@@ -22,22 +22,31 @@
  SOFTWARE.
  */
 
-public protocol Renderer : class {
-    func makeCommandQueue() -> CommandQueue
+public struct RenderPipelineDescriptor {
+    public var vertexShader: ShaderFunction?
+    public var fragmentShader: ShaderFunction?
+    public var sampleCount: Int = 0
+    public var isRasterizationEnabled: Bool = false
+    public var colorAttachments: [RenderPipelineColorAttachmentDescriptor] = []
+    public var depthAttachmentPixelFormat: PixelFormat = .invalid
+    public var stencilAttachmentPixelFormat: PixelFormat = .invalid
     
-    func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer
+    public init() {
+    }
+}
+
+public struct RenderPipelineColorAttachmentDescriptor {
+    public var pixelFormat: PixelFormat = .invalid
+    public var isBlendingEnabled: Bool = false
+    public var sourceRGBBlendFactor: BlendFactor = .one
+    public var destinationRGBBlendFactor: BlendFactor = .zero
+    public var rgbBlendOperation: BlendOperation = .add
+    public var sourceAlphaBlendFactor: BlendFactor = .one
+    public var destinationAlphaBlendFactor: BlendFactor = .zero
+    public var alphaBlendOperation: BlendOperation = .add
     
-    func makeTexture(descriptor: TextureDescriptor) -> Texture
+    /* Other Options */
     
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
-    
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+    /*! Defaults to MTLColorWriteMaskAll */
+//    public var writeMask: MTLColorWriteMask
 }
