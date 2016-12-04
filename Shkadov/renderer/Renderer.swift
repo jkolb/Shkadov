@@ -22,7 +22,7 @@
  SOFTWARE.
  */
 
-public protocol Renderer : GPUBufferOwner, ModuleOwner, TextureOwner, SamplerOwner, RenderPipelineStateOwner, RasterizerStateOwner {
+public protocol Renderer : GPUBufferOwner, ModuleOwner, TextureOwner, SamplerOwner, RenderPipelineStateOwner, RasterizerStateOwner, RenderPassOwner {
     func makeCommandQueue() -> CommandQueue
     
     func waitForGPUIfNeeded()

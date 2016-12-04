@@ -31,24 +31,20 @@ public final class MetalCommandBuffer : CommandBuffer {
     private unowned(unsafe) let samplerOwner: MetalSamplerOwner
     private unowned(unsafe) let renderPipelineStateOwner: MetalRenderPipelineStateOwner
     private unowned(unsafe) let rasterizerStateOwner: MetalRasterizerStateOwner
-
-    public init(instance: MTLCommandBuffer, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner, samplerOwner: MetalSamplerOwner, renderPipelineStateOwner: MetalRenderPipelineStateOwner, rasterizerStateOwner: MetalRasterizerStateOwner) {
+    private unowned(unsafe) let renderPassOwner: MetalRenderPassOwner
+    
+    public init(instance: MTLCommandBuffer, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner, samplerOwner: MetalSamplerOwner, renderPipelineStateOwner: MetalRenderPipelineStateOwner, rasterizerStateOwner: MetalRasterizerStateOwner, renderPassOwner: MetalRenderPassOwner) {
         self.instance = instance
         self.bufferOwner = bufferOwner
         self.textureOwner = textureOwner
         self.samplerOwner = samplerOwner
         self.renderPipelineStateOwner = renderPipelineStateOwner
         self.rasterizerStateOwner = rasterizerStateOwner
+        self.renderPassOwner = renderPassOwner
     }
     
-    public func makeRenderCommandEncoder(descriptor renderPassDescriptor: RenderPassDescriptor) -> RenderCommandEncoder {
-        if let metalDescriptor = renderPassDescriptor as? MetalRenderPassDescriptor {
-            let metalRenderCommandEncoder = instance.makeRenderCommandEncoder(descriptor: metalDescriptor.metalRenderPassDescriptor)
-            return MetalRenderCommandEncoder(instance: metalRenderCommandEncoder, bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner)
-        }
-        else {
-            fatalError("Unexpected implementation: \(renderPassDescriptor)")
-        }
+    public func makeRenderCommandEncoder(handle: RenderPassHandle) -> RenderCommandEncoder {
+        return MetalRenderCommandEncoder(instance: instance.makeRenderCommandEncoder(descriptor: renderPassOwner[handle]), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner)
     }
     
     public func addCompletedHandler(_ block: @escaping (CommandBuffer) -> Void) {

@@ -206,7 +206,15 @@ public final class Engine {
     public func destroyRasterizerState(handle: RasterizerStateHandle) {
         renderer.destroyRasterizerState(handle: handle)
     }
+
+    public func createRenderPass(descriptor: RenderPassDescriptor) -> RenderPassHandle {
+        return renderer.createRenderPass(descriptor: descriptor)
+    }
     
+    public func destoryRenderPass(handle: RenderPassHandle) {
+        return renderer.destroyRenderPass(handle: handle)
+    }
+
     public func waitForGPUIfNeeded() {
         renderer.waitForGPUIfNeeded()
     }

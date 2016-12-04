@@ -82,34 +82,6 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
         instance.setTriangleFillMode(MetalDataTypes.map(descriptor.fillMode))
     }
     
-    public func setViewport(_ viewport: Viewport) {
-        instance.setViewport(MetalDataTypes.map(viewport))
-    }
-    
-    public func setFrontFacing(_ frontFacingWinding: Winding) {
-        instance.setFrontFacing(MetalDataTypes.map(frontFacingWinding))
-    }
-    
-    public func setCullMode(_ cullMode: CullMode) {
-        instance.setCullMode(MetalDataTypes.map(cullMode))
-    }
-    
-    public func setDepthClipMode(_ depthClipMode: DepthClipMode) {
-        instance.setDepthClipMode(MetalDataTypes.map(depthClipMode))
-    }
-    
-    public func setDepthBias(_ depthBias: Float, slopeScale: Float, clamp: Float) {
-        instance.setDepthBias(depthBias, slopeScale: slopeScale, clamp: clamp)
-    }
-    
-    public func setScissorRect(_ rect: ScissorRect) {
-        instance.setScissorRect(MetalDataTypes.map(rect))
-    }
-    
-    public func setTriangleFillMode(_ fillMode: TriangleFillMode) {
-        instance.setTriangleFillMode(MetalDataTypes.map(fillMode))
-    }
-    
     public func setVertexBytes(_ bytes: UnsafeRawPointer, length: Int, at index: Int) {
         instance.setVertexBytes(bytes, length: length, at: index)
     }

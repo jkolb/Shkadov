@@ -25,7 +25,7 @@
 public protocol CommandBuffer {
 //    func makeBlitCommandEncoder() -> BlitCommandEncoder
 //    func makeComputeCommandEncoder() -> ComputeCommandEncoder
-    func makeRenderCommandEncoder(descriptor renderPassDescriptor: RenderPassDescriptor) -> RenderCommandEncoder
+    func makeRenderCommandEncoder(handle: RenderPassHandle) -> RenderCommandEncoder
     
     func addCompletedHandler(_ block: @escaping (CommandBuffer) -> Void)
     
