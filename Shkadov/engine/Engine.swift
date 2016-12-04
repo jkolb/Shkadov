@@ -25,12 +25,13 @@
 import Swiftish
 
 public final class Engine {
-    public static let minimumWidth = 640
-    public static let minimumHeight = 360
+    public static let minimumWidth: Int = 640
+    public static let minimumHeight: Int = 360
+    public static let defaultFOVY: Float = 30.0
     public var listener: EngineListener?
     
     private let rawConfig: RawConfig
-    private let config: EngineConfig
+    public let config: EngineConfig
     private let platform: Platform
     private let timeSource: TimeSource
     private let renderer: Renderer

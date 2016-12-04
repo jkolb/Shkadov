@@ -39,6 +39,8 @@ public final class MetalRenderer : Renderer {
         self.config = config
         self.logger = logger
         self.semaphore = DispatchSemaphore(value: 3)
+        
+        view.drawableSize = CGSize(width: config.width, height: config.height)
     }
     
     public static func isSupported() -> Bool {

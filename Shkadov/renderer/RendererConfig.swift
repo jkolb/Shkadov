@@ -22,10 +22,13 @@
  SOFTWARE.
  */
 
+import Swiftish
+
 private enum RendererConfigName : String {
+    case fovy
+    case height
     case type
     case width
-    case height
 }
 
 open class RendererConfig {
@@ -54,6 +57,22 @@ open class RendererConfig {
         }
         set {
             putString(value: newValue.rawValue, name: .type)
+        }
+    }
+    
+    public var fovy: Angle<Float> {
+        get {
+            if let value = getFloat(name: .fovy) {
+                return Angle<Float>(degrees: value)
+            }
+            
+            let fallback = Angle<Float>(degrees: Engine.defaultFOVY)
+            self.fovy = fallback
+            
+            return fallback
+        }
+        set {
+            putFloat(value: newValue.degrees, name: .fovy)
         }
     }
     

@@ -45,7 +45,7 @@ public final class Game : EngineListener {
     public func didStartup() {
         logger.debug("\(#function)")
         logger.debug("Screen Size: \(engine.screensSize)")
-        camera.projection.fovy = Angle<Float>(degrees: 30.0)
+        camera.projection.fovy = engine.config.renderer.fovy
         camera.projection.zNear = 0.1
         camera.projection.zFar = 1000.0
         camera.worldTransform.t = Vector3<Float>(0.0, 0.0, 0.0)
@@ -105,11 +105,8 @@ public final class Game : EngineListener {
     
     public func processFrame() {
         logger.trace("\(#function)")
-        engine.waitForGPUIfNeeded()
 
-        // var previousState
-        
-        // var currentState
+        engine.waitForGPUIfNeeded()
         
         let currentTime = engine.currentTime
         var frameDuration = currentTime - previousTime
@@ -124,19 +121,11 @@ public final class Game : EngineListener {
         previousTime = currentTime
         
         while accumulatedTime >= tickDuration {
-            // previousState = currentState
-            // currentState = integrate(currentState, totalDuration, tickDuration)
             accumulatedTime -= tickDuration
             totalDuration += tickDuration
             
             update(elapsed: tickDuration)
         }
-        
-        //let alpha = accumulatedTime / tickDuration.nanoseconds
-        
-        // let state = currentState * alpha + previousState * (1.0 - alpha)
-        
-        // render(state)
         
         render()
     }

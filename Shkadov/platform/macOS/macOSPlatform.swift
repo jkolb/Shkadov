@@ -37,7 +37,7 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
         self.config = config
         self.logger = logger
         self.window = NSWindow(
-            contentRect: CGRect.engineMinimum,
+            contentRect: CGRect(x: 0, y: 0, width: config.width, height: config.height),
             styleMask: [.titled, .closable, .miniaturizable, .resizable],
             backing: .buffered,
             defer: false
