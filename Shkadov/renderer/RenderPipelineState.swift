@@ -22,6 +22,46 @@
  SOFTWARE.
  */
 
-public protocol RenderPipelineState {
+public struct RenderPipelineDescriptor {
+    public var vertexShader: VertexFunctionHandle = VertexFunctionHandle()
+    public var fragmentShader: FragmentFunctionHandle = FragmentFunctionHandle()
+    public var sampleCount: Int = 0
+    public var isRasterizationEnabled: Bool = false
+    public var colorAttachments: [RenderPipelineColorAttachmentDescriptor] = []
+    public var depthAttachmentPixelFormat: PixelFormat = .invalid
+    public var stencilAttachmentPixelFormat: PixelFormat = .invalid
     
+    public init() {
+    }
+}
+
+public struct RenderPipelineColorAttachmentDescriptor {
+    public var pixelFormat: PixelFormat = .invalid
+    public var isBlendingEnabled: Bool = false
+    public var sourceRGBBlendFactor: BlendFactor = .one
+    public var destinationRGBBlendFactor: BlendFactor = .zero
+    public var rgbBlendOperation: BlendOperation = .add
+    public var sourceAlphaBlendFactor: BlendFactor = .one
+    public var destinationAlphaBlendFactor: BlendFactor = .zero
+    public var alphaBlendOperation: BlendOperation = .add
+    
+    /* Other Options */
+    
+    /*! Defaults to MTLColorWriteMaskAll */
+    //    public var writeMask: MTLColorWriteMask
+}
+
+public struct RenderPipelineStateHandle : Handle {
+    public let key: UInt8
+    
+    public init() { self.init(key: 0) }
+    
+    public init(key: UInt8) {
+        self.key = key
+    }
+}
+
+public protocol RenderPipelineStateOwner : class {
+    func createRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineStateHandle
+    func destroyRenderPipelineState(handle: RenderPipelineStateHandle)
 }

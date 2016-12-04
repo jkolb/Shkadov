@@ -23,22 +23,10 @@
  */
 
 public protocol RenderCommandEncoder : CommandEncoder {
-    func setRenderPipelineState(_ pipelineState: RenderPipelineState)
+    func setRenderPipelineState(_ handle: RenderPipelineStateHandle)
 
-    func setViewport(_ viewport: Viewport)
+    func setRasterizerState(_ handle: RasterizerStateHandle)
     
-    func setFrontFacing(_ frontFacingWinding: Winding)
-    
-    func setCullMode(_ cullMode: CullMode)
-    
-    func setDepthClipMode(_ depthClipMode: DepthClipMode)
-    
-    func setDepthBias(_ depthBias: Float, slopeScale: Float, clamp: Float)
-    
-    func setScissorRect(_ rect: ScissorRect)
-    
-    func setTriangleFillMode(_ fillMode: TriangleFillMode)
-
     func setVertexBytes(_ bytes: UnsafeRawPointer, length: Int, at index: Int)
     
     func setVertexBuffer(_ handle: GPUBufferHandle, offset: Int, at index: Int)

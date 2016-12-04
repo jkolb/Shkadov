@@ -24,15 +24,25 @@
 
 import Metal
 
-public final class MetalRenderPipelineColorAttachmentDescriptor {
-    public static func map(_ descriptor: RenderPipelineColorAttachmentDescriptor, to metalDescriptor: MTLRenderPipelineColorAttachmentDescriptor) {
-        metalDescriptor.pixelFormat = MetalDataTypes.map(descriptor.pixelFormat)
-        metalDescriptor.isBlendingEnabled = descriptor.isBlendingEnabled
-        metalDescriptor.sourceRGBBlendFactor = MetalDataTypes.map(descriptor.sourceRGBBlendFactor)
-        metalDescriptor.destinationRGBBlendFactor = MetalDataTypes.map(descriptor.destinationRGBBlendFactor)
-        metalDescriptor.rgbBlendOperation = MetalDataTypes.map(descriptor.rgbBlendOperation)
-        metalDescriptor.sourceAlphaBlendFactor = MetalDataTypes.map(descriptor.sourceAlphaBlendFactor)
-        metalDescriptor.destinationAlphaBlendFactor = MetalDataTypes.map(descriptor.destinationAlphaBlendFactor)
-        metalDescriptor.alphaBlendOperation = MetalDataTypes.map(descriptor.alphaBlendOperation)
+public final class MetalRasterizerStateOwner : RasterizerStateOwner {
+    private var rasterizerStates: [RasterizerStateDescriptor?]
+    
+    public init() {
+        self.rasterizerStates = []
+        
+        rasterizerStates.reserveCapacity(16)
+    }
+    
+    public func createRasterizerState(descriptor: RasterizerStateDescriptor) -> RasterizerStateHandle {
+        rasterizerStates.append(descriptor)
+        return RasterizerStateHandle(key: UInt8(rasterizerStates.count))
+    }
+    
+    public func destroyRasterizerState(handle: RasterizerStateHandle) {
+        rasterizerStates[handle.index] = nil
+    }
+    
+    internal subscript (handle: RasterizerStateHandle) -> RasterizerStateDescriptor {
+        return rasterizerStates[handle.index]!
     }
 }

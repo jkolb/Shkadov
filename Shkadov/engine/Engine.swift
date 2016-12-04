@@ -191,8 +191,20 @@ public final class Engine {
         renderer.destroySampler(handle: handle)
     }
     
-    public func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState {
-        return try renderer.makeRenderPipelineState(descriptor: descriptor)
+    public func createRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineStateHandle {
+        return try renderer.createRenderPipelineState(descriptor: descriptor)
+    }
+    
+    public func destroyRenderPipelineState(handle: RenderPipelineStateHandle) {
+        renderer.destroyRenderPipelineState(handle: handle)
+    }
+
+    public func createRasterizerState(descriptor: RasterizerStateDescriptor) -> RasterizerStateHandle {
+        return renderer.createRasterizerState(descriptor: descriptor)
+    }
+    
+    public func destroyRasterizerState(handle: RasterizerStateHandle) {
+        renderer.destroyRasterizerState(handle: handle)
     }
     
     public func waitForGPUIfNeeded() {

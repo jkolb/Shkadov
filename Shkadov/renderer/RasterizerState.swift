@@ -22,10 +22,28 @@
  SOFTWARE.
  */
 
-public protocol Renderer : GPUBufferOwner, ModuleOwner, TextureOwner, SamplerOwner, RenderPipelineStateOwner, RasterizerStateOwner {
-    func makeCommandQueue() -> CommandQueue
+public struct RasterizerStateDescriptor {
+    public var viewport: Viewport? = nil
+    public var frontFaceWinding: Winding = .clockwise
+    public var cullMode: CullMode = .none
+    public var depthClipMode: DepthClipMode = .clip
+    public var scissorRect: ScissorRect? = nil
+    public var fillMode: TriangleFillMode = .fill
     
-    func waitForGPUIfNeeded()
+    public init() { }
+}
+
+public struct RasterizerStateHandle : Handle {
+    public let key: UInt8
     
-    func present(commandBuffer: CommandBuffer)
+    public init() { self.init(key: 0) }
+    
+    public init(key: UInt8) {
+        self.key = key
+    }
+}
+
+public protocol RasterizerStateOwner : class {
+    func createRasterizerState(descriptor: RasterizerStateDescriptor) -> RasterizerStateHandle
+    func destroyRasterizerState(handle: RasterizerStateHandle)
 }

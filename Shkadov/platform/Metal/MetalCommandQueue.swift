@@ -29,15 +29,19 @@ public final class MetalCommandQueue : CommandQueue {
     private unowned(unsafe) let bufferOwner: MetalGPUBufferOwner
     private unowned(unsafe) let textureOwner: MetalTextureOwner
     private unowned(unsafe) let samplerOwner: MetalSamplerOwner
+    private unowned(unsafe) let renderPipelineStateOwner: MetalRenderPipelineStateOwner
+    private unowned(unsafe) let rasterizerStateOwner: MetalRasterizerStateOwner
 
-    public init(instance: MTLCommandQueue, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner, samplerOwner: MetalSamplerOwner) {
+    public init(instance: MTLCommandQueue, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner, samplerOwner: MetalSamplerOwner, renderPipelineStateOwner: MetalRenderPipelineStateOwner, rasterizerStateOwner: MetalRasterizerStateOwner) {
         self.instance = instance
         self.bufferOwner = bufferOwner
         self.textureOwner = textureOwner
         self.samplerOwner = samplerOwner
+        self.renderPipelineStateOwner = renderPipelineStateOwner
+        self.rasterizerStateOwner = rasterizerStateOwner
     }
     
     public func makeCommandBuffer() -> CommandBuffer {
-        return MetalCommandBuffer(instance: instance.makeCommandBuffer(), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner)
+        return MetalCommandBuffer(instance: instance.makeCommandBuffer(), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner)
     }
 }

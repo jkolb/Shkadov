@@ -36,6 +36,8 @@ public final class MetalRenderer : Renderer {
     private let moduleOwner: MetalModuleOwner
     private let textureOwner: MetalTextureOwner
     private let samplerOwner: MetalSamplerOwner
+    private let renderPipelineStateOwner: MetalRenderPipelineStateOwner
+    private let rasterizerStateOwner: MetalRasterizerStateOwner
     
     public init(view: MetalView, config: RendererConfig, logger: Logger) {
         self.device = view.device!
@@ -47,6 +49,8 @@ public final class MetalRenderer : Renderer {
         self.moduleOwner = MetalModuleOwner(device: device)
         self.textureOwner = MetalTextureOwner(device: device)
         self.samplerOwner = MetalSamplerOwner(device: device)
+        self.renderPipelineStateOwner = MetalRenderPipelineStateOwner(device: device, moduleOwner: moduleOwner)
+        self.rasterizerStateOwner = MetalRasterizerStateOwner()
         
         view.drawableSize = CGSize(width: config.width, height: config.height)
     }
@@ -60,7 +64,7 @@ public final class MetalRenderer : Renderer {
     }
     
     public func makeCommandQueue() -> CommandQueue {
-        return MetalCommandQueue(instance: device.makeCommandQueue(), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner)
+        return MetalCommandQueue(instance: device.makeCommandQueue(), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner)
     }
     
     public func createBuffer(count: Int, storageMode: StorageMode) -> GPUBufferHandle {
@@ -139,12 +143,22 @@ public final class MetalRenderer : Renderer {
         moduleOwner.destroyVertexFunction(handle: handle)
     }
     
-    public func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState {
-        let metalDescriptor = MetalRenderPipelineDescriptor.map(descriptor, moduleOwner: moduleOwner)
-        let metalRenderPipelineState = try device.makeRenderPipelineState(descriptor: metalDescriptor)
-        return MetalRenderPipelineState(instance: metalRenderPipelineState)
+    public func createRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineStateHandle {
+        return try renderPipelineStateOwner.createRenderPipelineState(descriptor: descriptor)
     }
     
+    public func destroyRenderPipelineState(handle: RenderPipelineStateHandle) {
+        renderPipelineStateOwner.destroyRenderPipelineState(handle: handle)
+    }
+    
+    public func createRasterizerState(descriptor: RasterizerStateDescriptor) -> RasterizerStateHandle {
+        return rasterizerStateOwner.createRasterizerState(descriptor: descriptor)
+    }
+    
+    public func destroyRasterizerState(handle: RasterizerStateHandle) {
+        rasterizerStateOwner.destroyRasterizerState(handle: handle)
+    }
+
     public func waitForGPUIfNeeded() {
         semaphore.wait()
     }

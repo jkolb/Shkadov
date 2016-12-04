@@ -29,18 +29,22 @@ public final class MetalCommandBuffer : CommandBuffer {
     private unowned(unsafe) let bufferOwner: MetalGPUBufferOwner
     private unowned(unsafe) let textureOwner: MetalTextureOwner
     private unowned(unsafe) let samplerOwner: MetalSamplerOwner
+    private unowned(unsafe) let renderPipelineStateOwner: MetalRenderPipelineStateOwner
+    private unowned(unsafe) let rasterizerStateOwner: MetalRasterizerStateOwner
 
-    public init(instance: MTLCommandBuffer, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner, samplerOwner: MetalSamplerOwner) {
+    public init(instance: MTLCommandBuffer, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner, samplerOwner: MetalSamplerOwner, renderPipelineStateOwner: MetalRenderPipelineStateOwner, rasterizerStateOwner: MetalRasterizerStateOwner) {
         self.instance = instance
         self.bufferOwner = bufferOwner
         self.textureOwner = textureOwner
         self.samplerOwner = samplerOwner
+        self.renderPipelineStateOwner = renderPipelineStateOwner
+        self.rasterizerStateOwner = rasterizerStateOwner
     }
     
     public func makeRenderCommandEncoder(descriptor renderPassDescriptor: RenderPassDescriptor) -> RenderCommandEncoder {
         if let metalDescriptor = renderPassDescriptor as? MetalRenderPassDescriptor {
             let metalRenderCommandEncoder = instance.makeRenderCommandEncoder(descriptor: metalDescriptor.metalRenderPassDescriptor)
-            return MetalRenderCommandEncoder(instance: metalRenderCommandEncoder, bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner)
+            return MetalRenderCommandEncoder(instance: metalRenderCommandEncoder, bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner)
         }
         else {
             fatalError("Unexpected implementation: \(renderPassDescriptor)")

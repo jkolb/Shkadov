@@ -29,22 +29,57 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
     private unowned(unsafe) let bufferOwner: MetalGPUBufferOwner
     private unowned(unsafe) let textureOwner: MetalTextureOwner
     private unowned(unsafe) let samplerOwner: MetalSamplerOwner
+    private unowned(unsafe) let renderPipelineStateOwner: MetalRenderPipelineStateOwner
+    private unowned(unsafe) let rasterizerStateOwner: MetalRasterizerStateOwner
+    private var lastRenderPipelineState: RenderPipelineStateHandle
+    private var lastRasterizerState: RasterizerStateHandle
     
-    public init(instance: MTLRenderCommandEncoder, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner, samplerOwner: MetalSamplerOwner) {
+    public init(instance: MTLRenderCommandEncoder, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner, samplerOwner: MetalSamplerOwner, renderPipelineStateOwner: MetalRenderPipelineStateOwner, rasterizerStateOwner: MetalRasterizerStateOwner) {
         self.instance = instance
         self.bufferOwner = bufferOwner
         self.textureOwner = textureOwner
         self.samplerOwner = samplerOwner
+        self.renderPipelineStateOwner = renderPipelineStateOwner
+        self.rasterizerStateOwner = rasterizerStateOwner
+        self.lastRenderPipelineState = RenderPipelineStateHandle()
+        self.lastRasterizerState = RasterizerStateHandle()
     }
     
     public func endEncoding() {
         instance.endEncoding()
     }
     
-    public func setRenderPipelineState(_ pipelineState: RenderPipelineState) {
-        if let metalPipelineState = pipelineState as? MetalRenderPipelineState {
-            instance.setRenderPipelineState(metalPipelineState.instance)
+    public func setRenderPipelineState(_ handle: RenderPipelineStateHandle) {
+        if handle == lastRenderPipelineState { return }
+        
+        lastRenderPipelineState = handle
+        
+        if !handle.isValid { return }
+        
+        instance.setRenderPipelineState(renderPipelineStateOwner[handle])
+    }
+    
+    public func setRasterizerState(_ handle: RasterizerStateHandle) {
+        if handle == lastRasterizerState { return }
+        
+        lastRasterizerState = handle
+        
+        if !handle.isValid { return }
+        
+        let descriptor = rasterizerStateOwner[handle]
+
+        if let viewport = descriptor.viewport {
+            instance.setViewport(MetalDataTypes.map(viewport))
         }
+        
+        if let scissorRect = descriptor.scissorRect {
+            instance.setScissorRect(MetalDataTypes.map(scissorRect))
+        }
+
+        instance.setFrontFacing(MetalDataTypes.map(descriptor.frontFaceWinding))
+        instance.setCullMode(MetalDataTypes.map(descriptor.cullMode))
+        instance.setDepthClipMode(MetalDataTypes.map(descriptor.depthClipMode))
+        instance.setTriangleFillMode(MetalDataTypes.map(descriptor.fillMode))
     }
     
     public func setViewport(_ viewport: Viewport) {
