@@ -22,14 +22,10 @@
  SOFTWARE.
  */
 
-public protocol Renderer : GPUBufferOwner, TextureOwner {
+public protocol Renderer : GPUBufferOwner, ModuleOwner, TextureOwner {
     func makeCommandQueue() -> CommandQueue
     
     func makeSampler(descriptor: SamplerDescriptor) -> Sampler
-    
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
     
     func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
     

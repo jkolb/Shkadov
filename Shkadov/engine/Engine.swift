@@ -135,6 +135,38 @@ public final class Engine {
         return renderer.destroyBuffer(handle: handle)
     }
     
+    public func createModule(filepath: String) throws -> ModuleHandle {
+        return try renderer.createModule(filepath: filepath)
+    }
+    
+    public func destroyModule(handle: ModuleHandle) {
+        renderer.destroyModule(handle: handle)
+    }
+    
+    public func createComputeFunction(module: ModuleHandle, named: String) -> ComputeFunctionHandle {
+        return renderer.createComputeFunction(module: module, named: named)
+    }
+    
+    public func destroyComputeFunction(handle: ComputeFunctionHandle) {
+        renderer.destroyComputeFunction(handle: handle)
+    }
+    
+    public func createFragmentFunction(module: ModuleHandle, named: String) -> FragmentFunctionHandle {
+        return renderer.createFragmentFunction(module: module, named: named)
+    }
+    
+    public func destroyFragmentFunction(handle: FragmentFunctionHandle) {
+        renderer.destroyFragmentFunction(handle: handle)
+    }
+    
+    public func createVertexFunction(module: ModuleHandle, named: String) -> VertexFunctionHandle {
+        return renderer.createVertexFunction(module: module, named: named)
+    }
+    
+    public func destroyVertexFunction(handle: VertexFunctionHandle) {
+        renderer.destroyVertexFunction(handle: handle)
+    }
+
     public func createTexture(descriptor: TextureDescriptor) -> TextureHandle {
         return renderer.createTexture(descriptor: descriptor)
     }
@@ -153,14 +185,6 @@ public final class Engine {
 
     public func makeSampler(descriptor: SamplerDescriptor) -> Sampler {
         return renderer.makeSampler(descriptor: descriptor)
-    }
-    
-    public func newDefaultLibrary() -> ShaderLibrary? {
-        return renderer.newDefaultLibrary()
-    }
-    
-    public func makeLibrary(filepath: String) throws -> ShaderLibrary {
-        return try renderer.makeLibrary(filepath: filepath)
     }
     
     public func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState {

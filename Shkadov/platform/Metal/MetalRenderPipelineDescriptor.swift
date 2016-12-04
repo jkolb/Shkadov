@@ -25,18 +25,18 @@
 import Metal
 
 public final class MetalRenderPipelineDescriptor {
-    public static func map(_ descriptor: RenderPipelineDescriptor) -> MTLRenderPipelineDescriptor {
+    public static func map(_ descriptor: RenderPipelineDescriptor, moduleOwner: MetalModuleOwner) -> MTLRenderPipelineDescriptor {
         let metalDescriptor = MTLRenderPipelineDescriptor()
         
         metalDescriptor.sampleCount = descriptor.sampleCount
         metalDescriptor.isRasterizationEnabled = descriptor.isRasterizationEnabled
         
-        if let metalShaderFunction = descriptor.vertexShader as? MetalShaderFunction {
-            metalDescriptor.vertexFunction = metalShaderFunction.instance
+        if descriptor.vertexShader.isValid {
+            metalDescriptor.vertexFunction = moduleOwner[descriptor.vertexShader]
         }
         
-        if let metalShaderFunction = descriptor.fragmentShader as? MetalShaderFunction {
-            metalDescriptor.fragmentFunction = metalShaderFunction.instance
+        if descriptor.fragmentShader.isValid {
+            metalDescriptor.fragmentFunction = moduleOwner[descriptor.fragmentShader]
         }
         
         for (index, colorAttachmentDescriptor) in descriptor.colorAttachments.enumerated() {

@@ -23,8 +23,8 @@
  */
 
 public struct RenderPipelineDescriptor {
-    public var vertexShader: ShaderFunction?
-    public var fragmentShader: ShaderFunction?
+    public var vertexShader: VertexFunctionHandle = VertexFunctionHandle()
+    public var fragmentShader: FragmentFunctionHandle = FragmentFunctionHandle()
     public var sampleCount: Int = 0
     public var isRasterizationEnabled: Bool = false
     public var colorAttachments: [RenderPipelineColorAttachmentDescriptor] = []

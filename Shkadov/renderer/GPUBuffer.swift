@@ -24,6 +24,24 @@
 
 import Lilliput
 
+public protocol GPUBufferOwner : class {
+    func createBuffer(count: Int, storageMode: StorageMode) -> GPUBufferHandle
+    func createBuffer(bytes: UnsafeRawPointer, count: Int, storageMode: StorageMode) -> GPUBufferHandle
+    func createBuffer(bytesNoCopy: UnsafeMutableRawPointer, count: Int, storageMode: StorageMode) -> GPUBufferHandle
+    func borrowBuffer(handle: GPUBufferHandle) -> GPUBuffer
+    func destroyBuffer(handle: GPUBufferHandle)
+}
+
+public struct GPUBufferHandle : Handle {
+    public let key: UInt16
+    
+    public init() { self.init(key: 0) }
+    
+    public init(key: UInt16) {
+        self.key = key
+    }
+}
+
 public protocol GPUBuffer : UnsafeBuffer {
     func wasCPUModified(range: Range<Int>)
 }

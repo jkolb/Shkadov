@@ -33,6 +33,7 @@ public final class MetalRenderer : Renderer {
     private let logger: Logger
     private let semaphore: DispatchSemaphore
     private let bufferOwner: MetalGPUBufferOwner
+    private let moduleOwner: MetalModuleOwner
     private let textureOwner: MetalTextureOwner
     
     public init(view: MetalView, config: RendererConfig, logger: Logger) {
@@ -41,8 +42,9 @@ public final class MetalRenderer : Renderer {
         self.config = config
         self.logger = logger
         self.semaphore = DispatchSemaphore(value: 3)
-        self.textureOwner = MetalTextureOwner(device: device)
         self.bufferOwner = MetalGPUBufferOwner(device: device)
+        self.moduleOwner = MetalModuleOwner(device: device)
+        self.textureOwner = MetalTextureOwner(device: device)
         
         view.drawableSize = CGSize(width: config.width, height: config.height)
     }
@@ -101,22 +103,40 @@ public final class MetalRenderer : Renderer {
         return MetalSampler(instance: metalSampler)
     }
     
-    public func newDefaultLibrary() -> ShaderLibrary? {
-        if let metalLibrary = device.newDefaultLibrary() {
-            return MetalShaderLibrary(instance: metalLibrary)
-        }
-        else {
-            return nil
-        }
+    public func createModule(filepath: String) throws -> ModuleHandle {
+        return try moduleOwner.createModule(filepath: filepath)
     }
     
-    public func makeLibrary(filepath: String) throws -> ShaderLibrary {
-        let metalLibrary = try device.makeLibrary(filepath: filepath)
-        return MetalShaderLibrary(instance: metalLibrary)
+    public func destroyModule(handle: ModuleHandle) {
+        moduleOwner.destroyModule(handle: handle)
+    }
+    
+    public func createComputeFunction(module: ModuleHandle, named: String) -> ComputeFunctionHandle {
+        return moduleOwner.createComputeFunction(module: module, named: named)
+    }
+    
+    public func destroyComputeFunction(handle: ComputeFunctionHandle) {
+        moduleOwner.destroyComputeFunction(handle: handle)
+    }
+    
+    public func createFragmentFunction(module: ModuleHandle, named: String) -> FragmentFunctionHandle {
+        return moduleOwner.createFragmentFunction(module: module, named: named)
+    }
+    
+    public func destroyFragmentFunction(handle: FragmentFunctionHandle) {
+        moduleOwner.destroyFragmentFunction(handle: handle)
+    }
+    
+    public func createVertexFunction(module: ModuleHandle, named: String) -> VertexFunctionHandle {
+        return moduleOwner.createVertexFunction(module: module, named: named)
+    }
+    
+    public func destroyVertexFunction(handle: VertexFunctionHandle) {
+        moduleOwner.destroyVertexFunction(handle: handle)
     }
     
     public func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState {
-        let metalDescriptor = MetalRenderPipelineDescriptor.map(descriptor)
+        let metalDescriptor = MetalRenderPipelineDescriptor.map(descriptor, moduleOwner: moduleOwner)
         let metalRenderPipelineState = try device.makeRenderPipelineState(descriptor: metalDescriptor)
         return MetalRenderPipelineState(instance: metalRenderPipelineState)
     }

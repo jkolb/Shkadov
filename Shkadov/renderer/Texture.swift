@@ -24,6 +24,62 @@
 
 import Swiftish
 
+public enum TextureType {
+    case type1D
+    case type2D
+    case type3D
+}
+
+public struct TextureUsage : OptionSet {
+    public let rawValue: UInt
+    public init(rawValue: UInt) {
+        self.rawValue = rawValue
+    }
+    public static let shaderRead = TextureUsage(rawValue: 1)
+    public static let shaderWrite = TextureUsage(rawValue: 2)
+    public static let renderTarget = TextureUsage(rawValue: 4)
+}
+
+public struct TextureDescriptor {
+    public var textureType: TextureType = .type2D
+    public var pixelFormat: PixelFormat = .rgba8Unorm
+    public var width: Int = 1
+    public var height: Int = 1
+    public var depth: Int = 1
+    public var mipmapLevelCount: Int = 1
+    public var storageMode: ResourceOptions = [.storageModeShared]
+    public var textureUsage: TextureUsage = [.shaderRead]
+    
+    public static func texture2DDescriptor(pixelFormat: PixelFormat, width: Int, height: Int, mipmapped: Bool) -> TextureDescriptor {
+        var descriptor = TextureDescriptor()
+        descriptor.pixelFormat = pixelFormat
+        descriptor.width = width
+        descriptor.height = height
+        descriptor.mipmapLevelCount = mipmapped ? Int(Float.floor(Float.log2(Float(max(width, height))))) + 1 : 1
+        return descriptor
+    }
+    
+    public init() {
+    }
+}
+
+public protocol TextureOwner : class {
+    func createTexture(descriptor: TextureDescriptor) -> TextureHandle
+    func borrowTexture(handle: TextureHandle) -> Texture
+    func generateMipmaps(handles: [TextureHandle])
+    func destroyTexture(handle: TextureHandle)
+}
+
+public struct TextureHandle : Handle {
+    public let key: UInt16
+    
+    public init() { self.init(key: 0) }
+    
+    public init(key: UInt16) {
+        self.key = key
+    }
+}
+
 public protocol Texture {
     var handle: TextureHandle { get }
     func replace(region: Region3<Int>, mipmapLevel level: Int, slice: Int, bytes: UnsafeRawPointer, bytesPerRow: Int, bytesPerImage: Int)

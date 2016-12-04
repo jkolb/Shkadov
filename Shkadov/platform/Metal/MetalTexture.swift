@@ -25,6 +25,79 @@
 import Metal
 import Swiftish
 
+public final class MetalTextureOwner : TextureOwner {
+    private let device: MTLDevice
+    private var textures: [MTLTexture?]
+    
+    public init(device: MTLDevice) {
+        self.device = device
+        self.textures = []
+        textures.reserveCapacity(128)
+    }
+    
+    public func createTexture(descriptor: TextureDescriptor) -> TextureHandle {
+        textures.append(device.makeTexture(descriptor: map(descriptor)))
+        return TextureHandle(key: UInt16(textures.count))
+    }
+    
+    public func borrowTexture(handle: TextureHandle) -> Texture {
+        return MetalTexture(handle: handle, instance: self[handle])
+    }
+    
+    public func generateMipmaps(handles: [TextureHandle]) {
+        
+    }
+    
+    public func destroyTexture(handle: TextureHandle) {
+        textures[Int(handle.key)] = nil
+    }
+    
+    internal subscript (handle: TextureHandle) -> MTLTexture {
+        return textures[Int(handle.key)]!
+    }
+    
+    private func map(_ descriptor: TextureDescriptor) -> MTLTextureDescriptor {
+        let metalDescriptor = MTLTextureDescriptor()
+        metalDescriptor.textureType = map(descriptor.textureType)
+        metalDescriptor.pixelFormat = MetalPixelFormat.map(descriptor.pixelFormat)
+        metalDescriptor.width = descriptor.width
+        metalDescriptor.height = descriptor.height
+        metalDescriptor.depth = descriptor.depth
+        metalDescriptor.mipmapLevelCount = descriptor.mipmapLevelCount
+        metalDescriptor.usage = map(descriptor.textureUsage)
+        return metalDescriptor
+    }
+    
+    private func map(_ textureType: TextureType) -> MTLTextureType {
+        switch textureType {
+        case .type1D:
+            return .type1D
+        case .type2D:
+            return .type2D
+        case .type3D:
+            return .type3D
+        }
+    }
+    
+    private func map(_ textureUsage: TextureUsage) -> MTLTextureUsage {
+        var usage = MTLTextureUsage()
+        
+        if textureUsage.contains(.shaderRead) {
+            usage.formUnion(.shaderRead)
+        }
+        
+        if textureUsage.contains(.shaderWrite) {
+            usage.formUnion(.shaderWrite)
+        }
+        
+        if textureUsage.contains(.renderTarget) {
+            usage.formUnion(.renderTarget)
+        }
+        
+        return usage
+    }
+}
+
 public struct MetalTexture : Texture {
     public let handle: TextureHandle
     public unowned(unsafe) let instance: MTLTexture
