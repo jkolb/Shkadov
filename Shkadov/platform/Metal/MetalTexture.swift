@@ -59,7 +59,7 @@ public final class MetalTextureOwner : TextureOwner {
     private func map(_ descriptor: TextureDescriptor) -> MTLTextureDescriptor {
         let metalDescriptor = MTLTextureDescriptor()
         metalDescriptor.textureType = map(descriptor.textureType)
-        metalDescriptor.pixelFormat = MetalPixelFormat.map(descriptor.pixelFormat)
+        metalDescriptor.pixelFormat = MetalDataTypes.map(descriptor.pixelFormat)
         metalDescriptor.width = descriptor.width
         metalDescriptor.height = descriptor.height
         metalDescriptor.depth = descriptor.depth
@@ -108,7 +108,6 @@ public struct MetalTexture : Texture {
     }
     
     public func replace(region: Region3<Int>, mipmapLevel level: Int, slice: Int, bytes: UnsafeRawPointer, bytesPerRow: Int, bytesPerImage: Int) {
-        let metalRegion = MetalRegion().map(region)
-        instance.replace(region: metalRegion, mipmapLevel: level, slice: slice, withBytes: bytes, bytesPerRow: bytesPerRow, bytesPerImage: bytesPerImage)
+        instance.replace(region: MetalDataTypes.map(region), mipmapLevel: level, slice: slice, withBytes: bytes, bytesPerRow: bytesPerRow, bytesPerImage: bytesPerImage)
     }
 }

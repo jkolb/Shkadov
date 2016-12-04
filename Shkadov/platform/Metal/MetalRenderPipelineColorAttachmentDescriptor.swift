@@ -26,13 +26,13 @@ import Metal
 
 public final class MetalRenderPipelineColorAttachmentDescriptor {
     public static func map(_ descriptor: RenderPipelineColorAttachmentDescriptor, to metalDescriptor: MTLRenderPipelineColorAttachmentDescriptor) {
-        metalDescriptor.pixelFormat = MetalPixelFormat.map(descriptor.pixelFormat)
+        metalDescriptor.pixelFormat = MetalDataTypes.map(descriptor.pixelFormat)
         metalDescriptor.isBlendingEnabled = descriptor.isBlendingEnabled
-        metalDescriptor.sourceRGBBlendFactor = MetalBlendFactor.map(descriptor.sourceRGBBlendFactor)
-        metalDescriptor.destinationRGBBlendFactor = MetalBlendFactor.map(descriptor.destinationRGBBlendFactor)
-        metalDescriptor.rgbBlendOperation = MetalBlendOperation.map(descriptor.rgbBlendOperation)
-        metalDescriptor.sourceAlphaBlendFactor = MetalBlendFactor.map(descriptor.sourceAlphaBlendFactor)
-        metalDescriptor.destinationAlphaBlendFactor = MetalBlendFactor.map(descriptor.destinationAlphaBlendFactor)
-        metalDescriptor.alphaBlendOperation = MetalBlendOperation.map(descriptor.alphaBlendOperation)
+        metalDescriptor.sourceRGBBlendFactor = MetalDataTypes.map(descriptor.sourceRGBBlendFactor)
+        metalDescriptor.destinationRGBBlendFactor = MetalDataTypes.map(descriptor.destinationRGBBlendFactor)
+        metalDescriptor.rgbBlendOperation = MetalDataTypes.map(descriptor.rgbBlendOperation)
+        metalDescriptor.sourceAlphaBlendFactor = MetalDataTypes.map(descriptor.sourceAlphaBlendFactor)
+        metalDescriptor.destinationAlphaBlendFactor = MetalDataTypes.map(descriptor.destinationAlphaBlendFactor)
+        metalDescriptor.alphaBlendOperation = MetalDataTypes.map(descriptor.alphaBlendOperation)
     }
 }

@@ -43,8 +43,8 @@ public final class MetalRenderPipelineDescriptor {
             MetalRenderPipelineColorAttachmentDescriptor.map(colorAttachmentDescriptor, to: metalDescriptor.colorAttachments[index])
         }
 
-        metalDescriptor.depthAttachmentPixelFormat = MetalPixelFormat.map(descriptor.depthAttachmentPixelFormat)
-        metalDescriptor.stencilAttachmentPixelFormat = MetalPixelFormat.map(descriptor.stencilAttachmentPixelFormat)
+        metalDescriptor.depthAttachmentPixelFormat = MetalDataTypes.map(descriptor.depthAttachmentPixelFormat)
+        metalDescriptor.stencilAttachmentPixelFormat = MetalDataTypes.map(descriptor.stencilAttachmentPixelFormat)
         return metalDescriptor
     }
 }

@@ -46,19 +46,19 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
     }
     
     public func setViewport(_ viewport: Viewport) {
-        instance.setViewport(MetalViewport.map(viewport))
+        instance.setViewport(MetalDataTypes.map(viewport))
     }
     
     public func setFrontFacing(_ frontFacingWinding: Winding) {
-        instance.setFrontFacing(MetalWinding.map(frontFacingWinding))
+        instance.setFrontFacing(MetalDataTypes.map(frontFacingWinding))
     }
     
     public func setCullMode(_ cullMode: CullMode) {
-        instance.setCullMode(MetalCullMode.map(cullMode))
+        instance.setCullMode(MetalDataTypes.map(cullMode))
     }
     
     public func setDepthClipMode(_ depthClipMode: DepthClipMode) {
-        instance.setDepthClipMode(MetalDepthClipMode.map(depthClipMode))
+        instance.setDepthClipMode(MetalDataTypes.map(depthClipMode))
     }
     
     public func setDepthBias(_ depthBias: Float, slopeScale: Float, clamp: Float) {
@@ -66,11 +66,11 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
     }
     
     public func setScissorRect(_ rect: ScissorRect) {
-        instance.setScissorRect(MetalScissorRect.map(rect))
+        instance.setScissorRect(MetalDataTypes.map(rect))
     }
     
     public func setTriangleFillMode(_ fillMode: TriangleFillMode) {
-        instance.setTriangleFillMode(MetalTriangleFillMode.map(fillMode))
+        instance.setTriangleFillMode(MetalDataTypes.map(fillMode))
     }
     
     public func setVertexBytes(_ bytes: UnsafeRawPointer, length: Int, at index: Int) {
@@ -258,34 +258,34 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
     }
     
     public func drawPrimitives(type primitiveType: PrimitiveType, vertexStart: Int, vertexCount: Int, instanceCount: Int) {
-        instance.drawPrimitives(type: MetalPrimitiveType.map(primitiveType), vertexStart: vertexStart, vertexCount: vertexCount, instanceCount: instanceCount)
+        instance.drawPrimitives(type: MetalDataTypes.map(primitiveType), vertexStart: vertexStart, vertexCount: vertexCount, instanceCount: instanceCount)
     }
     
     public func drawPrimitives(type primitiveType: PrimitiveType, vertexStart: Int, vertexCount: Int) {
-        instance.drawPrimitives(type: MetalPrimitiveType.map(primitiveType), vertexStart: vertexStart, vertexCount: vertexCount)
+        instance.drawPrimitives(type: MetalDataTypes.map(primitiveType), vertexStart: vertexStart, vertexCount: vertexCount)
     }
     
     public func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexCount: Int, indexType: IndexType, indexBuffer: GPUBufferHandle, indexBufferOffset: Int, instanceCount: Int) {
-        instance.drawIndexedPrimitives(type: MetalPrimitiveType.map(primitiveType), indexCount: indexCount, indexType: MetalIndexType.map(indexType), indexBuffer: bufferOwner[indexBuffer], indexBufferOffset: indexBufferOffset, instanceCount: instanceCount)
+        instance.drawIndexedPrimitives(type: MetalDataTypes.map(primitiveType), indexCount: indexCount, indexType: MetalDataTypes.map(indexType), indexBuffer: bufferOwner[indexBuffer], indexBufferOffset: indexBufferOffset, instanceCount: instanceCount)
     }
     
     public func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexCount: Int, indexType: IndexType, indexBuffer: GPUBufferHandle, indexBufferOffset: Int) {
-        instance.drawIndexedPrimitives(type: MetalPrimitiveType.map(primitiveType), indexCount: indexCount, indexType: MetalIndexType.map(indexType), indexBuffer: bufferOwner[indexBuffer], indexBufferOffset: indexBufferOffset)
+        instance.drawIndexedPrimitives(type: MetalDataTypes.map(primitiveType), indexCount: indexCount, indexType: MetalDataTypes.map(indexType), indexBuffer: bufferOwner[indexBuffer], indexBufferOffset: indexBufferOffset)
     }
     
     public func drawPrimitives(type primitiveType: PrimitiveType, vertexStart: Int, vertexCount: Int, instanceCount: Int, baseInstance: Int) {
-        instance.drawPrimitives(type: MetalPrimitiveType.map(primitiveType), vertexStart: vertexStart, vertexCount: vertexCount, instanceCount: instanceCount, baseInstance: baseInstance)
+        instance.drawPrimitives(type: MetalDataTypes.map(primitiveType), vertexStart: vertexStart, vertexCount: vertexCount, instanceCount: instanceCount, baseInstance: baseInstance)
     }
     
     public func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexCount: Int, indexType: IndexType, indexBuffer: GPUBufferHandle, indexBufferOffset: Int, instanceCount: Int, baseVertex: Int, baseInstance: Int) {
-        instance.drawIndexedPrimitives(type: MetalPrimitiveType.map(primitiveType), indexCount: indexCount, indexType: MetalIndexType.map(indexType), indexBuffer: bufferOwner[indexBuffer], indexBufferOffset: indexBufferOffset, instanceCount: instanceCount, baseVertex: baseVertex, baseInstance: baseInstance)
+        instance.drawIndexedPrimitives(type: MetalDataTypes.map(primitiveType), indexCount: indexCount, indexType: MetalDataTypes.map(indexType), indexBuffer: bufferOwner[indexBuffer], indexBufferOffset: indexBufferOffset, instanceCount: instanceCount, baseVertex: baseVertex, baseInstance: baseInstance)
     }
     
     public func drawPrimitives(type primitiveType: PrimitiveType, indirectBuffer: GPUBufferHandle, indirectBufferOffset: Int) {
-        instance.drawPrimitives(type: MetalPrimitiveType.map(primitiveType), indirectBuffer: bufferOwner[indirectBuffer], indirectBufferOffset: indirectBufferOffset)
+        instance.drawPrimitives(type: MetalDataTypes.map(primitiveType), indirectBuffer: bufferOwner[indirectBuffer], indirectBufferOffset: indirectBufferOffset)
     }
     
     public func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexType: IndexType, indexBuffer: GPUBufferHandle, indexBufferOffset: Int, indirectBuffer: GPUBufferHandle, indirectBufferOffset: Int) {
-        instance.drawIndexedPrimitives(type: MetalPrimitiveType.map(primitiveType), indexType: MetalIndexType.map(indexType), indexBuffer: bufferOwner[indexBuffer], indexBufferOffset: indexBufferOffset, indirectBuffer: bufferOwner[indirectBuffer], indirectBufferOffset: indirectBufferOffset)
+        instance.drawIndexedPrimitives(type: MetalDataTypes.map(primitiveType), indexType: MetalDataTypes.map(indexType), indexBuffer: bufferOwner[indexBuffer], indexBufferOffset: indexBufferOffset, indirectBuffer: bufferOwner[indirectBuffer], indirectBufferOffset: indirectBufferOffset)
     }
 }
