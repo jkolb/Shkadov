@@ -39,7 +39,7 @@ public final class MetalTextureOwner : TextureOwner {
         return TextureHandle(key: UInt16(textures.count))
     }
     
-    public func getTexture(handle: TextureHandle) -> Texture {
+    public func borrowTexture(handle: TextureHandle) -> Texture {
         return MetalTexture(handle: handle, instance: self[handle])
     }
     

@@ -115,16 +115,32 @@ public final class Engine {
         return renderer.makeCommandQueue()
     }
     
-    public func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer {
-        return renderer.makeBuffer(length: length, options: options)
+    public func createBuffer(count: Int, storageMode: StorageMode) -> GPUBufferHandle {
+        return renderer.createBuffer(count: count, storageMode: storageMode)
+    }
+    
+    public func createBuffer(bytes: UnsafeRawPointer, count: Int, storageMode: StorageMode) -> GPUBufferHandle {
+        return renderer.createBuffer(bytes: bytes, count: count, storageMode: storageMode)
+    }
+    
+    public func createBuffer(bytesNoCopy: UnsafeMutableRawPointer, count: Int, storageMode: StorageMode) -> GPUBufferHandle {
+        return renderer.createBuffer(bytesNoCopy: bytesNoCopy, count: count, storageMode: storageMode)
+    }
+    
+    public func borrowBuffer(handle: GPUBufferHandle) -> GPUBuffer {
+        return renderer.borrowBuffer(handle: handle)
+    }
+    
+    public func destroyBuffer(handle: GPUBufferHandle) {
+        return renderer.destroyBuffer(handle: handle)
     }
     
     public func createTexture(descriptor: TextureDescriptor) -> TextureHandle {
         return renderer.createTexture(descriptor: descriptor)
     }
     
-    public func getTexture(handle: TextureHandle) -> Texture {
-        return renderer.getTexture(handle: handle)
+    public func borrowTexture(handle: TextureHandle) -> Texture {
+        return renderer.borrowTexture(handle: handle)
     }
     
     public func generateMipmaps(handles: [TextureHandle]) {

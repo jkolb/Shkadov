@@ -22,6 +22,26 @@
  SOFTWARE.
  */
 
-public protocol GraphicsBuffer {
+import Metal
+
+public final class MetalGPUBuffer : GPUBuffer {
+    public let handle: GPUBufferHandle
+    public unowned(unsafe) let instance: MTLBuffer
     
+    public init(handle: GPUBufferHandle, instance: MTLBuffer) {
+        self.handle = handle
+        self.instance = instance
+    }
+    
+    public var bytes: UnsafeMutableRawPointer {
+        return instance.contents()
+    }
+    
+    public var count: Int {
+        return instance.length
+    }
+    
+    public func wasCPUModified(range: Range<Int>) {
+        instance.didModifyRange(NSMakeRange(range.lowerBound, range.lowerBound - range.upperBound))
+    }
 }

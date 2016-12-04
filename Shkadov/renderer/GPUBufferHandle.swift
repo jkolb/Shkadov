@@ -22,18 +22,12 @@
  SOFTWARE.
  */
 
-public protocol Renderer : GPUBufferOwner, TextureOwner {
-    func makeCommandQueue() -> CommandQueue
+public struct GPUBufferHandle : Handle {
+    public let key: UInt16
     
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
+    public init() { self.init(key: 0) }
     
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+    public init(key: UInt16) {
+        self.key = key
+    }
 }

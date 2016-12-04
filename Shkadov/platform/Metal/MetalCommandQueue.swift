@@ -26,14 +26,16 @@ import Metal
 
 public final class MetalCommandQueue : CommandQueue {
     public let instance: MTLCommandQueue
+    private unowned(unsafe) let bufferOwner: MetalGPUBufferOwner
     private unowned(unsafe) let textureOwner: MetalTextureOwner
 
-    public init(instance: MTLCommandQueue, textureOwner: MetalTextureOwner) {
+    public init(instance: MTLCommandQueue, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner) {
         self.instance = instance
+        self.bufferOwner = bufferOwner
         self.textureOwner = textureOwner
     }
     
     public func makeCommandBuffer() -> CommandBuffer {
-        return MetalCommandBuffer(instance: instance.makeCommandBuffer(), textureOwner: textureOwner)
+        return MetalCommandBuffer(instance: instance.makeCommandBuffer(), bufferOwner: bufferOwner, textureOwner: textureOwner)
     }
 }

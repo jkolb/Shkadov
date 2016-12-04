@@ -24,7 +24,7 @@
 
 public protocol TextureOwner : class {
     func createTexture(descriptor: TextureDescriptor) -> TextureHandle
-    func getTexture(handle: TextureHandle) -> Texture
+    func borrowTexture(handle: TextureHandle) -> Texture
     func generateMipmaps(handles: [TextureHandle])
     func destroyTexture(handle: TextureHandle)
 }

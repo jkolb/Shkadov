@@ -68,7 +68,7 @@
 		E5E14E101DF38E4400D08AAD /* ComputeCommandEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14DED1DF38E4400D08AAD /* ComputeCommandEncoder.swift */; };
 		E5E14E111DF38E4400D08AAD /* CullMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14DEE1DF38E4400D08AAD /* CullMode.swift */; };
 		E5E14E121DF38E4400D08AAD /* DepthClipMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14DEF1DF38E4400D08AAD /* DepthClipMode.swift */; };
-		E5E14E131DF38E4400D08AAD /* GraphicsBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14DF01DF38E4400D08AAD /* GraphicsBuffer.swift */; };
+		E5E14E131DF38E4400D08AAD /* GPUBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14DF01DF38E4400D08AAD /* GPUBuffer.swift */; };
 		E5E14E191DF38E4400D08AAD /* IndexType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14DF61DF38E4400D08AAD /* IndexType.swift */; };
 		E5E14E1A1DF38E4400D08AAD /* PixelFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14DF71DF38E4400D08AAD /* PixelFormat.swift */; };
 		E5E14E1B1DF38E4400D08AAD /* PrimitiveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14DF81DF38E4400D08AAD /* PrimitiveType.swift */; };
@@ -96,7 +96,7 @@
 		E5E14E561DF38FAF00D08AAD /* MetalCommandQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E361DF38FAF00D08AAD /* MetalCommandQueue.swift */; };
 		E5E14E571DF38FAF00D08AAD /* MetalCullMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E371DF38FAF00D08AAD /* MetalCullMode.swift */; };
 		E5E14E581DF38FAF00D08AAD /* MetalDepthClipMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E381DF38FAF00D08AAD /* MetalDepthClipMode.swift */; };
-		E5E14E591DF38FAF00D08AAD /* MetalGraphicsBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E391DF38FAF00D08AAD /* MetalGraphicsBuffer.swift */; };
+		E5E14E591DF38FAF00D08AAD /* MetalGPUBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E391DF38FAF00D08AAD /* MetalGPUBuffer.swift */; };
 		E5E14E5E1DF38FAF00D08AAD /* MetalIndexType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E3E1DF38FAF00D08AAD /* MetalIndexType.swift */; };
 		E5E14E5F1DF38FAF00D08AAD /* MetalPixelFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E3F1DF38FAF00D08AAD /* MetalPixelFormat.swift */; };
 		E5E14E601DF38FAF00D08AAD /* MetalPrimitiveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E401DF38FAF00D08AAD /* MetalPrimitiveType.swift */; };
@@ -120,6 +120,10 @@
 		E5E14E7B1DF3C87400D08AAD /* MetalRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E7A1DF3C87400D08AAD /* MetalRegion.swift */; };
 		E5E14E7F1DF3C9C800D08AAD /* TextureOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E7E1DF3C9C800D08AAD /* TextureOwner.swift */; };
 		E5E14E811DF3CE0B00D08AAD /* MetalTextureOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E801DF3CE0B00D08AAD /* MetalTextureOwner.swift */; };
+		E5E14E831DF4576900D08AAD /* GPUBufferHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E821DF4576900D08AAD /* GPUBufferHandle.swift */; };
+		E5E14E851DF457FF00D08AAD /* GPUBufferOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E841DF457FF00D08AAD /* GPUBufferOwner.swift */; };
+		E5E14E871DF4589B00D08AAD /* StorageMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E861DF4589B00D08AAD /* StorageMode.swift */; };
+		E5E14E891DF45AFF00D08AAD /* MetalGPUBufferOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E881DF45AFF00D08AAD /* MetalGPUBufferOwner.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -261,7 +265,7 @@
 		E5E14DED1DF38E4400D08AAD /* ComputeCommandEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputeCommandEncoder.swift; sourceTree = "<group>"; };
 		E5E14DEE1DF38E4400D08AAD /* CullMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CullMode.swift; sourceTree = "<group>"; };
 		E5E14DEF1DF38E4400D08AAD /* DepthClipMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepthClipMode.swift; sourceTree = "<group>"; };
-		E5E14DF01DF38E4400D08AAD /* GraphicsBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicsBuffer.swift; sourceTree = "<group>"; };
+		E5E14DF01DF38E4400D08AAD /* GPUBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPUBuffer.swift; sourceTree = "<group>"; };
 		E5E14DF61DF38E4400D08AAD /* IndexType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexType.swift; sourceTree = "<group>"; };
 		E5E14DF71DF38E4400D08AAD /* PixelFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelFormat.swift; sourceTree = "<group>"; };
 		E5E14DF81DF38E4400D08AAD /* PrimitiveType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrimitiveType.swift; sourceTree = "<group>"; };
@@ -289,7 +293,7 @@
 		E5E14E361DF38FAF00D08AAD /* MetalCommandQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalCommandQueue.swift; sourceTree = "<group>"; };
 		E5E14E371DF38FAF00D08AAD /* MetalCullMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalCullMode.swift; sourceTree = "<group>"; };
 		E5E14E381DF38FAF00D08AAD /* MetalDepthClipMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalDepthClipMode.swift; sourceTree = "<group>"; };
-		E5E14E391DF38FAF00D08AAD /* MetalGraphicsBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalGraphicsBuffer.swift; sourceTree = "<group>"; };
+		E5E14E391DF38FAF00D08AAD /* MetalGPUBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalGPUBuffer.swift; sourceTree = "<group>"; };
 		E5E14E3E1DF38FAF00D08AAD /* MetalIndexType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalIndexType.swift; sourceTree = "<group>"; };
 		E5E14E3F1DF38FAF00D08AAD /* MetalPixelFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalPixelFormat.swift; sourceTree = "<group>"; };
 		E5E14E401DF38FAF00D08AAD /* MetalPrimitiveType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalPrimitiveType.swift; sourceTree = "<group>"; };
@@ -313,6 +317,10 @@
 		E5E14E7A1DF3C87400D08AAD /* MetalRegion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalRegion.swift; sourceTree = "<group>"; };
 		E5E14E7E1DF3C9C800D08AAD /* TextureOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureOwner.swift; sourceTree = "<group>"; };
 		E5E14E801DF3CE0B00D08AAD /* MetalTextureOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalTextureOwner.swift; sourceTree = "<group>"; };
+		E5E14E821DF4576900D08AAD /* GPUBufferHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPUBufferHandle.swift; sourceTree = "<group>"; };
+		E5E14E841DF457FF00D08AAD /* GPUBufferOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPUBufferOwner.swift; sourceTree = "<group>"; };
+		E5E14E861DF4589B00D08AAD /* StorageMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageMode.swift; sourceTree = "<group>"; };
+		E5E14E881DF45AFF00D08AAD /* MetalGPUBufferOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalGPUBufferOwner.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -500,7 +508,8 @@
 				E5E14E361DF38FAF00D08AAD /* MetalCommandQueue.swift */,
 				E5E14E371DF38FAF00D08AAD /* MetalCullMode.swift */,
 				E5E14E381DF38FAF00D08AAD /* MetalDepthClipMode.swift */,
-				E5E14E391DF38FAF00D08AAD /* MetalGraphicsBuffer.swift */,
+				E5E14E391DF38FAF00D08AAD /* MetalGPUBuffer.swift */,
+				E5E14E881DF45AFF00D08AAD /* MetalGPUBufferOwner.swift */,
 				E5E14E3E1DF38FAF00D08AAD /* MetalIndexType.swift */,
 				E5E14E3F1DF38FAF00D08AAD /* MetalPixelFormat.swift */,
 				E5E14E401DF38FAF00D08AAD /* MetalPrimitiveType.swift */,
@@ -541,7 +550,9 @@
 				E5E14DED1DF38E4400D08AAD /* ComputeCommandEncoder.swift */,
 				E5E14DEE1DF38E4400D08AAD /* CullMode.swift */,
 				E5E14DEF1DF38E4400D08AAD /* DepthClipMode.swift */,
-				E5E14DF01DF38E4400D08AAD /* GraphicsBuffer.swift */,
+				E5E14DF01DF38E4400D08AAD /* GPUBuffer.swift */,
+				E5E14E821DF4576900D08AAD /* GPUBufferHandle.swift */,
+				E5E14E841DF457FF00D08AAD /* GPUBufferOwner.swift */,
 				E5E14DF61DF38E4400D08AAD /* IndexType.swift */,
 				E5E14DF71DF38E4400D08AAD /* PixelFormat.swift */,
 				E5E14DF81DF38E4400D08AAD /* PrimitiveType.swift */,
@@ -559,6 +570,7 @@
 				E5E14E2E1DF38ED800D08AAD /* SamplerHandle.swift */,
 				E5E14E011DF38E4400D08AAD /* ScissorRect.swift */,
 				E5E14E021DF38E4400D08AAD /* ShaderLibrary.swift */,
+				E5E14E861DF4589B00D08AAD /* StorageMode.swift */,
 				E5E14E031DF38E4400D08AAD /* Texture.swift */,
 				E5E14E041DF38E4400D08AAD /* TextureDescriptor.swift */,
 				E5E14E2F1DF38ED800D08AAD /* TextureHandle.swift */,
@@ -851,6 +863,7 @@
 				E5E14E7F1DF3C9C800D08AAD /* TextureOwner.swift in Sources */,
 				E5E14E0C1DF38E4400D08AAD /* BlitCommandEncoder.swift in Sources */,
 				E5E14E721DF38FAF00D08AAD /* MetalWinding.swift in Sources */,
+				E5E14E891DF45AFF00D08AAD /* MetalGPUBufferOwner.swift in Sources */,
 				E5E14E611DF38FAF00D08AAD /* MetalRenderCommandEncoder.swift in Sources */,
 				E5E14E671DF38FAF00D08AAD /* MetalSamplerDescriptor.swift in Sources */,
 				E5E14E121DF38E4400D08AAD /* DepthClipMode.swift in Sources */,
@@ -879,6 +892,7 @@
 				E55606EC1DEB4CEB00D9F1F8 /* MouseCursor.swift in Sources */,
 				E55606DE1DEA7E6100D9F1F8 /* FoundationFilePaths.swift in Sources */,
 				E556071A1DEBE09B00D9F1F8 /* RawInput.swift in Sources */,
+				E5E14E871DF4589B00D08AAD /* StorageMode.swift in Sources */,
 				E579BA611DEE997C007DC0FE /* PlatformListener.swift in Sources */,
 				E5E14E701DF38FAF00D08AAD /* MetalTriangleFillMode.swift in Sources */,
 				E5E14E601DF38FAF00D08AAD /* MetalPrimitiveType.swift in Sources */,
@@ -915,7 +929,7 @@
 				E5E14E5E1DF38FAF00D08AAD /* MetalIndexType.swift in Sources */,
 				E55606E81DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift in Sources */,
 				E5E14E291DF38E4400D08AAD /* TextureUsage.swift in Sources */,
-				E5E14E591DF38FAF00D08AAD /* MetalGraphicsBuffer.swift in Sources */,
+				E5E14E591DF38FAF00D08AAD /* MetalGPUBuffer.swift in Sources */,
 				E579BA5F1DEE957A007DC0FE /* Bootstrap.swift in Sources */,
 				E55606BD1DEA71EB00D9F1F8 /* macOSMouseCursor.swift in Sources */,
 				E5E14E0A1DF38E4400D08AAD /* BlendFactor.swift in Sources */,
@@ -939,15 +953,17 @@
 				E5E14E191DF38E4400D08AAD /* IndexType.swift in Sources */,
 				E55606E61DEB3E1500D9F1F8 /* POSIXThreadIDProvider.swift in Sources */,
 				E5E14E311DF38ED800D08AAD /* SamplerHandle.swift in Sources */,
-				E5E14E131DF38E4400D08AAD /* GraphicsBuffer.swift in Sources */,
+				E5E14E131DF38E4400D08AAD /* GPUBuffer.swift in Sources */,
 				E5E14E0F1DF38E4400D08AAD /* CommandQueue.swift in Sources */,
 				E5E14E541DF38FAF00D08AAD /* MetalBlendOperation.swift in Sources */,
+				E5E14E831DF4576900D08AAD /* GPUBufferHandle.swift in Sources */,
 				E5E14E621DF38FAF00D08AAD /* MetalRenderPassDescriptor.swift in Sources */,
 				E5E14E711DF38FAF00D08AAD /* MetalViewport.swift in Sources */,
 				E5E14E691DF38FAF00D08AAD /* MetalScissorRect.swift in Sources */,
 				E579BAAC1DF349DB007DC0FE /* MetalView.swift in Sources */,
 				E5E14E661DF38FAF00D08AAD /* MetalResourceOptions.swift in Sources */,
 				E556070D1DEB819500D9F1F8 /* RendererConfig.swift in Sources */,
+				E5E14E851DF457FF00D08AAD /* GPUBufferOwner.swift in Sources */,
 				E5E14E6F1DF38FAF00D08AAD /* MetalTextureUsage.swift in Sources */,
 				E55606FD1DEB674500D9F1F8 /* RendererType.swift in Sources */,
 				E5E14E0E1DF38E4400D08AAD /* CommandEncoder.swift in Sources */,

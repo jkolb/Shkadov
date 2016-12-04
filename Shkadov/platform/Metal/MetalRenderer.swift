@@ -32,6 +32,7 @@ public final class MetalRenderer : Renderer {
     private let config: RendererConfig
     private let logger: Logger
     private let semaphore: DispatchSemaphore
+    private let bufferOwner: MetalGPUBufferOwner
     private let textureOwner: MetalTextureOwner
     
     public init(view: MetalView, config: RendererConfig, logger: Logger) {
@@ -41,6 +42,7 @@ public final class MetalRenderer : Renderer {
         self.logger = logger
         self.semaphore = DispatchSemaphore(value: 3)
         self.textureOwner = MetalTextureOwner(device: device)
+        self.bufferOwner = MetalGPUBufferOwner(device: device)
         
         view.drawableSize = CGSize(width: config.width, height: config.height)
     }
@@ -54,21 +56,35 @@ public final class MetalRenderer : Renderer {
     }
     
     public func makeCommandQueue() -> CommandQueue {
-        let metalCommandQueue = device.makeCommandQueue()
-        return MetalCommandQueue(instance: metalCommandQueue, textureOwner: textureOwner)
+        return MetalCommandQueue(instance: device.makeCommandQueue(), bufferOwner: bufferOwner, textureOwner: textureOwner)
     }
     
-    public func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer {
-        let metalBuffer = device.makeBuffer(length: length, options: MetalResourceOptions.map(options))
-        return MetalGraphicsBuffer(instance: metalBuffer)
+    public func createBuffer(count: Int, storageMode: StorageMode) -> GPUBufferHandle {
+        return bufferOwner.createBuffer(count: count, storageMode: storageMode)
+    }
+    
+    public func createBuffer(bytes: UnsafeRawPointer, count: Int, storageMode: StorageMode) -> GPUBufferHandle {
+        return bufferOwner.createBuffer(bytes: bytes, count: count, storageMode: storageMode)
+    }
+    
+    public func createBuffer(bytesNoCopy: UnsafeMutableRawPointer, count: Int, storageMode: StorageMode) -> GPUBufferHandle {
+        return bufferOwner.createBuffer(bytesNoCopy: bytesNoCopy, count: count, storageMode: storageMode)
+    }
+    
+    public func borrowBuffer(handle: GPUBufferHandle) -> GPUBuffer {
+        return bufferOwner.borrowBuffer(handle: handle)
+    }
+    
+    public func destroyBuffer(handle: GPUBufferHandle) {
+        bufferOwner.destroyBuffer(handle: handle)
     }
     
     public func createTexture(descriptor: TextureDescriptor) -> TextureHandle {
         return textureOwner.createTexture(descriptor: descriptor)
     }
     
-    public func getTexture(handle: TextureHandle) -> Texture {
-        return textureOwner.getTexture(handle: handle)
+    public func borrowTexture(handle: TextureHandle) -> Texture {
+        return textureOwner.borrowTexture(handle: handle)
     }
     
     public func generateMipmaps(handles: [TextureHandle]) {

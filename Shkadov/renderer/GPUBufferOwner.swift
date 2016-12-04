@@ -22,18 +22,10 @@
  SOFTWARE.
  */
 
-public protocol Renderer : GPUBufferOwner, TextureOwner {
-    func makeCommandQueue() -> CommandQueue
-    
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
-    
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+public protocol GPUBufferOwner : class {
+    func createBuffer(count: Int, storageMode: StorageMode) -> GPUBufferHandle
+    func createBuffer(bytes: UnsafeRawPointer, count: Int, storageMode: StorageMode) -> GPUBufferHandle
+    func createBuffer(bytesNoCopy: UnsafeMutableRawPointer, count: Int, storageMode: StorageMode) -> GPUBufferHandle
+    func borrowBuffer(handle: GPUBufferHandle) -> GPUBuffer
+    func destroyBuffer(handle: GPUBufferHandle)
 }

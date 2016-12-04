@@ -41,11 +41,11 @@ public protocol RenderCommandEncoder : CommandEncoder {
 
     func setVertexBytes(_ bytes: UnsafeRawPointer, length: Int, at index: Int)
     
-    func setVertexBuffer(_ buffer: GraphicsBuffer?, offset: Int, at index: Int)
+    func setVertexBuffer(_ handle: GPUBufferHandle, offset: Int, at index: Int)
     
     func setVertexBufferOffset(_ offset: Int, at index: Int)
     
-    func setVertexBuffers(_ buffers: [GraphicsBuffer?], offsets: [Int], with range: Range<Int>)
+    func setVertexBuffers(_ handles: [GPUBufferHandle], offsets: [Int], with range: Range<Int>)
     
     func setVertexTexture(_ handle: TextureHandle, at index: Int)
     
@@ -61,11 +61,11 @@ public protocol RenderCommandEncoder : CommandEncoder {
 
     func setFragmentBytes(_ bytes: UnsafeRawPointer, length: Int, at index: Int)
     
-    func setFragmentBuffer(_ buffer: GraphicsBuffer?, offset: Int, at index: Int)
+    func setFragmentBuffer(_ handle: GPUBufferHandle, offset: Int, at index: Int)
     
     func setFragmentBufferOffset(_ offset: Int, at index: Int)
     
-    func setFragmentBuffers(_ buffers: [GraphicsBuffer?], offsets: [Int], with range: Range<Int>)
+    func setFragmentBuffers(_ handles: [GPUBufferHandle], offsets: [Int], with range: Range<Int>)
     
     func setFragmentTexture(_ handle: TextureHandle, at index: Int)
     
@@ -83,15 +83,15 @@ public protocol RenderCommandEncoder : CommandEncoder {
     
     func drawPrimitives(type primitiveType: PrimitiveType, vertexStart: Int, vertexCount: Int)
     
-    func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexCount: Int, indexType: IndexType, indexBuffer: GraphicsBuffer, indexBufferOffset: Int, instanceCount: Int)
+    func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexCount: Int, indexType: IndexType, indexBuffer: GPUBufferHandle, indexBufferOffset: Int, instanceCount: Int)
     
-    func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexCount: Int, indexType: IndexType, indexBuffer: GraphicsBuffer, indexBufferOffset: Int)
+    func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexCount: Int, indexType: IndexType, indexBuffer: GPUBufferHandle, indexBufferOffset: Int)
     
     func drawPrimitives(type primitiveType: PrimitiveType, vertexStart: Int, vertexCount: Int, instanceCount: Int, baseInstance: Int)
     
-    func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexCount: Int, indexType: IndexType, indexBuffer: GraphicsBuffer, indexBufferOffset: Int, instanceCount: Int, baseVertex: Int, baseInstance: Int)
+    func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexCount: Int, indexType: IndexType, indexBuffer: GPUBufferHandle, indexBufferOffset: Int, instanceCount: Int, baseVertex: Int, baseInstance: Int)
     
-    func drawPrimitives(type primitiveType: PrimitiveType, indirectBuffer: GraphicsBuffer, indirectBufferOffset: Int)
+    func drawPrimitives(type primitiveType: PrimitiveType, indirectBuffer: GPUBufferHandle, indirectBufferOffset: Int)
     
-    func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexType: IndexType, indexBuffer: GraphicsBuffer, indexBufferOffset: Int, indirectBuffer: GraphicsBuffer, indirectBufferOffset: Int)
+    func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexType: IndexType, indexBuffer: GPUBufferHandle, indexBufferOffset: Int, indirectBuffer: GPUBufferHandle, indirectBufferOffset: Int)
 }

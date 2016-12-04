@@ -26,10 +26,12 @@ import Metal
 
 public final class MetalRenderCommandEncoder : RenderCommandEncoder {
     public let instance: MTLRenderCommandEncoder
+    private unowned(unsafe) let bufferOwner: MetalGPUBufferOwner
     private unowned(unsafe) let textureOwner: MetalTextureOwner
     
-    public init(instance: MTLRenderCommandEncoder, textureOwner: MetalTextureOwner) {
+    public init(instance: MTLRenderCommandEncoder, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner) {
         self.instance = instance
+        self.bufferOwner = bufferOwner
         self.textureOwner = textureOwner
     }
     
@@ -75,9 +77,9 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
         instance.setVertexBytes(bytes, length: length, at: index)
     }
     
-    public func setVertexBuffer(_ buffer: GraphicsBuffer?, offset: Int, at index: Int) {
-        if let metalBuffer = buffer as? MetalGraphicsBuffer {
-            instance.setVertexBuffer(metalBuffer.instance, offset: offset, at: index)
+    public func setVertexBuffer(_ handle: GPUBufferHandle, offset: Int, at index: Int) {
+        if handle.isValid {
+            instance.setVertexBuffer(bufferOwner[handle], offset: offset, at: index)
         }
         else {
             instance.setVertexBuffer(nil, offset: offset, at: index)
@@ -88,10 +90,10 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
         instance.setVertexBufferOffset(offset, at: index)
     }
     
-    public func setVertexBuffers(_ buffers: [GraphicsBuffer?], offsets: [Int], with range: Range<Int>) {
-        let metalBuffers = buffers.map { (buffer) -> MTLBuffer? in
-            if let metalBuffer = buffer as? MetalGraphicsBuffer {
-                return metalBuffer.instance
+    public func setVertexBuffers(_ handles: [GPUBufferHandle], offsets: [Int], with range: Range<Int>) {
+        let metalBuffers = handles.map { (handle) -> MTLBuffer? in
+            if handle.isValid {
+                return bufferOwner[handle]
             }
             else {
                 return nil
@@ -167,9 +169,9 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
         instance.setFragmentBytes(bytes, length: length, at: index)
     }
     
-    public func setFragmentBuffer(_ buffer: GraphicsBuffer?, offset: Int, at index: Int) {
-        if let metalBufer = buffer as? MetalGraphicsBuffer {
-            instance.setFragmentBuffer(metalBufer.instance, offset: offset, at: index)
+    public func setFragmentBuffer(_ handle: GPUBufferHandle, offset: Int, at index: Int) {
+        if handle.isValid {
+            instance.setFragmentBuffer(bufferOwner[handle], offset: offset, at: index)
         }
         else {
             instance.setFragmentBuffer(nil, offset: offset, at: index)
@@ -180,10 +182,10 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
         instance.setFragmentBufferOffset(offset, at: index)
     }
     
-    public func setFragmentBuffers(_ buffers: [GraphicsBuffer?], offsets: [Int], with range: Range<Int>) {
-        let metalBuffers = buffers.map { (buffer) -> MTLBuffer? in
-            if let metalBuffer = buffer as? MetalGraphicsBuffer {
-                return metalBuffer.instance
+    public func setFragmentBuffers(_ handles: [GPUBufferHandle], offsets: [Int], with range: Range<Int>) {
+        let metalBuffers = handles.map { (handle) -> MTLBuffer? in
+            if handle.isValid {
+                return bufferOwner[handle]
             }
             else {
                 return nil
@@ -263,37 +265,27 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
         instance.drawPrimitives(type: MetalPrimitiveType.map(primitiveType), vertexStart: vertexStart, vertexCount: vertexCount)
     }
     
-    public func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexCount: Int, indexType: IndexType, indexBuffer: GraphicsBuffer, indexBufferOffset: Int, instanceCount: Int) {
-        if let metalBuffer = indexBuffer as? MetalGraphicsBuffer {
-            instance.drawIndexedPrimitives(type: MetalPrimitiveType.map(primitiveType), indexCount: indexCount, indexType: MetalIndexType.map(indexType), indexBuffer: metalBuffer.instance, indexBufferOffset: indexBufferOffset, instanceCount: instanceCount)
-        }
+    public func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexCount: Int, indexType: IndexType, indexBuffer: GPUBufferHandle, indexBufferOffset: Int, instanceCount: Int) {
+        instance.drawIndexedPrimitives(type: MetalPrimitiveType.map(primitiveType), indexCount: indexCount, indexType: MetalIndexType.map(indexType), indexBuffer: bufferOwner[indexBuffer], indexBufferOffset: indexBufferOffset, instanceCount: instanceCount)
     }
     
-    public func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexCount: Int, indexType: IndexType, indexBuffer: GraphicsBuffer, indexBufferOffset: Int) {
-        if let metalBuffer = indexBuffer as? MetalGraphicsBuffer {
-            instance.drawIndexedPrimitives(type: MetalPrimitiveType.map(primitiveType), indexCount: indexCount, indexType: MetalIndexType.map(indexType), indexBuffer: metalBuffer.instance, indexBufferOffset: indexBufferOffset)
-        }
+    public func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexCount: Int, indexType: IndexType, indexBuffer: GPUBufferHandle, indexBufferOffset: Int) {
+        instance.drawIndexedPrimitives(type: MetalPrimitiveType.map(primitiveType), indexCount: indexCount, indexType: MetalIndexType.map(indexType), indexBuffer: bufferOwner[indexBuffer], indexBufferOffset: indexBufferOffset)
     }
     
     public func drawPrimitives(type primitiveType: PrimitiveType, vertexStart: Int, vertexCount: Int, instanceCount: Int, baseInstance: Int) {
         instance.drawPrimitives(type: MetalPrimitiveType.map(primitiveType), vertexStart: vertexStart, vertexCount: vertexCount, instanceCount: instanceCount, baseInstance: baseInstance)
     }
     
-    public func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexCount: Int, indexType: IndexType, indexBuffer: GraphicsBuffer, indexBufferOffset: Int, instanceCount: Int, baseVertex: Int, baseInstance: Int) {
-        if let metalBuffer = indexBuffer as? MetalGraphicsBuffer {
-            instance.drawIndexedPrimitives(type: MetalPrimitiveType.map(primitiveType), indexCount: indexCount, indexType: MetalIndexType.map(indexType), indexBuffer: metalBuffer.instance, indexBufferOffset: indexBufferOffset, instanceCount: instanceCount, baseVertex: baseVertex, baseInstance: baseInstance)
-        }
+    public func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexCount: Int, indexType: IndexType, indexBuffer: GPUBufferHandle, indexBufferOffset: Int, instanceCount: Int, baseVertex: Int, baseInstance: Int) {
+        instance.drawIndexedPrimitives(type: MetalPrimitiveType.map(primitiveType), indexCount: indexCount, indexType: MetalIndexType.map(indexType), indexBuffer: bufferOwner[indexBuffer], indexBufferOffset: indexBufferOffset, instanceCount: instanceCount, baseVertex: baseVertex, baseInstance: baseInstance)
     }
     
-    public func drawPrimitives(type primitiveType: PrimitiveType, indirectBuffer: GraphicsBuffer, indirectBufferOffset: Int) {
-        if let metalBuffer = indirectBuffer as? MetalGraphicsBuffer {
-            instance.drawPrimitives(type: MetalPrimitiveType.map(primitiveType), indirectBuffer: metalBuffer.instance, indirectBufferOffset: indirectBufferOffset)
-        }
+    public func drawPrimitives(type primitiveType: PrimitiveType, indirectBuffer: GPUBufferHandle, indirectBufferOffset: Int) {
+        instance.drawPrimitives(type: MetalPrimitiveType.map(primitiveType), indirectBuffer: bufferOwner[indirectBuffer], indirectBufferOffset: indirectBufferOffset)
     }
     
-    public func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexType: IndexType, indexBuffer: GraphicsBuffer, indexBufferOffset: Int, indirectBuffer: GraphicsBuffer, indirectBufferOffset: Int) {
-        if let metalIndexBuffer = indexBuffer as? MetalGraphicsBuffer, let metalIndirectBuffer = indirectBuffer as? MetalGraphicsBuffer  {
-            instance.drawIndexedPrimitives(type: MetalPrimitiveType.map(primitiveType), indexType: MetalIndexType.map(indexType), indexBuffer: metalIndexBuffer.instance, indexBufferOffset: indexBufferOffset, indirectBuffer: metalIndirectBuffer.instance, indirectBufferOffset: indirectBufferOffset)
-        }
+    public func drawIndexedPrimitives(type primitiveType: PrimitiveType, indexType: IndexType, indexBuffer: GPUBufferHandle, indexBufferOffset: Int, indirectBuffer: GPUBufferHandle, indirectBufferOffset: Int) {
+        instance.drawIndexedPrimitives(type: MetalPrimitiveType.map(primitiveType), indexType: MetalIndexType.map(indexType), indexBuffer: bufferOwner[indexBuffer], indexBufferOffset: indexBufferOffset, indirectBuffer: bufferOwner[indirectBuffer], indirectBufferOffset: indirectBufferOffset)
     }
 }

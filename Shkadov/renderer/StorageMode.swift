@@ -22,18 +22,8 @@
  SOFTWARE.
  */
 
-public protocol Renderer : GPUBufferOwner, TextureOwner {
-    func makeCommandQueue() -> CommandQueue
-    
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
-    
-    func newDefaultLibrary() -> ShaderLibrary?
-    
-    func makeLibrary(filepath: String) throws -> ShaderLibrary
-    
-    func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+public enum StorageMode : UInt8 {
+    case sharedWithCPU
+    case unsafeSharedWithCPU
+    case privateToGPU
 }

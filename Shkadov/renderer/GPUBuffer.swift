@@ -22,12 +22,8 @@
  SOFTWARE.
  */
 
-import Metal
+import Lilliput
 
-public final class MetalGraphicsBuffer : GraphicsBuffer {
-    public let instance: MTLBuffer
-    
-    public init(instance: MTLBuffer) {
-        self.instance = instance
-    }
+public protocol GPUBuffer : UnsafeBuffer {
+    func wasCPUModified(range: Range<Int>)
 }
