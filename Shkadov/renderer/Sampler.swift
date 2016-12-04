@@ -48,17 +48,6 @@ public enum SamplerBorderColor {
     case opaqueWhite // {1,1,1,1}
 }
 
-public enum CompareFunction {
-    case never
-    case less
-    case equal
-    case lessEqual
-    case greater
-    case notEqual
-    case greaterEqual
-    case always
-}
-
 public struct SamplerDescriptor {
     public var minFilter: SamplerMinMagFilter = .nearest
     public var magFilter: SamplerMinMagFilter = .nearest

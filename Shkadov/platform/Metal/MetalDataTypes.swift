@@ -76,6 +76,27 @@ public struct MetalDataTypes {
         }
     }
 
+    public static func map(_ compareFunction: CompareFunction) -> MTLCompareFunction {
+        switch compareFunction {
+        case .never:
+            return .never
+        case .less:
+            return .less
+        case .equal:
+            return .equal
+        case .lessEqual:
+            return .lessEqual
+        case .greater:
+            return .greater
+        case .notEqual:
+            return .notEqual
+        case .greaterEqual:
+            return .greaterEqual
+        case .always:
+            return .always
+        }
+    }
+    
     public static func map(_ cullMode: CullMode) -> MTLCullMode {
         switch cullMode {
         case .none:

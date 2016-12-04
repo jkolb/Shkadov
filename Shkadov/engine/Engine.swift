@@ -214,6 +214,14 @@ public final class Engine {
     public func destoryRenderPass(handle: RenderPassHandle) {
         return renderer.destroyRenderPass(handle: handle)
     }
+    
+    public func createDepthStencilState(descriptor: DepthStencilDescriptor) -> DepthStencilStateHandle {
+        return renderer.createDepthStencilState(descriptor: descriptor)
+    }
+    
+    public func destroyDepthStencilState(handle: DepthStencilStateHandle) {
+        renderer.destroyDepthStencilState(handle: handle)
+    }
 
     public func waitForGPUIfNeeded() {
         renderer.waitForGPUIfNeeded()

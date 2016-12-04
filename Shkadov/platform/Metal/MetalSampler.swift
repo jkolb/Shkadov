@@ -25,7 +25,7 @@
 import Metal
 
 public final class MetalSamplerOwner : SamplerOwner {
-    private let device: MTLDevice
+    private unowned(unsafe) let device: MTLDevice
     private var samplers: [MTLSamplerState?]
     
     public init(device: MTLDevice) {
@@ -48,9 +48,68 @@ public final class MetalSamplerOwner : SamplerOwner {
         return samplers[handle.index]!
     }
     
-    private func map(_ samplerDescriptor: SamplerDescriptor) -> MTLSamplerDescriptor {
+    private func map(_ descriptor: SamplerDescriptor) -> MTLSamplerDescriptor {
         let metalDescriptor = MTLSamplerDescriptor()
-        
+        metalDescriptor.minFilter = map(descriptor.minFilter)
+        metalDescriptor.magFilter = map(descriptor.magFilter)
+        metalDescriptor.mipFilter = map(descriptor.mipFilter)
+        metalDescriptor.maxAnisotropy = descriptor.maxAnisotropy
+        metalDescriptor.sAddressMode = map(descriptor.sAddressMode)
+        metalDescriptor.tAddressMode = map(descriptor.tAddressMode)
+        metalDescriptor.rAddressMode = map(descriptor.rAddressMode)
+        metalDescriptor.borderColor = map(descriptor.borderColor)
+        metalDescriptor.normalizedCoordinates = descriptor.normalizedCoordinates
+        metalDescriptor.lodMinClamp = descriptor.lodMinClamp
+        metalDescriptor.lodMaxClamp = descriptor.lodMaxClamp
+        metalDescriptor.compareFunction = MetalDataTypes.map(descriptor.compareFunction)
         return metalDescriptor
+    }
+    
+    private func map(_ minMagFilter: SamplerMinMagFilter) -> MTLSamplerMinMagFilter {
+        switch minMagFilter {
+        case .nearest:
+            return .nearest
+        case .linear:
+            return .linear
+        }
+    }
+    
+    private func map(_ mipFilter: SamplerMipFilter) -> MTLSamplerMipFilter {
+        switch mipFilter {
+        case .notMipmapped:
+            return .notMipmapped
+        case .nearest:
+            return .nearest
+        case .linear:
+            return .linear
+        }
+    }
+    
+    private func map(_ addressMode: SamplerAddressMode) -> MTLSamplerAddressMode {
+        switch addressMode {
+        case .clampToEdge:
+            return .clampToEdge
+        case .mirrorClampToEdge:
+            return .mirrorClampToEdge
+        case .repeat:
+            return .repeat
+        case .mirrorRepeat:
+            return .mirrorRepeat
+        case .clampToZero:
+            return .clampToZero
+        case .clampToBorderColor:
+            return .clampToBorderColor
+        }
+    }
+    
+    private func map(_ borderColor: SamplerBorderColor) -> MTLSamplerBorderColor {
+        switch borderColor {
+        case .transparentBlack:
+            return .transparentBlack
+        case .opaqueBlack:
+            return .opaqueBlack
+        case .opaqueWhite:
+            return .opaqueWhite
+        }
     }
 }

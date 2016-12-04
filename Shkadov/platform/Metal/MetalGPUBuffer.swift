@@ -25,7 +25,7 @@
 import Metal
 
 public final class MetalGPUBufferOwner : GPUBufferOwner {
-    private let device: MTLDevice
+    private unowned(unsafe) let device: MTLDevice
     private var buffers: [MTLBuffer?]
     
     public init(device: MTLDevice) {

@@ -26,7 +26,7 @@ import Metal
 import Swiftish
 
 public final class MetalTextureOwner : TextureOwner {
-    private let device: MTLDevice
+    private unowned(unsafe) let device: MTLDevice
     private var textures: [MTLTexture?]
     
     public init(device: MTLDevice) {

@@ -35,11 +35,21 @@ public final class Game : EngineListener {
     private let maxFrameDuration = Duration(seconds: 0.25)
     private let camera = Camera()
     private let commandQueue: CommandQueue
+    private var mainRenderPass: RenderPassHandle
+    private var shadowRenderPasses: [RenderPassHandle]
+    private var shadowMap: TextureHandle
+    private var mainPassDepthTexture: TextureHandle
+    private var mainPassFramebuffer: TextureHandle
     
     public init(engine: Engine, logger: Logger) {
         self.engine = engine
         self.logger = logger
         self.commandQueue = engine.makeCommandQueue()
+        self.mainRenderPass = RenderPassHandle()
+        self.shadowRenderPasses = []
+        self.shadowMap = TextureHandle()
+        self.mainPassDepthTexture = TextureHandle()
+        self.mainPassFramebuffer = TextureHandle()
     }
     
     public func didStartup() {

@@ -39,6 +39,7 @@ public final class MetalRenderer : Renderer {
     private let renderPipelineStateOwner: MetalRenderPipelineStateOwner
     private let rasterizerStateOwner: MetalRasterizerStateOwner
     private let renderPassOwner: MetalRenderPassOwner
+    private let depthStencilStateOwner: MetalDepthStencilStateOwner
     
     public init(view: MetalView, config: RendererConfig, logger: Logger) {
         self.device = view.device!
@@ -53,6 +54,7 @@ public final class MetalRenderer : Renderer {
         self.renderPipelineStateOwner = MetalRenderPipelineStateOwner(device: device, moduleOwner: moduleOwner)
         self.rasterizerStateOwner = MetalRasterizerStateOwner()
         self.renderPassOwner = MetalRenderPassOwner(textureOwner: textureOwner, bufferOwner: bufferOwner)
+        self.depthStencilStateOwner = MetalDepthStencilStateOwner(device: device)
         
         view.drawableSize = CGSize(width: config.width, height: config.height)
     }
@@ -167,6 +169,14 @@ public final class MetalRenderer : Renderer {
     
     public func destroyRenderPass(handle: RenderPassHandle) {
         renderPassOwner.destroyRenderPass(handle: handle)
+    }
+
+    public func createDepthStencilState(descriptor: DepthStencilDescriptor) -> DepthStencilStateHandle {
+        return depthStencilStateOwner.createDepthStencilState(descriptor: descriptor)
+    }
+    
+    public func destroyDepthStencilState(handle: DepthStencilStateHandle) {
+        depthStencilStateOwner.destroyDepthStencilState(handle: handle)
     }
 
     public func waitForGPUIfNeeded() {
