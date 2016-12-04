@@ -22,12 +22,10 @@
  SOFTWARE.
  */
 
-public protocol Renderer : class {
+public protocol Renderer : TextureOwner {
     func makeCommandQueue() -> CommandQueue
     
     func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer
-    
-    func makeTexture(descriptor: TextureDescriptor) -> Texture
     
     func makeSampler(descriptor: SamplerDescriptor) -> Sampler
     

@@ -26,15 +26,17 @@ import Metal
 
 public final class MetalCommandBuffer : CommandBuffer {
     public let instance: MTLCommandBuffer
-    
-    public init(instance: MTLCommandBuffer) {
+    private unowned(unsafe) let textureOwner: MetalTextureOwner
+
+    public init(instance: MTLCommandBuffer, textureOwner: MetalTextureOwner) {
         self.instance = instance
+        self.textureOwner = textureOwner
     }
     
     public func makeRenderCommandEncoder(descriptor renderPassDescriptor: RenderPassDescriptor) -> RenderCommandEncoder {
         if let metalDescriptor = renderPassDescriptor as? MetalRenderPassDescriptor {
             let metalRenderCommandEncoder = instance.makeRenderCommandEncoder(descriptor: metalDescriptor.metalRenderPassDescriptor)
-            return MetalRenderCommandEncoder(instance: metalRenderCommandEncoder)
+            return MetalRenderCommandEncoder(instance: metalRenderCommandEncoder, textureOwner: textureOwner)
         }
         else {
             fatalError("Unexpected implementation: \(renderPassDescriptor)")

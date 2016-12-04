@@ -22,5 +22,15 @@
  SOFTWARE.
  */
 
-public protocol Texture : class {
+import Swiftish
+
+public protocol Texture {
+    var handle: TextureHandle { get }
+    func replace(region: Region3<Int>, mipmapLevel level: Int, slice: Int, bytes: UnsafeRawPointer, bytesPerRow: Int, bytesPerImage: Int)
+}
+
+extension Texture {
+    public func replace(region: Region3<Int>, mipmapLevel level: Int, bytes: UnsafeRawPointer, bytesPerRow: Int) {
+        replace(region: region, mipmapLevel: level, slice: 0, bytes: bytes, bytesPerRow: bytesPerRow, bytesPerImage: 0)
+    }
 }

@@ -25,9 +25,9 @@
 import Metal
 
 public final class MetalShaderFunction : ShaderFunction {
-    public let metalFunction: MTLFunction
+    public let instance: MTLFunction
     
-    public init(metalFunction: MTLFunction) {
-        self.metalFunction = metalFunction
+    public init(instance: MTLFunction) {
+        self.instance = instance
     }
 }

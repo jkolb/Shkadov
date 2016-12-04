@@ -32,6 +32,7 @@ public final class MetalRenderer : Renderer {
     private let config: RendererConfig
     private let logger: Logger
     private let semaphore: DispatchSemaphore
+    private let textureOwner: MetalTextureOwner
     
     public init(view: MetalView, config: RendererConfig, logger: Logger) {
         self.device = view.device!
@@ -39,6 +40,7 @@ public final class MetalRenderer : Renderer {
         self.config = config
         self.logger = logger
         self.semaphore = DispatchSemaphore(value: 3)
+        self.textureOwner = MetalTextureOwner(device: device)
         
         view.drawableSize = CGSize(width: config.width, height: config.height)
     }
@@ -53,7 +55,7 @@ public final class MetalRenderer : Renderer {
     
     public func makeCommandQueue() -> CommandQueue {
         let metalCommandQueue = device.makeCommandQueue()
-        return MetalCommandQueue(instance: metalCommandQueue)
+        return MetalCommandQueue(instance: metalCommandQueue, textureOwner: textureOwner)
     }
     
     public func makeBuffer(length: Int, options: ResourceOptions) -> GraphicsBuffer {
@@ -61,10 +63,20 @@ public final class MetalRenderer : Renderer {
         return MetalGraphicsBuffer(instance: metalBuffer)
     }
     
-    public func makeTexture(descriptor: TextureDescriptor) -> Texture {
-        let metalDescriptor = MetalTextureDescriptor.map(descriptor)
-        let metalTexture = device.makeTexture(descriptor: metalDescriptor)
-        return MetalTexture(metalTexture: metalTexture)
+    public func createTexture(descriptor: TextureDescriptor) -> TextureHandle {
+        return textureOwner.createTexture(descriptor: descriptor)
+    }
+    
+    public func getTexture(handle: TextureHandle) -> Texture {
+        return textureOwner.getTexture(handle: handle)
+    }
+    
+    public func generateMipmaps(handles: [TextureHandle]) {
+        return textureOwner.generateMipmaps(handles: handles)
+    }
+    
+    public func destroyTexture(handle: TextureHandle) {
+        return textureOwner.destroyTexture(handle: handle)
     }
     
     public func makeSampler(descriptor: SamplerDescriptor) -> Sampler {
@@ -75,7 +87,7 @@ public final class MetalRenderer : Renderer {
     
     public func newDefaultLibrary() -> ShaderLibrary? {
         if let metalLibrary = device.newDefaultLibrary() {
-            return MetalShaderLibrary(metalLibrary: metalLibrary)
+            return MetalShaderLibrary(instance: metalLibrary)
         }
         else {
             return nil
@@ -84,13 +96,13 @@ public final class MetalRenderer : Renderer {
     
     public func makeLibrary(filepath: String) throws -> ShaderLibrary {
         let metalLibrary = try device.makeLibrary(filepath: filepath)
-        return MetalShaderLibrary(metalLibrary: metalLibrary)
+        return MetalShaderLibrary(instance: metalLibrary)
     }
     
     public func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState {
         let metalDescriptor = MetalRenderPipelineDescriptor.map(descriptor)
         let metalRenderPipelineState = try device.makeRenderPipelineState(descriptor: metalDescriptor)
-        return MetalRenderPipelineState(metalRenderPipelineState: metalRenderPipelineState)
+        return MetalRenderPipelineState(instance: metalRenderPipelineState)
     }
     
     public func waitForGPUIfNeeded() {

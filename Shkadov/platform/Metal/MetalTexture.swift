@@ -23,11 +23,19 @@
  */
 
 import Metal
+import Swiftish
 
-public final class MetalTexture : Texture {
-    public let metalTexture: MTLTexture
+public struct MetalTexture : Texture {
+    public let handle: TextureHandle
+    public unowned(unsafe) let instance: MTLTexture
     
-    public init(metalTexture: MTLTexture) {
-        self.metalTexture = metalTexture
+    public init(handle: TextureHandle, instance: MTLTexture) {
+        self.handle = handle
+        self.instance = instance
+    }
+    
+    public func replace(region: Region3<Int>, mipmapLevel level: Int, slice: Int, bytes: UnsafeRawPointer, bytesPerRow: Int, bytesPerImage: Int) {
+        let metalRegion = MetalRegion().map(region)
+        instance.replace(region: metalRegion, mipmapLevel: level, slice: slice, withBytes: bytes, bytesPerRow: bytesPerRow, bytesPerImage: bytesPerImage)
     }
 }

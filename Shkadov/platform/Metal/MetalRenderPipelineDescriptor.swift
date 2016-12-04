@@ -32,11 +32,11 @@ public final class MetalRenderPipelineDescriptor {
         metalDescriptor.isRasterizationEnabled = descriptor.isRasterizationEnabled
         
         if let metalShaderFunction = descriptor.vertexShader as? MetalShaderFunction {
-            metalDescriptor.vertexFunction = metalShaderFunction.metalFunction
+            metalDescriptor.vertexFunction = metalShaderFunction.instance
         }
         
         if let metalShaderFunction = descriptor.fragmentShader as? MetalShaderFunction {
-            metalDescriptor.fragmentFunction = metalShaderFunction.metalFunction
+            metalDescriptor.fragmentFunction = metalShaderFunction.instance
         }
         
         for (index, colorAttachmentDescriptor) in descriptor.colorAttachments.enumerated() {

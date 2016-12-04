@@ -119,10 +119,22 @@ public final class Engine {
         return renderer.makeBuffer(length: length, options: options)
     }
     
-    public func makeTexture(descriptor: TextureDescriptor) -> Texture {
-        return renderer.makeTexture(descriptor: descriptor)
+    public func createTexture(descriptor: TextureDescriptor) -> TextureHandle {
+        return renderer.createTexture(descriptor: descriptor)
     }
     
+    public func getTexture(handle: TextureHandle) -> Texture {
+        return renderer.getTexture(handle: handle)
+    }
+    
+    public func generateMipmaps(handles: [TextureHandle]) {
+        renderer.generateMipmaps(handles: handles)
+    }
+    
+    public func destroyTexture(handle: TextureHandle) {
+        renderer.destroyTexture(handle: handle)
+    }
+
     public func makeSampler(descriptor: SamplerDescriptor) -> Sampler {
         return renderer.makeSampler(descriptor: descriptor)
     }

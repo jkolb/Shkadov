@@ -25,9 +25,9 @@
 import Metal
 
 public final class MetalRenderPipelineState : RenderPipelineState {
-    public let metalRenderPipelineState: MTLRenderPipelineState
+    public let instance: MTLRenderPipelineState
     
-    public init(metalRenderPipelineState: MTLRenderPipelineState) {
-        self.metalRenderPipelineState = metalRenderPipelineState
+    public init(instance: MTLRenderPipelineState) {
+        self.instance = instance
     }
 }

@@ -26,9 +26,11 @@ import Metal
 
 public final class MetalRenderCommandEncoder : RenderCommandEncoder {
     public let instance: MTLRenderCommandEncoder
+    private unowned(unsafe) let textureOwner: MetalTextureOwner
     
-    public init(instance: MTLRenderCommandEncoder) {
+    public init(instance: MTLRenderCommandEncoder, textureOwner: MetalTextureOwner) {
         self.instance = instance
+        self.textureOwner = textureOwner
     }
     
     public func endEncoding() {
@@ -37,7 +39,7 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
     
     public func setRenderPipelineState(_ pipelineState: RenderPipelineState) {
         if let metalPipelineState = pipelineState as? MetalRenderPipelineState {
-            instance.setRenderPipelineState(metalPipelineState.metalRenderPipelineState)
+            instance.setRenderPipelineState(metalPipelineState.instance)
         }
     }
     
@@ -98,19 +100,19 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
         instance.setVertexBuffers(metalBuffers, offsets: offsets, with: NSMakeRange(range.lowerBound, range.count))
     }
     
-    public func setVertexTexture(_ texture: Texture?, at index: Int) {
-        if let metalTexture = texture as? MetalTexture {
-            instance.setVertexTexture(metalTexture.metalTexture, at: index)
+    public func setVertexTexture(_ handle: TextureHandle, at index: Int) {
+        if handle.isValid {
+            instance.setVertexTexture(textureOwner[handle], at: index)
         }
         else {
             instance.setVertexTexture(nil, at: index)
         }
     }
     
-    public func setVertexTextures(_ textures: [Texture?], with range: Range<Int>) {
-        let metalTextures = textures.map { (texture) -> MTLTexture? in
-            if let metalTexture = texture as? MetalTexture {
-                return metalTexture.metalTexture
+    public func setVertexTextures(_ handles: [TextureHandle], with range: Range<Int>) {
+        let metalTextures = handles.map { (handle) -> MTLTexture? in
+            if handle.isValid {
+                return textureOwner[handle]
             }
             else {
                 return nil
@@ -190,19 +192,19 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
         instance.setFragmentBuffers(metalBuffers, offsets: offsets, with: NSMakeRange(range.lowerBound, range.count))
     }
     
-    public func setFragmentTexture(_ texture: Texture?, at index: Int) {
-        if let metalTexture = texture as? MetalTexture {
-            instance.setFragmentTexture(metalTexture.metalTexture, at: index)
+    public func setFragmentTexture(_ handle: TextureHandle, at index: Int) {
+        if handle.isValid {
+            instance.setFragmentTexture(textureOwner[handle], at: index)
         }
         else {
             instance.setFragmentTexture(nil, at: index)
         }
     }
     
-    public func setFragmentTextures(_ textures: [Texture?], with range: Range<Int>) {
-        let metalTextures = textures.map { (texture) -> MTLTexture? in
-            if let metalTexture = texture as? MetalTexture {
-                return metalTexture.metalTexture
+    public func setFragmentTextures(_ handles: [TextureHandle], with range: Range<Int>) {
+        let metalTextures = handles.map { (handle) -> MTLTexture? in
+            if handle.isValid {
+                return textureOwner[handle]
             }
             else {
                 return nil

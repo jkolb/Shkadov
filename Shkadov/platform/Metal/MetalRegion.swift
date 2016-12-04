@@ -23,24 +23,18 @@
  */
 
 import Metal
+import Swiftish
 
-public final class MetalShaderLibrary : ShaderLibrary {
-    public let instance: MTLLibrary
+public final class MetalRegion {
+    public func map(_ region: Region3<Int>) -> MTLRegion {
+        return MTLRegion(origin: map(region.origin), size: map(region.size))
+    }
     
-    public var functionNames: [String] {
-        return instance.functionNames
+    public func map(_ origin: Vector3<Int>) -> MTLOrigin {
+        return MTLOrigin(x: origin.x, y: origin.y, z: origin.z)
     }
-
-    public func makeFunction(name functionName: String) -> ShaderFunction? {
-        if let metalFunction = instance.makeFunction(name: functionName) {
-            return MetalShaderFunction(instance: metalFunction)
-        }
-        else {
-            return nil
-        }
-    }
-
-    public init(instance: MTLLibrary) {
-        self.instance = instance
+    
+    public func map(_ size: Vector3<Int>) -> MTLSize {
+        return MTLSize(width: size.width, height: size.height, depth: size.depth)
     }
 }

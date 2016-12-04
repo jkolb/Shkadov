@@ -47,9 +47,9 @@ public protocol RenderCommandEncoder : CommandEncoder {
     
     func setVertexBuffers(_ buffers: [GraphicsBuffer?], offsets: [Int], with range: Range<Int>)
     
-    func setVertexTexture(_ texture: Texture?, at index: Int)
+    func setVertexTexture(_ handle: TextureHandle, at index: Int)
     
-    func setVertexTextures(_ textures: [Texture?], with range: Range<Int>)
+    func setVertexTextures(_ handles: [TextureHandle], with range: Range<Int>)
     
     func setVertexSampler(_ sampler: Sampler?, at index: Int)
     
@@ -67,9 +67,9 @@ public protocol RenderCommandEncoder : CommandEncoder {
     
     func setFragmentBuffers(_ buffers: [GraphicsBuffer?], offsets: [Int], with range: Range<Int>)
     
-    func setFragmentTexture(_ texture: Texture?, at index: Int)
+    func setFragmentTexture(_ handle: TextureHandle, at index: Int)
     
-    func setFragmentTextures(_ textures: [Texture?], with range: Range<Int>)
+    func setFragmentTextures(_ handles: [TextureHandle], with range: Range<Int>)
     
     func setFragmentSampler(_ sampler: Sampler?, at index: Int)
     

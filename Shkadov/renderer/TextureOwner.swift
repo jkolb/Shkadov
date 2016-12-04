@@ -22,18 +22,9 @@
  SOFTWARE.
  */
 
-import Metal
-
-public final class MetalTextureDescriptor {
-    public static func map(_ textureDescriptor: TextureDescriptor) -> MTLTextureDescriptor {
-        let metalTextureDescriptor = MTLTextureDescriptor()
-        metalTextureDescriptor.textureType = MetalTextureType.map(textureDescriptor.textureType)
-        metalTextureDescriptor.pixelFormat = MetalPixelFormat.map(textureDescriptor.pixelFormat)
-        metalTextureDescriptor.width = textureDescriptor.width
-        metalTextureDescriptor.height = textureDescriptor.height
-        metalTextureDescriptor.depth = textureDescriptor.depth
-        metalTextureDescriptor.mipmapLevelCount = textureDescriptor.mipmapLevelCount
-        metalTextureDescriptor.usage = MetalTextureUsage.map(textureDescriptor.textureUsage)
-        return metalTextureDescriptor
-    }
+public protocol TextureOwner : class {
+    func createTexture(descriptor: TextureDescriptor) -> TextureHandle
+    func getTexture(handle: TextureHandle) -> Texture
+    func generateMipmaps(handles: [TextureHandle])
+    func destroyTexture(handle: TextureHandle)
 }
