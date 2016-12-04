@@ -51,6 +51,7 @@
 		E55607391DED381800D9F1F8 /* LoggerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607381DED381800D9F1F8 /* LoggerFactory.swift */; };
 		E56D56A61DF4C1D200968903 /* DepthStencilState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56D56A51DF4C1D200968903 /* DepthStencilState.swift */; };
 		E56D56B01DF4C39400968903 /* MetalDepthStencilState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56D56AF1DF4C39400968903 /* MetalDepthStencilState.swift */; };
+		E56D56B21DF4CC6200968903 /* Shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = E56D56B11DF4CC6200968903 /* Shading.metal */; };
 		E579BA5F1DEE957A007DC0FE /* Bootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA5E1DEE957A007DC0FE /* Bootstrap.swift */; };
 		E579BA611DEE997C007DC0FE /* PlatformListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA601DEE997C007DC0FE /* PlatformListener.swift */; };
 		E579BA711DF334EA007DC0FE /* macOSInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA701DF334EA007DC0FE /* macOSInputView.swift */; };
@@ -222,6 +223,7 @@
 		E55607381DED381800D9F1F8 /* LoggerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerFactory.swift; sourceTree = "<group>"; };
 		E56D56A51DF4C1D200968903 /* DepthStencilState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepthStencilState.swift; sourceTree = "<group>"; };
 		E56D56AF1DF4C39400968903 /* MetalDepthStencilState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalDepthStencilState.swift; sourceTree = "<group>"; };
+		E56D56B11DF4CC6200968903 /* Shading.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shading.metal; sourceTree = "<group>"; };
 		E579BA5E1DEE957A007DC0FE /* Bootstrap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bootstrap.swift; sourceTree = "<group>"; };
 		E579BA601DEE997C007DC0FE /* PlatformListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlatformListener.swift; sourceTree = "<group>"; };
 		E579BA701DF334EA007DC0FE /* macOSInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSInputView.swift; sourceTree = "<group>"; };
@@ -320,6 +322,7 @@
 			children = (
 				E55606C81DEA76BA00D9F1F8 /* LICENSE */,
 				E55606C91DEA76BA00D9F1F8 /* README.md */,
+				E56D56B11DF4CC6200968903 /* Shading.metal */,
 				E55606A91DEA71EB00D9F1F8 /* main.swift */,
 				E55607341DED34D400D9F1F8 /* Game.swift */,
 				E55606A61DEA71EB00D9F1F8 /* engine */,
@@ -832,6 +835,7 @@
 				E579BA711DF334EA007DC0FE /* macOSInputView.swift in Sources */,
 				E55606C01DEA71EB00D9F1F8 /* Logger.swift in Sources */,
 				E5E14E2C1DF38E4400D08AAD /* Winding.swift in Sources */,
+				E56D56B21DF4CC6200968903 /* Shading.metal in Sources */,
 				E5E14E8B1DF477BB00D08AAD /* MetalDataTypes.swift in Sources */,
 				E55606E81DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift in Sources */,
 				E5E14E591DF38FAF00D08AAD /* MetalGPUBuffer.swift in Sources */,

@@ -24,6 +24,33 @@
 
 import Swiftish
 
+struct ObjectData {
+    var localToWorld: Matrix4x4<Float>
+    var color: Vector4<Float>
+//    vector_float4 pad0;
+//    vector_float4 pad01;
+//    vector_float4 pad02;
+//    matrix_float4x4 pad1;
+//    matrix_float4x4 pad2;
+}
+
+struct ShadowPass {
+    var viewProjection: Matrix4x4<Float>
+//    matrix_float4x4 pad1;
+//    matrix_float4x4 pad2;
+//    matrix_float4x4 pad3;
+}
+
+struct MainPass {
+    var viewProjection: Matrix4x4<Float>
+    var viewShadow0Projection: Matrix4x4<Float>
+    var lightPosition: Vector4<Float>
+//    vector_float4	pad00;
+//    vector_float4	pad01;
+//    vector_float4	pad02;
+//    matrix_float4x4 pad1;
+}
+
 public final class Game : EngineListener {
     private let engine: Engine
     private let logger: Logger
@@ -40,6 +67,9 @@ public final class Game : EngineListener {
     private var shadowMap: TextureHandle
     private var mainPassDepthTexture: TextureHandle
     private var mainPassFramebuffer: TextureHandle
+    private var depthTestLess: DepthStencilStateHandle
+    private var depthTestAlways: DepthStencilStateHandle
+    private var constantBuffers: [GPUBufferHandle]
     
     public init(engine: Engine, logger: Logger) {
         self.engine = engine
@@ -50,6 +80,9 @@ public final class Game : EngineListener {
         self.shadowMap = TextureHandle()
         self.mainPassDepthTexture = TextureHandle()
         self.mainPassFramebuffer = TextureHandle()
+        self.depthTestLess = DepthStencilStateHandle()
+        self.depthTestAlways = DepthStencilStateHandle()
+        self.constantBuffers = []
     }
     
     public func didStartup() {
