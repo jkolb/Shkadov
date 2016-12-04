@@ -44,4 +44,8 @@ extension Handle {
     public var isValid: Bool {
         return key != KeyType.allZeros
     }
+    
+    public var index: Int {
+        return Int(key.toIntMax()) - 1
+    }
 }

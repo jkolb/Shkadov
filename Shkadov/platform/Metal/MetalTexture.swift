@@ -49,11 +49,11 @@ public final class MetalTextureOwner : TextureOwner {
     }
     
     public func destroyTexture(handle: TextureHandle) {
-        textures[Int(handle.key)] = nil
+        textures[handle.index] = nil
     }
     
     internal subscript (handle: TextureHandle) -> MTLTexture {
-        return textures[Int(handle.key)]!
+        return textures[handle.index]!
     }
     
     private func map(_ descriptor: TextureDescriptor) -> MTLTextureDescriptor {

@@ -50,11 +50,11 @@ public final class MetalModuleOwner : ModuleOwner {
     }
     
     public func destroyModule(handle: ModuleHandle) {
-        modules[Int(handle.key)] = nil
+        modules[handle.index] = nil
     }
     
     internal subscript (handle: ModuleHandle) -> MTLLibrary {
-        return modules[Int(handle.key)]!
+        return modules[handle.index]!
     }
     
     public func createComputeFunction(module: ModuleHandle, named: String) -> ComputeFunctionHandle {
@@ -63,11 +63,11 @@ public final class MetalModuleOwner : ModuleOwner {
     }
     
     public func destroyComputeFunction(handle: ComputeFunctionHandle) {
-        computeFunctions[Int(handle.key)] = nil
+        computeFunctions[handle.index] = nil
     }
     
     internal subscript (handle: ComputeFunctionHandle) -> MTLFunction {
-        return computeFunctions[Int(handle.key)]!
+        return computeFunctions[handle.index]!
     }
     
     public func createFragmentFunction(module: ModuleHandle, named: String) -> FragmentFunctionHandle {
@@ -76,11 +76,11 @@ public final class MetalModuleOwner : ModuleOwner {
     }
     
     public func destroyFragmentFunction(handle: FragmentFunctionHandle) {
-        fragmentFunctions[Int(handle.key)] = nil
+        fragmentFunctions[handle.index] = nil
     }
     
     internal subscript (handle: FragmentFunctionHandle) -> MTLFunction {
-        return fragmentFunctions[Int(handle.key)]!
+        return fragmentFunctions[handle.index]!
     }
     
     public func createVertexFunction(module: ModuleHandle, named: String) -> VertexFunctionHandle {
@@ -89,10 +89,10 @@ public final class MetalModuleOwner : ModuleOwner {
     }
     
     public func destroyVertexFunction(handle: VertexFunctionHandle) {
-        vertexFunctions[Int(handle.key)] = nil
+        vertexFunctions[handle.index] = nil
     }
     
     internal subscript (handle: VertexFunctionHandle) -> MTLFunction {
-        return vertexFunctions[Int(handle.key)]!
+        return vertexFunctions[handle.index]!
     }
 }

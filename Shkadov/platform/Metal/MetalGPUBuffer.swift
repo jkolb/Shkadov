@@ -54,11 +54,11 @@ public final class MetalGPUBufferOwner : GPUBufferOwner {
     }
     
     public func destroyBuffer(handle: GPUBufferHandle) {
-        buffers[Int(handle.key)] = nil
+        buffers[handle.index] = nil
     }
     
     internal subscript (handle: GPUBufferHandle) -> MTLBuffer {
-        return buffers[Int(handle.key)]!
+        return buffers[handle.index]!
     }
     
     private func map(_ storageMode: StorageMode) -> MTLResourceOptions {
