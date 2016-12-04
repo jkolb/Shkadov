@@ -182,9 +182,13 @@ public final class Engine {
     public func destroyTexture(handle: TextureHandle) {
         renderer.destroyTexture(handle: handle)
     }
-
-    public func makeSampler(descriptor: SamplerDescriptor) -> Sampler {
-        return renderer.makeSampler(descriptor: descriptor)
+    
+    public func createSampler(descriptor: SamplerDescriptor) -> SamplerHandle {
+        return renderer.createSampler(descriptor: descriptor)
+    }
+    
+    public func destroySampler(handle: SamplerHandle) {
+        renderer.destroySampler(handle: handle)
     }
     
     public func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState {

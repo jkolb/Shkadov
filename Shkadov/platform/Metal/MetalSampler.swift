@@ -24,10 +24,33 @@
 
 import Metal
 
-public final class MetalSampler : Sampler {
-    public let instance: MTLSamplerState
+public final class MetalSamplerOwner : SamplerOwner {
+    private let device: MTLDevice
+    private var samplers: [MTLSamplerState?]
     
-    public init(instance: MTLSamplerState) {
-        self.instance = instance
+    public init(device: MTLDevice) {
+        self.device = device
+        self.samplers = []
+        
+        samplers.reserveCapacity(128)
+    }
+    
+    public func createSampler(descriptor: SamplerDescriptor) -> SamplerHandle {
+        samplers.append(device.makeSamplerState(descriptor: map(descriptor)))
+        return SamplerHandle(key: UInt16(samplers.count))
+    }
+    
+    public func destroySampler(handle: SamplerHandle) {
+        samplers[handle.index] = nil
+    }
+
+    internal subscript (handle: SamplerHandle) -> MTLSamplerState {
+        return samplers[handle.index]!
+    }
+    
+    private func map(_ samplerDescriptor: SamplerDescriptor) -> MTLSamplerDescriptor {
+        let metalDescriptor = MTLSamplerDescriptor()
+        
+        return metalDescriptor
     }
 }

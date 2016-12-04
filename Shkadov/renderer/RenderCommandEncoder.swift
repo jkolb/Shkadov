@@ -51,13 +51,13 @@ public protocol RenderCommandEncoder : CommandEncoder {
     
     func setVertexTextures(_ handles: [TextureHandle], with range: Range<Int>)
     
-    func setVertexSampler(_ sampler: Sampler?, at index: Int)
+    func setVertexSampler(_ handle: SamplerHandle, at index: Int)
     
-    func setVertexSamplers(_ samplers: [Sampler?], with range: Range<Int>)
+    func setVertexSamplers(_ handles: [SamplerHandle], with range: Range<Int>)
     
-    func setVertexSampler(_ sampler: Sampler?, lodMinClamp: Float, lodMaxClamp: Float, at index: Int)
+    func setVertexSampler(_ handle: SamplerHandle, lodMinClamp: Float, lodMaxClamp: Float, at index: Int)
     
-    func setVertexSamplers(_ samplers: [Sampler?], lodMinClamps: [Float], lodMaxClamps: [Float], with range: Range<Int>)
+    func setVertexSamplers(_ handles: [SamplerHandle], lodMinClamps: [Float], lodMaxClamps: [Float], with range: Range<Int>)
 
     func setFragmentBytes(_ bytes: UnsafeRawPointer, length: Int, at index: Int)
     
@@ -71,13 +71,13 @@ public protocol RenderCommandEncoder : CommandEncoder {
     
     func setFragmentTextures(_ handles: [TextureHandle], with range: Range<Int>)
     
-    func setFragmentSampler(_ sampler: Sampler?, at index: Int)
+    func setFragmentSampler(_ handle: SamplerHandle, at index: Int)
     
-    func setFragmentSamplers(_ samplers: [Sampler?], with range: Range<Int>)
+    func setFragmentSamplers(_ handles: [SamplerHandle], with range: Range<Int>)
     
-    func setFragmentSampler(_ sampler: Sampler?, lodMinClamp: Float, lodMaxClamp: Float, at index: Int)
+    func setFragmentSampler(_ handle: SamplerHandle, lodMinClamp: Float, lodMaxClamp: Float, at index: Int)
     
-    func setFragmentSamplers(_ samplers: [Sampler?], lodMinClamps: [Float], lodMaxClamps: [Float], with range: Range<Int>)
+    func setFragmentSamplers(_ handles: [SamplerHandle], lodMinClamps: [Float], lodMaxClamps: [Float], with range: Range<Int>)
 
     func drawPrimitives(type primitiveType: PrimitiveType, vertexStart: Int, vertexCount: Int, instanceCount: Int)
     

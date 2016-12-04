@@ -105,6 +105,10 @@ public struct MetalDataTypes {
         }
     }
     
+    public static func map(_ origin: Vector3<Int>) -> MTLOrigin {
+        return MTLOrigin(x: origin.x, y: origin.y, z: origin.z)
+    }
+
     public static func map(_ pixelFormat: PixelFormat) -> MTLPixelFormat {
         switch pixelFormat {
         case .rgba8Unorm:
@@ -135,14 +139,28 @@ public struct MetalDataTypes {
         return MTLRegion(origin: map(region.origin), size: map(region.size))
     }
     
-    public static func map(_ origin: Vector3<Int>) -> MTLOrigin {
-        return MTLOrigin(x: origin.x, y: origin.y, z: origin.z)
+    public static func map(_ options: ResourceOptions) -> MTLResourceOptions {
+        var metalOptions = MTLResourceOptions()
+        
+        if options.contains(.storageModeShared) {
+            metalOptions.formUnion(.storageModeShared)
+        }
+        
+        if options.contains(.storageModeManaged) {
+            metalOptions.formUnion(.storageModeManaged)
+        }
+        
+        if options.contains(.storageModePrivate) {
+            metalOptions.formUnion(.storageModePrivate)
+        }
+        
+        if options.contains(.cpuCacheModeWriteCombined) {
+            metalOptions.formUnion(.cpuCacheModeWriteCombined)
+        }
+        
+        return metalOptions
     }
-    
-    public static func map(_ size: Vector3<Int>) -> MTLSize {
-        return MTLSize(width: size.width, height: size.height, depth: size.depth)
-    }
-    
+
     public static func map(_ scissorRect: ScissorRect) -> MTLScissorRect {
         return MTLScissorRect(
             x: scissorRect.x,
@@ -152,6 +170,10 @@ public struct MetalDataTypes {
         )
     }
     
+    public static func map(_ size: Vector3<Int>) -> MTLSize {
+        return MTLSize(width: size.width, height: size.height, depth: size.depth)
+    }
+
     public static func map(_ fillMode: TriangleFillMode) -> MTLTriangleFillMode {
         switch fillMode {
         case .fill:

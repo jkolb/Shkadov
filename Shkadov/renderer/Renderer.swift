@@ -22,10 +22,8 @@
  SOFTWARE.
  */
 
-public protocol Renderer : GPUBufferOwner, ModuleOwner, TextureOwner {
+public protocol Renderer : GPUBufferOwner, ModuleOwner, TextureOwner, SamplerOwner {
     func makeCommandQueue() -> CommandQueue
-    
-    func makeSampler(descriptor: SamplerDescriptor) -> Sampler
     
     func makeRenderPipelineState(descriptor: RenderPipelineDescriptor) throws -> RenderPipelineState
     

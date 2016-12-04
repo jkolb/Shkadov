@@ -77,7 +77,6 @@
 		E5E14E1F1DF38E4400D08AAD /* RenderPipelineDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14DFC1DF38E4400D08AAD /* RenderPipelineDescriptor.swift */; };
 		E5E14E201DF38E4400D08AAD /* RenderPipelineState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14DFD1DF38E4400D08AAD /* RenderPipelineState.swift */; };
 		E5E14E211DF38E4400D08AAD /* ResourceOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14DFE1DF38E4400D08AAD /* ResourceOptions.swift */; };
-		E5E14E221DF38E4400D08AAD /* SamplerDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14DFF1DF38E4400D08AAD /* SamplerDescriptor.swift */; };
 		E5E14E241DF38E4400D08AAD /* ScissorRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E011DF38E4400D08AAD /* ScissorRect.swift */; };
 		E5E14E251DF38E4400D08AAD /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E021DF38E4400D08AAD /* Module.swift */; };
 		E5E14E261DF38E4400D08AAD /* Texture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E031DF38E4400D08AAD /* Texture.swift */; };
@@ -85,7 +84,6 @@
 		E5E14E2B1DF38E4400D08AAD /* Viewport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E081DF38E4400D08AAD /* Viewport.swift */; };
 		E5E14E2C1DF38E4400D08AAD /* Winding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E091DF38E4400D08AAD /* Winding.swift */; };
 		E5E14E301DF38ED800D08AAD /* Sampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E2D1DF38ED800D08AAD /* Sampler.swift */; };
-		E5E14E311DF38ED800D08AAD /* SamplerHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E2E1DF38ED800D08AAD /* SamplerHandle.swift */; };
 		E5E14E551DF38FAF00D08AAD /* MetalCommandBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E351DF38FAF00D08AAD /* MetalCommandBuffer.swift */; };
 		E5E14E561DF38FAF00D08AAD /* MetalCommandQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E361DF38FAF00D08AAD /* MetalCommandQueue.swift */; };
 		E5E14E591DF38FAF00D08AAD /* MetalGPUBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E391DF38FAF00D08AAD /* MetalGPUBuffer.swift */; };
@@ -94,8 +92,6 @@
 		E5E14E631DF38FAF00D08AAD /* MetalRenderPipelineColorAttachmentDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E431DF38FAF00D08AAD /* MetalRenderPipelineColorAttachmentDescriptor.swift */; };
 		E5E14E641DF38FAF00D08AAD /* MetalRenderPipelineDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E441DF38FAF00D08AAD /* MetalRenderPipelineDescriptor.swift */; };
 		E5E14E651DF38FAF00D08AAD /* MetalRenderPipelineState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E451DF38FAF00D08AAD /* MetalRenderPipelineState.swift */; };
-		E5E14E661DF38FAF00D08AAD /* MetalResourceOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E461DF38FAF00D08AAD /* MetalResourceOptions.swift */; };
-		E5E14E671DF38FAF00D08AAD /* MetalSamplerDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E471DF38FAF00D08AAD /* MetalSamplerDescriptor.swift */; };
 		E5E14E681DF38FAF00D08AAD /* MetalSampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E481DF38FAF00D08AAD /* MetalSampler.swift */; };
 		E5E14E6B1DF38FAF00D08AAD /* MetalModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E4B1DF38FAF00D08AAD /* MetalModule.swift */; };
 		E5E14E6C1DF38FAF00D08AAD /* MetalTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E4C1DF38FAF00D08AAD /* MetalTexture.swift */; };
@@ -251,7 +247,6 @@
 		E5E14DFC1DF38E4400D08AAD /* RenderPipelineDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderPipelineDescriptor.swift; sourceTree = "<group>"; };
 		E5E14DFD1DF38E4400D08AAD /* RenderPipelineState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderPipelineState.swift; sourceTree = "<group>"; };
 		E5E14DFE1DF38E4400D08AAD /* ResourceOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceOptions.swift; sourceTree = "<group>"; };
-		E5E14DFF1DF38E4400D08AAD /* SamplerDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplerDescriptor.swift; sourceTree = "<group>"; };
 		E5E14E011DF38E4400D08AAD /* ScissorRect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScissorRect.swift; sourceTree = "<group>"; };
 		E5E14E021DF38E4400D08AAD /* Module.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Module.swift; sourceTree = "<group>"; };
 		E5E14E031DF38E4400D08AAD /* Texture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Texture.swift; sourceTree = "<group>"; };
@@ -259,7 +254,6 @@
 		E5E14E081DF38E4400D08AAD /* Viewport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Viewport.swift; sourceTree = "<group>"; };
 		E5E14E091DF38E4400D08AAD /* Winding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Winding.swift; sourceTree = "<group>"; };
 		E5E14E2D1DF38ED800D08AAD /* Sampler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sampler.swift; sourceTree = "<group>"; };
-		E5E14E2E1DF38ED800D08AAD /* SamplerHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplerHandle.swift; sourceTree = "<group>"; };
 		E5E14E351DF38FAF00D08AAD /* MetalCommandBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalCommandBuffer.swift; sourceTree = "<group>"; };
 		E5E14E361DF38FAF00D08AAD /* MetalCommandQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalCommandQueue.swift; sourceTree = "<group>"; };
 		E5E14E391DF38FAF00D08AAD /* MetalGPUBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalGPUBuffer.swift; sourceTree = "<group>"; };
@@ -268,8 +262,6 @@
 		E5E14E431DF38FAF00D08AAD /* MetalRenderPipelineColorAttachmentDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalRenderPipelineColorAttachmentDescriptor.swift; sourceTree = "<group>"; };
 		E5E14E441DF38FAF00D08AAD /* MetalRenderPipelineDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalRenderPipelineDescriptor.swift; sourceTree = "<group>"; };
 		E5E14E451DF38FAF00D08AAD /* MetalRenderPipelineState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalRenderPipelineState.swift; sourceTree = "<group>"; };
-		E5E14E461DF38FAF00D08AAD /* MetalResourceOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalResourceOptions.swift; sourceTree = "<group>"; };
-		E5E14E471DF38FAF00D08AAD /* MetalSamplerDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalSamplerDescriptor.swift; sourceTree = "<group>"; };
 		E5E14E481DF38FAF00D08AAD /* MetalSampler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalSampler.swift; sourceTree = "<group>"; };
 		E5E14E4B1DF38FAF00D08AAD /* MetalModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalModule.swift; sourceTree = "<group>"; };
 		E5E14E4C1DF38FAF00D08AAD /* MetalTexture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalTexture.swift; sourceTree = "<group>"; };
@@ -467,8 +459,6 @@
 				E5E14E431DF38FAF00D08AAD /* MetalRenderPipelineColorAttachmentDescriptor.swift */,
 				E5E14E441DF38FAF00D08AAD /* MetalRenderPipelineDescriptor.swift */,
 				E5E14E451DF38FAF00D08AAD /* MetalRenderPipelineState.swift */,
-				E5E14E461DF38FAF00D08AAD /* MetalResourceOptions.swift */,
-				E5E14E471DF38FAF00D08AAD /* MetalSamplerDescriptor.swift */,
 				E5E14E481DF38FAF00D08AAD /* MetalSampler.swift */,
 				E5E14E4C1DF38FAF00D08AAD /* MetalTexture.swift */,
 				E579BAAB1DF349DB007DC0FE /* MetalView.swift */,
@@ -503,8 +493,6 @@
 				E5E14DFD1DF38E4400D08AAD /* RenderPipelineState.swift */,
 				E5E14DFE1DF38E4400D08AAD /* ResourceOptions.swift */,
 				E5E14E2D1DF38ED800D08AAD /* Sampler.swift */,
-				E5E14DFF1DF38E4400D08AAD /* SamplerDescriptor.swift */,
-				E5E14E2E1DF38ED800D08AAD /* SamplerHandle.swift */,
 				E5E14E011DF38E4400D08AAD /* ScissorRect.swift */,
 				E5E14E861DF4589B00D08AAD /* StorageMode.swift */,
 				E5E14E031DF38E4400D08AAD /* Texture.swift */,
@@ -791,7 +779,6 @@
 				E55607391DED381800D9F1F8 /* LoggerFactory.swift in Sources */,
 				E5E14E0C1DF38E4400D08AAD /* BlitCommandEncoder.swift in Sources */,
 				E5E14E611DF38FAF00D08AAD /* MetalRenderCommandEncoder.swift in Sources */,
-				E5E14E671DF38FAF00D08AAD /* MetalSamplerDescriptor.swift in Sources */,
 				E5E14E121DF38E4400D08AAD /* DepthClipMode.swift in Sources */,
 				E55606D51DEA7ACD00D9F1F8 /* RawConfigWriter.swift in Sources */,
 				E5E14E641DF38FAF00D08AAD /* MetalRenderPipelineDescriptor.swift in Sources */,
@@ -836,7 +823,6 @@
 				E55606B81DEA71EB00D9F1F8 /* Engine.swift in Sources */,
 				E55606B91DEA71EB00D9F1F8 /* main.swift in Sources */,
 				E5E14E1B1DF38E4400D08AAD /* PrimitiveType.swift in Sources */,
-				E5E14E221DF38E4400D08AAD /* SamplerDescriptor.swift in Sources */,
 				E55606E31DEB3DD100D9F1F8 /* UnixMath.swift in Sources */,
 				E5E14E1F1DF38E4400D08AAD /* RenderPipelineDescriptor.swift in Sources */,
 				E5E14E631DF38FAF00D08AAD /* MetalRenderPipelineColorAttachmentDescriptor.swift in Sources */,
@@ -866,12 +852,10 @@
 				E5E14E1A1DF38E4400D08AAD /* PixelFormat.swift in Sources */,
 				E5E14E191DF38E4400D08AAD /* IndexType.swift in Sources */,
 				E55606E61DEB3E1500D9F1F8 /* POSIXThreadIDProvider.swift in Sources */,
-				E5E14E311DF38ED800D08AAD /* SamplerHandle.swift in Sources */,
 				E5E14E131DF38E4400D08AAD /* GPUBuffer.swift in Sources */,
 				E5E14E0F1DF38E4400D08AAD /* CommandQueue.swift in Sources */,
 				E5E14E621DF38FAF00D08AAD /* MetalRenderPassDescriptor.swift in Sources */,
 				E579BAAC1DF349DB007DC0FE /* MetalView.swift in Sources */,
-				E5E14E661DF38FAF00D08AAD /* MetalResourceOptions.swift in Sources */,
 				E556070D1DEB819500D9F1F8 /* RendererConfig.swift in Sources */,
 				E55606FD1DEB674500D9F1F8 /* RendererType.swift in Sources */,
 				E5E14E0E1DF38E4400D08AAD /* CommandEncoder.swift in Sources */,

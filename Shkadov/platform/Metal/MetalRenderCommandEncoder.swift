@@ -28,11 +28,13 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
     public let instance: MTLRenderCommandEncoder
     private unowned(unsafe) let bufferOwner: MetalGPUBufferOwner
     private unowned(unsafe) let textureOwner: MetalTextureOwner
+    private unowned(unsafe) let samplerOwner: MetalSamplerOwner
     
-    public init(instance: MTLRenderCommandEncoder, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner) {
+    public init(instance: MTLRenderCommandEncoder, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner, samplerOwner: MetalSamplerOwner) {
         self.instance = instance
         self.bufferOwner = bufferOwner
         self.textureOwner = textureOwner
+        self.samplerOwner = samplerOwner
     }
     
     public func endEncoding() {
@@ -123,19 +125,19 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
         instance.setVertexTextures(metalTextures, with: NSMakeRange(range.lowerBound, range.count))
     }
     
-    public func setVertexSampler(_ sampler: Sampler?, at index: Int) {
-        if let metalSampler = sampler as? MetalSampler {
-            instance.setVertexSamplerState(metalSampler.instance, at: index)
+    public func setVertexSampler(_ handle: SamplerHandle, at index: Int) {
+        if handle.isValid {
+            instance.setVertexSamplerState(samplerOwner[handle], at: index)
         }
         else {
             instance.setVertexSamplerState(nil, at: index)
         }
     }
     
-    public func setVertexSamplers(_ samplers: [Sampler?], with range: Range<Int>) {
-        let metalSamplers = samplers.map { (sampler) -> MTLSamplerState? in
-            if let metalSampler = sampler as? MetalSampler {
-                return metalSampler.instance
+    public func setVertexSamplers(_ handles: [SamplerHandle], with range: Range<Int>) {
+        let metalSamplers = handles.map { (handle) -> MTLSamplerState? in
+            if handle.isValid {
+                return samplerOwner[handle]
             }
             else {
                 return nil
@@ -144,19 +146,19 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
         instance.setVertexSamplerStates(metalSamplers, with: NSMakeRange(range.lowerBound, range.count))
     }
     
-    public func setVertexSampler(_ sampler: Sampler?, lodMinClamp: Float, lodMaxClamp: Float, at index: Int) {
-        if let metalSampler = sampler as? MetalSampler {
-            instance.setVertexSamplerState(metalSampler.instance, lodMinClamp: lodMinClamp, lodMaxClamp: lodMaxClamp, at: index)
+    public func setVertexSampler(_ handle: SamplerHandle, lodMinClamp: Float, lodMaxClamp: Float, at index: Int) {
+        if handle.isValid {
+            instance.setVertexSamplerState(samplerOwner[handle], lodMinClamp: lodMinClamp, lodMaxClamp: lodMaxClamp, at: index)
         }
         else {
             instance.setVertexSamplerState(nil, lodMinClamp: lodMinClamp, lodMaxClamp: lodMaxClamp, at: index)
         }
     }
     
-    public func setVertexSamplers(_ samplers: [Sampler?], lodMinClamps: [Float], lodMaxClamps: [Float], with range: Range<Int>) {
-        let metalSamplers = samplers.map { (sampler) -> MTLSamplerState? in
-            if let metalSampler = sampler as? MetalSampler {
-                return metalSampler.instance
+    public func setVertexSamplers(_ handles: [SamplerHandle], lodMinClamps: [Float], lodMaxClamps: [Float], with range: Range<Int>) {
+        let metalSamplers = handles.map { (handle) -> MTLSamplerState? in
+            if handle.isValid {
+                return samplerOwner[handle]
             }
             else {
                 return nil
@@ -215,19 +217,19 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
         instance.setFragmentTextures(metalTextures, with: NSMakeRange(range.lowerBound, range.count))
     }
     
-    public func setFragmentSampler(_ sampler: Sampler?, at index: Int) {
-        if let metalSampler = sampler as? MetalSampler {
-            instance.setFragmentSamplerState(metalSampler.instance, at: index)
+    public func setFragmentSampler(_ handle: SamplerHandle, at index: Int) {
+        if handle.isValid {
+            instance.setFragmentSamplerState(samplerOwner[handle], at: index)
         }
         else {
             instance.setFragmentSamplerState(nil, at: index)
         }
     }
     
-    public func setFragmentSamplers(_ samplers: [Sampler?], with range: Range<Int>) {
-        let metalSamplers = samplers.map { (sampler) -> MTLSamplerState? in
-            if let metalSampler = sampler as? MetalSampler {
-                return metalSampler.instance
+    public func setFragmentSamplers(_ handles: [SamplerHandle], with range: Range<Int>) {
+        let metalSamplers = handles.map { (handle) -> MTLSamplerState? in
+            if handle.isValid {
+                return samplerOwner[handle]
             }
             else {
                 return nil
@@ -236,19 +238,19 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
         instance.setFragmentSamplerStates(metalSamplers, with: NSMakeRange(range.lowerBound, range.count))
     }
     
-    public func setFragmentSampler(_ sampler: Sampler?, lodMinClamp: Float, lodMaxClamp: Float, at index: Int) {
-        if let metalSampler = sampler as? MetalSampler {
-            instance.setFragmentSamplerState(metalSampler.instance, lodMinClamp: lodMinClamp, lodMaxClamp: lodMaxClamp, at: index)
+    public func setFragmentSampler(_ handle: SamplerHandle, lodMinClamp: Float, lodMaxClamp: Float, at index: Int) {
+        if handle.isValid {
+            instance.setFragmentSamplerState(samplerOwner[handle], lodMinClamp: lodMinClamp, lodMaxClamp: lodMaxClamp, at: index)
         }
         else {
             instance.setFragmentSamplerState(nil, lodMinClamp: lodMinClamp, lodMaxClamp: lodMaxClamp, at: index)
         }
     }
     
-    public func setFragmentSamplers(_ samplers: [Sampler?], lodMinClamps: [Float], lodMaxClamps: [Float], with range: Range<Int>) {
-        let metalSamplers = samplers.map { (sampler) -> MTLSamplerState? in
-            if let metalSampler = sampler as? MetalSampler {
-                return metalSampler.instance
+    public func setFragmentSamplers(_ handles: [SamplerHandle], lodMinClamps: [Float], lodMaxClamps: [Float], with range: Range<Int>) {
+        let metalSamplers = handles.map { (handle) -> MTLSamplerState? in
+            if handle.isValid {
+                return samplerOwner[handle]
             }
             else {
                 return nil

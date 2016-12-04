@@ -35,6 +35,7 @@ public final class MetalRenderer : Renderer {
     private let bufferOwner: MetalGPUBufferOwner
     private let moduleOwner: MetalModuleOwner
     private let textureOwner: MetalTextureOwner
+    private let samplerOwner: MetalSamplerOwner
     
     public init(view: MetalView, config: RendererConfig, logger: Logger) {
         self.device = view.device!
@@ -45,6 +46,7 @@ public final class MetalRenderer : Renderer {
         self.bufferOwner = MetalGPUBufferOwner(device: device)
         self.moduleOwner = MetalModuleOwner(device: device)
         self.textureOwner = MetalTextureOwner(device: device)
+        self.samplerOwner = MetalSamplerOwner(device: device)
         
         view.drawableSize = CGSize(width: config.width, height: config.height)
     }
@@ -58,7 +60,7 @@ public final class MetalRenderer : Renderer {
     }
     
     public func makeCommandQueue() -> CommandQueue {
-        return MetalCommandQueue(instance: device.makeCommandQueue(), bufferOwner: bufferOwner, textureOwner: textureOwner)
+        return MetalCommandQueue(instance: device.makeCommandQueue(), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner)
     }
     
     public func createBuffer(count: Int, storageMode: StorageMode) -> GPUBufferHandle {
@@ -97,10 +99,12 @@ public final class MetalRenderer : Renderer {
         return textureOwner.destroyTexture(handle: handle)
     }
     
-    public func makeSampler(descriptor: SamplerDescriptor) -> Sampler {
-        let metalDescriptor = MetalSamplerDescriptor.map(descriptor)
-        let metalSampler = device.makeSamplerState(descriptor: metalDescriptor)
-        return MetalSampler(instance: metalSampler)
+    public func createSampler(descriptor: SamplerDescriptor) -> SamplerHandle {
+        return samplerOwner.createSampler(descriptor: descriptor)
+    }
+    
+    public func destroySampler(handle: SamplerHandle) {
+        samplerOwner.destroySampler(handle: handle)
     }
     
     public func createModule(filepath: String) throws -> ModuleHandle {
