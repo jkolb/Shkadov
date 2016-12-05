@@ -85,6 +85,10 @@ public final class Engine {
         try configWriter.write(config: rawConfig, path: config.paths.configPath)
     }
     
+    public func pathForResource(named: String) -> String {
+        return config.paths.resourcesPath + named
+    }
+    
     public var currentTime: Time {
         return timeSource.currentTime
     }

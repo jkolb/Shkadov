@@ -25,8 +25,8 @@
 public struct RenderPipelineDescriptor {
     public var vertexShader: VertexFunctionHandle = VertexFunctionHandle()
     public var fragmentShader: FragmentFunctionHandle = FragmentFunctionHandle()
-    public var sampleCount: Int = 0
-    public var isRasterizationEnabled: Bool = false
+    public var sampleCount: Int = 1
+    public var isRasterizationEnabled: Bool = true
     public var colorAttachments: [RenderPipelineColorAttachmentDescriptor] = []
     public var depthAttachmentPixelFormat: PixelFormat = .invalid
     public var stencilAttachmentPixelFormat: PixelFormat = .invalid

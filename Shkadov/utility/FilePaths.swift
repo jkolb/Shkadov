@@ -24,4 +24,5 @@
 
 public protocol FilePaths : class {
     var configPath: String { get }
+    var resourcesPath: String { get }
 }

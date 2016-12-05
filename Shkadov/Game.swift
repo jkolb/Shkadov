@@ -70,7 +70,16 @@ public final class Game : EngineListener {
     private var depthTestLess: DepthStencilStateHandle
     private var depthTestAlways: DepthStencilStateHandle
     private var constantBuffers: [GPUBufferHandle]
-    
+    private var unshadedPipeline: RenderPipelineStateHandle
+    private var unshadedShadowedPipeline: RenderPipelineStateHandle
+    private var litPipeline: RenderPipelineStateHandle
+    private var litShadowedPipeline: RenderPipelineStateHandle
+    private var planeRenderPipeline: RenderPipelineStateHandle
+    private var zpassPipeline: RenderPipelineStateHandle
+    private var quadVisPipeline: RenderPipelineStateHandle
+    private var depthVisPipeline: RenderPipelineStateHandle
+    private var texQuadVisPipeline: RenderPipelineStateHandle
+
     public init(engine: Engine, logger: Logger) {
         self.engine = engine
         self.logger = logger
@@ -83,11 +92,62 @@ public final class Game : EngineListener {
         self.depthTestLess = DepthStencilStateHandle()
         self.depthTestAlways = DepthStencilStateHandle()
         self.constantBuffers = []
+        self.unshadedPipeline = RenderPipelineStateHandle()
+        self.unshadedShadowedPipeline = RenderPipelineStateHandle()
+        self.litPipeline = RenderPipelineStateHandle()
+        self.litShadowedPipeline = RenderPipelineStateHandle()
+        self.planeRenderPipeline = RenderPipelineStateHandle()
+        self.zpassPipeline = RenderPipelineStateHandle()
+        self.quadVisPipeline = RenderPipelineStateHandle()
+        self.depthVisPipeline = RenderPipelineStateHandle()
+        self.texQuadVisPipeline = RenderPipelineStateHandle()
     }
     
     public func didStartup() {
         logger.debug("\(#function)")
         logger.debug("Screen Size: \(engine.screensSize)")
+        
+        do {
+            let modulePath = engine.pathForResource(named: "default.metallib")
+            logger.debug("\(modulePath)")
+            let module = try engine.createModule(filepath: modulePath)
+            defer {
+                engine.destroyModule(handle: module)
+            }
+            
+            let vertexFunction = engine.createVertexFunction(module: module, named: "vertex_main")
+            let unshadedFragment = engine.createFragmentFunction(module: module, named: "unshaded_fragment")
+            let unshadedShadowedFragment = engine.createFragmentFunction(module: module, named: "unshaded_shadowed_fragment")
+            let planeVertex = engine.createVertexFunction(module: module, named: "plane_vertex")
+            let planeFragment = engine.createFragmentFunction(module: module, named: "plane_fragment")
+
+            defer {
+                engine.destroyVertexFunction(handle: vertexFunction)
+                engine.destroyFragmentFunction(handle: unshadedFragment)
+                engine.destroyFragmentFunction(handle: unshadedShadowedFragment)
+                engine.destroyVertexFunction(handle: planeVertex)
+                engine.destroyFragmentFunction(handle: planeFragment)
+            }
+
+            var pipelineDescriptor = RenderPipelineDescriptor()
+            pipelineDescriptor.vertexShader = vertexFunction
+            pipelineDescriptor.fragmentShader = unshadedFragment
+            pipelineDescriptor.colorAttachments.append(RenderPipelineColorAttachmentDescriptor())
+            pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+            pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
+            
+            unshadedPipeline = try engine.createRenderPipelineState(descriptor: pipelineDescriptor)
+            
+            pipelineDescriptor.fragmentShader = unshadedShadowedFragment
+            unshadedShadowedPipeline = try engine.createRenderPipelineState(descriptor: pipelineDescriptor)
+            
+        }
+        catch {
+            logger.debug("\(error)")
+            fatalError()
+        }
+        
+        
         camera.projection.fovy = engine.config.renderer.fovy
         camera.projection.zNear = 0.1
         camera.projection.zFar = 1000.0
