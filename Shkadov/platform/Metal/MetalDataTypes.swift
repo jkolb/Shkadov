@@ -198,6 +198,17 @@ public struct MetalDataTypes {
     public static func map(_ size: Vector3<Int>) -> MTLSize {
         return MTLSize(width: size.width, height: size.height, depth: size.depth)
     }
+    
+    public static func map(_ storageMode: StorageMode) -> MTLStorageMode {
+        switch storageMode {
+        case .sharedWithCPU:
+            return .shared
+        case .unsafeSharedWithCPU:
+            return .managed
+        case .privateToGPU:
+            return .private
+        }
+    }
 
     public static func map(_ fillMode: TriangleFillMode) -> MTLTriangleFillMode {
         switch fillMode {

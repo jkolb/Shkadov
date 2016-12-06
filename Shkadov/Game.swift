@@ -51,6 +51,28 @@ struct MainPass {
 //    matrix_float4x4 pad1;
 }
 
+let SHADOW_DIMENSION = 2048
+
+let MAX_FRAMES_IN_FLIGHT : Int = 3
+
+let SHADOW_PASS_COUNT : Int = 1
+let MAIN_PASS_COUNT : Int = 1
+let OBJECT_COUNT : Int = 200000
+
+let START_POSITION = Vector3<Float>(0.0, 0.0, -325.0)
+
+let START_CAMERA_VIEW_DIR = Vector3<Float>(0.0, 0.0, 1.0)
+let START_CAMERA_UP_DIR = Vector3<Float>(0.0, 1.0, 0.0)
+
+let GROUND_POSITION = Vector3<Float>(0.0, -250.0, 0.0)
+let GROUND_COLOR = Vector4<Float>(1.0)
+
+let SHADOWED_DIRECTIONAL_LIGHT_DIRECTION = Vector3<Float>(0.0, -1.0, 0.0)
+let SHADOWED_DIRECTIONAL_LIGHT_UP = Vector3<Float>(0.0, 0.0, 1.0)
+let SHADOWED_DIRECTIONAL_LIGHT_POSITION = Vector3<Float>(0.0, 225.0, 0.0)
+
+let CONSTANT_BUFFER_SIZE : Int = OBJECT_COUNT * MemoryLayout<ObjectData>.size + SHADOW_PASS_COUNT * MemoryLayout<ShadowPass>.size + MAIN_PASS_COUNT * MemoryLayout<MainPass>.size
+
 public final class Game : EngineListener {
     private let engine: Engine
     private let logger: Logger
@@ -107,6 +129,16 @@ public final class Game : EngineListener {
         logger.debug("\(#function)")
         logger.debug("Screen Size: \(engine.screensSize)")
         
+        var renderPassDescriptor = RenderPassDescriptor()
+        renderPassDescriptor.colorAttachments.append(RenderPassColorAttachmentDescriptor())
+        renderPassDescriptor.colorAttachments[0].clearColor = ClearColor(r: 0.0, g: 0.0, b: 0.0, a: 1.0)
+        renderPassDescriptor.colorAttachments[0].loadAction = .clear
+        renderPassDescriptor.colorAttachments[0].storeAction = .store
+        
+        renderPassDescriptor.depthAttachment.clearDepth = 1.0
+        renderPassDescriptor.depthAttachment.loadAction = .clear
+        renderPassDescriptor.depthAttachment.storeAction = .dontCare
+        
         do {
             let modulePath = engine.pathForResource(named: "default.metallib")
             logger.debug("\(modulePath)")
@@ -141,13 +173,135 @@ public final class Game : EngineListener {
             pipelineDescriptor.fragmentShader = unshadedShadowedFragment
             unshadedShadowedPipeline = try engine.createRenderPipelineState(descriptor: pipelineDescriptor)
             
+            let litVertexFunction = engine.createVertexFunction(module: module, named: "lit_vertex")
+            let litFragmentFunction = engine.createFragmentFunction(module: module, named: "lit_fragment")
+            let litShadowedFragment = engine.createFragmentFunction(module: module, named: "lit_shadowed_fragment")
+            
+            defer {
+                engine.destroyVertexFunction(handle: litVertexFunction)
+                engine.destroyFragmentFunction(handle: litFragmentFunction)
+                engine.destroyFragmentFunction(handle: litShadowedFragment)
+            }
+
+            pipelineDescriptor.vertexShader = litVertexFunction
+            pipelineDescriptor.fragmentShader = litFragmentFunction
+            litPipeline = try engine.createRenderPipelineState(descriptor: pipelineDescriptor)
+
+            pipelineDescriptor.fragmentShader = litShadowedFragment
+            litShadowedPipeline = try engine.createRenderPipelineState(descriptor: pipelineDescriptor)
+
+            pipelineDescriptor.vertexShader = planeVertex
+            pipelineDescriptor.fragmentShader = planeFragment
+            planeRenderPipeline = try engine.createRenderPipelineState(descriptor: pipelineDescriptor)
+
+            let zpassVertex = engine.createVertexFunction(module: module, named: "zpass_vertex_main")
+            let zpassFragment = engine.createFragmentFunction(module: module, named: "zpass_fragment")
+            
+            defer {
+                engine.destroyVertexFunction(handle: zpassVertex)
+                engine.destroyFragmentFunction(handle: zpassFragment)
+            }
+
+            pipelineDescriptor.vertexShader = zpassVertex
+            pipelineDescriptor.fragmentShader = zpassFragment
+            pipelineDescriptor.colorAttachments[0].pixelFormat = .invalid
+            pipelineDescriptor.colorAttachments[0].writeMask = []
+            zpassPipeline = try engine.createRenderPipelineState(descriptor: pipelineDescriptor)
+            
+            let vertexFunction2 = engine.createVertexFunction(module: module, named: "quad_vertex_main")
+            let quadVisFragFunction = engine.createFragmentFunction(module: module, named: "quad_fragment_main")
+            let quadTexVisFunction = engine.createFragmentFunction(module: module, named: "textured_quad_fragment")
+            let quadDepthVisFunction = engine.createFragmentFunction(module: module, named: "visualize_depth_fragment")
+            
+            var pipeDesc = RenderPipelineDescriptor()
+            pipeDesc.vertexShader = vertexFunction2
+            pipeDesc.fragmentShader = quadVisFragFunction
+            pipeDesc.colorAttachments.append(RenderPipelineColorAttachmentDescriptor())
+            pipeDesc.colorAttachments[0].pixelFormat = .bgra8Unorm
+            
+            quadVisPipeline = try engine.createRenderPipelineState(descriptor: pipeDesc)
+            
+            pipeDesc.fragmentShader = quadDepthVisFunction
+            depthVisPipeline = try engine.createRenderPipelineState(descriptor: pipeDesc)
+            
+            pipeDesc.fragmentShader = quadTexVisFunction
+            texQuadVisPipeline = try engine.createRenderPipelineState(descriptor: pipeDesc)
         }
         catch {
             logger.debug("\(error)")
             fatalError()
         }
         
+        for _ in 1...MAX_FRAMES_IN_FLIGHT {
+            let buf = engine.createBuffer(count: CONSTANT_BUFFER_SIZE, storageMode: .unsafeSharedWithCPU)
+            constantBuffers.append(buf)
+        }
         
+        do {
+            var texDesc = TextureDescriptor()
+            texDesc.pixelFormat = .depth32Float
+            texDesc.width = SHADOW_DIMENSION
+            texDesc.height = SHADOW_DIMENSION
+            texDesc.depth = 1
+            texDesc.textureType = .type2D
+            texDesc.textureUsage = [.renderTarget, .shaderRead]
+            texDesc.storageMode = .privateToGPU
+            
+            shadowMap = engine.createTexture(descriptor: texDesc)
+        }
+        
+        do {
+            var texDesc = TextureDescriptor()
+            texDesc.width =  engine.config.renderer.width
+            texDesc.height =  engine.config.renderer.height
+            texDesc.depth = 1
+            texDesc.textureType = .type2D
+            
+            texDesc.textureUsage = [.renderTarget, .shaderRead]
+            texDesc.storageMode = .privateToGPU
+            texDesc.pixelFormat = .bgra8Unorm
+            
+            mainPassFramebuffer = engine.createTexture(descriptor: texDesc)
+            
+            renderPassDescriptor.colorAttachments[0].texture = mainPassFramebuffer
+        }
+        
+        do {
+            var texDesc = TextureDescriptor.texture2DDescriptor(pixelFormat: .depth32Float,
+                                                                width: engine.config.renderer.width,
+                                                                height: engine.config.renderer.height,
+                                                                mipmapped: false)
+            texDesc.textureUsage = [.renderTarget, .shaderRead]
+            texDesc.storageMode = .privateToGPU
+            mainPassDepthTexture = engine.createTexture(descriptor: texDesc)
+            
+            renderPassDescriptor.depthAttachment.texture = mainPassDepthTexture
+        }
+
+        mainRenderPass = engine.createRenderPass(descriptor: renderPassDescriptor)
+
+        do {
+            var rp = RenderPassDescriptor()
+            rp.depthAttachment.clearDepth = 1.0
+            rp.depthAttachment.texture = shadowMap
+            rp.depthAttachment.loadAction = .clear
+            rp.depthAttachment.storeAction = .store
+            shadowRenderPasses.append(engine.createRenderPass(descriptor: rp))
+        }
+
+        do {
+            var depthStencilDesc = DepthStencilDescriptor()
+            depthStencilDesc.isDepthWriteEnabled = true
+            depthStencilDesc.depthCompareFunction = .less
+            
+            depthTestLess = engine.createDepthStencilState(descriptor: depthStencilDesc)
+            
+            depthStencilDesc.isDepthWriteEnabled = false
+            depthStencilDesc.depthCompareFunction = .always
+            
+            depthTestAlways = engine.createDepthStencilState(descriptor: depthStencilDesc)
+        }
+
         camera.projection.fovy = engine.config.renderer.fovy
         camera.projection.zNear = 0.1
         camera.projection.zFar = 1000.0

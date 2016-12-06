@@ -35,6 +35,20 @@ public struct RenderPipelineDescriptor {
     }
 }
 
+public struct ColorWriteMask : OptionSet {
+    public let rawValue: UInt32
+    
+    public init(rawValue: UInt32) {
+        self.rawValue = rawValue
+    }
+    
+    public static var red = ColorWriteMask(rawValue: 0x1 << 3)
+    public static var green = ColorWriteMask(rawValue: 0x1 << 2)
+    public static var blue = ColorWriteMask(rawValue: 0x1 << 1)
+    public static var alpha = ColorWriteMask(rawValue: 0x1 << 0)
+    public static var all = ColorWriteMask(rawValue: 0xf)
+}
+
 public struct RenderPipelineColorAttachmentDescriptor {
     public var pixelFormat: PixelFormat = .invalid
     public var isBlendingEnabled: Bool = false
@@ -44,11 +58,7 @@ public struct RenderPipelineColorAttachmentDescriptor {
     public var sourceAlphaBlendFactor: BlendFactor = .one
     public var destinationAlphaBlendFactor: BlendFactor = .zero
     public var alphaBlendOperation: BlendOperation = .add
-    
-    /* Other Options */
-    
-    /*! Defaults to MTLColorWriteMaskAll */
-    //    public var writeMask: MTLColorWriteMask
+    public var writeMask: ColorWriteMask = .all
 }
 
 public struct RenderPipelineStateHandle : Handle {

@@ -47,7 +47,7 @@ public struct TextureDescriptor {
     public var height: Int = 1
     public var depth: Int = 1
     public var mipmapLevelCount: Int = 1
-    public var storageMode: ResourceOptions = [.storageModeShared]
+    public var storageMode: StorageMode = .sharedWithCPU
     public var textureUsage: TextureUsage = [.shaderRead]
     
     public static func texture2DDescriptor(pixelFormat: PixelFormat, width: Int, height: Int, mipmapped: Bool) -> TextureDescriptor {

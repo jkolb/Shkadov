@@ -28,7 +28,7 @@ public final class FoundationFilePaths : FilePaths {
     public let configPath: String
     public let resourcesPath: String
     
-    public init(applicationNameProvider: ApplicationNameProvider) {
+    public init(applicationNameProvider: ApplicationNameProvider, resourceRootPath: String) {
         let fileManager = FileManager.default
         do {
             let applicationSupportURL = try fileManager.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
@@ -36,7 +36,7 @@ public final class FoundationFilePaths : FilePaths {
             try fileManager.createDirectory(at: applicationURL, withIntermediateDirectories: true, attributes: nil)
             self.configPath = "/" + applicationURL.appendingPathComponent("config.json").path
             
-            self.resourcesPath = Bundle.main.bundlePath + "/Contents/Resources/"
+            self.resourcesPath = Bundle.main.bundlePath + resourceRootPath
         }
         catch {
             fatalError("\(error)")

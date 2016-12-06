@@ -93,7 +93,7 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
     }
     
     private func filePaths() -> FilePaths {
-        return scoped(FoundationFilePaths(applicationNameProvider: applicationNameProvider()))
+        return scoped(FoundationFilePaths(applicationNameProvider: applicationNameProvider(), resourceRootPath: "/Contents/Resources/"))
     }
     
     private func rawConfig() -> RawConfig {

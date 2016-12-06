@@ -65,6 +65,7 @@ public final class MetalTextureOwner : TextureOwner {
         metalDescriptor.depth = descriptor.depth
         metalDescriptor.mipmapLevelCount = descriptor.mipmapLevelCount
         metalDescriptor.usage = map(descriptor.textureUsage)
+        metalDescriptor.storageMode = MetalDataTypes.map(descriptor.storageMode)
         return metalDescriptor
     }
     
