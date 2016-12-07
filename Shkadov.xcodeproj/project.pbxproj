@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0924E21F1DF6F48300795EAC /* RenderableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0924E21E1DF6F48300795EAC /* RenderableObject.swift */; };
 		09428F7D1DF649830096612A /* Visualize.metal in Sources */ = {isa = PBXBuildFile; fileRef = 09428F7C1DF649830096612A /* Visualize.metal */; };
 		09C2B85E1DF114DE0098B147 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C2B85D1DF114DE0098B147 /* Screen.swift */; };
 		E55606741DEA68F100D9F1F8 /* ShkadovTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606731DEA68F100D9F1F8 /* ShkadovTests.swift */; };
@@ -169,6 +170,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0924E21E1DF6F48300795EAC /* RenderableObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderableObject.swift; sourceTree = "<group>"; };
 		09428F7C1DF649830096612A /* Visualize.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Visualize.metal; sourceTree = "<group>"; };
 		09C2B85D1DF114DE0098B147 /* Screen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
 		E556065C1DEA68F000D9F1F8 /* Shkadov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shkadov.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -328,6 +330,7 @@
 				09428F7C1DF649830096612A /* Visualize.metal */,
 				E55606A91DEA71EB00D9F1F8 /* main.swift */,
 				E55607341DED34D400D9F1F8 /* Game.swift */,
+				0924E21E1DF6F48300795EAC /* RenderableObject.swift */,
 				E55606A61DEA71EB00D9F1F8 /* engine */,
 				E55606AA1DEA71EB00D9F1F8 /* platform */,
 				E55606C31DEA755C00D9F1F8 /* renderer */,
@@ -787,6 +790,7 @@
 				E5E14E1E1DF38E4400D08AAD /* RenderPass.swift in Sources */,
 				E5E14E681DF38FAF00D08AAD /* MetalSampler.swift in Sources */,
 				E55607391DED381800D9F1F8 /* LoggerFactory.swift in Sources */,
+				0924E21F1DF6F48300795EAC /* RenderableObject.swift in Sources */,
 				E5E14E0C1DF38E4400D08AAD /* BlitCommandEncoder.swift in Sources */,
 				E5E14E611DF38FAF00D08AAD /* MetalRenderCommandEncoder.swift in Sources */,
 				E5E14E121DF38E4400D08AAD /* DepthClipMode.swift in Sources */,

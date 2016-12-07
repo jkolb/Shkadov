@@ -25,8 +25,8 @@
 import Swiftish
 
 struct ObjectData {
-    var localToWorld: Matrix4x4<Float>
-    var color: Vector4<Float>
+    var localToWorld: Matrix4x4<Float> = Matrix4x4<Float>()
+    var color: Vector4<Float> = Vector4<Float>(0.0, 0.0, 0.0, 1.0)
 //    vector_float4 pad0;
 //    vector_float4 pad01;
 //    vector_float4 pad02;
@@ -396,5 +396,84 @@ public final class Game : EngineListener {
         let commandBuffer = commandQueue.makeCommandBuffer()
         engine.present(commandBuffer: commandBuffer)
         commandBuffer.commit()
+    }
+    
+    private func createPlane() -> (GPUBufferHandle, Int) {
+        var verts : [CFloat] = [ -1000.5, 0.0,  1000.5, 1.0,
+                                 1000.5, 0.0,  1000.5, 1.0,
+                                 -1000.5, 0.0, -1000.5, 1.0,
+                                 1000.5, 0.0,  1000.5, 1.0,
+                                 1000.5, 0.0, -1000.5, 1.0,
+                                 -1000.5, 0.0, -1000.5, 1.0,]
+        
+        let length = verts.count*MemoryLayout<CFloat>.size
+        
+        let geoBufferHandle = engine.createBuffer(count: length, storageMode: .unsafeSharedWithCPU)
+        let geoBuffer = engine.borrowBuffer(handle: geoBufferHandle)
+        
+        let geoPtr = geoBuffer.bytes.bindMemory(to: CFloat.self, capacity: length)
+        
+        geoPtr.assign(from: &verts, count: verts.count)
+        geoBuffer.wasCPUModified(range: 0..<verts.count*MemoryLayout<Float>.size)
+//        geoBuffer.didModifyRange(NSMakeRange(0, verts.count*MemoryLayout<Float>.size))
+        
+        return (geoBufferHandle, verts.count / 4)
+    }
+    
+    private func createCube() -> (GPUBufferHandle, GPUBufferHandle?, Int, Int) {
+        var verts : [CFloat] = [-0.5,  0.5, -0.5, 0.0, 0.0, -1.0,//0
+            0.5,  0.5, -0.5, 0.0, 0.0, -1.0,//1
+            0.5, -0.5, -0.5, 0.0, 0.0, -1.0,//2
+            0.5, -0.5, -0.5, 0.0, 0.0, -1.0,//2
+            -0.5, -0.5, -0.5, 0.0, 0.0, -1.0,//3
+            -0.5,  0.5, -0.5, 0.0, 0.0, -1.0,//0
+            
+            0.5,  0.5, -0.5, 1.0,0.0,0.0, //1
+            0.5,  0.5,  0.5, 1.0,0.0,0.0, //5
+            0.5, -0.5,  0.5, 1.0,0.0,0.0, //6
+            0.5, -0.5,  0.5, 1.0,0.0,0.0, //6
+            0.5, -0.5, -0.5, 1.0,0.0,0.0, //2
+            0.5,  0.5, -0.5, 1.0,0.0,0.0, //1
+            
+            0.5,  0.5,  0.5, 0.0,0.0,1.0, //5
+            -0.5,  0.5,  0.5, 0.0,0.0,1.0, //4
+            -0.5, -0.5,  0.5, 0.0,0.0,1.0, //7
+            -0.5, -0.5,  0.5, 0.0,0.0,1.0, //7
+            0.5, -0.5,  0.5, 0.0,0.0,1.0, //6
+            0.5,  0.5,  0.5, 0.0,0.0,1.0, //5
+            
+            -0.5,  0.5,  0.5, -1.0,0.0,0.0, //4
+            -0.5,  0.5, -0.5, -1.0,0.0,0.0, //0
+            -0.5, -0.5, -0.5, -1.0,0.0,0.0, //3
+            -0.5, -0.5, -0.5, -1.0,0.0,0.0, //3
+            -0.5, -0.5,  0.5, -1.0,0.0,0.0, //7
+            -0.5,  0.5,  0.5, -1.0,0.0,0.0, //4
+            
+            -0.5,  0.5,  0.5, 0.0,1.0,0.0,//4
+            0.5,  0.5,  0.5, 0.0,1.0,0.0, //5
+            0.5,  0.5, -0.5, 0.0,1.0,0.0, //1
+            0.5,  0.5, -0.5, 0.0,1.0,0.0, //1
+            -0.5,  0.5, -0.5, 0.0,1.0,0.0, //0
+            -0.5,  0.5,  0.5, 0.0,1.0,0.0, //4
+            
+            -0.5, -0.5, -0.5, 0.0,-1.0,0.0, //3
+            0.5, -0.5, -0.5, 0.0,-1.0,0.0, //2
+            0.5, -0.5,  0.5, 0.0,-1.0,0.0, //6
+            0.5, -0.5,  0.5, 0.0,-1.0,0.0, //6
+            -0.5, -0.5,  0.5, 0.0,-1.0,0.0, //7
+            -0.5, -0.5, -0.5, 0.0,-1.0,0.0, //3
+        ]
+        
+        let length = verts.count*MemoryLayout<CFloat>.size
+        let geoBufferHandle = engine.createBuffer(count: length, storageMode: .unsafeSharedWithCPU)
+        let geoBuffer = engine.borrowBuffer(handle: geoBufferHandle)
+        
+        let geoPtr = geoBuffer.bytes.bindMemory(to: CFloat.self, capacity: length)
+        
+        geoPtr.assign(from: &verts, count: verts.count)
+        geoBuffer.wasCPUModified(range: 0..<verts.count*MemoryLayout<Float>.size)
+//        geoBuffer.didModifyRange(NSMakeRange(0, verts.count*MemoryLayout<Float>.size))
+        
+        return (geoBufferHandle, nil, 0, verts.count/6)
     }
 }
