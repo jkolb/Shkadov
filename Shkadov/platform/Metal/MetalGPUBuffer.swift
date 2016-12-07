@@ -91,6 +91,6 @@ public final class MetalGPUBuffer : GPUBuffer {
     }
     
     public func wasCPUModified(range: Range<Int>) {
-        instance.didModifyRange(NSMakeRange(range.lowerBound, range.lowerBound - range.upperBound))
+        instance.didModifyRange(NSMakeRange(range.lowerBound, range.upperBound - range.lowerBound))
     }
 }

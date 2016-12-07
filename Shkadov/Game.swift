@@ -23,6 +23,7 @@
  */
 
 import Swiftish
+import Darwin
 
 struct ObjectData {
     var localToWorld: Matrix4x4<Float> = Matrix4x4<Float>()
@@ -35,16 +36,16 @@ struct ObjectData {
 }
 
 struct ShadowPass {
-    var viewProjection: Matrix4x4<Float>
+    var viewProjection: Matrix4x4<Float> = Matrix4x4<Float>()
 //    matrix_float4x4 pad1;
 //    matrix_float4x4 pad2;
 //    matrix_float4x4 pad3;
 }
 
 struct MainPass {
-    var viewProjection: Matrix4x4<Float>
-    var viewShadow0Projection: Matrix4x4<Float>
-    var lightPosition: Vector4<Float>
+    var viewProjection: Matrix4x4<Float> = Matrix4x4<Float>()
+    var viewShadow0Projection: Matrix4x4<Float> = Matrix4x4<Float>()
+    var lightPosition: Vector4<Float> = Vector4<Float>()
 //    vector_float4	pad00;
 //    vector_float4	pad01;
 //    vector_float4	pad02;
@@ -83,6 +84,7 @@ public final class Game : EngineListener {
     private let tickDuration = Duration(seconds: 1.0 / 60.0)
     private let maxFrameDuration = Duration(seconds: 0.25)
     private let camera = Camera()
+    private var shadowCameras: [Camera] = [Camera]()
     private let commandQueue: CommandQueue
     private var mainRenderPass: RenderPassHandle
     private var shadowRenderPasses: [RenderPassHandle]
@@ -101,6 +103,22 @@ public final class Game : EngineListener {
     private var quadVisPipeline: RenderPipelineStateHandle
     private var depthVisPipeline: RenderPipelineStateHandle
     private var texQuadVisPipeline: RenderPipelineStateHandle
+    private var renderables: ContiguousArray<RenderableObject> = ContiguousArray<RenderableObject>()
+    private var groundPlane: StaticRenderableObject!
+    private var frameCounter: UInt = 1
+    private var constantBufferSlot: Int = 0
+    private var mainPassView = Matrix4x4<Float>()
+    private var mainPassProjection = Matrix4x4<Float>()
+    private var mainPassFrameData = MainPass()
+    private var shadowPassData = [ShadowPass]()
+    private var moveForward = false
+    private var moveBackward = false
+    private var moveLeft = false
+    private var moveRight = false
+    private var mouseDown = false
+    private var objectsToRender = 10000
+    private var orbit = Vector2<Float>()
+    private var cameraAngles = Vector2<Float>()
 
     public init(engine: Engine, logger: Logger) {
         self.engine = engine
@@ -129,6 +147,25 @@ public final class Game : EngineListener {
         logger.debug("\(#function)")
         logger.debug("Screen Size: \(engine.screensSize)")
         
+        camera.worldTransform.t = START_POSITION
+        // TODO
+//        camera.direction = START_CAMERA_VIEW_DIR
+//        camera.up = START_CAMERA_UP_DIR
+        
+        do
+        {
+            var c = Camera()
+
+            // TODO
+//            c.direction = SHADOWED_DIRECTIONAL_LIGHT_DIRECTION
+//            c.up = SHADOWED_DIRECTIONAL_LIGHT_UP
+            c.worldTransform.t = SHADOWED_DIRECTIONAL_LIGHT_POSITION
+            
+            shadowCameras.append(c)
+            
+            shadowPassData.append(ShadowPass())
+        }
+
         var renderPassDescriptor = RenderPassDescriptor()
         renderPassDescriptor.colorAttachments.append(RenderPassColorAttachmentDescriptor())
         renderPassDescriptor.colorAttachments[0].clearColor = ClearColor(r: 0.0, g: 0.0, b: 0.0, a: 1.0)
@@ -302,9 +339,49 @@ public final class Game : EngineListener {
             depthTestAlways = engine.createDepthStencilState(descriptor: depthStencilDesc)
         }
 
+        do {
+            let (geo, index, indexCount, vertCount) = createCube()
+            
+            for _ in 0..<OBJECT_COUNT {
+                let p = Float(getRandomValue(500.0))
+                let p1 = Float(getRandomValue(100.0))
+                let p2 = Float(getRandomValue(500.0))
+                
+                let cube = RenderableObject(m: geo, idx: index, count: indexCount, tex: TextureHandle())
+                cube.transform.t = Vector3<Float>(p, p1, p2)
+                cube.count = vertCount
+                
+                let r = Float(Float(drand48())) * 2.0
+                let r1 = Float(Float(drand48())) * 2.0
+                let r2 = Float(Float(drand48())) * 2.0
+                
+                cube.rotationRate = Vector3<Float>(r, r1, r2)
+                
+                let scale = Float(drand48()*5.0)
+                
+                cube.transform.s = Vector3<Float>(scale)
+                
+                cube.objectData.color = Vector4<Float>(Float(drand48()),
+                                               Float(drand48()),
+                                               Float(drand48()), 1.0)
+                renderables.append(cube)
+            }
+        }
+        
+        do {
+            let (planeGeo, count) = createPlane()
+            groundPlane = StaticRenderableObject(m: planeGeo, idx: GPUBufferHandle(), count: count, tex: TextureHandle())
+            groundPlane.transform.t = Vector3<Float>(GROUND_POSITION.x,
+                                           GROUND_POSITION.y,
+                                           GROUND_POSITION.z)
+            groundPlane.objectData.color = GROUND_COLOR
+            groundPlane.objectData.localToWorld = groundPlane.transform.matrix
+        }
+
+        camera.projection.aspectRatio = Float(engine.config.renderer.width) / Float(engine.config.renderer.height)
         camera.projection.fovy = engine.config.renderer.fovy
-        camera.projection.zNear = 0.1
-        camera.projection.zFar = 1000.0
+        camera.projection.zNear = 1.0
+        camera.projection.zFar = 2000.0
         camera.worldTransform.t = Vector3<Float>(0.0, 0.0, 0.0)
         camera.worldTransform.r = rotation(pitch: Angle<Float>(), yaw: Angle<Float>(), roll: Angle<Float>())
         engine.mouseCursorFollowsMouse = true
@@ -389,6 +466,57 @@ public final class Game : EngineListener {
     
     private func update(elapsed: Duration) {
         logger.trace("\(#function)")
+        let currentFrame = frameCounter
+        let currentConstantBuffer = constantBufferSlot
+        
+        // Update view matrix here
+        if moveForward {
+            camera.worldTransform.t.z += 1.0
+        }
+        else if moveBackward {
+            camera.worldTransform.t.z -= 1.0
+        }
+        
+        if mouseDown {
+            cameraAngles.x += 0.005 * orbit.y
+            cameraAngles.y += 0.005 * orbit.x
+        }
+        
+        do {
+            // Figure out far plane distance at least
+            let zFar = distance(GROUND_POSITION,SHADOWED_DIRECTIONAL_LIGHT_POSITION)
+            
+            shadowPassData[0].viewProjection = getLHOrthoMatrix(1100, height: 1100, zFar: zFar, zNear: 25)
+            shadowPassData[0].viewProjection = shadowPassData[0].viewProjection * shadowCameras[0].worldTransform.matrix
+        }
+        
+        do {
+            //NOTE: We're doing an orbit so we've usurped the normal camera class here
+            let r = rotation(angle: Vector3<Float>(cameraAngles.x, cameraAngles.y, 0.0))
+            mainPassView = camera.viewMatrix * Matrix4x4<Float>(r.matrix)
+            mainPassFrameData.viewProjection = camera.projectionMatrix * mainPassView
+            mainPassFrameData.viewShadow0Projection = shadowPassData[0].viewProjection
+            mainPassFrameData.lightPosition = Vector4<Float>(SHADOWED_DIRECTIONAL_LIGHT_POSITION.x,
+                                                     SHADOWED_DIRECTIONAL_LIGHT_POSITION.y,
+                                                     SHADOWED_DIRECTIONAL_LIGHT_POSITION.z, 1.0)
+        }
+        
+        // Select which constant buffer to use
+        let constantBufferForFrame = engine.borrowBuffer(handle: constantBuffers[currentConstantBuffer])
+        
+        // Calculate the offsets into the constant buffer for the shadow pass data, main pass data, and object data
+        let shadowOffset = 0
+        let mainPassOffset = 256 + shadowOffset
+        let objectDataOffset = 256 + mainPassOffset
+        
+        // Write the shadow pass data into the constants buffer
+        constantBufferForFrame.bytes.storeBytes(of: shadowPassData[0], toByteOffset: shadowOffset, as: ShadowPass.self)
+        
+        // Write the main pass data into the constants buffer
+        constantBufferForFrame.bytes.storeBytes(of: mainPassFrameData, toByteOffset: mainPassOffset, as: MainPass.self)
+        
+        // Create a mutable pointer to the beginning of the object data so we can step through it and set the data of each object individually
+        var ptr = constantBufferForFrame.bytes.advanced(by: objectDataOffset).bindMemory(to: ObjectData.self, capacity: objectsToRender)
     }
     
     private func render() {
@@ -420,7 +548,7 @@ public final class Game : EngineListener {
         return (geoBufferHandle, verts.count / 4)
     }
     
-    private func createCube() -> (GPUBufferHandle, GPUBufferHandle?, Int, Int) {
+    private func createCube() -> (GPUBufferHandle, GPUBufferHandle, Int, Int) {
         var verts : [CFloat] = [-0.5,  0.5, -0.5, 0.0, 0.0, -1.0,//0
             0.5,  0.5, -0.5, 0.0, 0.0, -1.0,//1
             0.5, -0.5, -0.5, 0.0, 0.0, -1.0,//2
@@ -474,6 +602,28 @@ public final class Game : EngineListener {
         geoBuffer.wasCPUModified(range: 0..<verts.count*MemoryLayout<Float>.size)
 //        geoBuffer.didModifyRange(NSMakeRange(0, verts.count*MemoryLayout<Float>.size))
         
-        return (geoBufferHandle, nil, 0, verts.count/6)
+        return (geoBufferHandle, GPUBufferHandle(), 0, verts.count/6)
+    }
+    
+    func getRandomValue(_ max : Double) -> Double {
+        let r : Int32 = Int32(Int64(arc4random()) - Int64(RAND_MAX))
+        let v = (Double(r) / Double(RAND_MAX)) * max
+        
+        return v
+    }
+    
+    func getLHOrthoMatrix(_ width : Float, height : Float, zFar : Float, zNear : Float) -> Matrix4x4<Float> {
+        var m = Matrix4x4<Float>()
+        
+        m[0].x = 2.0 / width
+        
+        m[1].y = 2.0 / height
+        
+        m[2].z = 1.0 / (zFar-zNear)
+        
+        m[3].z = -zNear / (zFar-zNear)
+        m[3].w = 1.0
+        
+        return m
     }
 }
