@@ -31,19 +31,21 @@ public final class MetalCommandQueue : CommandQueue {
     private unowned(unsafe) let samplerOwner: MetalSamplerOwner
     private unowned(unsafe) let renderPipelineStateOwner: MetalRenderPipelineStateOwner
     private unowned(unsafe) let rasterizerStateOwner: MetalRasterizerStateOwner
+    private unowned(unsafe) let depthStencilStateOwner: MetalDepthStencilStateOwner
     private unowned(unsafe) let renderPassOwner: MetalRenderPassOwner
     
-    public init(instance: MTLCommandQueue, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner, samplerOwner: MetalSamplerOwner, renderPipelineStateOwner: MetalRenderPipelineStateOwner, rasterizerStateOwner: MetalRasterizerStateOwner, renderPassOwner: MetalRenderPassOwner) {
+    public init(instance: MTLCommandQueue, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner, samplerOwner: MetalSamplerOwner, renderPipelineStateOwner: MetalRenderPipelineStateOwner, rasterizerStateOwner: MetalRasterizerStateOwner, depthStencilStateOwner: MetalDepthStencilStateOwner, renderPassOwner: MetalRenderPassOwner) {
         self.instance = instance
         self.bufferOwner = bufferOwner
         self.textureOwner = textureOwner
         self.samplerOwner = samplerOwner
         self.renderPipelineStateOwner = renderPipelineStateOwner
         self.rasterizerStateOwner = rasterizerStateOwner
+        self.depthStencilStateOwner = depthStencilStateOwner
         self.renderPassOwner = renderPassOwner
     }
     
     public func makeCommandBuffer() -> CommandBuffer {
-        return MetalCommandBuffer(instance: instance.makeCommandBuffer(), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner, renderPassOwner: renderPassOwner)
+        return MetalCommandBuffer(instance: instance.makeCommandBuffer(), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner, depthStencilStateOwner: depthStencilStateOwner, renderPassOwner: renderPassOwner)
     }
 }

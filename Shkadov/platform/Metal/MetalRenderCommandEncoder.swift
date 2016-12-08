@@ -31,18 +31,22 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
     private unowned(unsafe) let samplerOwner: MetalSamplerOwner
     private unowned(unsafe) let renderPipelineStateOwner: MetalRenderPipelineStateOwner
     private unowned(unsafe) let rasterizerStateOwner: MetalRasterizerStateOwner
+    private unowned(unsafe) let depthStencilStateOwner: MetalDepthStencilStateOwner
     private var lastRenderPipelineState: RenderPipelineStateHandle
     private var lastRasterizerState: RasterizerStateHandle
+    private var lastDepthStencilState: DepthStencilStateHandle
     
-    public init(instance: MTLRenderCommandEncoder, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner, samplerOwner: MetalSamplerOwner, renderPipelineStateOwner: MetalRenderPipelineStateOwner, rasterizerStateOwner: MetalRasterizerStateOwner) {
+    public init(instance: MTLRenderCommandEncoder, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner, samplerOwner: MetalSamplerOwner, renderPipelineStateOwner: MetalRenderPipelineStateOwner, rasterizerStateOwner: MetalRasterizerStateOwner, depthStencilStateOwner: MetalDepthStencilStateOwner) {
         self.instance = instance
         self.bufferOwner = bufferOwner
         self.textureOwner = textureOwner
         self.samplerOwner = samplerOwner
         self.renderPipelineStateOwner = renderPipelineStateOwner
         self.rasterizerStateOwner = rasterizerStateOwner
+        self.depthStencilStateOwner = depthStencilStateOwner
         self.lastRenderPipelineState = RenderPipelineStateHandle()
         self.lastRasterizerState = RasterizerStateHandle()
+        self.lastDepthStencilState = DepthStencilStateHandle()
     }
     
     public func endEncoding() {
@@ -82,6 +86,18 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
         instance.setTriangleFillMode(MetalDataTypes.map(descriptor.fillMode))
     }
     
+    public func setDepthStencilState(_ handle: DepthStencilStateHandle) {
+        if handle == lastDepthStencilState { return }
+        
+        lastDepthStencilState = handle
+        
+        if !handle.isValid { return }
+        
+        let state = depthStencilStateOwner[handle]
+        
+        instance.setDepthStencilState(state)
+    }
+
     public func setVertexBytes(_ bytes: UnsafeRawPointer, length: Int, at index: Int) {
         instance.setVertexBytes(bytes, length: length, at: index)
     }

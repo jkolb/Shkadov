@@ -38,8 +38,8 @@ public final class MetalRenderer : Renderer {
     private let samplerOwner: MetalSamplerOwner
     private let renderPipelineStateOwner: MetalRenderPipelineStateOwner
     private let rasterizerStateOwner: MetalRasterizerStateOwner
-    private let renderPassOwner: MetalRenderPassOwner
     private let depthStencilStateOwner: MetalDepthStencilStateOwner
+    private let renderPassOwner: MetalRenderPassOwner
     
     public init(view: MetalView, config: RendererConfig, logger: Logger) {
         self.device = view.device!
@@ -53,8 +53,8 @@ public final class MetalRenderer : Renderer {
         self.samplerOwner = MetalSamplerOwner(device: device)
         self.renderPipelineStateOwner = MetalRenderPipelineStateOwner(device: device, moduleOwner: moduleOwner)
         self.rasterizerStateOwner = MetalRasterizerStateOwner()
-        self.renderPassOwner = MetalRenderPassOwner(textureOwner: textureOwner, bufferOwner: bufferOwner)
         self.depthStencilStateOwner = MetalDepthStencilStateOwner(device: device)
+        self.renderPassOwner = MetalRenderPassOwner(textureOwner: textureOwner, bufferOwner: bufferOwner)
         
         view.drawableSize = CGSize(width: config.width, height: config.height)
     }
@@ -68,7 +68,7 @@ public final class MetalRenderer : Renderer {
     }
     
     public func makeCommandQueue() -> CommandQueue {
-        return MetalCommandQueue(instance: device.makeCommandQueue(), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner, renderPassOwner: renderPassOwner)
+        return MetalCommandQueue(instance: device.makeCommandQueue(), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner, depthStencilStateOwner: depthStencilStateOwner, renderPassOwner: renderPassOwner)
     }
     
     public func createBuffer(count: Int, storageMode: StorageMode) -> GPUBufferHandle {

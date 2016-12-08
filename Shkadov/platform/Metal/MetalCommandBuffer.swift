@@ -31,20 +31,22 @@ public final class MetalCommandBuffer : CommandBuffer {
     private unowned(unsafe) let samplerOwner: MetalSamplerOwner
     private unowned(unsafe) let renderPipelineStateOwner: MetalRenderPipelineStateOwner
     private unowned(unsafe) let rasterizerStateOwner: MetalRasterizerStateOwner
+    private unowned(unsafe) let depthStencilStateOwner: MetalDepthStencilStateOwner
     private unowned(unsafe) let renderPassOwner: MetalRenderPassOwner
     
-    public init(instance: MTLCommandBuffer, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner, samplerOwner: MetalSamplerOwner, renderPipelineStateOwner: MetalRenderPipelineStateOwner, rasterizerStateOwner: MetalRasterizerStateOwner, renderPassOwner: MetalRenderPassOwner) {
+    public init(instance: MTLCommandBuffer, bufferOwner: MetalGPUBufferOwner, textureOwner: MetalTextureOwner, samplerOwner: MetalSamplerOwner, renderPipelineStateOwner: MetalRenderPipelineStateOwner, rasterizerStateOwner: MetalRasterizerStateOwner, depthStencilStateOwner: MetalDepthStencilStateOwner, renderPassOwner: MetalRenderPassOwner) {
         self.instance = instance
         self.bufferOwner = bufferOwner
         self.textureOwner = textureOwner
         self.samplerOwner = samplerOwner
         self.renderPipelineStateOwner = renderPipelineStateOwner
         self.rasterizerStateOwner = rasterizerStateOwner
+        self.depthStencilStateOwner = depthStencilStateOwner
         self.renderPassOwner = renderPassOwner
     }
     
     public func makeRenderCommandEncoder(handle: RenderPassHandle) -> RenderCommandEncoder {
-        return MetalRenderCommandEncoder(instance: instance.makeRenderCommandEncoder(descriptor: renderPassOwner[handle]), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner)
+        return MetalRenderCommandEncoder(instance: instance.makeRenderCommandEncoder(descriptor: renderPassOwner[handle]), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner, depthStencilStateOwner: depthStencilStateOwner)
     }
     
     public func addCompletedHandler(_ block: @escaping (CommandBuffer) -> Void) {
@@ -53,6 +55,10 @@ public final class MetalCommandBuffer : CommandBuffer {
         }
     }
     
+    public func enqueue() {
+        instance.enqueue()
+    }
+
     public func commit() {
         instance.commit()
     }

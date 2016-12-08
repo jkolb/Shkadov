@@ -29,5 +29,7 @@ public protocol CommandBuffer {
     
     func addCompletedHandler(_ block: @escaping (CommandBuffer) -> Void)
     
+    func enqueue()
+
     func commit()
 }

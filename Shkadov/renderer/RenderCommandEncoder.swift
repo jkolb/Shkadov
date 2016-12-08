@@ -27,6 +27,8 @@ public protocol RenderCommandEncoder : CommandEncoder {
 
     func setRasterizerState(_ handle: RasterizerStateHandle)
     
+    func setDepthStencilState(_ handle: DepthStencilStateHandle)
+    
     func setVertexBytes(_ bytes: UnsafeRawPointer, length: Int, at index: Int)
     
     func setVertexBuffer(_ handle: GPUBufferHandle, offset: Int, at index: Int)

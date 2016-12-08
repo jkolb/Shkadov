@@ -66,7 +66,7 @@ class RenderableObject {
         self.rotationRate = Vector3<Float>(0.0, 0.0, 0.0)
     }
     
-    func UpdateData(_ dest : UnsafeMutablePointer<ObjectData>, deltaTime : Time) -> UnsafeMutablePointer<ObjectData>
+    func UpdateData(_ dest : UnsafeMutablePointer<ObjectData>, deltaTime : Duration) -> UnsafeMutablePointer<ObjectData>
     {
         
         transform.r = transform.r + rotation(angle: rotationRate * Float(deltaTime.seconds))
@@ -103,14 +103,14 @@ class RenderableObject {
 }
 
 class StaticRenderableObject : RenderableObject {
-    override func UpdateData(_ dest: UnsafeMutablePointer<ObjectData>, deltaTime: Time) -> UnsafeMutablePointer<ObjectData> {
+    override func UpdateData(_ dest: UnsafeMutablePointer<ObjectData>, deltaTime: Duration) -> UnsafeMutablePointer<ObjectData> {
         return dest
     }
     
     override func Draw(_ enc: RenderCommandEncoder, offset: Int) {
         enc.setVertexBuffer(mesh, offset: 0, at: 0)
-        enc.setVertexBytes(&objectData, length: MemoryLayout<ObjectData>.size, at: 1)
-        enc.setFragmentBytes(&objectData, length: MemoryLayout<ObjectData>.size, at: 1)
+        enc.setVertexBytes(&objectData, length: 256, at: 1)
+        enc.setFragmentBytes(&objectData, length: 256, at: 1)
         
         enc.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: count)
     }

@@ -72,7 +72,7 @@ let SHADOWED_DIRECTIONAL_LIGHT_DIRECTION = Vector3<Float>(0.0, -1.0, 0.0)
 let SHADOWED_DIRECTIONAL_LIGHT_UP = Vector3<Float>(0.0, 0.0, 1.0)
 let SHADOWED_DIRECTIONAL_LIGHT_POSITION = Vector3<Float>(0.0, 225.0, 0.0)
 
-let CONSTANT_BUFFER_SIZE : Int = OBJECT_COUNT * MemoryLayout<ObjectData>.size + SHADOW_PASS_COUNT * MemoryLayout<ShadowPass>.size + MAIN_PASS_COUNT * MemoryLayout<MainPass>.size
+let CONSTANT_BUFFER_SIZE : Int = OBJECT_COUNT * 256 + SHADOW_PASS_COUNT * 256 + MAIN_PASS_COUNT * 256
 
 public final class Game : EngineListener {
     private let engine: Engine
@@ -119,7 +119,9 @@ public final class Game : EngineListener {
     private var objectsToRender = 10000
     private var orbit = Vector2<Float>()
     private var cameraAngles = Vector2<Float>()
-
+    private var mainRasterizerState: RasterizerStateHandle
+    private var shadowRasterizerState: RasterizerStateHandle
+    
     public init(engine: Engine, logger: Logger) {
         self.engine = engine
         self.logger = logger
@@ -141,6 +143,8 @@ public final class Game : EngineListener {
         self.quadVisPipeline = RenderPipelineStateHandle()
         self.depthVisPipeline = RenderPipelineStateHandle()
         self.texQuadVisPipeline = RenderPipelineStateHandle()
+        self.mainRasterizerState = RasterizerStateHandle()
+        self.shadowRasterizerState = RasterizerStateHandle()
     }
     
     public func didStartup() {
@@ -166,6 +170,14 @@ public final class Game : EngineListener {
             shadowPassData.append(ShadowPass())
         }
 
+        var mainRasterizer = RasterizerStateDescriptor()
+        mainRasterizer.cullMode = .back
+        mainRasterizerState = engine.createRasterizerState(descriptor: mainRasterizer)
+        
+        var shadowRasterizer = RasterizerStateDescriptor()
+        shadowRasterizer.cullMode = .front
+        shadowRasterizerState = engine.createRasterizerState(descriptor: shadowRasterizer)
+        
         var renderPassDescriptor = RenderPassDescriptor()
         renderPassDescriptor.colorAttachments.append(RenderPassColorAttachmentDescriptor())
         renderPassDescriptor.colorAttachments[0].clearColor = ClearColor(r: 0.0, g: 0.0, b: 0.0, a: 1.0)
@@ -175,7 +187,7 @@ public final class Game : EngineListener {
         renderPassDescriptor.depthAttachment.clearDepth = 1.0
         renderPassDescriptor.depthAttachment.loadAction = .clear
         renderPassDescriptor.depthAttachment.storeAction = .dontCare
-        
+
         do {
             let modulePath = engine.pathForResource(named: "default.metallib")
             logger.debug("\(modulePath)")
@@ -466,7 +478,6 @@ public final class Game : EngineListener {
     
     private func update(elapsed: Duration) {
         logger.trace("\(#function)")
-        let currentFrame = frameCounter
         let currentConstantBuffer = constantBufferSlot
         
         // Update view matrix here
@@ -517,13 +528,39 @@ public final class Game : EngineListener {
         
         // Create a mutable pointer to the beginning of the object data so we can step through it and set the data of each object individually
         var ptr = constantBufferForFrame.bytes.advanced(by: objectDataOffset).bindMemory(to: ObjectData.self, capacity: objectsToRender)
+        
+        for index in 0..<objectsToRender {
+            ptr = renderables[index].UpdateData(ptr, deltaTime: elapsed)
+        }
+        
+        ptr = ptr.advanced(by: objectsToRender)
+        
+        _ = groundPlane.UpdateData(ptr, deltaTime: elapsed)
+        
+        // Mark constant buffer as modified (objectsToRender+1 because of the ground plane)
+        constantBufferForFrame.wasCPUModified(range: 0..<mainPassOffset+(256*(objectsToRender+1)))
     }
     
     private func render() {
         logger.trace("\(#function)")
-        let commandBuffer = commandQueue.makeCommandBuffer()
-        engine.present(commandBuffer: commandBuffer)
-        commandBuffer.commit()
+        
+        // Create command buffers for the entire scene rendering
+        let shadowCommandBuffer = commandQueue.makeCommandBuffer()
+        let mainCommandBuffer = commandQueue.makeCommandBuffer()
+        
+        // Enforce the ordering:
+        // Shadows must be completed before the main rendering pass
+        shadowCommandBuffer.enqueue()
+        mainCommandBuffer.enqueue()
+        
+        let currentConstantBuffer = constantBufferSlot
+        let shadowOffset = 0
+        let mainPassOffset = 256 + shadowOffset
+        let objectDataOffset = 256 + mainPassOffset
+
+        encodeShadowPass(shadowCommandBuffer, rp: shadowRenderPasses[0], constantBuffer: constantBuffers[currentConstantBuffer], passDataOffset: shadowOffset, objectDataOffset: objectDataOffset)
+        drawMainPass(mainCommandBuffer, constantBuffer: constantBuffers[currentConstantBuffer], mainPassOffset: mainPassOffset, objectDataOffset: objectDataOffset)
+        constantBufferSlot = (constantBufferSlot + 1) % MAX_FRAMES_IN_FLIGHT
     }
     
     private func createPlane() -> (GPUBufferHandle, Int) {
@@ -625,5 +662,89 @@ public final class Game : EngineListener {
         m[3].w = 1.0
         
         return m
+    }
+    
+    func encodeShadowPass(_ commandBuffer: CommandBuffer, rp: RenderPassHandle, constantBuffer: GPUBufferHandle, passDataOffset: Int, objectDataOffset: Int) {
+        let enc = commandBuffer.makeRenderCommandEncoder(handle: rp)
+        enc.setDepthStencilState(depthTestLess)
+        
+        enc.setRasterizerState(shadowRasterizerState)
+        
+        // setVertexOffset will allow faster updates, but we must bind the Constant buffer once
+        enc.setVertexBuffer(constantBuffer, offset: 0, at: 1)
+        // Bind the ShadowPass data once for all objects to see
+        enc.setVertexBuffer(constantBuffer, offset: passDataOffset, at: 2)
+        
+        // We have one pipeline for all our objects, so only bind it once
+        enc.setRenderPipelineState(zpassPipeline)
+        enc.setVertexBuffer(renderables[0].mesh, offset: 0, at: 0)
+        
+        var offset = objectDataOffset
+        for index in 0..<objectsToRender {
+            renderables[index].DrawZPass(enc, offset: offset)
+            offset += 256
+        }
+        
+        enc.endEncoding()
+        
+        commandBuffer.commit()
+    }
+    
+    // A tiny bit more complex than DrawShadowPass
+    // We must pick the current drawable from MTKView as well as calling present before
+    // Committing our command buffer
+    // We'll also add a completion handler to signal the semaphore
+    
+    func encodeMainPass(_ enc: RenderCommandEncoder, constantBuffer: GPUBufferHandle, passDataOffset: Int, objectDataOffset: Int) {
+        // Similar to the shadow passes, we must bind the constant buffer once before we call setVertexBytes
+        enc.setVertexBuffer(constantBuffer, offset: 0, at: 1)
+        enc.setFragmentBuffer(constantBuffer, offset: 0, at: 1)
+        
+        // Now bind the MainPass constants once
+        enc.setVertexBuffer(constantBuffer, offset: passDataOffset, at: 2)
+        enc.setFragmentBuffer(constantBuffer, offset: passDataOffset, at: 2)
+        
+        enc.setFragmentTexture(shadowMap, at: 0)
+        
+        var offset = objectDataOffset
+        enc.setRenderPipelineState(litShadowedPipeline)
+        
+        enc.setVertexBuffer(renderables[0].mesh, offset: 0, at: 0)
+        for index in 0..<objectsToRender {
+            renderables[index].Draw(enc, offset: offset)
+            offset += 256
+        }
+        
+        enc.setRenderPipelineState(planeRenderPipeline)
+        enc.setVertexBuffer(groundPlane.mesh, offset: 0, at: 0)
+        groundPlane.Draw(enc, offset: offset)
+    }
+    
+    func drawMainPass(_ mainCommandBuffer: CommandBuffer, constantBuffer: GPUBufferHandle, mainPassOffset: Int, objectDataOffset: Int) {
+        let currentFrame = frameCounter
+        
+        let enc = mainCommandBuffer.makeRenderCommandEncoder(handle: mainRenderPass)
+        enc.setDepthStencilState(depthTestLess)
+        enc.setRasterizerState(mainRasterizerState)
+        
+        encodeMainPass(enc, constantBuffer: constantBuffer, passDataOffset : mainPassOffset, objectDataOffset: objectDataOffset)
+        
+        enc.endEncoding()
+        
+        // TODO !!!!!
+//        let rpDesc = currentRenderPassDescriptor!
+//        
+//        let finalEnc = mainCommandBuffer.makeRenderCommandEncoder(descriptor: rpDesc)
+//        
+//        finalEnc.setRenderPipelineState(texQuadVisPipeline)
+//        finalEnc.setFragmentTexture(mainPassFramebuffer, at: 0)
+//        
+//        finalEnc.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
+//        
+//        finalEnc.endEncoding()
+        
+        engine.present(commandBuffer: mainCommandBuffer)
+        
+        mainCommandBuffer.commit()
     }
 }
