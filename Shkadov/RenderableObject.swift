@@ -22,95 +22,116 @@
  SOFTWARE.
  */
 
-import Swiftish
+import simd
 
-public func rotation(angle: Vector3<Float>) -> Quaternion<Float> {
-    let halfAngle: Vector3<Float> = angle / 2.0
-    let c = cos(halfAngle)
-    let s = sin(halfAngle)
-    let w: Float = c.x * c.y * c.z + s.x * s.y * s.z
-    let x: Float = s.x * c.y * c.z - c.x * s.y * s.z
-    let y: Float = c.x * s.y * c.z + s.x * c.y * s.z
-    let z: Float = c.x * c.y * s.z - s.x * s.y * c.z
+class RenderableObject
+{
+    let mesh : GPUBufferHandle
+    let indexBuffer : GPUBufferHandle
+    let texture : TextureHandle
     
-    return Quaternion<Float>(w, x, y, z)
-}
-
-class RenderableObject {
-    let mesh: GPUBufferHandle
-    let indexBuffer: GPUBufferHandle
-    let texture: TextureHandle
-    var count: Int
-    var transform: Transform3<Float>
-    var rotationRate: Vector3<Float>
-    var objectData: ObjectData
+    var count : Int
     
-    init() {
+    var scale : vector_float3 = float3(1.0)
+    var position : vector_float4
+    var rotation : vector_float3
+    var rotationRate : vector_float3
+    
+    var objectData : ObjectData
+    
+    init()
+    {
         self.mesh = GPUBufferHandle()
         self.indexBuffer = GPUBufferHandle()
         self.texture = TextureHandle()
         self.count = 0
         self.objectData = ObjectData()
-        self.transform = Transform3<Float>()
-        self.rotationRate = Vector3<Float>(0.0, 0.0, 0.0)
+        self.objectData.LocalToWorld = matrix_identity_float4x4
+        self.position = vector_float4(0.0, 0.0, 0.0, 1.0)
+        self.rotation = float3(0.0, 0.0, 0.0)
+        self.rotationRate = float3(0.0, 0.0, 0.0)
     }
     
-    init(m: GPUBufferHandle, idx: GPUBufferHandle, count: Int, tex: TextureHandle)
+    init(m : GPUBufferHandle, idx : GPUBufferHandle, count : Int, tex : TextureHandle)
     {
         self.mesh = m
         self.indexBuffer = idx
         self.texture = tex
         self.count = count
         self.objectData = ObjectData()
-        self.transform = Transform3<Float>()
-        self.rotationRate = Vector3<Float>(0.0, 0.0, 0.0)
+        self.objectData.LocalToWorld = matrix_identity_float4x4
+        self.objectData.color = float4(0.0, 0.0, 0.0, 0.0)
+        self.objectData.pad1 = matrix_identity_float4x4
+        self.objectData.pad2 = matrix_identity_float4x4
+        
+        self.position = vector_float4(0.0, 0.0, 0.0, 1.0)
+        self.rotation = float3(0.0, 0.0, 0.0)
+        self.rotationRate = float3(0.0, 0.0, 0.0)
     }
     
-    func UpdateData(_ dest : UnsafeMutablePointer<ObjectData>, deltaTime : Duration) -> UnsafeMutablePointer<ObjectData>
+    func SetRotationRate(_ rot : vector_float3)
     {
+        rotationRate = rot
+    }
+    
+    func UpdateData(_ dest : UnsafeMutablePointer<ObjectData>, deltaTime : Float) -> UnsafeMutablePointer<ObjectData>
+    {
+        rotation += rotationRate * deltaTime
         
-        transform.r = transform.r + rotation(angle: rotationRate * Float(deltaTime.seconds))
+        objectData.LocalToWorld = getScaleMatrix(scale.x, y: scale.y, z: scale.z)
         
-        objectData.localToWorld = transform.matrix
+        objectData.LocalToWorld = matrix_multiply(getRotationAroundX(rotation.x), objectData.LocalToWorld)
+        objectData.LocalToWorld = matrix_multiply(getRotationAroundY(rotation.y), objectData.LocalToWorld)
+        objectData.LocalToWorld = matrix_multiply(getRotationAroundZ(rotation.z), objectData.LocalToWorld)
+        objectData.LocalToWorld = matrix_multiply(getTranslationMatrix(position), objectData.LocalToWorld)
         
         dest.pointee = objectData
         return dest.advanced(by: 1)
     }
     
-    func DrawZPass(_ enc: RenderCommandEncoder, offset: Int) {
+    func DrawZPass(_ enc :RenderCommandEncoder, offset : Int)
+    {
         enc.setVertexBufferOffset(offset, at: 1)
         
-        if (indexBuffer.isValid) {
+        if(indexBuffer.isValid)
+        {
             enc.drawIndexedPrimitives(type: .triangle, indexCount: count, indexType: .uint16, indexBuffer: indexBuffer, indexBufferOffset: 0)
         }
-        else {
+        else
+        {
             enc.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: count)
         }
     }
     
-    func Draw(_ enc: RenderCommandEncoder, offset: Int) {
+    func Draw(_ enc : RenderCommandEncoder, offset : Int)
+    {
         enc.setVertexBufferOffset(offset, at: 1)
         enc.setFragmentBufferOffset(offset, at: 1)
         
-        if (indexBuffer.isValid) {
+        if(indexBuffer.isValid)
+        {
             enc.drawIndexedPrimitives(type: .triangle, indexCount: count, indexType: .uint16, indexBuffer: indexBuffer, indexBufferOffset: 0)
         }
-        else {
+        else
+        {
             enc.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: count)
         }
         
     }
 }
 
-class StaticRenderableObject : RenderableObject {
-    override func UpdateData(_ dest: UnsafeMutablePointer<ObjectData>, deltaTime: Duration) -> UnsafeMutablePointer<ObjectData> {
+class StaticRenderableObject : RenderableObject
+{
+    override func UpdateData(_ dest: UnsafeMutablePointer<ObjectData>, deltaTime: Float) -> UnsafeMutablePointer<ObjectData>
+    {
         return dest
     }
     
-    override func Draw(_ enc: RenderCommandEncoder, offset: Int) {
+    override func Draw(_ enc: RenderCommandEncoder, offset: Int)
+    {
         enc.setVertexBuffer(mesh, offset: 0, at: 0)
-        enc.setVertexBytes(&objectData, length: 256, at: 1)
-        enc.setFragmentBytes(&objectData, length: 256, at: 1)
+        enc.setVertexBytes(&objectData, length: MemoryLayout<ObjectData>.size, at: 1)
+        enc.setFragmentBytes(&objectData, length: MemoryLayout<ObjectData>.size, at: 1)
         
         enc.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: count)
     }

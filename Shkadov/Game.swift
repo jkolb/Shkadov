@@ -24,33 +24,40 @@
 
 import Swiftish
 import Darwin
+import simd
 
-struct ObjectData {
-    var localToWorld: Matrix4x4<Float> = Matrix4x4<Float>()
-    var color: Vector4<Float> = Vector4<Float>(0.0, 0.0, 0.0, 1.0)
-//    vector_float4 pad0;
-//    vector_float4 pad01;
-//    vector_float4 pad02;
-//    matrix_float4x4 pad1;
-//    matrix_float4x4 pad2;
+struct ObjectData
+{
+    var LocalToWorld: matrix_float4x4 = matrix_float4x4()
+    var color: vector_float4 = vector_float4()
+    var pad0: vector_float4 = vector_float4()
+    var pad01: vector_float4 = vector_float4()
+    var pad02: vector_float4 = vector_float4()
+    var pad1: matrix_float4x4 = matrix_float4x4()
+    var pad2: matrix_float4x4 = matrix_float4x4()
+    
 }
 
-struct ShadowPass {
-    var viewProjection: Matrix4x4<Float> = Matrix4x4<Float>()
-//    matrix_float4x4 pad1;
-//    matrix_float4x4 pad2;
-//    matrix_float4x4 pad3;
+struct ShadowPass
+{
+    var ViewProjection: matrix_float4x4 = matrix_float4x4()
+    var pad1: matrix_float4x4 = matrix_float4x4()
+    var pad2: matrix_float4x4 = matrix_float4x4()
+    var pad3: matrix_float4x4 = matrix_float4x4()
+};
+
+struct MainPass
+{
+    var ViewProjection: matrix_float4x4 = matrix_float4x4()
+    var ViewShadow0Projection: matrix_float4x4 = matrix_float4x4()
+    var LightPosition: vector_float4 = vector_float4()
+    var pad00: vector_float4 = vector_float4()
+    var pad01: vector_float4 = vector_float4()
+    var pad02: vector_float4 = vector_float4()
+    var pad1: matrix_float4x4 = matrix_float4x4()
 }
 
-struct MainPass {
-    var viewProjection: Matrix4x4<Float> = Matrix4x4<Float>()
-    var viewShadow0Projection: Matrix4x4<Float> = Matrix4x4<Float>()
-    var lightPosition: Vector4<Float> = Vector4<Float>()
-//    vector_float4	pad00;
-//    vector_float4	pad01;
-//    vector_float4	pad02;
-//    matrix_float4x4 pad1;
-}
+let DEG2RAD = M_PI / 180.0
 
 let SHADOW_DIMENSION = 2048
 
@@ -60,19 +67,19 @@ let SHADOW_PASS_COUNT : Int = 1
 let MAIN_PASS_COUNT : Int = 1
 let OBJECT_COUNT : Int = 200000
 
-let START_POSITION = Vector3<Float>(0.0, 0.0, -325.0)
+let START_POSITION = float3(0.0, 0.0, -325.0)
 
-let START_CAMERA_VIEW_DIR = Vector3<Float>(0.0, 0.0, 1.0)
-let START_CAMERA_UP_DIR = Vector3<Float>(0.0, 1.0, 0.0)
+let START_CAMERA_VIEW_DIR = float3(0.0, 0.0, 1.0)
+let START_CAMERA_UP_DIR = float3(0.0, 1.0, 0.0)
 
-let GROUND_POSITION = Vector3<Float>(0.0, -250.0, 0.0)
-let GROUND_COLOR = Vector4<Float>(1.0)
+let GROUND_POSITION = float3(0.0, -250.0, 0.0)
+let GROUND_COLOR = float4(1.0)
 
-let SHADOWED_DIRECTIONAL_LIGHT_DIRECTION = Vector3<Float>(0.0, -1.0, 0.0)
-let SHADOWED_DIRECTIONAL_LIGHT_UP = Vector3<Float>(0.0, 0.0, 1.0)
-let SHADOWED_DIRECTIONAL_LIGHT_POSITION = Vector3<Float>(0.0, 225.0, 0.0)
+let SHADOWED_DIRECTIONAL_LIGHT_DIRECTION = float3(0.0, -1.0, 0.0)
+let SHADOWED_DIRECTIONAL_LIGHT_UP = float3(0.0, 0.0, 1.0)
+let SHADOWED_DIRECTIONAL_LIGHT_POSITION = float3(0.0, 225.0, 0.0)
 
-let CONSTANT_BUFFER_SIZE : Int = OBJECT_COUNT * 256 + SHADOW_PASS_COUNT * 256 + MAIN_PASS_COUNT * 256
+let CONSTANT_BUFFER_SIZE : Int = OBJECT_COUNT * MemoryLayout<ObjectData>.size + SHADOW_PASS_COUNT * MemoryLayout<ShadowPass>.size + MAIN_PASS_COUNT * MemoryLayout<MainPass>.size
 
 public final class Game : EngineListener {
     private let engine: Engine
@@ -83,8 +90,8 @@ public final class Game : EngineListener {
     private var accumulatedTime = Duration.zero
     private let tickDuration = Duration(seconds: 1.0 / 60.0)
     private let maxFrameDuration = Duration(seconds: 0.25)
-    private let camera = Camera()
-    private var shadowCameras: [Camera] = [Camera]()
+    private let camera = ACamera()
+    private var shadowCamera: ACamera = ACamera()
     private let commandQueue: CommandQueue
     private var mainRenderPass: RenderPassHandle
     private var mainPassFramebuffer: Framebuffer
@@ -106,8 +113,8 @@ public final class Game : EngineListener {
     private var groundPlane: StaticRenderableObject!
     private var frameCounter: UInt = 1
     private var constantBufferSlot: Int = 0
-    private var mainPassView = Matrix4x4<Float>()
-    private var mainPassProjection = Matrix4x4<Float>()
+    private var mainPassView = matrix_float4x4()
+    private var mainPassProjection = matrix_float4x4()
     private var mainPassFrameData = MainPass()
     private var shadowPassData = ShadowPass()
     private var moveForward = false
@@ -116,8 +123,8 @@ public final class Game : EngineListener {
     private var moveRight = false
     private var mouseDown = false
     private var objectsToRender = 1000
-    private var orbit = Vector2<Float>()
-    private var cameraAngles = Vector2<Float>()
+    private var orbit = float2()
+    private var cameraAngles = float2()
     private var mainRasterizerState: RasterizerStateHandle
     private var shadowRasterizerState: RasterizerStateHandle
     private var finalRenderPass: RenderPassHandle
@@ -154,21 +161,16 @@ public final class Game : EngineListener {
         logger.debug("\(#function)")
         logger.debug("Screen Size: \(engine.screensSize)")
         
-        camera.worldTransform.t = START_POSITION
-        // TODO
-//        camera.direction = START_CAMERA_VIEW_DIR
-//        camera.up = START_CAMERA_UP_DIR
+        camera.position = START_POSITION
+        camera.direction = START_CAMERA_VIEW_DIR
+        camera.up = START_CAMERA_UP_DIR
         
+        // Set up shadow camera and data
         do
         {
-            var c = Camera()
-
-            // TODO
-//            c.direction = SHADOWED_DIRECTIONAL_LIGHT_DIRECTION
-//            c.up = SHADOWED_DIRECTIONAL_LIGHT_UP
-            c.worldTransform.t = SHADOWED_DIRECTIONAL_LIGHT_POSITION
-            
-            shadowCameras.append(c)
+            shadowCamera.direction = SHADOWED_DIRECTIONAL_LIGHT_DIRECTION
+            shadowCamera.up = SHADOWED_DIRECTIONAL_LIGHT_UP
+            shadowCamera.position = SHADOWED_DIRECTIONAL_LIGHT_POSITION
         }
 
         var mainRasterizer = RasterizerStateDescriptor()
@@ -185,7 +187,7 @@ public final class Game : EngineListener {
         
         var renderPassDescriptor = RenderPassDescriptor()
         renderPassDescriptor.colorAttachments.append(RenderPassColorAttachmentDescriptor())
-        renderPassDescriptor.colorAttachments[0].clearColor = ClearColor(r: 0.0, g: 0.0, b: 0.0, a: 1.0)
+        renderPassDescriptor.colorAttachments[0].clearColor = ClearColor(r: 1.0, g: 0.0, b: 0.0, a: 1.0)
         renderPassDescriptor.colorAttachments[0].loadAction = .clear
         renderPassDescriptor.colorAttachments[0].storeAction = .store
         
@@ -364,20 +366,20 @@ public final class Game : EngineListener {
                 let p2 = Float(getRandomValue(500.0))
                 
                 let cube = RenderableObject(m: geo, idx: index, count: indexCount, tex: TextureHandle())
-                cube.transform.t = Vector3<Float>(p, p1, p2)
+                cube.position = float4(p, p1, p2, 1.0)
                 cube.count = vertCount
                 
                 let r = Float(Float(drand48())) * 2.0
                 let r1 = Float(Float(drand48())) * 2.0
                 let r2 = Float(Float(drand48())) * 2.0
                 
-                cube.rotationRate = Vector3<Float>(r, r1, r2)
+                cube.rotationRate = float3(r, r1, r2)
                 
                 let scale = Float(drand48()*5.0)
                 
-                cube.transform.s = Vector3<Float>(scale)
+                cube.scale = float3(scale)
                 
-                cube.objectData.color = Vector4<Float>(Float(drand48()),
+                cube.objectData.color = float4(Float(drand48()),
                                                Float(drand48()),
                                                Float(drand48()), 1.0)
                 renderables.append(cube)
@@ -387,19 +389,15 @@ public final class Game : EngineListener {
         do {
             let (planeGeo, count) = createPlane()
             groundPlane = StaticRenderableObject(m: planeGeo, idx: GPUBufferHandle(), count: count, tex: TextureHandle())
-            groundPlane.transform.t = Vector3<Float>(GROUND_POSITION.x,
+            groundPlane.position = float4(GROUND_POSITION.x,
                                            GROUND_POSITION.y,
-                                           GROUND_POSITION.z)
+                                           GROUND_POSITION.z,1.0)
             groundPlane.objectData.color = GROUND_COLOR
-            groundPlane.objectData.localToWorld = groundPlane.transform.matrix
+            groundPlane.objectData.LocalToWorld.columns.3 = groundPlane!.position
         }
 
-        camera.projection.aspectRatio = Float(engine.config.renderer.width) / Float(engine.config.renderer.height)
-        camera.projection.fovy = engine.config.renderer.fovy
-        camera.projection.zNear = 1.0
-        camera.projection.zFar = 2000.0
-        camera.worldTransform.t = Vector3<Float>(0.0, 0.0, 0.0)
-        camera.worldTransform.r = rotation(pitch: Angle<Float>(), yaw: Angle<Float>(), roll: Angle<Float>())
+        mainPassProjection = getPerpectiveProjectionMatrix(Float(60.0*DEG2RAD), aspectRatio: Float(engine.config.renderer.width) / Float(engine.config.renderer.height), zFar: 2000.0, zNear: 1.0)
+
         engine.mouseCursorFollowsMouse = true
         engine.mouseCursorHidden = true
         previousTime = engine.currentTime
@@ -486,10 +484,10 @@ public final class Game : EngineListener {
         
         // Update view matrix here
         if moveForward {
-            camera.worldTransform.t.z += 1.0
+            camera.position.z += 1.0
         }
         else if moveBackward {
-            camera.worldTransform.t.z -= 1.0
+            camera.position.z -= 1.0
         }
         
         if mouseDown {
@@ -501,17 +499,17 @@ public final class Game : EngineListener {
             // Figure out far plane distance at least
             let zFar = distance(GROUND_POSITION,SHADOWED_DIRECTIONAL_LIGHT_POSITION)
             
-            shadowPassData.viewProjection = getLHOrthoMatrix(1100, height: 1100, zFar: zFar, zNear: 25)
-            shadowPassData.viewProjection = shadowPassData.viewProjection * shadowCameras[0].worldTransform.matrix
+            shadowPassData.ViewProjection = getLHOrthoMatrix(1100, height: 1100, zFar: zFar, zNear: 25)
+            shadowPassData.ViewProjection = matrix_multiply(shadowPassData.ViewProjection, shadowCamera.GetViewMatrix())
         }
         
         do {
             //NOTE: We're doing an orbit so we've usurped the normal camera class here
-            let r = rotation(angle: Vector3<Float>(cameraAngles.x, cameraAngles.y, 0.0))
-            mainPassView = camera.viewMatrix * Matrix4x4<Float>(r.matrix)
-            mainPassFrameData.viewProjection = camera.projectionMatrix * mainPassView
-            mainPassFrameData.viewShadow0Projection = shadowPassData.viewProjection
-            mainPassFrameData.lightPosition = Vector4<Float>(SHADOWED_DIRECTIONAL_LIGHT_POSITION.x,
+            mainPassView = matrix_multiply(getRotationAroundY(cameraAngles.y), getRotationAroundX(cameraAngles.x))
+            mainPassView = matrix_multiply(camera.GetViewMatrix(), mainPassView)
+            mainPassFrameData.ViewProjection = matrix_multiply(mainPassProjection, mainPassView)
+            mainPassFrameData.ViewShadow0Projection = shadowPassData.ViewProjection
+            mainPassFrameData.LightPosition = float4(SHADOWED_DIRECTIONAL_LIGHT_POSITION.x,
                                                      SHADOWED_DIRECTIONAL_LIGHT_POSITION.y,
                                                      SHADOWED_DIRECTIONAL_LIGHT_POSITION.z, 1.0)
         }
@@ -534,12 +532,12 @@ public final class Game : EngineListener {
         var ptr = constantBufferForFrame.bytes.advanced(by: objectDataOffset).bindMemory(to: ObjectData.self, capacity: objectsToRender)
         
         for index in 0..<objectsToRender {
-            ptr = renderables[index].UpdateData(ptr, deltaTime: elapsed)
+            ptr = renderables[index].UpdateData(ptr, deltaTime: Float(elapsed.seconds))
         }
         
         ptr = ptr.advanced(by: objectsToRender)
         
-        _ = groundPlane.UpdateData(ptr, deltaTime: elapsed)
+        _ = groundPlane.UpdateData(ptr, deltaTime: Float(elapsed.seconds))
         
         // Mark constant buffer as modified (objectsToRender+1 because of the ground plane)
         constantBufferForFrame.wasCPUModified(range: 0..<mainPassOffset+(256*(objectsToRender+1)))
@@ -644,28 +642,6 @@ public final class Game : EngineListener {
 //        geoBuffer.didModifyRange(NSMakeRange(0, verts.count*MemoryLayout<Float>.size))
         
         return (geoBufferHandle, GPUBufferHandle(), 0, verts.count/6)
-    }
-    
-    func getRandomValue(_ max : Double) -> Double {
-        let r : Int32 = Int32(Int64(arc4random()) - Int64(RAND_MAX))
-        let v = (Double(r) / Double(RAND_MAX)) * max
-        
-        return v
-    }
-    
-    func getLHOrthoMatrix(_ width : Float, height : Float, zFar : Float, zNear : Float) -> Matrix4x4<Float> {
-        var m = Matrix4x4<Float>()
-        
-        m[0].x = 2.0 / width
-        
-        m[1].y = 2.0 / height
-        
-        m[2].z = 1.0 / (zFar-zNear)
-        
-        m[3].z = -zNear / (zFar-zNear)
-        m[3].w = 1.0
-        
-        return m
     }
     
     func encodeShadowPass(_ commandBuffer: CommandBuffer, rp: RenderPassHandle, constantBuffer: GPUBufferHandle, passDataOffset: Int, objectDataOffset: Int) {

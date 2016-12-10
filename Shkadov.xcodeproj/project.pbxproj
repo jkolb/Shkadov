@@ -106,6 +106,7 @@
 		E5F60C271DFC756800466C32 /* OneTriangle.metal in Sources */ = {isa = PBXBuildFile; fileRef = E5F60C261DFC756800466C32 /* OneTriangle.metal */; };
 		E5F60C291DFC860B00466C32 /* SwapChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F60C281DFC860B00466C32 /* SwapChain.swift */; };
 		E5F60C2B1DFC8BCB00466C32 /* MetalSwapChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F60C2A1DFC8BCB00466C32 /* MetalSwapChain.swift */; };
+		E5F60C371DFCBDFA00466C32 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F60C361DFCBDFA00466C32 /* Utils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -285,6 +286,7 @@
 		E5F60C261DFC756800466C32 /* OneTriangle.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = OneTriangle.metal; sourceTree = "<group>"; };
 		E5F60C281DFC860B00466C32 /* SwapChain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwapChain.swift; sourceTree = "<group>"; };
 		E5F60C2A1DFC8BCB00466C32 /* MetalSwapChain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalSwapChain.swift; sourceTree = "<group>"; };
+		E5F60C361DFCBDFA00466C32 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -343,6 +345,7 @@
 				E5F60C261DFC756800466C32 /* OneTriangle.metal */,
 				E55607341DED34D400D9F1F8 /* Game.swift */,
 				0924E21E1DF6F48300795EAC /* RenderableObject.swift */,
+				E5F60C361DFCBDFA00466C32 /* Utils.swift */,
 				E55606A61DEA71EB00D9F1F8 /* engine */,
 				E55606AA1DEA71EB00D9F1F8 /* platform */,
 				E55606C31DEA755C00D9F1F8 /* renderer */,
@@ -856,6 +859,7 @@
 				099A85CC1DFAE60F00336188 /* Framebuffer.swift in Sources */,
 				E55606EA1DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift in Sources */,
 				E55606B81DEA71EB00D9F1F8 /* Engine.swift in Sources */,
+				E5F60C371DFCBDFA00466C32 /* Utils.swift in Sources */,
 				E55606B91DEA71EB00D9F1F8 /* main.swift in Sources */,
 				E5E14E1B1DF38E4400D08AAD /* PrimitiveType.swift in Sources */,
 				E55606E31DEB3DD100D9F1F8 /* UnixMath.swift in Sources */,

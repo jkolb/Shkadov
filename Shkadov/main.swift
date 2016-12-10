@@ -24,6 +24,6 @@
 
 macOSBootstrap(
     factory: { (engine, loggerFactory) in
-        return OneTriangle(engine: engine, logger: loggerFactory.makeLogger())
+        return Game(engine: engine, logger: loggerFactory.makeLogger())
     }
 ).makeEngine().startup()
