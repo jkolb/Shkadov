@@ -120,6 +120,7 @@ public final class OneTriangle : EngineListener {
             descriptor.colorAttachments.append(RenderPipelineColorAttachmentDescriptor())
             descriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
 //            descriptor.sampleCount = 4
+            descriptor.sampleCount = 1
             
             return try engine.createRenderPipelineState(descriptor: descriptor)
         }
@@ -167,7 +168,7 @@ public final class OneTriangle : EngineListener {
         framebuffer = makeFramebuffer()
         renderPass = makeRenderPass()
         vertexBuffer = engine.createBuffer(count: ConstantBufferSize, storageMode: .sharedWithCPU)
-        vertexColorBuffer = engine.createBuffer(count: vertexData.count * MemoryLayout<Float>.size, storageMode: .sharedWithCPU)
+        vertexColorBuffer = engine.createBuffer(bytes: vertexColorData, count: vertexData.count * MemoryLayout<Float>.size, storageMode: .sharedWithCPU)
         
         precondition(pipeline.isValid)
 //        precondition(framebuffer.colorAttachments[0].render.isValid)
@@ -260,28 +261,28 @@ public final class OneTriangle : EngineListener {
         
         vData.initialize(from: vertexData)
         
-//        let lastTriVertex = 24
-//        let vertexSize = 4
-//        
-//        for j in 0..<3 {
-//            xOffset[j] += xDelta[j]
-//            
-//            if(xOffset[j] >= 1.0 || xOffset[j] <= -1.0) {
-//                xDelta[j] = -xDelta[j]
-//                xOffset[j] += xDelta[j]
-//            }
-//            
-//            yOffset[j] += yDelta[j]
-//            
-//            if(yOffset[j] >= 1.0 || yOffset[j] <= -1.0) {
-//                yDelta[j] = -yDelta[j]
-//                yOffset[j] += yDelta[j]
-//            }
-//            
-//            let pos = lastTriVertex + j*vertexSize
-//            vData[pos] = xOffset[j]
-//            vData[pos+1] = yOffset[j]
-//        }
+        let lastTriVertex = 24
+        let vertexSize = 4
+        
+        for j in 0..<3 {
+            xOffset[j] += xDelta[j]
+            
+            if(xOffset[j] >= 1.0 || xOffset[j] <= -1.0) {
+                xDelta[j] = -xDelta[j]
+                xOffset[j] += xDelta[j]
+            }
+            
+            yOffset[j] += yDelta[j]
+            
+            if(yOffset[j] >= 1.0 || yOffset[j] <= -1.0) {
+                yDelta[j] = -yDelta[j]
+                yOffset[j] += yDelta[j]
+            }
+            
+            let pos = lastTriVertex + j*vertexSize
+            vData[pos] = xOffset[j]
+            vData[pos+1] = yOffset[j]
+        }
     }
     
     private func render() {
@@ -300,7 +301,7 @@ public final class OneTriangle : EngineListener {
         renderEncoder.setRenderPipelineState(pipeline)
         renderEncoder.setVertexBuffer(vertexBuffer, offset: 256 * bufferIndex, at: 0)
         renderEncoder.setVertexBuffer(vertexColorBuffer, offset: 0, at: 1)
-//        renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 9, instanceCount: 1)
+        renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 9, instanceCount: 1)
         renderEncoder.endEncoding()
         
         engine.present(commandBuffer: commandBuffer, renderTarget: renderTarget)

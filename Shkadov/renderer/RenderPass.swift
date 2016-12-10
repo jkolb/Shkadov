@@ -70,7 +70,7 @@ public struct RenderPassColorAttachmentDescriptor {
 }
 
 public struct RenderPassDepthAttachmentDescriptor {
-    public var clearDepth: Float = 0.0
+    public var clearDepth: Float = 1.0
     public var level: Int = 0
     public var slice: Int = 0
     public var depthPlane: Int = 0
