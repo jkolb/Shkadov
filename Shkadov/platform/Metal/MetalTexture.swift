@@ -23,14 +23,18 @@
  */
 
 import Metal
+import MetalKit
 import Swiftish
 
 public final class MetalTextureOwner : TextureOwner {
     private unowned(unsafe) let device: MTLDevice
+    private unowned(unsafe) let view: MTKView
     private var textures: [MTLTexture?]
+    private var renderTexture: MTLTexture?
     
-    public init(device: MTLDevice) {
+    public init(device: MTLDevice, view: MTKView) {
         self.device = device
+        self.view = view
         self.textures = []
         textures.reserveCapacity(128)
     }
@@ -52,8 +56,23 @@ public final class MetalTextureOwner : TextureOwner {
         textures[handle.index] = nil
     }
     
+    public func nextRenderTexture() -> TextureHandle {
+        if let drawableTexture = view.currentDrawable?.texture {
+            renderTexture = drawableTexture
+            return TextureHandle(key: 0xFFFF)
+        }
+        else {
+            return TextureHandle()
+        }
+    }
+
     internal subscript (handle: TextureHandle) -> MTLTexture {
-        return textures[handle.index]!
+        if handle.key == 0xFFFF {
+            return renderTexture!
+        }
+        else {
+            return textures[handle.index]!
+        }
     }
     
     private func map(_ descriptor: TextureDescriptor) -> MTLTextureDescriptor {

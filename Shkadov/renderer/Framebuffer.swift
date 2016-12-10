@@ -22,12 +22,14 @@
  SOFTWARE.
  */
 
-public protocol Renderer : GPUBufferOwner, ModuleOwner, TextureOwner, SamplerOwner, RenderPipelineStateOwner, RasterizerStateOwner, RenderPassOwner, DepthStencilStateOwner {
-    func makeCommandQueue() -> CommandQueue
-    
-    func nextRenderTexture() -> TextureHandle
-    
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer)
+public struct FramebufferAttachment {
+    var render: TextureHandle = TextureHandle()
+    var resolve: TextureHandle = TextureHandle()
+}
+
+public struct Framebuffer {
+    public var colorAttachments: [FramebufferAttachment] = []
+    public var depthAttachment: FramebufferAttachment = FramebufferAttachment()
+    public var stencilAttachment: FramebufferAttachment = FramebufferAttachment()
+    public var visibilityResultBuffer: GPUBufferHandle = GPUBufferHandle()
 }

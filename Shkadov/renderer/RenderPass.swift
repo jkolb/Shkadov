@@ -56,11 +56,10 @@ public struct ClearColor {
 
 public struct RenderPassColorAttachmentDescriptor {
     public var clearColor: ClearColor = ClearColor()
-    public var texture: TextureHandle = TextureHandle()
     public var level: Int = 0
     public var slice: Int = 0
     public var depthPlane: Int = 0
-    public var resolveTexture: TextureHandle = TextureHandle()
+    public var resolve: Bool = false
     public var resolveLevel: Int = 0
     public var resolveSlice: Int = 0
     public var resolveDepthPlane: Int = 0
@@ -72,11 +71,10 @@ public struct RenderPassColorAttachmentDescriptor {
 
 public struct RenderPassDepthAttachmentDescriptor {
     public var clearDepth: Float = 0.0
-    public var texture: TextureHandle = TextureHandle()
     public var level: Int = 0
     public var slice: Int = 0
     public var depthPlane: Int = 0
-    public var resolveTexture: TextureHandle = TextureHandle()
+    public var resolve: Bool = false
     public var resolveLevel: Int = 0
     public var resolveSlice: Int = 0
     public var resolveDepthPlane: Int = 0
@@ -88,11 +86,10 @@ public struct RenderPassDepthAttachmentDescriptor {
 
 public struct RenderPassStencilAttachmentDescriptor {
     public var clearStencil: UInt32 = 0
-    public var texture: TextureHandle = TextureHandle()
     public var level: Int = 0
     public var slice: Int = 0
     public var depthPlane: Int = 0
-    public var resolveTexture: TextureHandle = TextureHandle()
+    public var resolve: Bool = false
     public var resolveLevel: Int = 0
     public var resolveSlice: Int = 0
     public var resolveDepthPlane: Int = 0
@@ -106,7 +103,6 @@ public struct RenderPassDescriptor {
     public var colorAttachments: [RenderPassColorAttachmentDescriptor] = []
     public var depthAttachment: RenderPassDepthAttachmentDescriptor = RenderPassDepthAttachmentDescriptor()
     public var stencilAttachment: RenderPassStencilAttachmentDescriptor = RenderPassStencilAttachmentDescriptor()
-    public var visibilityResultBuffer: GPUBufferHandle = GPUBufferHandle()
     public var renderTargetArrayLength: Int = 0
     
     public init() { }

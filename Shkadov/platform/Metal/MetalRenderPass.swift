@@ -54,36 +54,21 @@ public final class MetalRenderPassOwner: RenderPassOwner {
         let metalDescriptor = MTLRenderPassDescriptor()
         
         for (index, colorDescriptor) in descriptor.colorAttachments.enumerated() {
-            map(colorDescriptor, metalDescriptor: metalDescriptor.colorAttachments[index])
+            map(colorDescriptor, metalDescriptor: metalDescriptor.colorAttachments[index], index: index)
         }
         
         map(descriptor.depthAttachment, metalDescriptor: metalDescriptor.depthAttachment)
         map(descriptor.stencilAttachment, metalDescriptor: metalDescriptor.stencilAttachment)
-        
-        if descriptor.visibilityResultBuffer.isValid {
-            metalDescriptor.visibilityResultBuffer = bufferOwner[descriptor.visibilityResultBuffer]
-        }
-
         metalDescriptor.renderTargetArrayLength = descriptor.renderTargetArrayLength
         
         return metalDescriptor
     }
     
-    private func map(_ descriptor: RenderPassColorAttachmentDescriptor, metalDescriptor: MTLRenderPassColorAttachmentDescriptor) {
+    private func map(_ descriptor: RenderPassColorAttachmentDescriptor, metalDescriptor: MTLRenderPassColorAttachmentDescriptor, index: Int) {
         metalDescriptor.clearColor = map(descriptor.clearColor)
-        
-        if descriptor.texture.isValid {
-            metalDescriptor.texture = textureOwner[descriptor.texture]
-        }
-        
         metalDescriptor.level = descriptor.level
         metalDescriptor.slice = descriptor.slice
         metalDescriptor.depthPlane = descriptor.depthPlane
-        
-        if descriptor.resolveTexture.isValid {
-            metalDescriptor.resolveTexture = textureOwner[descriptor.resolveTexture]
-        }
-        
         metalDescriptor.resolveLevel = descriptor.resolveLevel
         metalDescriptor.resolveSlice = descriptor.resolveSlice
         metalDescriptor.resolveDepthPlane = descriptor.resolveDepthPlane
@@ -93,19 +78,9 @@ public final class MetalRenderPassOwner: RenderPassOwner {
     
     private func map(_ descriptor: RenderPassDepthAttachmentDescriptor, metalDescriptor: MTLRenderPassDepthAttachmentDescriptor) {
         metalDescriptor.clearDepth = Double(descriptor.clearDepth)
-        
-        if descriptor.texture.isValid {
-            metalDescriptor.texture = textureOwner[descriptor.texture]
-        }
-        
         metalDescriptor.level = descriptor.level
         metalDescriptor.slice = descriptor.slice
         metalDescriptor.depthPlane = descriptor.depthPlane
-        
-        if descriptor.resolveTexture.isValid {
-            metalDescriptor.resolveTexture = textureOwner[descriptor.resolveTexture]
-        }
-        
         metalDescriptor.resolveLevel = descriptor.resolveLevel
         metalDescriptor.resolveSlice = descriptor.resolveSlice
         metalDescriptor.resolveDepthPlane = descriptor.resolveDepthPlane
@@ -115,19 +90,9 @@ public final class MetalRenderPassOwner: RenderPassOwner {
     
     private func map(_ descriptor: RenderPassStencilAttachmentDescriptor, metalDescriptor: MTLRenderPassStencilAttachmentDescriptor) {
         metalDescriptor.clearStencil = descriptor.clearStencil
-        
-        if descriptor.texture.isValid {
-            metalDescriptor.texture = textureOwner[descriptor.texture]
-        }
-        
         metalDescriptor.level = descriptor.level
         metalDescriptor.slice = descriptor.slice
         metalDescriptor.depthPlane = descriptor.depthPlane
-        
-        if descriptor.resolveTexture.isValid {
-            metalDescriptor.resolveTexture = textureOwner[descriptor.resolveTexture]
-        }
-        
         metalDescriptor.resolveLevel = descriptor.resolveLevel
         metalDescriptor.resolveSlice = descriptor.resolveSlice
         metalDescriptor.resolveDepthPlane = descriptor.resolveDepthPlane

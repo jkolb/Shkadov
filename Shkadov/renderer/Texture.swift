@@ -68,6 +68,7 @@ public protocol TextureOwner : class {
     func borrowTexture(handle: TextureHandle) -> Texture
     func generateMipmaps(handles: [TextureHandle])
     func destroyTexture(handle: TextureHandle)
+    func nextRenderTexture() -> TextureHandle
 }
 
 public struct TextureHandle : Handle {

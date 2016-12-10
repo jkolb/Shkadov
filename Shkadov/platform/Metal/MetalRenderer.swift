@@ -40,6 +40,7 @@ public final class MetalRenderer : Renderer {
     private let rasterizerStateOwner: MetalRasterizerStateOwner
     private let depthStencilStateOwner: MetalDepthStencilStateOwner
     private let renderPassOwner: MetalRenderPassOwner
+    private var renderTexture: MTLTexture?
     
     public init(view: MetalView, config: RendererConfig, logger: Logger) {
         self.device = view.device!
@@ -49,7 +50,7 @@ public final class MetalRenderer : Renderer {
         self.semaphore = DispatchSemaphore(value: 3)
         self.bufferOwner = MetalGPUBufferOwner(device: device)
         self.moduleOwner = MetalModuleOwner(device: device)
-        self.textureOwner = MetalTextureOwner(device: device)
+        self.textureOwner = MetalTextureOwner(device: device, view: view)
         self.samplerOwner = MetalSamplerOwner(device: device)
         self.renderPipelineStateOwner = MetalRenderPipelineStateOwner(device: device, moduleOwner: moduleOwner)
         self.rasterizerStateOwner = MetalRasterizerStateOwner()
@@ -71,6 +72,10 @@ public final class MetalRenderer : Renderer {
         return MetalCommandQueue(instance: device.makeCommandQueue(), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner, depthStencilStateOwner: depthStencilStateOwner, renderPassOwner: renderPassOwner)
     }
     
+    public func nextRenderTexture() -> TextureHandle {
+        return textureOwner.nextRenderTexture()
+    }
+
     public func createBuffer(count: Int, storageMode: StorageMode) -> GPUBufferHandle {
         return bufferOwner.createBuffer(count: count, storageMode: storageMode)
     }

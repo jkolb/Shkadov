@@ -87,10 +87,9 @@ public final class Game : EngineListener {
     private var shadowCameras: [Camera] = [Camera]()
     private let commandQueue: CommandQueue
     private var mainRenderPass: RenderPassHandle
-    private var shadowRenderPasses: [RenderPassHandle]
-    private var shadowMap: TextureHandle
-    private var mainPassDepthTexture: TextureHandle
-    private var mainPassFramebuffer: TextureHandle
+    private var mainPassFramebuffer: Framebuffer
+    private var shadowRenderPass: RenderPassHandle
+    private var shadowFramebuffer: Framebuffer
     private var depthTestLess: DepthStencilStateHandle
     private var depthTestAlways: DepthStencilStateHandle
     private var constantBuffers: [GPUBufferHandle]
@@ -121,16 +120,16 @@ public final class Game : EngineListener {
     private var cameraAngles = Vector2<Float>()
     private var mainRasterizerState: RasterizerStateHandle
     private var shadowRasterizerState: RasterizerStateHandle
+    private var finalRenderPass: RenderPassHandle
     
     public init(engine: Engine, logger: Logger) {
         self.engine = engine
         self.logger = logger
         self.commandQueue = engine.makeCommandQueue()
         self.mainRenderPass = RenderPassHandle()
-        self.shadowRenderPasses = []
-        self.shadowMap = TextureHandle()
-        self.mainPassDepthTexture = TextureHandle()
-        self.mainPassFramebuffer = TextureHandle()
+        self.mainPassFramebuffer = Framebuffer()
+        self.shadowRenderPass = RenderPassHandle()
+        self.shadowFramebuffer = Framebuffer()
         self.depthTestLess = DepthStencilStateHandle()
         self.depthTestAlways = DepthStencilStateHandle()
         self.constantBuffers = []
@@ -145,6 +144,7 @@ public final class Game : EngineListener {
         self.texQuadVisPipeline = RenderPipelineStateHandle()
         self.mainRasterizerState = RasterizerStateHandle()
         self.shadowRasterizerState = RasterizerStateHandle()
+        self.finalRenderPass = RenderPassHandle()
     }
     
     public func didStartup() {
@@ -177,6 +177,10 @@ public final class Game : EngineListener {
         var shadowRasterizer = RasterizerStateDescriptor()
         shadowRasterizer.cullMode = .front
         shadowRasterizerState = engine.createRasterizerState(descriptor: shadowRasterizer)
+        
+        var finalPassDescriptor = RenderPassDescriptor()
+        finalPassDescriptor.colorAttachments.append(RenderPassColorAttachmentDescriptor())
+        finalRenderPass = engine.createRenderPass(descriptor: finalPassDescriptor)
         
         var renderPassDescriptor = RenderPassDescriptor()
         renderPassDescriptor.colorAttachments.append(RenderPassColorAttachmentDescriptor())
@@ -296,7 +300,7 @@ public final class Game : EngineListener {
             texDesc.textureUsage = [.renderTarget, .shaderRead]
             texDesc.storageMode = .privateToGPU
             
-            shadowMap = engine.createTexture(descriptor: texDesc)
+            shadowFramebuffer.depthAttachment.render = engine.createTexture(descriptor: texDesc)
         }
         
         do {
@@ -310,9 +314,9 @@ public final class Game : EngineListener {
             texDesc.storageMode = .privateToGPU
             texDesc.pixelFormat = .bgra8Unorm
             
-            mainPassFramebuffer = engine.createTexture(descriptor: texDesc)
-            
-            renderPassDescriptor.colorAttachments[0].texture = mainPassFramebuffer
+            var attachment = FramebufferAttachment()
+            attachment.render = engine.createTexture(descriptor: texDesc)
+            mainPassFramebuffer.colorAttachments.append(attachment)
         }
         
         do {
@@ -322,9 +326,8 @@ public final class Game : EngineListener {
                                                                 mipmapped: false)
             texDesc.textureUsage = [.renderTarget, .shaderRead]
             texDesc.storageMode = .privateToGPU
-            mainPassDepthTexture = engine.createTexture(descriptor: texDesc)
             
-            renderPassDescriptor.depthAttachment.texture = mainPassDepthTexture
+            mainPassFramebuffer.depthAttachment.render = engine.createTexture(descriptor: texDesc)
         }
 
         mainRenderPass = engine.createRenderPass(descriptor: renderPassDescriptor)
@@ -332,10 +335,10 @@ public final class Game : EngineListener {
         do {
             var rp = RenderPassDescriptor()
             rp.depthAttachment.clearDepth = 1.0
-            rp.depthAttachment.texture = shadowMap
             rp.depthAttachment.loadAction = .clear
             rp.depthAttachment.storeAction = .store
-            shadowRenderPasses.append(engine.createRenderPass(descriptor: rp))
+
+            shadowRenderPass = engine.createRenderPass(descriptor: rp)
         }
 
         do {
@@ -558,7 +561,7 @@ public final class Game : EngineListener {
         let mainPassOffset = 256 + shadowOffset
         let objectDataOffset = 256 + mainPassOffset
 
-        encodeShadowPass(shadowCommandBuffer, rp: shadowRenderPasses[0], constantBuffer: constantBuffers[currentConstantBuffer], passDataOffset: shadowOffset, objectDataOffset: objectDataOffset)
+        encodeShadowPass(shadowCommandBuffer, rp: shadowRenderPass, constantBuffer: constantBuffers[currentConstantBuffer], passDataOffset: shadowOffset, objectDataOffset: objectDataOffset)
         drawMainPass(mainCommandBuffer, constantBuffer: constantBuffers[currentConstantBuffer], mainPassOffset: mainPassOffset, objectDataOffset: objectDataOffset)
         constantBufferSlot = (constantBufferSlot + 1) % MAX_FRAMES_IN_FLIGHT
     }
@@ -665,7 +668,7 @@ public final class Game : EngineListener {
     }
     
     func encodeShadowPass(_ commandBuffer: CommandBuffer, rp: RenderPassHandle, constantBuffer: GPUBufferHandle, passDataOffset: Int, objectDataOffset: Int) {
-        let enc = commandBuffer.makeRenderCommandEncoder(handle: rp)
+        let enc = commandBuffer.makeRenderCommandEncoder(handle: rp, framebuffer: shadowFramebuffer)
         enc.setDepthStencilState(depthTestLess)
         
         enc.setRasterizerState(shadowRasterizerState)
@@ -704,7 +707,7 @@ public final class Game : EngineListener {
         enc.setVertexBuffer(constantBuffer, offset: passDataOffset, at: 2)
         enc.setFragmentBuffer(constantBuffer, offset: passDataOffset, at: 2)
         
-        enc.setFragmentTexture(shadowMap, at: 0)
+        enc.setFragmentTexture(shadowFramebuffer.depthAttachment.render, at: 0)
         
         var offset = objectDataOffset
         enc.setRenderPipelineState(litShadowedPipeline)
@@ -723,7 +726,7 @@ public final class Game : EngineListener {
     func drawMainPass(_ mainCommandBuffer: CommandBuffer, constantBuffer: GPUBufferHandle, mainPassOffset: Int, objectDataOffset: Int) {
         let currentFrame = frameCounter
         
-        let enc = mainCommandBuffer.makeRenderCommandEncoder(handle: mainRenderPass)
+        let enc = mainCommandBuffer.makeRenderCommandEncoder(handle: mainRenderPass, framebuffer: mainPassFramebuffer)
         enc.setDepthStencilState(depthTestLess)
         enc.setRasterizerState(mainRasterizerState)
         
@@ -732,16 +735,20 @@ public final class Game : EngineListener {
         enc.endEncoding()
         
         // TODO !!!!!
-//        let rpDesc = currentRenderPassDescriptor!
-//        
-//        let finalEnc = mainCommandBuffer.makeRenderCommandEncoder(descriptor: rpDesc)
-//        
-//        finalEnc.setRenderPipelineState(texQuadVisPipeline)
-//        finalEnc.setFragmentTexture(mainPassFramebuffer, at: 0)
-//        
-//        finalEnc.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
-//        
-//        finalEnc.endEncoding()
+        let renderTexture = engine.nextRenderTexture()
+        var framebuffer = Framebuffer()
+        var renderAttachment = FramebufferAttachment()
+        renderAttachment.render = renderTexture
+        framebuffer.colorAttachments.append(renderAttachment)
+        
+        let finalEnc = mainCommandBuffer.makeRenderCommandEncoder(handle: finalRenderPass, framebuffer: framebuffer)
+        
+        finalEnc.setRenderPipelineState(texQuadVisPipeline)
+        finalEnc.setFragmentTexture(mainPassFramebuffer.colorAttachments[0].render, at: 0)
+        
+        finalEnc.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
+        
+        finalEnc.endEncoding()
         
         engine.present(commandBuffer: mainCommandBuffer)
         

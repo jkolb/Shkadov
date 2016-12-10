@@ -45,7 +45,39 @@ public final class MetalCommandBuffer : CommandBuffer {
         self.renderPassOwner = renderPassOwner
     }
     
-    public func makeRenderCommandEncoder(handle: RenderPassHandle) -> RenderCommandEncoder {
+    public func makeRenderCommandEncoder(handle: RenderPassHandle, framebuffer: Framebuffer) -> RenderCommandEncoder {
+        let renderPass = renderPassOwner[handle]
+        
+        for (index, attachment) in framebuffer.colorAttachments.enumerated() {
+            if attachment.render.isValid {
+                renderPass.colorAttachments[index].texture = textureOwner[attachment.render]
+            }
+            
+            if framebuffer.colorAttachments[index].resolve.isValid {
+                renderPass.colorAttachments[index].resolveTexture = textureOwner[attachment.resolve]
+            }
+        }
+
+        if framebuffer.depthAttachment.render.isValid {
+            renderPass.depthAttachment.texture = textureOwner[framebuffer.depthAttachment.render]
+        }
+        
+        if framebuffer.depthAttachment.resolve.isValid {
+            renderPass.depthAttachment.resolveTexture = textureOwner[framebuffer.depthAttachment.resolve]
+        }
+        
+        if framebuffer.stencilAttachment.render.isValid {
+            renderPass.stencilAttachment.texture = textureOwner[framebuffer.stencilAttachment.render]
+        }
+        
+        if framebuffer.stencilAttachment.resolve.isValid {
+            renderPass.stencilAttachment.resolveTexture = textureOwner[framebuffer.stencilAttachment.resolve]
+        }
+        
+        if framebuffer.visibilityResultBuffer.isValid {
+            renderPass.visibilityResultBuffer = bufferOwner[framebuffer.visibilityResultBuffer]
+        }
+
         return MetalRenderCommandEncoder(instance: instance.makeRenderCommandEncoder(descriptor: renderPassOwner[handle]), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner, depthStencilStateOwner: depthStencilStateOwner)
     }
     

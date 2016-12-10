@@ -119,6 +119,10 @@ public final class Engine {
         return renderer.makeCommandQueue()
     }
     
+    public func nextRenderTexture() -> TextureHandle {
+        return renderer.nextRenderTexture()
+    }
+
     public func createBuffer(count: Int, storageMode: StorageMode) -> GPUBufferHandle {
         return renderer.createBuffer(count: count, storageMode: storageMode)
     }
