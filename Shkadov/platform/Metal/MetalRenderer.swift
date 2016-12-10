@@ -40,7 +40,7 @@ public final class MetalRenderer : Renderer {
     private let rasterizerStateOwner: MetalRasterizerStateOwner
     private let depthStencilStateOwner: MetalDepthStencilStateOwner
     private let renderPassOwner: MetalRenderPassOwner
-    private var renderTexture: MTLTexture?
+    private let swapChain: MetalSwapChain
     
     public init(view: MetalView, config: RendererConfig, logger: Logger) {
         self.device = view.device!
@@ -56,6 +56,7 @@ public final class MetalRenderer : Renderer {
         self.rasterizerStateOwner = MetalRasterizerStateOwner()
         self.depthStencilStateOwner = MetalDepthStencilStateOwner(device: device)
         self.renderPassOwner = MetalRenderPassOwner(textureOwner: textureOwner, bufferOwner: bufferOwner)
+        self.swapChain = MetalSwapChain(view: view, textureOwner: textureOwner)
         
         view.drawableSize = CGSize(width: config.width, height: config.height)
     }
@@ -67,13 +68,21 @@ public final class MetalRenderer : Renderer {
         
         return false
     }
-    
+
     public func makeCommandQueue() -> CommandQueue {
         return MetalCommandQueue(instance: device.makeCommandQueue(), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner, depthStencilStateOwner: depthStencilStateOwner, renderPassOwner: renderPassOwner)
     }
     
-    public func nextRenderTexture() -> TextureHandle {
-        return textureOwner.nextRenderTexture()
+    public func acquireNextRenderTarget() -> RenderTargetHandle {
+        return swapChain.acquireNextRenderTarget()
+    }
+    
+    public func textureForRenderTarget(handle: RenderTargetHandle) -> TextureHandle {
+        return swapChain.textureForRenderTarget(handle: handle)
+    }
+    
+    public func releaseRenderTarget(handle: RenderTargetHandle) {
+        return swapChain.releaseRenderTarget(handle: handle)
     }
 
     public func createBuffer(count: Int, storageMode: StorageMode) -> GPUBufferHandle {
@@ -188,16 +197,18 @@ public final class MetalRenderer : Renderer {
         semaphore.wait()
     }
 
-    public func present(commandBuffer: CommandBuffer) {
-        guard let metalCommandBuffer = commandBuffer as? MetalCommandBuffer else { return }
+    public func present(commandBuffer: CommandBuffer, renderTarget: RenderTargetHandle) {
+        let metalCommandBuffer = commandBuffer as! MetalCommandBuffer
         let semaphore = self.semaphore
 
         metalCommandBuffer.instance.addCompletedHandler { (commandBuffer) in
             semaphore.signal()
         }
 
-        if let drawable = view.currentDrawable {
-            metalCommandBuffer.instance.present(drawable)
+        if renderTarget.isValid {
+            metalCommandBuffer.instance.present(swapChain[renderTarget])
         }
+        
+        swapChain.releaseRenderTarget(handle: renderTarget)
     }
 }

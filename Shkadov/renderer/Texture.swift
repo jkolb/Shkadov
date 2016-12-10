@@ -28,6 +28,10 @@ public enum TextureType {
     case type1D
     case type2D
     case type3D
+    case type1DArray
+    case type2DArray
+    case typeCube
+    case typeCubeArray
 }
 
 public struct TextureUsage : OptionSet {
@@ -47,6 +51,8 @@ public struct TextureDescriptor {
     public var height: Int = 1
     public var depth: Int = 1
     public var mipmapLevelCount: Int = 1
+    public var sampleCount: Int = 1
+    public var arrayLength: Int = 1
     public var storageMode: StorageMode = .sharedWithCPU
     public var textureUsage: TextureUsage = [.shaderRead]
     
@@ -68,7 +74,6 @@ public protocol TextureOwner : class {
     func borrowTexture(handle: TextureHandle) -> Texture
     func generateMipmaps(handles: [TextureHandle])
     func destroyTexture(handle: TextureHandle)
-    func nextRenderTexture() -> TextureHandle
 }
 
 public struct TextureHandle : Handle {

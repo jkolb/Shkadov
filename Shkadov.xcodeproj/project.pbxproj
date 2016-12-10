@@ -102,6 +102,10 @@
 		E5E14E8B1DF477BB00D08AAD /* MetalDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E8A1DF477BB00D08AAD /* MetalDataTypes.swift */; };
 		E5E14E8D1DF4882800D08AAD /* RasterizerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E8C1DF4882800D08AAD /* RasterizerState.swift */; };
 		E5E14E8F1DF48FB700D08AAD /* MetalRasterizerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14E8E1DF48FB700D08AAD /* MetalRasterizerState.swift */; };
+		E5F60C1D1DFC748600466C32 /* OneTriangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F60C1C1DFC748600466C32 /* OneTriangle.swift */; };
+		E5F60C271DFC756800466C32 /* OneTriangle.metal in Sources */ = {isa = PBXBuildFile; fileRef = E5F60C261DFC756800466C32 /* OneTriangle.metal */; };
+		E5F60C291DFC860B00466C32 /* SwapChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F60C281DFC860B00466C32 /* SwapChain.swift */; };
+		E5F60C2B1DFC8BCB00466C32 /* MetalSwapChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F60C2A1DFC8BCB00466C32 /* MetalSwapChain.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -277,6 +281,10 @@
 		E5E14E8A1DF477BB00D08AAD /* MetalDataTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalDataTypes.swift; sourceTree = "<group>"; };
 		E5E14E8C1DF4882800D08AAD /* RasterizerState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RasterizerState.swift; sourceTree = "<group>"; };
 		E5E14E8E1DF48FB700D08AAD /* MetalRasterizerState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalRasterizerState.swift; sourceTree = "<group>"; };
+		E5F60C1C1DFC748600466C32 /* OneTriangle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneTriangle.swift; sourceTree = "<group>"; };
+		E5F60C261DFC756800466C32 /* OneTriangle.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = OneTriangle.metal; sourceTree = "<group>"; };
+		E5F60C281DFC860B00466C32 /* SwapChain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwapChain.swift; sourceTree = "<group>"; };
+		E5F60C2A1DFC8BCB00466C32 /* MetalSwapChain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalSwapChain.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -331,6 +339,8 @@
 				E56D56B11DF4CC6200968903 /* Shading.metal */,
 				09428F7C1DF649830096612A /* Visualize.metal */,
 				E55606A91DEA71EB00D9F1F8 /* main.swift */,
+				E5F60C1C1DFC748600466C32 /* OneTriangle.swift */,
+				E5F60C261DFC756800466C32 /* OneTriangle.metal */,
 				E55607341DED34D400D9F1F8 /* Game.swift */,
 				0924E21E1DF6F48300795EAC /* RenderableObject.swift */,
 				E55606A61DEA71EB00D9F1F8 /* engine */,
@@ -473,6 +483,7 @@
 				E5E14E421DF38FAF00D08AAD /* MetalRenderPass.swift */,
 				E5E14E451DF38FAF00D08AAD /* MetalRenderPipelineState.swift */,
 				E5E14E481DF38FAF00D08AAD /* MetalSampler.swift */,
+				E5F60C2A1DFC8BCB00466C32 /* MetalSwapChain.swift */,
 				E5E14E4C1DF38FAF00D08AAD /* MetalTexture.swift */,
 				E579BAAB1DF349DB007DC0FE /* MetalView.swift */,
 			);
@@ -510,6 +521,7 @@
 				E5E14E2D1DF38ED800D08AAD /* Sampler.swift */,
 				E5E14E011DF38E4400D08AAD /* ScissorRect.swift */,
 				E5E14E861DF4589B00D08AAD /* StorageMode.swift */,
+				E5F60C281DFC860B00466C32 /* SwapChain.swift */,
 				E5E14E031DF38E4400D08AAD /* Texture.swift */,
 				E5E14E071DF38E4400D08AAD /* TriangleFillMode.swift */,
 				E5E14E081DF38E4400D08AAD /* Viewport.swift */,
@@ -791,6 +803,7 @@
 			files = (
 				E5E14E8D1DF4882800D08AAD /* RasterizerState.swift in Sources */,
 				E5E14E1E1DF38E4400D08AAD /* RenderPass.swift in Sources */,
+				E5F60C271DFC756800466C32 /* OneTriangle.metal in Sources */,
 				E5E14E681DF38FAF00D08AAD /* MetalSampler.swift in Sources */,
 				E55607391DED381800D9F1F8 /* LoggerFactory.swift in Sources */,
 				0924E21F1DF6F48300795EAC /* RenderableObject.swift in Sources */,
@@ -814,8 +827,10 @@
 				E55607281DECFE7900D9F1F8 /* EngineConfig.swift in Sources */,
 				E5E14D8C1DF360B500D08AAD /* Material.swift in Sources */,
 				E55607261DECF65000D9F1F8 /* WindowConfig.swift in Sources */,
+				E5F60C1D1DFC748600466C32 /* OneTriangle.swift in Sources */,
 				E5E14D961DF3634300D08AAD /* Handle.swift in Sources */,
 				E55606DA1DEA7B4E00D9F1F8 /* FoundationRawConfigWriter.swift in Sources */,
+				E5F60C291DFC860B00466C32 /* SwapChain.swift in Sources */,
 				E55606D31DEA7A9900D9F1F8 /* RawConfigReader.swift in Sources */,
 				E55606EC1DEB4CEB00D9F1F8 /* MouseCursor.swift in Sources */,
 				E55606DE1DEA7E6100D9F1F8 /* FoundationFilePaths.swift in Sources */,
@@ -852,6 +867,7 @@
 				E55606E81DEB406000D9F1F8 /* FoundationFormattedTimestampProvider.swift in Sources */,
 				E5E14E591DF38FAF00D08AAD /* MetalGPUBuffer.swift in Sources */,
 				E5E14E8F1DF48FB700D08AAD /* MetalRasterizerState.swift in Sources */,
+				E5F60C2B1DFC8BCB00466C32 /* MetalSwapChain.swift in Sources */,
 				E579BA5F1DEE957A007DC0FE /* Bootstrap.swift in Sources */,
 				E55606BD1DEA71EB00D9F1F8 /* macOSMouseCursor.swift in Sources */,
 				E5E14E0A1DF38E4400D08AAD /* BlendFactor.swift in Sources */,

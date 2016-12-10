@@ -22,11 +22,18 @@
  SOFTWARE.
  */
 
-public protocol Renderer : GPUBufferOwner, ModuleOwner, TextureOwner, SamplerOwner, RenderPipelineStateOwner, RasterizerStateOwner, RenderPassOwner, DepthStencilStateOwner, SwapChain {
+public protocol SwapChain : class {
+    func acquireNextRenderTarget() -> RenderTargetHandle
+    func textureForRenderTarget(handle: RenderTargetHandle) -> TextureHandle
+    func releaseRenderTarget(handle: RenderTargetHandle)
+}
+
+public struct RenderTargetHandle : Handle {
+    public let key: UInt8
     
-    func makeCommandQueue() -> CommandQueue
+    public init() { self.init(key: 0) }
     
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer, renderTarget: RenderTargetHandle)
+    public init(key: UInt8) {
+        self.key = key
+    }
 }

@@ -30,18 +30,19 @@ public final class MetalTextureOwner : TextureOwner {
     private unowned(unsafe) let device: MTLDevice
     private unowned(unsafe) let view: MTKView
     private var textures: [MTLTexture?]
-    private var renderTexture: MTLTexture?
+    private var reclaimedHandles: [TextureHandle]
     
     public init(device: MTLDevice, view: MTKView) {
         self.device = device
         self.view = view
         self.textures = []
+        self.reclaimedHandles = []
         textures.reserveCapacity(128)
+        reclaimedHandles.reserveCapacity(16)
     }
     
     public func createTexture(descriptor: TextureDescriptor) -> TextureHandle {
-        textures.append(device.makeTexture(descriptor: map(descriptor)))
-        return TextureHandle(key: UInt16(textures.count))
+        return storeTexture(device.makeTexture(descriptor: map(descriptor)))
     }
     
     public func borrowTexture(handle: TextureHandle) -> Texture {
@@ -53,49 +54,62 @@ public final class MetalTextureOwner : TextureOwner {
     }
     
     public func destroyTexture(handle: TextureHandle) {
+        reclaimedHandles.append(handle)
         textures[handle.index] = nil
     }
     
-    public func nextRenderTexture() -> TextureHandle {
-        if let drawableTexture = view.currentDrawable?.texture {
-            renderTexture = drawableTexture
-            return TextureHandle(key: 0xFFFF)
+    public func storeTexture(_ texture: MTLTexture) -> TextureHandle {
+        if reclaimedHandles.count > 0 {
+            let handle = reclaimedHandles.removeLast()
+            textures[handle.index] = texture
+            return handle
         }
         else {
-            return TextureHandle()
+            textures.append(texture)
+            return TextureHandle(key: UInt16(textures.count))
         }
     }
 
     internal subscript (handle: TextureHandle) -> MTLTexture {
-        if handle.key == 0xFFFF {
-            return renderTexture!
-        }
-        else {
-            return textures[handle.index]!
-        }
+        return textures[handle.index]!
     }
     
     private func map(_ descriptor: TextureDescriptor) -> MTLTextureDescriptor {
         let metalDescriptor = MTLTextureDescriptor()
-        metalDescriptor.textureType = map(descriptor.textureType)
+        metalDescriptor.textureType = map(descriptor.textureType, sampleCount: descriptor.sampleCount)
         metalDescriptor.pixelFormat = MetalDataTypes.map(descriptor.pixelFormat)
         metalDescriptor.width = descriptor.width
         metalDescriptor.height = descriptor.height
         metalDescriptor.depth = descriptor.depth
         metalDescriptor.mipmapLevelCount = descriptor.mipmapLevelCount
+        metalDescriptor.sampleCount = descriptor.sampleCount
+        metalDescriptor.arrayLength = descriptor.arrayLength
         metalDescriptor.usage = map(descriptor.textureUsage)
         metalDescriptor.storageMode = MetalDataTypes.map(descriptor.storageMode)
         return metalDescriptor
     }
     
-    private func map(_ textureType: TextureType) -> MTLTextureType {
+    private func map(_ textureType: TextureType, sampleCount: Int) -> MTLTextureType {
         switch textureType {
         case .type1D:
             return .type1D
         case .type2D:
-            return .type2D
+            if sampleCount > 1 {
+                return .type2DMultisample
+            }
+            else {
+                return .type2D
+            }
         case .type3D:
             return .type3D
+        case .type1DArray:
+            return .type1DArray
+        case .type2DArray:
+            return .type2DArray
+        case .typeCube:
+            return .typeCube
+        case .typeCubeArray:
+            return .typeCubeArray
         }
     }
     

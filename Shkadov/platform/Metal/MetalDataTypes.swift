@@ -145,6 +145,21 @@ public struct MetalDataTypes {
         }
     }
     
+    public static func map(_ pixelFormat: MTLPixelFormat) -> PixelFormat {
+        switch pixelFormat {
+        case .invalid:
+            return .invalid
+        case .rgba8Unorm:
+            return .rgba8Unorm
+        case .bgra8Unorm:
+            return .bgra8Unorm
+        case .depth32Float:
+            return .depth32Float
+        default:
+            fatalError("Unsupported pixelFormat: \(pixelFormat)")
+        }
+    }
+    
     public static func map(_ primitiveType: PrimitiveType) -> MTLPrimitiveType {
         switch primitiveType {
         case .point:

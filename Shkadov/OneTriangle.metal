@@ -22,11 +22,29 @@
  SOFTWARE.
  */
 
-public protocol Renderer : GPUBufferOwner, ModuleOwner, TextureOwner, SamplerOwner, RenderPipelineStateOwner, RasterizerStateOwner, RenderPassOwner, DepthStencilStateOwner, SwapChain {
+#include <metal_stdlib>
+
+using namespace metal;
+
+struct VertexInOut
+{
+    float4  position [[position]];
+    float4  color;
+};
+
+vertex VertexInOut passThroughVertex(uint vid [[ vertex_id ]],
+                                     constant packed_float4* position  [[ buffer(0) ]],
+                                     constant packed_float4* color    [[ buffer(1) ]])
+{
+    VertexInOut outVertex;
     
-    func makeCommandQueue() -> CommandQueue
+    outVertex.position = position[vid];
+    outVertex.color    = color[vid];
     
-    func waitForGPUIfNeeded()
-    
-    func present(commandBuffer: CommandBuffer, renderTarget: RenderTargetHandle)
-}
+    return outVertex;
+};
+
+fragment half4 passThroughFragment(VertexInOut inFrag [[stage_in]])
+{
+    return half4(inFrag.color);
+};

@@ -735,7 +735,8 @@ public final class Game : EngineListener {
         
         enc.endEncoding()
         
-        finalFrameBuffer.colorAttachments[0].render = engine.nextRenderTexture()
+        let renderTarget = engine.acquireNextRenderTarget()
+        finalFrameBuffer.colorAttachments[0].render = engine.textureForRenderTarget(handle: renderTarget)
         
         let finalEnc = mainCommandBuffer.makeRenderCommandEncoder(handle: finalRenderPass, framebuffer: finalFrameBuffer)
         
@@ -746,7 +747,7 @@ public final class Game : EngineListener {
         
         finalEnc.endEncoding()
         
-        engine.present(commandBuffer: mainCommandBuffer)
+        engine.present(commandBuffer: mainCommandBuffer, renderTarget: renderTarget)
         
         mainCommandBuffer.commit()
     }

@@ -119,8 +119,12 @@ public final class Engine {
         return renderer.makeCommandQueue()
     }
     
-    public func nextRenderTexture() -> TextureHandle {
-        return renderer.nextRenderTexture()
+    public func acquireNextRenderTarget() -> RenderTargetHandle {
+        return renderer.acquireNextRenderTarget()
+    }
+    
+    public func textureForRenderTarget(handle: RenderTargetHandle) -> TextureHandle {
+        return renderer.textureForRenderTarget(handle: handle)
     }
 
     public func createBuffer(count: Int, storageMode: StorageMode) -> GPUBufferHandle {
@@ -235,7 +239,7 @@ public final class Engine {
         renderer.waitForGPUIfNeeded()
     }
     
-    public func present(commandBuffer: CommandBuffer) {
-        renderer.present(commandBuffer: commandBuffer)
+    public func present(commandBuffer: CommandBuffer, renderTarget: RenderTargetHandle) {
+        renderer.present(commandBuffer: commandBuffer, renderTarget: renderTarget)
     }
 }
