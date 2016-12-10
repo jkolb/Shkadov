@@ -119,8 +119,7 @@ public final class OneTriangle : EngineListener {
             descriptor.fragmentShader = fragmentShader
             descriptor.colorAttachments.append(RenderPipelineColorAttachmentDescriptor())
             descriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-//            descriptor.sampleCount = 4
-            descriptor.sampleCount = 1
+            descriptor.sampleCount = 4
             
             return try engine.createRenderPipelineState(descriptor: descriptor)
         }
@@ -133,18 +132,15 @@ public final class OneTriangle : EngineListener {
     private func makeRenderPass() -> RenderPassHandle {
         var descriptor = RenderPassDescriptor()
         descriptor.colorAttachments.append(RenderPassColorAttachmentDescriptor())
-//        descriptor.colorAttachments[0].resolve = true
-//        descriptor.colorAttachments[0].storeAction = .multisampleResolve
-        descriptor.colorAttachments[0].clearColor = ClearColor(r: 1.0, g: 0.0, b: 0.0, a: 1.0)
-        descriptor.colorAttachments[0].loadAction = .clear
-        descriptor.colorAttachments[0].storeAction = .store
+        descriptor.colorAttachments[0].resolve = true
+        descriptor.colorAttachments[0].storeAction = .multisampleResolve
         return engine.createRenderPass(descriptor: descriptor)
     }
     
     private func makeFramebuffer() -> Framebuffer {
         var framebuffer = Framebuffer()
         framebuffer.colorAttachments.append(FramebufferAttachment())
-//        framebuffer.colorAttachments[0].render = makeMultisampleTexture()
+        framebuffer.colorAttachments[0].render = makeMultisampleTexture()
         return framebuffer
     }
     
@@ -171,7 +167,7 @@ public final class OneTriangle : EngineListener {
         vertexColorBuffer = engine.createBuffer(bytes: vertexColorData, count: vertexData.count * MemoryLayout<Float>.size, storageMode: .sharedWithCPU)
         
         precondition(pipeline.isValid)
-//        precondition(framebuffer.colorAttachments[0].render.isValid)
+        precondition(framebuffer.colorAttachments[0].render.isValid)
         precondition(renderPass.isValid)
         precondition(vertexBuffer.isValid)
         precondition(vertexColorBuffer.isValid)
@@ -293,9 +289,8 @@ public final class OneTriangle : EngineListener {
         let renderTarget = engine.acquireNextRenderTarget()
         precondition(renderTarget.isValid)
         
-//        framebuffer.colorAttachments[0].resolve = engine.textureForRenderTarget(handle: renderTarget)
-        framebuffer.colorAttachments[0].render = engine.textureForRenderTarget(handle: renderTarget)
-        precondition(framebuffer.colorAttachments[0].render.isValid)
+        framebuffer.colorAttachments[0].resolve = engine.textureForRenderTarget(handle: renderTarget)
+        precondition(framebuffer.colorAttachments[0].resolve.isValid)
         
         let renderEncoder = commandBuffer.makeRenderCommandEncoder(handle: renderPass, framebuffer: framebuffer)
         renderEncoder.setRenderPipelineState(pipeline)
