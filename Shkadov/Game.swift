@@ -25,6 +25,7 @@
 import Swiftish
 import Darwin
 import simd
+import Dispatch
 
 struct ObjectData
 {
@@ -90,76 +91,112 @@ public final class Game : EngineListener {
     private var accumulatedTime = Duration.zero
     private let tickDuration = Duration(seconds: 1.0 / 60.0)
     private let maxFrameDuration = Duration(seconds: 0.25)
-    private let camera = ACamera()
-    private var shadowCamera: ACamera = ACamera()
-    private let commandQueue: CommandQueue
-    private var mainRenderPass: RenderPassHandle
-    private var mainPassFramebuffer: Framebuffer
-    private var shadowRenderPass: RenderPassHandle
-    private var shadowFramebuffer: Framebuffer
-    private var depthTestLess: DepthStencilStateHandle
-    private var depthTestAlways: DepthStencilStateHandle
-    private var constantBuffers: [GPUBufferHandle]
-    private var unshadedPipeline: RenderPipelineStateHandle
-    private var unshadedShadowedPipeline: RenderPipelineStateHandle
-    private var litPipeline: RenderPipelineStateHandle
-    private var litShadowedPipeline: RenderPipelineStateHandle
-    private var planeRenderPipeline: RenderPipelineStateHandle
-    private var zpassPipeline: RenderPipelineStateHandle
-    private var quadVisPipeline: RenderPipelineStateHandle
-    private var depthVisPipeline: RenderPipelineStateHandle
-    private var texQuadVisPipeline: RenderPipelineStateHandle
-    private var renderables: ContiguousArray<RenderableObject> = ContiguousArray<RenderableObject>()
-    private var groundPlane: StaticRenderableObject!
-    private var frameCounter: UInt = 1
-    private var constantBufferSlot: Int = 0
-    private var mainPassView = matrix_float4x4()
-    private var mainPassProjection = matrix_float4x4()
-    private var mainPassFrameData = MainPass()
-    private var shadowPassData = ShadowPass()
-    private var moveForward = false
-    private var moveBackward = false
-    private var moveLeft = false
-    private var moveRight = false
-    private var mouseDown = false
-    private var objectsToRender = 1000
-    private var orbit = float2()
-    private var cameraAngles = float2()
-    private var mainRasterizerState: RasterizerStateHandle
-    private var shadowRasterizerState: RasterizerStateHandle
-    private var finalRenderPass: RenderPassHandle
-    private var finalFrameBuffer = Framebuffer()
+    private let metalQueue: CommandQueue
     
+    let mainRP: RenderPassHandle
+    var mainFrame = Framebuffer()
+    
+    var shadowRPs : Array<RenderPassHandle> = [RenderPassHandle]()
+    var shadowFrames : Array<Framebuffer> = [Framebuffer]()
+    var shadowMap : TextureHandle = TextureHandle()
+    
+    var mainPassDepthTexture : TextureHandle = TextureHandle()
+    var mainPassFramebuffer : TextureHandle = TextureHandle()
+    
+    var depthTestLess : DepthStencilStateHandle = DepthStencilStateHandle()
+    var depthTestAlways : DepthStencilStateHandle = DepthStencilStateHandle()
+    
+    var semaphore : DispatchSemaphore
+    var dispatchQueue : DispatchQueue
+    
+    // Contains all our objects and metadata about them
+    // We aren't doing any culling so that means we'll be drawing everything every frame
+    var renderables : ContiguousArray<RenderableObject> = ContiguousArray<RenderableObject>()
+    var groundPlane : StaticRenderableObject!
+    
+    // Constant buffer ring
+    var constantBuffers : Array<GPUBufferHandle> = [GPUBufferHandle] ()
+    var constantBufferSlot : Int = 0
+    var frameCounter : UInt = 1
+    
+    // View and shadow cameras
+    var camera  = ACamera()
+    var shadowCameras : Array<ACamera> = [ACamera]()
+    
+    // Controls
+    var moveForward = false
+    var moveBackward = false
+    var moveLeft = false
+    var moveRight = false
+    
+    var orbit = float2()
+    var cameraAngles = float2()
+    
+    var mouseDown = false
+    
+    var mouseDownPoint = Vector2<Float>()
+    
+    var drawLighting = true
+    var drawShadowsOnCubes = false
+    var multithreadedUpdate = false
+    var multithreadedRender = false
+    var objectsToRender = 10000
+    
+    // Render modes
+    var depthTest = true
+    var showDepthAndShadow = false
+    
+    // Per-pass constant data. View/projection matrices, etc
+    var mainPassView = matrix_float4x4()
+    var mainPassProjection = matrix_float4x4()
+    var mainPassFrameData = MainPass()
+    
+    var shadowPassData = [ShadowPass]()
+    
+    // Our pipelines
+    var unshadedPipeline: RenderPipelineStateHandle = RenderPipelineStateHandle()
+    var unshadedShadowedPipeline: RenderPipelineStateHandle = RenderPipelineStateHandle()
+    
+    var litPipeline: RenderPipelineStateHandle = RenderPipelineStateHandle()
+    var litShadowedPipeline: RenderPipelineStateHandle = RenderPipelineStateHandle()
+    
+    var planeRenderPipeline: RenderPipelineStateHandle = RenderPipelineStateHandle()
+    var zpassPipeline: RenderPipelineStateHandle = RenderPipelineStateHandle()
+    
+    var quadVisPipeline: RenderPipelineStateHandle = RenderPipelineStateHandle()
+    var depthVisPipeline: RenderPipelineStateHandle = RenderPipelineStateHandle()
+    var texQuadVisPipeline: RenderPipelineStateHandle = RenderPipelineStateHandle()
+    
+    // Timing
+    var machToMilliseconds: Double = 0.0
+    var runningAverageGPU: Double = 0.0
+    var runningAverageCPU: Double = 0.0
+    
+    var gpuTiming = [UInt64]()
+
     public init(engine: Engine, logger: Logger) {
         self.engine = engine
         self.logger = logger
-        self.commandQueue = engine.makeCommandQueue()
-        self.mainRenderPass = RenderPassHandle()
-        self.mainPassFramebuffer = Framebuffer()
-        self.shadowRenderPass = RenderPassHandle()
-        self.shadowFramebuffer = Framebuffer()
-        self.depthTestLess = DepthStencilStateHandle()
-        self.depthTestAlways = DepthStencilStateHandle()
-        self.constantBuffers = []
-        self.unshadedPipeline = RenderPipelineStateHandle()
-        self.unshadedShadowedPipeline = RenderPipelineStateHandle()
-        self.litPipeline = RenderPipelineStateHandle()
-        self.litShadowedPipeline = RenderPipelineStateHandle()
-        self.planeRenderPipeline = RenderPipelineStateHandle()
-        self.zpassPipeline = RenderPipelineStateHandle()
-        self.quadVisPipeline = RenderPipelineStateHandle()
-        self.depthVisPipeline = RenderPipelineStateHandle()
-        self.texQuadVisPipeline = RenderPipelineStateHandle()
-        self.mainRasterizerState = RasterizerStateHandle()
-        self.shadowRasterizerState = RasterizerStateHandle()
-        self.finalRenderPass = RenderPassHandle()
+        self.metalQueue = engine.makeCommandQueue()
         
-        finalFrameBuffer.colorAttachments.append(FramebufferAttachment())
-    }
-    
-    public func didStartup() {
-        logger.debug("\(#function)")
-        logger.debug("Screen Size: \(engine.screensSize)")
+        semaphore = DispatchSemaphore(value: MAX_FRAMES_IN_FLIGHT)
+        dispatchQueue = DispatchQueue(label: "default queue", attributes: [.concurrent])
+        
+        var mainRPDesc = RenderPassDescriptor()
+        mainRPDesc.colorAttachments.append(RenderPassColorAttachmentDescriptor())
+        mainRPDesc.colorAttachments[0].clearColor = ClearColor(r: 0.0, g: 0.0, b: 0.0, a: 1.0)
+        mainRPDesc.colorAttachments[0].loadAction = .clear
+        mainRPDesc.colorAttachments[0].storeAction = .store
+        
+        mainRPDesc.depthAttachment.clearDepth = 1.0
+        mainRPDesc.depthAttachment.loadAction = .clear
+        mainRPDesc.depthAttachment.storeAction = .dontCare
+        mainRP = engine.createRenderPass(descriptor: mainRPDesc)
+        
+        mainPassView = matrix_identity_float4x4
+        mainPassProjection = matrix_identity_float4x4
+        
+        mainPassFrameData.ViewProjection = matrix_multiply(mainPassProjection, mainPassView)
         
         camera.position = START_POSITION
         camera.direction = START_CAMERA_VIEW_DIR
@@ -168,133 +205,132 @@ public final class Game : EngineListener {
         // Set up shadow camera and data
         do
         {
-            shadowCamera.direction = SHADOWED_DIRECTIONAL_LIGHT_DIRECTION
-            shadowCamera.up = SHADOWED_DIRECTIONAL_LIGHT_UP
-            shadowCamera.position = SHADOWED_DIRECTIONAL_LIGHT_POSITION
+            let c = ACamera()
+            
+            c.direction = SHADOWED_DIRECTIONAL_LIGHT_DIRECTION
+            c.up = SHADOWED_DIRECTIONAL_LIGHT_UP
+            c.position = SHADOWED_DIRECTIONAL_LIGHT_POSITION
+            
+            shadowCameras.append(c)
+            
+            shadowPassData.append(ShadowPass())
         }
-
-        var mainRasterizer = RasterizerStateDescriptor()
-        mainRasterizer.cullMode = .back
-        mainRasterizerState = engine.createRasterizerState(descriptor: mainRasterizer)
         
-        var shadowRasterizer = RasterizerStateDescriptor()
-        shadowRasterizer.cullMode = .front
-        shadowRasterizerState = engine.createRasterizerState(descriptor: shadowRasterizer)
+        var timebase : mach_timebase_info_data_t = mach_timebase_info_data_t()
+        mach_timebase_info(&timebase)
         
-        var finalPassDescriptor = RenderPassDescriptor()
-        finalPassDescriptor.colorAttachments.append(RenderPassColorAttachmentDescriptor())
-        finalRenderPass = engine.createRenderPass(descriptor: finalPassDescriptor)
+        machToMilliseconds = Double(timebase.numer) / Double(timebase.denom) * 1e-6
         
-        var renderPassDescriptor = RenderPassDescriptor()
-        renderPassDescriptor.colorAttachments.append(RenderPassColorAttachmentDescriptor())
-        renderPassDescriptor.colorAttachments[0].clearColor = ClearColor(r: 1.0, g: 0.0, b: 0.0, a: 1.0)
-        renderPassDescriptor.colorAttachments[0].loadAction = .clear
-        renderPassDescriptor.colorAttachments[0].storeAction = .store
+        //add 3
+        gpuTiming.append(0)
+        gpuTiming.append(0)
+        gpuTiming.append(0)
+    }
+    
+    private func createPipelines() {
+        var module = ModuleHandle()
         
-        renderPassDescriptor.depthAttachment.clearDepth = 1.0
-        renderPassDescriptor.depthAttachment.loadAction = .clear
-        renderPassDescriptor.depthAttachment.storeAction = .dontCare
-
         do {
             let modulePath = engine.pathForResource(named: "default.metallib")
             logger.debug("\(modulePath)")
-            let module = try engine.createModule(filepath: modulePath)
-            defer {
-                engine.destroyModule(handle: module)
-            }
+            module = try engine.createModule(filepath: modulePath)
             
+            // Shaders for lighting/shadowing
             let vertexFunction = engine.createVertexFunction(module: module, named: "vertex_main")
             let unshadedFragment = engine.createFragmentFunction(module: module, named: "unshaded_fragment")
             let unshadedShadowedFragment = engine.createFragmentFunction(module: module, named: "unshaded_shadowed_fragment")
             let planeVertex = engine.createVertexFunction(module: module, named: "plane_vertex")
             let planeFragment = engine.createFragmentFunction(module: module, named: "plane_fragment")
-
-            defer {
-                engine.destroyVertexFunction(handle: vertexFunction)
-                engine.destroyFragmentFunction(handle: unshadedFragment)
-                engine.destroyFragmentFunction(handle: unshadedShadowedFragment)
-                engine.destroyVertexFunction(handle: planeVertex)
-                engine.destroyFragmentFunction(handle: planeFragment)
-            }
-
-            var pipelineDescriptor = RenderPipelineDescriptor()
-            pipelineDescriptor.vertexShader = vertexFunction
-            pipelineDescriptor.fragmentShader = unshadedFragment
-            pipelineDescriptor.colorAttachments.append(RenderPipelineColorAttachmentDescriptor())
-            pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-            pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
             
-            unshadedPipeline = try engine.createRenderPipelineState(descriptor: pipelineDescriptor)
+            var pipeDesc = RenderPipelineDescriptor()
+            pipeDesc.vertexShader = vertexFunction
+            pipeDesc.fragmentShader = unshadedFragment
+            pipeDesc.colorAttachments.append(RenderPipelineColorAttachmentDescriptor())
+            pipeDesc.colorAttachments[0].pixelFormat = .bgra8Unorm
+            pipeDesc.depthAttachmentPixelFormat = .depth32Float
             
-            pipelineDescriptor.fragmentShader = unshadedShadowedFragment
-            unshadedShadowedPipeline = try engine.createRenderPipelineState(descriptor: pipelineDescriptor)
+            try unshadedPipeline = engine.createRenderPipelineState(descriptor: pipeDesc)
+            
+            pipeDesc.fragmentShader = unshadedShadowedFragment
+            try unshadedShadowedPipeline = engine.createRenderPipelineState(descriptor: pipeDesc)
             
             let litVertexFunction = engine.createVertexFunction(module: module, named: "lit_vertex")
             let litFragmentFunction = engine.createFragmentFunction(module: module, named: "lit_fragment")
             let litShadowedFragment = engine.createFragmentFunction(module: module, named: "lit_shadowed_fragment")
             
-            defer {
-                engine.destroyVertexFunction(handle: litVertexFunction)
-                engine.destroyFragmentFunction(handle: litFragmentFunction)
-                engine.destroyFragmentFunction(handle: litShadowedFragment)
-            }
-
-            pipelineDescriptor.vertexShader = litVertexFunction
-            pipelineDescriptor.fragmentShader = litFragmentFunction
-            litPipeline = try engine.createRenderPipelineState(descriptor: pipelineDescriptor)
-
-            pipelineDescriptor.fragmentShader = litShadowedFragment
-            litShadowedPipeline = try engine.createRenderPipelineState(descriptor: pipelineDescriptor)
-
-            pipelineDescriptor.vertexShader = planeVertex
-            pipelineDescriptor.fragmentShader = planeFragment
-            planeRenderPipeline = try engine.createRenderPipelineState(descriptor: pipelineDescriptor)
-
+            // Rendering with simple lighting
+            pipeDesc.vertexShader = litVertexFunction
+            pipeDesc.fragmentShader = litFragmentFunction
+            
+            try litPipeline = engine.createRenderPipelineState(descriptor: pipeDesc)
+            
+            pipeDesc.fragmentShader = litShadowedFragment
+            
+            try litShadowedPipeline = engine.createRenderPipelineState(descriptor: pipeDesc)
+            
+            // Ground plane
+            
+            pipeDesc.vertexShader = planeVertex
+            pipeDesc.fragmentShader = planeFragment
+            try planeRenderPipeline = engine.createRenderPipelineState(descriptor: pipeDesc)
+            
+            // Shadow pass
+            
             let zpassVertex = engine.createVertexFunction(module: module, named: "zpass_vertex_main")
             let zpassFragment = engine.createFragmentFunction(module: module, named: "zpass_fragment")
             
-            defer {
-                engine.destroyVertexFunction(handle: zpassVertex)
-                engine.destroyFragmentFunction(handle: zpassFragment)
-            }
-
-            pipelineDescriptor.vertexShader = zpassVertex
-            pipelineDescriptor.fragmentShader = zpassFragment
-            pipelineDescriptor.colorAttachments[0].pixelFormat = .invalid
-            pipelineDescriptor.colorAttachments[0].writeMask = []
-            zpassPipeline = try engine.createRenderPipelineState(descriptor: pipelineDescriptor)
+            //Z only passes do not need to write color
+            pipeDesc.vertexShader = zpassVertex
+            pipeDesc.fragmentShader = zpassFragment
+            pipeDesc.colorAttachments[0].pixelFormat = .invalid
+            pipeDesc.colorAttachments[0].writeMask = [] // MTLColorWriteMask()
             
-            let vertexFunction2 = engine.createVertexFunction(module: module, named: "quad_vertex_main")
+            try zpassPipeline = engine.createRenderPipelineState(descriptor: pipeDesc)
+        }
+        catch {
+            fatalError("Could not create lighting shaders, failing. \(error)")
+        }
+        
+        do {
+            // Visualization shaders
+            let vertexFunction = engine.createVertexFunction(module: module, named: "quad_vertex_main")
             let quadVisFragFunction = engine.createFragmentFunction(module: module, named: "quad_fragment_main")
             let quadTexVisFunction = engine.createFragmentFunction(module: module, named: "textured_quad_fragment")
             let quadDepthVisFunction = engine.createFragmentFunction(module: module, named: "visualize_depth_fragment")
             
             var pipeDesc = RenderPipelineDescriptor()
-            pipeDesc.vertexShader = vertexFunction2
+            pipeDesc.vertexShader = vertexFunction
             pipeDesc.fragmentShader = quadVisFragFunction
             pipeDesc.colorAttachments.append(RenderPipelineColorAttachmentDescriptor())
             pipeDesc.colorAttachments[0].pixelFormat = .bgra8Unorm
             
-            quadVisPipeline = try engine.createRenderPipelineState(descriptor: pipeDesc)
+            try quadVisPipeline = engine.createRenderPipelineState(descriptor: pipeDesc)
             
             pipeDesc.fragmentShader = quadDepthVisFunction
-            depthVisPipeline = try engine.createRenderPipelineState(descriptor: pipeDesc)
+            try depthVisPipeline = engine.createRenderPipelineState(descriptor: pipeDesc)
             
             pipeDesc.fragmentShader = quadTexVisFunction
-            texQuadVisPipeline = try engine.createRenderPipelineState(descriptor: pipeDesc)
+            try texQuadVisPipeline = engine.createRenderPipelineState(descriptor: pipeDesc)
         }
         catch {
-            logger.debug("\(error)")
-            fatalError()
+            Swift.print("Could not compile visualization shaders, failing.")
+            exit(1)
         }
-        
+    }
+
+    public func didStartup() {
+        logger.debug("\(#function)")
+        // MARK: Constant Buffer Creation
+        // Create our constant buffers
+        // We've chosen 3 for this example; your application may need a different number
         for _ in 1...MAX_FRAMES_IN_FLIGHT {
             let buf = engine.createBuffer(count: CONSTANT_BUFFER_SIZE, storageMode: .unsafeSharedWithCPU)
             constantBuffers.append(buf)
         }
         
+        // MARK: Shadow Texture Creation
         do {
-            var texDesc = TextureDescriptor()
+            var texDesc : TextureDescriptor = TextureDescriptor()
             texDesc.pixelFormat = .depth32Float
             texDesc.width = SHADOW_DIMENSION
             texDesc.height = SHADOW_DIMENSION
@@ -303,13 +339,14 @@ public final class Game : EngineListener {
             texDesc.textureUsage = [.renderTarget, .shaderRead]
             texDesc.storageMode = .privateToGPU
             
-            shadowFramebuffer.depthAttachment.render = engine.createTexture(descriptor: texDesc)
+            shadowMap = engine.createTexture(descriptor: texDesc)
         }
         
+        // MARK: Main framebuffer / depth creation
         do {
             var texDesc = TextureDescriptor()
-            texDesc.width =  engine.config.renderer.width
-            texDesc.height =  engine.config.renderer.height
+            texDesc.width =  Int(engine.config.renderer.width)
+            texDesc.height =  Int(engine.config.renderer.height)
             texDesc.depth = 1
             texDesc.textureType = .type2D
             
@@ -317,33 +354,39 @@ public final class Game : EngineListener {
             texDesc.storageMode = .privateToGPU
             texDesc.pixelFormat = .bgra8Unorm
             
-            var attachment = FramebufferAttachment()
-            attachment.render = engine.createTexture(descriptor: texDesc)
-            mainPassFramebuffer.colorAttachments.append(attachment)
+            mainPassFramebuffer = engine.createTexture(descriptor: texDesc)
+            
+            mainFrame.colorAttachments.append(FramebufferAttachment())
+            mainFrame.colorAttachments[0].render = mainPassFramebuffer
         }
         
         do {
             var texDesc = TextureDescriptor.texture2DDescriptor(pixelFormat: .depth32Float,
-                                                                width: engine.config.renderer.width,
-                                                                height: engine.config.renderer.height,
+                                                                width: Int(engine.config.renderer.width),
+                                                                height: Int(engine.config.renderer.height),
                                                                 mipmapped: false)
             texDesc.textureUsage = [.renderTarget, .shaderRead]
             texDesc.storageMode = .privateToGPU
+            mainPassDepthTexture = engine.createTexture(descriptor: texDesc)
             
-            mainPassFramebuffer.depthAttachment.render = engine.createTexture(descriptor: texDesc)
+            mainFrame.depthAttachment.render = mainPassDepthTexture
         }
-
-        mainRenderPass = engine.createRenderPass(descriptor: renderPassDescriptor)
-
+        
         do {
             var rp = RenderPassDescriptor()
             rp.depthAttachment.clearDepth = 1.0
             rp.depthAttachment.loadAction = .clear
             rp.depthAttachment.storeAction = .store
-
-            shadowRenderPass = engine.createRenderPass(descriptor: rp)
+            
+            shadowRPs.append(engine.createRenderPass(descriptor: rp))
+            
+            var f = Framebuffer()
+            f.depthAttachment.render = shadowMap
+            shadowFrames.append(f)
         }
-
+        
+        // MARK: Depth State Creation
+        
         do {
             var depthStencilDesc = DepthStencilDescriptor()
             depthStencilDesc.isDepthWriteEnabled = true
@@ -353,14 +396,19 @@ public final class Game : EngineListener {
             
             depthStencilDesc.isDepthWriteEnabled = false
             depthStencilDesc.depthCompareFunction = .always
-            
             depthTestAlways = engine.createDepthStencilState(descriptor: depthStencilDesc)
         }
-
+        
+        // MARK: Shader Creation
+        
+        createPipelines()
+        
+        // MARK: Object Creation
         do {
-            let (geo, index, indexCount, vertCount) = createCube()
+            let (geo, index, indexCount, vertCount) = createCube(engine)
             
             for _ in 0..<OBJECT_COUNT {
+                //NOTE returns a value within -value to value
                 let p = Float(getRandomValue(500.0))
                 let p1 = Float(getRandomValue(100.0))
                 let p2 = Float(getRandomValue(500.0))
@@ -387,20 +435,18 @@ public final class Game : EngineListener {
         }
         
         do {
-            let (planeGeo, count) = createPlane()
+            let (planeGeo, count) = createPlane(engine)
             groundPlane = StaticRenderableObject(m: planeGeo, idx: GPUBufferHandle(), count: count, tex: TextureHandle())
             groundPlane.position = float4(GROUND_POSITION.x,
                                            GROUND_POSITION.y,
                                            GROUND_POSITION.z,1.0)
             groundPlane.objectData.color = GROUND_COLOR
-            groundPlane.objectData.LocalToWorld.columns.3 = groundPlane!.position
+            groundPlane.objectData.LocalToWorld.columns.3 = groundPlane.position
         }
-
+        
+        // Main pass projection matrix
+        // Our window cannot change size so we don't ever update this
         mainPassProjection = getPerpectiveProjectionMatrix(Float(60.0*DEG2RAD), aspectRatio: Float(engine.config.renderer.width) / Float(engine.config.renderer.height), zFar: 2000.0, zNear: 1.0)
-
-        engine.mouseCursorFollowsMouse = true
-        engine.mouseCursorHidden = true
-        previousTime = engine.currentTime
     }
     
     public func willShutdown() {
@@ -480,175 +526,18 @@ public final class Game : EngineListener {
     
     private func update(elapsed: Duration) {
         logger.trace("\(#function)")
-        let currentConstantBuffer = constantBufferSlot
-        
-        // Update view matrix here
-        if moveForward {
-            camera.position.z += 1.0
-        }
-        else if moveBackward {
-            camera.position.z -= 1.0
-        }
-        
-        if mouseDown {
-            cameraAngles.x += 0.005 * orbit.y
-            cameraAngles.y += 0.005 * orbit.x
-        }
-        
-        do {
-            // Figure out far plane distance at least
-            let zFar = distance(GROUND_POSITION,SHADOWED_DIRECTIONAL_LIGHT_POSITION)
-            
-            shadowPassData.ViewProjection = getLHOrthoMatrix(1100, height: 1100, zFar: zFar, zNear: 25)
-            shadowPassData.ViewProjection = matrix_multiply(shadowPassData.ViewProjection, shadowCamera.GetViewMatrix())
-        }
-        
-        do {
-            //NOTE: We're doing an orbit so we've usurped the normal camera class here
-            mainPassView = matrix_multiply(getRotationAroundY(cameraAngles.y), getRotationAroundX(cameraAngles.x))
-            mainPassView = matrix_multiply(camera.GetViewMatrix(), mainPassView)
-            mainPassFrameData.ViewProjection = matrix_multiply(mainPassProjection, mainPassView)
-            mainPassFrameData.ViewShadow0Projection = shadowPassData.ViewProjection
-            mainPassFrameData.LightPosition = float4(SHADOWED_DIRECTIONAL_LIGHT_POSITION.x,
-                                                     SHADOWED_DIRECTIONAL_LIGHT_POSITION.y,
-                                                     SHADOWED_DIRECTIONAL_LIGHT_POSITION.z, 1.0)
-        }
-        
-        // Select which constant buffer to use
-        let constantBufferForFrame = engine.borrowBuffer(handle: constantBuffers[currentConstantBuffer])
-        
-        // Calculate the offsets into the constant buffer for the shadow pass data, main pass data, and object data
-        let shadowOffset = 0
-        let mainPassOffset = 256 + shadowOffset
-        let objectDataOffset = 256 + mainPassOffset
-        
-        // Write the shadow pass data into the constants buffer
-        constantBufferForFrame.bytes.storeBytes(of: shadowPassData, toByteOffset: shadowOffset, as: ShadowPass.self)
-        
-        // Write the main pass data into the constants buffer
-        constantBufferForFrame.bytes.storeBytes(of: mainPassFrameData, toByteOffset: mainPassOffset, as: MainPass.self)
-        
-        // Create a mutable pointer to the beginning of the object data so we can step through it and set the data of each object individually
-        var ptr = constantBufferForFrame.bytes.advanced(by: objectDataOffset).bindMemory(to: ObjectData.self, capacity: objectsToRender)
-        
-        for index in 0..<objectsToRender {
-            ptr = renderables[index].UpdateData(ptr, deltaTime: Float(elapsed.seconds))
-        }
-        
-        ptr = ptr.advanced(by: objectsToRender)
-        
-        _ = groundPlane.UpdateData(ptr, deltaTime: Float(elapsed.seconds))
-        
-        // Mark constant buffer as modified (objectsToRender+1 because of the ground plane)
-        constantBufferForFrame.wasCPUModified(range: 0..<mainPassOffset+(256*(objectsToRender+1)))
     }
     
     private func render() {
         logger.trace("\(#function)")
-        
-        // Create command buffers for the entire scene rendering
-        let shadowCommandBuffer = commandQueue.makeCommandBuffer()
-        let mainCommandBuffer = commandQueue.makeCommandBuffer()
-        
-        // Enforce the ordering:
-        // Shadows must be completed before the main rendering pass
-        shadowCommandBuffer.enqueue()
-        mainCommandBuffer.enqueue()
-        
-        let currentConstantBuffer = constantBufferSlot
-        let shadowOffset = 0
-        let mainPassOffset = 256 + shadowOffset
-        let objectDataOffset = 256 + mainPassOffset
-
-        encodeShadowPass(shadowCommandBuffer, rp: shadowRenderPass, constantBuffer: constantBuffers[currentConstantBuffer], passDataOffset: shadowOffset, objectDataOffset: objectDataOffset)
-        drawMainPass(mainCommandBuffer, constantBuffer: constantBuffers[currentConstantBuffer], mainPassOffset: mainPassOffset, objectDataOffset: objectDataOffset)
-        constantBufferSlot = (constantBufferSlot + 1) % MAX_FRAMES_IN_FLIGHT
     }
     
-    private func createPlane() -> (GPUBufferHandle, Int) {
-        var verts : [CFloat] = [ -1000.5, 0.0,  1000.5, 1.0,
-                                 1000.5, 0.0,  1000.5, 1.0,
-                                 -1000.5, 0.0, -1000.5, 1.0,
-                                 1000.5, 0.0,  1000.5, 1.0,
-                                 1000.5, 0.0, -1000.5, 1.0,
-                                 -1000.5, 0.0, -1000.5, 1.0,]
-        
-        let length = verts.count*MemoryLayout<CFloat>.size
-        
-        let geoBufferHandle = engine.createBuffer(count: length, storageMode: .unsafeSharedWithCPU)
-        let geoBuffer = engine.borrowBuffer(handle: geoBufferHandle)
-        
-        let geoPtr = geoBuffer.bytes.bindMemory(to: CFloat.self, capacity: length)
-        
-        geoPtr.assign(from: &verts, count: verts.count)
-        geoBuffer.wasCPUModified(range: 0..<verts.count*MemoryLayout<Float>.size)
-//        geoBuffer.didModifyRange(NSMakeRange(0, verts.count*MemoryLayout<Float>.size))
-        
-        return (geoBufferHandle, verts.count / 4)
-    }
-    
-    private func createCube() -> (GPUBufferHandle, GPUBufferHandle, Int, Int) {
-        var verts : [CFloat] = [-0.5,  0.5, -0.5, 0.0, 0.0, -1.0,//0
-            0.5,  0.5, -0.5, 0.0, 0.0, -1.0,//1
-            0.5, -0.5, -0.5, 0.0, 0.0, -1.0,//2
-            0.5, -0.5, -0.5, 0.0, 0.0, -1.0,//2
-            -0.5, -0.5, -0.5, 0.0, 0.0, -1.0,//3
-            -0.5,  0.5, -0.5, 0.0, 0.0, -1.0,//0
-            
-            0.5,  0.5, -0.5, 1.0,0.0,0.0, //1
-            0.5,  0.5,  0.5, 1.0,0.0,0.0, //5
-            0.5, -0.5,  0.5, 1.0,0.0,0.0, //6
-            0.5, -0.5,  0.5, 1.0,0.0,0.0, //6
-            0.5, -0.5, -0.5, 1.0,0.0,0.0, //2
-            0.5,  0.5, -0.5, 1.0,0.0,0.0, //1
-            
-            0.5,  0.5,  0.5, 0.0,0.0,1.0, //5
-            -0.5,  0.5,  0.5, 0.0,0.0,1.0, //4
-            -0.5, -0.5,  0.5, 0.0,0.0,1.0, //7
-            -0.5, -0.5,  0.5, 0.0,0.0,1.0, //7
-            0.5, -0.5,  0.5, 0.0,0.0,1.0, //6
-            0.5,  0.5,  0.5, 0.0,0.0,1.0, //5
-            
-            -0.5,  0.5,  0.5, -1.0,0.0,0.0, //4
-            -0.5,  0.5, -0.5, -1.0,0.0,0.0, //0
-            -0.5, -0.5, -0.5, -1.0,0.0,0.0, //3
-            -0.5, -0.5, -0.5, -1.0,0.0,0.0, //3
-            -0.5, -0.5,  0.5, -1.0,0.0,0.0, //7
-            -0.5,  0.5,  0.5, -1.0,0.0,0.0, //4
-            
-            -0.5,  0.5,  0.5, 0.0,1.0,0.0,//4
-            0.5,  0.5,  0.5, 0.0,1.0,0.0, //5
-            0.5,  0.5, -0.5, 0.0,1.0,0.0, //1
-            0.5,  0.5, -0.5, 0.0,1.0,0.0, //1
-            -0.5,  0.5, -0.5, 0.0,1.0,0.0, //0
-            -0.5,  0.5,  0.5, 0.0,1.0,0.0, //4
-            
-            -0.5, -0.5, -0.5, 0.0,-1.0,0.0, //3
-            0.5, -0.5, -0.5, 0.0,-1.0,0.0, //2
-            0.5, -0.5,  0.5, 0.0,-1.0,0.0, //6
-            0.5, -0.5,  0.5, 0.0,-1.0,0.0, //6
-            -0.5, -0.5,  0.5, 0.0,-1.0,0.0, //7
-            -0.5, -0.5, -0.5, 0.0,-1.0,0.0, //3
-        ]
-        
-        let length = verts.count*MemoryLayout<CFloat>.size
-        let geoBufferHandle = engine.createBuffer(count: length, storageMode: .unsafeSharedWithCPU)
-        let geoBuffer = engine.borrowBuffer(handle: geoBufferHandle)
-        
-        let geoPtr = geoBuffer.bytes.bindMemory(to: CFloat.self, capacity: length)
-        
-        geoPtr.assign(from: &verts, count: verts.count)
-        geoBuffer.wasCPUModified(range: 0..<verts.count*MemoryLayout<Float>.size)
-//        geoBuffer.didModifyRange(NSMakeRange(0, verts.count*MemoryLayout<Float>.size))
-        
-        return (geoBufferHandle, GPUBufferHandle(), 0, verts.count/6)
-    }
-    
-    func encodeShadowPass(_ commandBuffer: CommandBuffer, rp: RenderPassHandle, constantBuffer: GPUBufferHandle, passDataOffset: Int, objectDataOffset: Int) {
-        let enc = commandBuffer.makeRenderCommandEncoder(handle: rp, framebuffer: shadowFramebuffer)
+    func encodeShadowPass(_ commandBuffer: CommandBuffer, rp: RenderPassHandle, fb: Framebuffer, constantBuffer: GPUBufferHandle, passDataOffset: Int, objectDataOffset: Int) {
+        let enc = commandBuffer.makeRenderCommandEncoder(handle: rp, framebuffer: fb)
         enc.setDepthStencilState(depthTestLess)
         
-        enc.setRasterizerState(shadowRasterizerState)
+        //We're only going to draw back faces into the shadowmap
+//        enc.setCullMode(.front)
         
         // setVertexOffset will allow faster updates, but we must bind the Constant buffer once
         enc.setVertexBuffer(constantBuffer, offset: 0, at: 1)
@@ -662,18 +551,13 @@ public final class Game : EngineListener {
         var offset = objectDataOffset
         for index in 0..<objectsToRender {
             renderables[index].DrawZPass(enc, offset: offset)
-            offset += 256
+            offset += MemoryLayout<ObjectData>.size
         }
         
         enc.endEncoding()
         
         commandBuffer.commit()
     }
-    
-    // A tiny bit more complex than DrawShadowPass
-    // We must pick the current drawable from MTKView as well as calling present before
-    // Committing our command buffer
-    // We'll also add a completion handler to signal the semaphore
     
     func encodeMainPass(_ enc: RenderCommandEncoder, constantBuffer: GPUBufferHandle, passDataOffset: Int, objectDataOffset: Int) {
         // Similar to the shadow passes, we must bind the constant buffer once before we call setVertexBytes
@@ -684,15 +568,30 @@ public final class Game : EngineListener {
         enc.setVertexBuffer(constantBuffer, offset: passDataOffset, at: 2)
         enc.setFragmentBuffer(constantBuffer, offset: passDataOffset, at: 2)
         
-        enc.setFragmentTexture(shadowFramebuffer.depthAttachment.render, at: 0)
+        enc.setFragmentTexture(shadowMap, at: 0)
         
         var offset = objectDataOffset
-        enc.setRenderPipelineState(litShadowedPipeline)
+        if drawShadowsOnCubes {
+            if drawLighting {
+                enc.setRenderPipelineState(litShadowedPipeline)
+            }
+            else {
+                enc.setRenderPipelineState(unshadedShadowedPipeline)
+            }
+        }
+        else {
+            if drawLighting {
+                enc.setRenderPipelineState(litPipeline)
+            }
+            else {
+                enc.setRenderPipelineState(unshadedPipeline)
+            }
+        }
         
         enc.setVertexBuffer(renderables[0].mesh, offset: 0, at: 0)
         for index in 0..<objectsToRender {
             renderables[index].Draw(enc, offset: offset)
-            offset += 256
+            offset += MemoryLayout<ObjectData>.size
         }
         
         enc.setRenderPipelineState(planeRenderPipeline)
@@ -703,27 +602,98 @@ public final class Game : EngineListener {
     func drawMainPass(_ mainCommandBuffer: CommandBuffer, constantBuffer: GPUBufferHandle, mainPassOffset: Int, objectDataOffset: Int) {
         let currentFrame = frameCounter
         
-        let enc = mainCommandBuffer.makeRenderCommandEncoder(handle: mainRenderPass, framebuffer: mainPassFramebuffer)
-        enc.setDepthStencilState(depthTestLess)
-        enc.setRasterizerState(mainRasterizerState)
+        if showDepthAndShadow {
+            mainRPDesc.depthAttachment.storeAction = .store
+        }
+        else {
+            mainRPDesc.depthAttachment.storeAction = .dontCare
+        }
+        
+        let enc : RenderCommandEncoder = mainCommandBuffer.makeRenderCommandEncoder(descriptor: mainRPDesc)
+        enc.setCullMode(MTLCullMode.back)
+        
+        if depthTest {
+            enc.setDepthStencilState(depthTestLess)
+        }
         
         encodeMainPass(enc, constantBuffer: constantBuffer, passDataOffset : mainPassOffset, objectDataOffset: objectDataOffset)
         
         enc.endEncoding()
         
-        let renderTarget = engine.acquireNextRenderTarget()
-        finalFrameBuffer.colorAttachments[0].render = engine.textureForRenderTarget(handle: renderTarget)
+        let currentDrawable = self.currentDrawable!
+        let rpDesc = currentRenderPassDescriptor!
         
-        let finalEnc = mainCommandBuffer.makeRenderCommandEncoder(handle: finalRenderPass, framebuffer: finalFrameBuffer)
+        // Draws the Scene, Depth and Shadow map to the screen
+        if showDepthAndShadow {
+            let visEnc = mainCommandBuffer.makeRenderCommandEncoder(descriptor: rpDesc)
+            
+            var viewport = MTLViewport(originX: 0.0, originY: 0.0,
+                                       width: Double(frame.width)*0.5,
+                                       height: Double(frame.height)*0.5,
+                                       znear: 0.0, zfar: 1.0)
+            
+            visEnc.setViewport(viewport)
+            
+            visEnc.setRenderPipelineState(texQuadVisPipeline!)
+            visEnc.setFragmentTexture(mainPassFramebuffer, at: 0)
+            
+            visEnc.drawPrimitives(type: MTLPrimitiveType.triangleStrip, vertexStart: 0, vertexCount: 4)
+            
+            viewport = MTLViewport(originX: Double(frame.width)*0.5, originY: 0.0,
+                                   width: Double(frame.width)*0.5,
+                                   height: Double(frame.height)*0.5,
+                                   znear: 0.0, zfar: 1.0)
+            
+            visEnc.setViewport(viewport)
+            
+            visEnc.setRenderPipelineState(self.depthVisPipeline!)
+            visEnc.setFragmentTexture(self.mainPassDepthTexture, at: 0)
+            
+            visEnc.drawPrimitives(type: MTLPrimitiveType.triangleStrip, vertexStart: 0, vertexCount: 4)
+            
+            // Shadow
+            viewport = MTLViewport(originX: 0.0,
+                                   originY: Double(frame.height)*0.5,
+                                   width: Double(frame.width)*0.5,
+                                   height: Double(frame.height)*0.5,
+                                   znear: 0.0, zfar: 1.0)
+            
+            visEnc.setViewport(viewport)
+            
+            visEnc.setFragmentTexture(shadowMap, at: 0)
+            visEnc.drawPrimitives(type: MTLPrimitiveType.triangleStrip, vertexStart: 0, vertexCount: 4)
+            
+            visEnc.endEncoding()
+        }
+        else {
+            // Draws the main pass
+            let finalEnc = mainCommandBuffer.makeRenderCommandEncoder(descriptor: rpDesc)
+            
+            finalEnc.setRenderPipelineState(texQuadVisPipeline!)
+            finalEnc.setFragmentTexture(mainPassFramebuffer, at: 0)
+            
+            finalEnc.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
+            
+            finalEnc.endEncoding()
+        }
         
-        finalEnc.setRenderPipelineState(texQuadVisPipeline)
-        finalEnc.setFragmentTexture(mainPassFramebuffer.colorAttachments[0].render, at: 0)
+        mainCommandBuffer.present(currentDrawable)
         
-        finalEnc.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
+        mainCommandBuffer.addScheduledHandler { scheduledCommandBuffer in
+            self.gpuTiming[Int(currentFrame % 3)] = mach_absolute_time()
+        }
         
-        finalEnc.endEncoding()
-        
-        engine.present(commandBuffer: mainCommandBuffer, renderTarget: renderTarget)
+        mainCommandBuffer.addCompletedHandler { completedCommandBuffer in
+            
+            let end = mach_absolute_time()
+            self.gpuTiming[Int(currentFrame % 3)] = end - self.gpuTiming[Int(currentFrame % 3)]
+            
+            let seconds = self.machToMilliseconds * Double(self.gpuTiming[Int(currentFrame % 3)])
+            
+            self.runningAverageGPU = (self.runningAverageGPU * Double(currentFrame-1) + seconds) / Double(currentFrame)
+            
+            self.semaphore.signal()
+        }
         
         mainCommandBuffer.commit()
     }

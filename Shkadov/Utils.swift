@@ -23,7 +23,6 @@
  */
 
 import simd
-import Metal
 
 class ACamera
 {
@@ -112,7 +111,7 @@ func getLHOrthoMatrix(_ width : Float, height : Float, zFar : Float, zNear : Flo
     return m
 }
 
-func createPlane(_ device : MTLDevice) -> (MTLBuffer, Int)
+func createPlane(_ device : Engine) -> (GPUBufferHandle, Int)
 {
     var verts : [CFloat] = [ -1000.5, 0.0,  1000.5, 1.0,
                              1000.5, 0.0,  1000.5, 1.0,
@@ -123,17 +122,17 @@ func createPlane(_ device : MTLDevice) -> (MTLBuffer, Int)
     
     let length = verts.count*MemoryLayout<CFloat>.size
     
-    let geoBuffer = device.makeBuffer(length: length, options: MTLResourceOptions.storageModeManaged)
-    
-    let geoPtr = geoBuffer.contents().bindMemory(to: CFloat.self, capacity: length)
+    let geoBuffer = device.createBuffer(count: length, storageMode: .unsafeSharedWithCPU)
+    let buffer = device.borrowBuffer(handle: geoBuffer)
+    let geoPtr = buffer.bytes.bindMemory(to: CFloat.self, capacity: length)
     
     geoPtr.assign(from: &verts, count: verts.count)
-    geoBuffer.didModifyRange(NSMakeRange(0, verts.count*MemoryLayout<Float>.size))
+    buffer.wasCPUModified(range: 0..<verts.count*MemoryLayout<Float>.size)
     
     return (geoBuffer, verts.count / 4)
 }
 
-func createCube(_ device : MTLDevice) -> (MTLBuffer, MTLBuffer?, Int, Int)
+func createCube(_ device : Engine) -> (GPUBufferHandle, GPUBufferHandle, Int, Int)
 {
     var verts : [CFloat] = [-0.5,  0.5, -0.5, 0.0, 0.0, -1.0,//0
 							 0.5,  0.5, -0.5, 0.0, 0.0, -1.0,//1
@@ -179,14 +178,14 @@ func createCube(_ device : MTLDevice) -> (MTLBuffer, MTLBuffer?, Int, Int)
     ]
     
     let length = verts.count*MemoryLayout<CFloat>.size
-    let geoBuffer = device.makeBuffer(length: length, options: MTLResourceOptions.storageModeManaged)
-    
-    let geoPtr = geoBuffer.contents().bindMemory(to: CFloat.self, capacity: length)
+    let geoBuffer = device.createBuffer(count: length, storageMode: .unsafeSharedWithCPU)
+    let buffer = device.borrowBuffer(handle: geoBuffer)
+    let geoPtr = buffer.bytes.bindMemory(to: CFloat.self, capacity: length)
     
     geoPtr.assign(from: &verts, count: verts.count)
-    geoBuffer.didModifyRange(NSMakeRange(0, verts.count*MemoryLayout<Float>.size))
+    buffer.wasCPUModified(range: 0..<verts.count*MemoryLayout<Float>.size)
     
-    return (geoBuffer, nil, 0, verts.count/6)
+    return (geoBuffer, GPUBufferHandle(), 0, verts.count/6)
 }
 
 func getRotationAroundZ(_ radians : Float) -> matrix_float4x4
