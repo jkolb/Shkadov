@@ -102,6 +102,8 @@ public final class OneTriangle : EngineListener {
                 engine.destroyModule(handle: module)
             }
             
+            precondition(module.isValid)
+            
             let vertexShader = engine.createVertexFunction(module: module, named: "passThroughVertex")
             let fragmentShader = engine.createFragmentFunction(module: module, named: "passThroughFragment")
             defer {
@@ -109,12 +111,15 @@ public final class OneTriangle : EngineListener {
                 engine.destroyFragmentFunction(handle: fragmentShader)
             }
             
+            precondition(vertexShader.isValid)
+            precondition(fragmentShader.isValid)
+            
             var descriptor = RenderPipelineDescriptor()
             descriptor.vertexShader = vertexShader
             descriptor.fragmentShader = fragmentShader
             descriptor.colorAttachments.append(RenderPipelineColorAttachmentDescriptor())
             descriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-            descriptor.sampleCount = 4
+//            descriptor.sampleCount = 4
             
             return try engine.createRenderPipelineState(descriptor: descriptor)
         }
@@ -127,15 +132,18 @@ public final class OneTriangle : EngineListener {
     private func makeRenderPass() -> RenderPassHandle {
         var descriptor = RenderPassDescriptor()
         descriptor.colorAttachments.append(RenderPassColorAttachmentDescriptor())
-        descriptor.colorAttachments[0].resolve = true
-        descriptor.colorAttachments[0].storeAction = .multisampleResolve
+//        descriptor.colorAttachments[0].resolve = true
+//        descriptor.colorAttachments[0].storeAction = .multisampleResolve
+        descriptor.colorAttachments[0].clearColor = ClearColor(r: 1.0, g: 0.0, b: 0.0, a: 1.0)
+        descriptor.colorAttachments[0].loadAction = .clear
+        descriptor.colorAttachments[0].storeAction = .store
         return engine.createRenderPass(descriptor: descriptor)
     }
     
     private func makeFramebuffer() -> Framebuffer {
         var framebuffer = Framebuffer()
         framebuffer.colorAttachments.append(FramebufferAttachment())
-        framebuffer.colorAttachments[0].render = makeMultisampleTexture()
+//        framebuffer.colorAttachments[0].render = makeMultisampleTexture()
         return framebuffer
     }
     
@@ -160,6 +168,12 @@ public final class OneTriangle : EngineListener {
         renderPass = makeRenderPass()
         vertexBuffer = engine.createBuffer(count: ConstantBufferSize, storageMode: .sharedWithCPU)
         vertexColorBuffer = engine.createBuffer(count: vertexData.count * MemoryLayout<Float>.size, storageMode: .sharedWithCPU)
+        
+        precondition(pipeline.isValid)
+//        precondition(framebuffer.colorAttachments[0].render.isValid)
+        precondition(renderPass.isValid)
+        precondition(vertexBuffer.isValid)
+        precondition(vertexColorBuffer.isValid)
     }
     
     public func willShutdown() {
@@ -246,28 +260,28 @@ public final class OneTriangle : EngineListener {
         
         vData.initialize(from: vertexData)
         
-        let lastTriVertex = 24
-        let vertexSize = 4
-        
-        for j in 0..<3 {
-            xOffset[j] += xDelta[j]
-            
-            if(xOffset[j] >= 1.0 || xOffset[j] <= -1.0) {
-                xDelta[j] = -xDelta[j]
-                xOffset[j] += xDelta[j]
-            }
-            
-            yOffset[j] += yDelta[j]
-            
-            if(yOffset[j] >= 1.0 || yOffset[j] <= -1.0) {
-                yDelta[j] = -yDelta[j]
-                yOffset[j] += yDelta[j]
-            }
-            
-            let pos = lastTriVertex + j*vertexSize
-            vData[pos] = xOffset[j]
-            vData[pos+1] = yOffset[j]
-        }
+//        let lastTriVertex = 24
+//        let vertexSize = 4
+//        
+//        for j in 0..<3 {
+//            xOffset[j] += xDelta[j]
+//            
+//            if(xOffset[j] >= 1.0 || xOffset[j] <= -1.0) {
+//                xDelta[j] = -xDelta[j]
+//                xOffset[j] += xDelta[j]
+//            }
+//            
+//            yOffset[j] += yDelta[j]
+//            
+//            if(yOffset[j] >= 1.0 || yOffset[j] <= -1.0) {
+//                yDelta[j] = -yDelta[j]
+//                yOffset[j] += yDelta[j]
+//            }
+//            
+//            let pos = lastTriVertex + j*vertexSize
+//            vData[pos] = xOffset[j]
+//            vData[pos+1] = yOffset[j]
+//        }
     }
     
     private func render() {
@@ -276,14 +290,17 @@ public final class OneTriangle : EngineListener {
         let commandBuffer = commandQueue.makeCommandBuffer()
         
         let renderTarget = engine.acquireNextRenderTarget()
+        precondition(renderTarget.isValid)
         
-        framebuffer.colorAttachments[0].resolve = engine.textureForRenderTarget(handle: renderTarget)
+//        framebuffer.colorAttachments[0].resolve = engine.textureForRenderTarget(handle: renderTarget)
+        framebuffer.colorAttachments[0].render = engine.textureForRenderTarget(handle: renderTarget)
+        precondition(framebuffer.colorAttachments[0].render.isValid)
         
         let renderEncoder = commandBuffer.makeRenderCommandEncoder(handle: renderPass, framebuffer: framebuffer)
         renderEncoder.setRenderPipelineState(pipeline)
         renderEncoder.setVertexBuffer(vertexBuffer, offset: 256 * bufferIndex, at: 0)
         renderEncoder.setVertexBuffer(vertexColorBuffer, offset: 0, at: 1)
-        renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 9)
+//        renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 9, instanceCount: 1)
         renderEncoder.endEncoding()
         
         engine.present(commandBuffer: commandBuffer, renderTarget: renderTarget)

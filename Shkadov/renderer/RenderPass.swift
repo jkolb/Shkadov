@@ -64,7 +64,7 @@ public struct RenderPassColorAttachmentDescriptor {
     public var resolveSlice: Int = 0
     public var resolveDepthPlane: Int = 0
     public var loadAction: LoadAction = .dontCare
-    public var storeAction: StoreAction = .dontCare
+    public var storeAction: StoreAction = .store
     
     public init() { }
 }
@@ -78,7 +78,7 @@ public struct RenderPassDepthAttachmentDescriptor {
     public var resolveLevel: Int = 0
     public var resolveSlice: Int = 0
     public var resolveDepthPlane: Int = 0
-    public var loadAction: LoadAction = .dontCare
+    public var loadAction: LoadAction = .clear
     public var storeAction: StoreAction = .dontCare
     
     public init() { }
@@ -93,7 +93,7 @@ public struct RenderPassStencilAttachmentDescriptor {
     public var resolveLevel: Int = 0
     public var resolveSlice: Int = 0
     public var resolveDepthPlane: Int = 0
-    public var loadAction: LoadAction = .dontCare
+    public var loadAction: LoadAction = .clear
     public var storeAction: StoreAction = .dontCare
     
     public init() { }

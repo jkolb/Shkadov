@@ -53,7 +53,7 @@ public final class MetalCommandBuffer : CommandBuffer {
                 renderPass.colorAttachments[index].texture = textureOwner[attachment.render]
             }
             
-            if framebuffer.colorAttachments[index].resolve.isValid {
+            if attachment.resolve.isValid {
                 renderPass.colorAttachments[index].resolveTexture = textureOwner[attachment.resolve]
             }
         }
