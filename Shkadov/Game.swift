@@ -109,18 +109,19 @@ public final class Game : EngineListener {
     private var mainPassView = Matrix4x4<Float>()
     private var mainPassProjection = Matrix4x4<Float>()
     private var mainPassFrameData = MainPass()
-    private var shadowPassData = [ShadowPass]()
+    private var shadowPassData = ShadowPass()
     private var moveForward = false
     private var moveBackward = false
     private var moveLeft = false
     private var moveRight = false
     private var mouseDown = false
-    private var objectsToRender = 10000
+    private var objectsToRender = 1000
     private var orbit = Vector2<Float>()
     private var cameraAngles = Vector2<Float>()
     private var mainRasterizerState: RasterizerStateHandle
     private var shadowRasterizerState: RasterizerStateHandle
     private var finalRenderPass: RenderPassHandle
+    private var finalFrameBuffer = Framebuffer()
     
     public init(engine: Engine, logger: Logger) {
         self.engine = engine
@@ -145,6 +146,8 @@ public final class Game : EngineListener {
         self.mainRasterizerState = RasterizerStateHandle()
         self.shadowRasterizerState = RasterizerStateHandle()
         self.finalRenderPass = RenderPassHandle()
+        
+        finalFrameBuffer.colorAttachments.append(FramebufferAttachment())
     }
     
     public func didStartup() {
@@ -166,8 +169,6 @@ public final class Game : EngineListener {
             c.worldTransform.t = SHADOWED_DIRECTIONAL_LIGHT_POSITION
             
             shadowCameras.append(c)
-            
-            shadowPassData.append(ShadowPass())
         }
 
         var mainRasterizer = RasterizerStateDescriptor()
@@ -500,8 +501,8 @@ public final class Game : EngineListener {
             // Figure out far plane distance at least
             let zFar = distance(GROUND_POSITION,SHADOWED_DIRECTIONAL_LIGHT_POSITION)
             
-            shadowPassData[0].viewProjection = getLHOrthoMatrix(1100, height: 1100, zFar: zFar, zNear: 25)
-            shadowPassData[0].viewProjection = shadowPassData[0].viewProjection * shadowCameras[0].worldTransform.matrix
+            shadowPassData.viewProjection = getLHOrthoMatrix(1100, height: 1100, zFar: zFar, zNear: 25)
+            shadowPassData.viewProjection = shadowPassData.viewProjection * shadowCameras[0].worldTransform.matrix
         }
         
         do {
@@ -509,7 +510,7 @@ public final class Game : EngineListener {
             let r = rotation(angle: Vector3<Float>(cameraAngles.x, cameraAngles.y, 0.0))
             mainPassView = camera.viewMatrix * Matrix4x4<Float>(r.matrix)
             mainPassFrameData.viewProjection = camera.projectionMatrix * mainPassView
-            mainPassFrameData.viewShadow0Projection = shadowPassData[0].viewProjection
+            mainPassFrameData.viewShadow0Projection = shadowPassData.viewProjection
             mainPassFrameData.lightPosition = Vector4<Float>(SHADOWED_DIRECTIONAL_LIGHT_POSITION.x,
                                                      SHADOWED_DIRECTIONAL_LIGHT_POSITION.y,
                                                      SHADOWED_DIRECTIONAL_LIGHT_POSITION.z, 1.0)
@@ -524,7 +525,7 @@ public final class Game : EngineListener {
         let objectDataOffset = 256 + mainPassOffset
         
         // Write the shadow pass data into the constants buffer
-        constantBufferForFrame.bytes.storeBytes(of: shadowPassData[0], toByteOffset: shadowOffset, as: ShadowPass.self)
+        constantBufferForFrame.bytes.storeBytes(of: shadowPassData, toByteOffset: shadowOffset, as: ShadowPass.self)
         
         // Write the main pass data into the constants buffer
         constantBufferForFrame.bytes.storeBytes(of: mainPassFrameData, toByteOffset: mainPassOffset, as: MainPass.self)
@@ -734,14 +735,9 @@ public final class Game : EngineListener {
         
         enc.endEncoding()
         
-        // TODO !!!!!
-        let renderTexture = engine.nextRenderTexture()
-        var framebuffer = Framebuffer()
-        var renderAttachment = FramebufferAttachment()
-        renderAttachment.render = renderTexture
-        framebuffer.colorAttachments.append(renderAttachment)
+        finalFrameBuffer.colorAttachments[0].render = engine.nextRenderTexture()
         
-        let finalEnc = mainCommandBuffer.makeRenderCommandEncoder(handle: finalRenderPass, framebuffer: framebuffer)
+        let finalEnc = mainCommandBuffer.makeRenderCommandEncoder(handle: finalRenderPass, framebuffer: finalFrameBuffer)
         
         finalEnc.setRenderPipelineState(texQuadVisPipeline)
         finalEnc.setFragmentTexture(mainPassFramebuffer.colorAttachments[0].render, at: 0)
