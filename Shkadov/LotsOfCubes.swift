@@ -189,7 +189,7 @@ public final class LotsOfCubes : EngineListener {
         
         var mainRPDesc = RenderPassDescriptor()
         mainRPDesc.colorAttachments.append(RenderPassColorAttachmentDescriptor())
-        mainRPDesc.colorAttachments[0].clearColor = ClearColor(r: 0.0, g: 1.0, b: 0.0, a: 1.0)
+        mainRPDesc.colorAttachments[0].clearColor = ClearColor(r: 0.0, g: 0.0, b: 0.0, a: 1.0)
         mainRPDesc.colorAttachments[0].loadAction = .clear
         mainRPDesc.colorAttachments[0].storeAction = .store
         
@@ -212,7 +212,7 @@ public final class LotsOfCubes : EngineListener {
         
         var finalRPDesc = RenderPassDescriptor()
         finalRPDesc.colorAttachments.append(RenderPassColorAttachmentDescriptor())
-        finalRPDesc.colorAttachments[0].clearColor = ClearColor(r: 1.0, g: 0.0, b: 0.0, a: 1.0)
+        finalRPDesc.colorAttachments[0].clearColor = ClearColor(r: 0.0, g: 0.0, b: 0.0, a: 1.0)
         finalRPDesc.colorAttachments[0].loadAction = .clear
         finalRPDesc.colorAttachments[0].storeAction = .store
         finalRP = engine.createRenderPass(descriptor: finalRPDesc)

@@ -45,12 +45,12 @@ public enum StencilOperation {
 }
 
 public struct StencilDescriptor {
-    public var stencilCompareFunction: CompareFunction = .never
+    public var stencilCompareFunction: CompareFunction = .always
     public var stencilFailureOperation: StencilOperation = .keep
     public var depthFailureOperation: StencilOperation = .keep
     public var depthStencilPassOperation: StencilOperation = .keep
-    public var readMask: UInt32 = 0
-    public var writeMask: UInt32 = 0
+    public var readMask: UInt32 = 0xFFFFFFFF
+    public var writeMask: UInt32 = 0xFFFFFFFF
     
     public init() { }
 }
