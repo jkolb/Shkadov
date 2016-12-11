@@ -78,7 +78,7 @@ public final class MetalCommandBuffer : CommandBuffer {
             renderPass.visibilityResultBuffer = bufferOwner[framebuffer.visibilityResultBuffer]
         }
 
-        return MetalRenderCommandEncoder(instance: instance.makeRenderCommandEncoder(descriptor: renderPassOwner[handle]), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner, depthStencilStateOwner: depthStencilStateOwner)
+        return MetalRenderCommandEncoder(instance: instance.makeRenderCommandEncoder(descriptor: renderPass), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner, depthStencilStateOwner: depthStencilStateOwner)
     }
     
     public func addCompletedHandler(_ block: @escaping (CommandBuffer) -> Void) {

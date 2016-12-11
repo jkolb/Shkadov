@@ -26,6 +26,9 @@ public protocol RenderCommandEncoder : CommandEncoder {
     func setRenderPipelineState(_ handle: RenderPipelineStateHandle)
 
     func setRasterizerState(_ handle: RasterizerStateHandle)
+
+    // Dynamic state
+    func setViewport(_ viewport: Viewport)
     
     func setDepthStencilState(_ handle: DepthStencilStateHandle)
     

@@ -49,7 +49,7 @@
 		E55607261DECF65000D9F1F8 /* WindowConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607251DECF65000D9F1F8 /* WindowConfig.swift */; };
 		E55607281DECFE7900D9F1F8 /* EngineConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607271DECFE7900D9F1F8 /* EngineConfig.swift */; };
 		E556072A1DED0AAA00D9F1F8 /* RendererListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607291DED0AAA00D9F1F8 /* RendererListener.swift */; };
-		E55607351DED34D400D9F1F8 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607341DED34D400D9F1F8 /* Game.swift */; };
+		E55607351DED34D400D9F1F8 /* LotsOfCubes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607341DED34D400D9F1F8 /* LotsOfCubes.swift */; };
 		E55607371DED351100D9F1F8 /* EngineListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607361DED351100D9F1F8 /* EngineListener.swift */; };
 		E55607391DED381800D9F1F8 /* LoggerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55607381DED381800D9F1F8 /* LoggerFactory.swift */; };
 		E56D56A61DF4C1D200968903 /* DepthStencilState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56D56A51DF4C1D200968903 /* DepthStencilState.swift */; };
@@ -229,7 +229,7 @@
 		E55607251DECF65000D9F1F8 /* WindowConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowConfig.swift; sourceTree = "<group>"; };
 		E55607271DECFE7900D9F1F8 /* EngineConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineConfig.swift; sourceTree = "<group>"; };
 		E55607291DED0AAA00D9F1F8 /* RendererListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererListener.swift; sourceTree = "<group>"; };
-		E55607341DED34D400D9F1F8 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		E55607341DED34D400D9F1F8 /* LotsOfCubes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LotsOfCubes.swift; sourceTree = "<group>"; };
 		E55607361DED351100D9F1F8 /* EngineListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineListener.swift; sourceTree = "<group>"; };
 		E55607381DED381800D9F1F8 /* LoggerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerFactory.swift; sourceTree = "<group>"; };
 		E56D56A51DF4C1D200968903 /* DepthStencilState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepthStencilState.swift; sourceTree = "<group>"; };
@@ -343,7 +343,7 @@
 				E55606A91DEA71EB00D9F1F8 /* main.swift */,
 				E5F60C1C1DFC748600466C32 /* OneTriangle.swift */,
 				E5F60C261DFC756800466C32 /* OneTriangle.metal */,
-				E55607341DED34D400D9F1F8 /* Game.swift */,
+				E55607341DED34D400D9F1F8 /* LotsOfCubes.swift */,
 				0924E21E1DF6F48300795EAC /* RenderableObject.swift */,
 				E5F60C361DFCBDFA00466C32 /* Utils.swift */,
 				E55606A61DEA71EB00D9F1F8 /* engine */,
@@ -848,7 +848,7 @@
 				E5E14E301DF38ED800D08AAD /* Sampler.swift in Sources */,
 				E55606C11DEA71EB00D9F1F8 /* Time.swift in Sources */,
 				E5E14E551DF38FAF00D08AAD /* MetalCommandBuffer.swift in Sources */,
-				E55607351DED34D400D9F1F8 /* Game.swift in Sources */,
+				E55607351DED34D400D9F1F8 /* LotsOfCubes.swift in Sources */,
 				E556072A1DED0AAA00D9F1F8 /* RendererListener.swift in Sources */,
 				E5E14E101DF38E4400D08AAD /* ComputeCommandEncoder.swift in Sources */,
 				E5E14E561DF38FAF00D08AAD /* MetalCommandQueue.swift in Sources */,

@@ -82,7 +82,7 @@ let SHADOWED_DIRECTIONAL_LIGHT_POSITION = float3(0.0, 225.0, 0.0)
 
 let CONSTANT_BUFFER_SIZE : Int = OBJECT_COUNT * MemoryLayout<ObjectData>.size + SHADOW_PASS_COUNT * MemoryLayout<ShadowPass>.size + MAIN_PASS_COUNT * MemoryLayout<MainPass>.size
 
-public final class Game : EngineListener {
+public final class LotsOfCubes : EngineListener {
     private let engine: Engine
     private let logger: Logger
 
@@ -93,8 +93,13 @@ public final class Game : EngineListener {
     private let maxFrameDuration = Duration(seconds: 0.25)
     private let metalQueue: CommandQueue
     
-    let mainRP: RenderPassHandle
+    let mainRPPlain: RenderPassHandle
+    let mainRPDepthAndShadow: RenderPassHandle
+    let mainRaster: RasterizerStateHandle
     var mainFrame = Framebuffer()
+    
+    let finalRP: RenderPassHandle
+    var finalFrame = Framebuffer()
     
     var shadowRPs : Array<RenderPassHandle> = [RenderPassHandle]()
     var shadowFrames : Array<Framebuffer> = [Framebuffer]()
@@ -184,20 +189,35 @@ public final class Game : EngineListener {
         
         var mainRPDesc = RenderPassDescriptor()
         mainRPDesc.colorAttachments.append(RenderPassColorAttachmentDescriptor())
-        mainRPDesc.colorAttachments[0].clearColor = ClearColor(r: 0.0, g: 0.0, b: 0.0, a: 1.0)
+        mainRPDesc.colorAttachments[0].clearColor = ClearColor(r: 0.0, g: 1.0, b: 0.0, a: 1.0)
         mainRPDesc.colorAttachments[0].loadAction = .clear
         mainRPDesc.colorAttachments[0].storeAction = .store
         
         mainRPDesc.depthAttachment.clearDepth = 1.0
         mainRPDesc.depthAttachment.loadAction = .clear
         mainRPDesc.depthAttachment.storeAction = .dontCare
-        mainRP = engine.createRenderPass(descriptor: mainRPDesc)
+        mainRPPlain = engine.createRenderPass(descriptor: mainRPDesc)
+        
+        mainRPDesc.depthAttachment.storeAction = .store
+        mainRPDepthAndShadow = engine.createRenderPass(descriptor: mainRPDesc)
+        
+        var mainRasterDesc = RasterizerStateDescriptor()
+        mainRasterDesc.cullMode = .back
+        mainRaster = engine.createRasterizerState(descriptor: mainRasterDesc)
         
         mainPassView = matrix_identity_float4x4
         mainPassProjection = matrix_identity_float4x4
         
         mainPassFrameData.ViewProjection = matrix_multiply(mainPassProjection, mainPassView)
         
+        var finalRPDesc = RenderPassDescriptor()
+        finalRPDesc.colorAttachments.append(RenderPassColorAttachmentDescriptor())
+        finalRPDesc.colorAttachments[0].clearColor = ClearColor(r: 1.0, g: 0.0, b: 0.0, a: 1.0)
+        finalRPDesc.colorAttachments[0].loadAction = .clear
+        finalRPDesc.colorAttachments[0].storeAction = .store
+        finalRP = engine.createRenderPass(descriptor: finalRPDesc)
+        finalFrame.colorAttachments.append(FramebufferAttachment())
+
         camera.position = START_POSITION
         camera.direction = START_CAMERA_VIEW_DIR
         camera.up = START_CAMERA_UP_DIR
@@ -320,6 +340,7 @@ public final class Game : EngineListener {
 
     public func didStartup() {
         logger.debug("\(#function)")
+
         // MARK: Constant Buffer Creation
         // Create our constant buffers
         // We've chosen 3 for this example; your application may need a different number
@@ -530,6 +551,152 @@ public final class Game : EngineListener {
     
     private func render() {
         logger.trace("\(#function)")
+        let currentFrame = frameCounter
+        let currentConstantBuffer = constantBufferSlot
+        
+        // Update view matrix here
+        if moveForward {
+            camera.position.z += 1.0
+        }
+        else if moveBackward {
+            camera.position.z -= 1.0
+        }
+        
+        if mouseDown {
+            cameraAngles.x += 0.005 * orbit.y
+            cameraAngles.y += 0.005 * orbit.x
+        }
+        
+        // Prepare Shadow Pass data
+        // The shadow is cast by a directional light - an infinite distance away
+        // This is a good fit for an orthographic projection
+        // IMPORTANT NOTE:
+        // The projection is hardcoded right now since our objects do not move.
+        // What this SHOULD do is determine the bounds of all the objects that will be drawn into the shadowmap
+        // and generate the smallest frustum possible
+        
+        do {
+            // Figure out far plane distance at least
+            let zFar = distance(GROUND_POSITION,SHADOWED_DIRECTIONAL_LIGHT_POSITION)
+            
+            shadowPassData[0].ViewProjection = getLHOrthoMatrix(1100, height: 1100, zFar: zFar, zNear: 25)
+            shadowPassData[0].ViewProjection = matrix_multiply(shadowPassData[0].ViewProjection, shadowCameras[0].GetViewMatrix())
+        }
+        
+        do {
+            //NOTE: We're doing an orbit so we've usurped the normal camera class here
+            mainPassView = matrix_multiply(getRotationAroundY(cameraAngles.y), getRotationAroundX(cameraAngles.x))
+            mainPassView = matrix_multiply(camera.GetViewMatrix(), mainPassView)
+            mainPassFrameData.ViewProjection = matrix_multiply(mainPassProjection, mainPassView)
+            mainPassFrameData.ViewShadow0Projection = shadowPassData[0].ViewProjection
+            mainPassFrameData.LightPosition = float4(SHADOWED_DIRECTIONAL_LIGHT_POSITION.x,
+                                                     SHADOWED_DIRECTIONAL_LIGHT_POSITION.y,
+                                                     SHADOWED_DIRECTIONAL_LIGHT_POSITION.z, 1.0)
+        }
+        
+        // Select which constant buffer to use
+        let constantBufferForFrame = constantBuffers[currentConstantBuffer]
+        let constantBuffer = engine.borrowBuffer(handle: constantBufferForFrame)
+        
+        // Calculate the offsets into the constant buffer for the shadow pass data, main pass data, and object data
+        let shadowOffset = 0
+        let mainPassOffset = MemoryLayout<ShadowPass>.stride + shadowOffset
+        let objectDataOffset = MemoryLayout<MainPass>.stride + mainPassOffset
+        
+        // Write the shadow pass data into the constants buffer
+        constantBuffer.bytes.storeBytes(of: shadowPassData[0], toByteOffset: shadowOffset, as: ShadowPass.self)
+        
+        // Write the main pass data into the constants buffer
+        constantBuffer.bytes.storeBytes(of: mainPassFrameData, toByteOffset: mainPassOffset, as: MainPass.self)
+        
+        // Create a mutable pointer to the beginning of the object data so we can step through it and set the data of each object individually
+        var ptr = constantBuffer.bytes.advanced(by: objectDataOffset).bindMemory(to: ObjectData.self, capacity: objectsToRender)
+        
+        // Update position of all the objects
+        if multithreadedUpdate {
+            DispatchQueue.concurrentPerform(iterations: objectsToRender) { i in
+                let thisPtr = ptr.advanced(by: i)
+                _ = self.renderables[i].UpdateData(thisPtr, deltaTime: 1.0/60.0)
+            }
+        }
+        else {
+            for index in 0..<objectsToRender {
+                ptr = renderables[index].UpdateData(ptr, deltaTime: 1.0/60.0)
+            }
+        }
+        
+        // Advance the object data pointer once more so we can write the data for the ground plane object
+        ptr = ptr.advanced(by: objectsToRender)
+        
+        _ = groundPlane!.UpdateData(ptr, deltaTime: 1.0/60.0)
+        
+        // Mark constant buffer as modified (objectsToRender+1 because of the ground plane)
+        constantBuffer.wasCPUModified(range: 0..<mainPassOffset+(MemoryLayout<ObjectData>.stride*(objectsToRender+1)))
+        
+        // Create command buffers for the entire scene rendering
+        let shadowCommandBuffer : CommandBuffer = metalQueue.makeCommandBuffer() //WithUnretainedReferences()
+        let mainCommandBuffer : CommandBuffer = metalQueue.makeCommandBuffer() //WithUnretainedReferences()
+        
+        // Enforce the ordering:
+        // Shadows must be completed before the main rendering pass
+        shadowCommandBuffer.enqueue()
+        mainCommandBuffer.enqueue()
+        
+        // Time the encoding, not the data update
+        let start = mach_absolute_time()
+        
+        let dispatchGroup = DispatchGroup()
+        
+        // Generate the command buffer for Shadowmap
+        if multithreadedRender {
+            dispatchGroup.enter()
+            dispatchQueue.async {
+                self.encodeShadowPass(shadowCommandBuffer, rp: self.shadowRPs[0], fb: self.shadowFrames[0], constantBuffer: constantBufferForFrame, passDataOffset: shadowOffset, objectDataOffset: objectDataOffset)
+                dispatchGroup.leave()
+            }
+        }
+        else {
+            encodeShadowPass(shadowCommandBuffer, rp: self.shadowRPs[0], fb: self.shadowFrames[0], constantBuffer: constantBufferForFrame, passDataOffset: shadowOffset, objectDataOffset: objectDataOffset)
+        }
+        
+        //MARK: Dispatch Main Render Pass
+        if multithreadedRender {
+            dispatchGroup.enter()
+            dispatchQueue.async {
+                self.drawMainPass(mainCommandBuffer, constantBuffer: constantBufferForFrame, mainPassOffset: mainPassOffset, objectDataOffset: objectDataOffset)
+                dispatchGroup.leave()
+            }
+        }
+        else {
+            drawMainPass(mainCommandBuffer, constantBuffer: constantBufferForFrame, mainPassOffset: mainPassOffset, objectDataOffset: objectDataOffset)
+        }
+        
+        if multithreadedRender {
+            // At this point we have created and committed all our command buffers
+            // Ordering was enforced by enqueue so there is no need to do anything extra
+            
+            // We rejoin here to ensure we aren't stomping any of our data.
+            // We are also using unretained command buffers so this ensure no weirdness there.
+            // You could certainly design this to just run through and let the semaphore handle throttling
+            _ = dispatchGroup.wait(timeout: DispatchTime.distantFuture)
+        }
+        
+        let end = mach_absolute_time()
+        
+        let delta = end - start
+        
+        let mseconds = machToMilliseconds*Double(delta)
+        
+        self.runningAverageCPU = (runningAverageCPU * Double(currentFrame-1) + mseconds) / Double(currentFrame)
+        
+        if frameCounter % 60 == 0 {
+//            frameEncodingTimeField?.stringValue = String.localizedStringWithFormat("%.3f ms", mseconds)
+        }
+        
+        // Increment our constant buffer counter
+        // This will wrap and the semaphore will make sure we aren't using a buffer that's already in flight
+        constantBufferSlot = (constantBufferSlot + 1) % MAX_FRAMES_IN_FLIGHT
+        frameCounter = frameCounter+1
     }
     
     func encodeShadowPass(_ commandBuffer: CommandBuffer, rp: RenderPassHandle, fb: Framebuffer, constantBuffer: GPUBufferHandle, passDataOffset: Int, objectDataOffset: Int) {
@@ -601,16 +768,17 @@ public final class Game : EngineListener {
     
     func drawMainPass(_ mainCommandBuffer: CommandBuffer, constantBuffer: GPUBufferHandle, mainPassOffset: Int, objectDataOffset: Int) {
         let currentFrame = frameCounter
+        let mainRPDesc: RenderPassHandle
         
         if showDepthAndShadow {
-            mainRPDesc.depthAttachment.storeAction = .store
+            mainRPDesc = mainRPDepthAndShadow
         }
         else {
-            mainRPDesc.depthAttachment.storeAction = .dontCare
+            mainRPDesc = mainRPPlain
         }
         
-        let enc : RenderCommandEncoder = mainCommandBuffer.makeRenderCommandEncoder(descriptor: mainRPDesc)
-        enc.setCullMode(MTLCullMode.back)
+        let enc : RenderCommandEncoder = mainCommandBuffer.makeRenderCommandEncoder(handle: mainRPDesc, framebuffer: mainFrame)
+        enc.setRasterizerState(mainRaster)
         
         if depthTest {
             enc.setDepthStencilState(depthTestLess)
@@ -620,56 +788,56 @@ public final class Game : EngineListener {
         
         enc.endEncoding()
         
-        let currentDrawable = self.currentDrawable!
-        let rpDesc = currentRenderPassDescriptor!
+        let currentDrawable = engine.acquireNextRenderTarget()
+        finalFrame.colorAttachments[0].render = engine.textureForRenderTarget(handle: currentDrawable)
         
         // Draws the Scene, Depth and Shadow map to the screen
         if showDepthAndShadow {
-            let visEnc = mainCommandBuffer.makeRenderCommandEncoder(descriptor: rpDesc)
+            let visEnc = mainCommandBuffer.makeRenderCommandEncoder(handle: finalRP, framebuffer: finalFrame)
             
-            var viewport = MTLViewport(originX: 0.0, originY: 0.0,
-                                       width: Double(frame.width)*0.5,
-                                       height: Double(frame.height)*0.5,
+            var viewport = Viewport(originX: 0.0, originY: 0.0,
+                                       width: Double(engine.config.renderer.width)*0.5,
+                                       height: Double(engine.config.renderer.height)*0.5,
                                        znear: 0.0, zfar: 1.0)
             
             visEnc.setViewport(viewport)
             
-            visEnc.setRenderPipelineState(texQuadVisPipeline!)
+            visEnc.setRenderPipelineState(texQuadVisPipeline)
             visEnc.setFragmentTexture(mainPassFramebuffer, at: 0)
             
-            visEnc.drawPrimitives(type: MTLPrimitiveType.triangleStrip, vertexStart: 0, vertexCount: 4)
+            visEnc.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
             
-            viewport = MTLViewport(originX: Double(frame.width)*0.5, originY: 0.0,
-                                   width: Double(frame.width)*0.5,
-                                   height: Double(frame.height)*0.5,
+            viewport = Viewport(originX: Double(engine.config.renderer.width)*0.5, originY: 0.0,
+                                   width: Double(engine.config.renderer.width)*0.5,
+                                   height: Double(engine.config.renderer.height)*0.5,
                                    znear: 0.0, zfar: 1.0)
             
             visEnc.setViewport(viewport)
             
-            visEnc.setRenderPipelineState(self.depthVisPipeline!)
+            visEnc.setRenderPipelineState(self.depthVisPipeline)
             visEnc.setFragmentTexture(self.mainPassDepthTexture, at: 0)
             
-            visEnc.drawPrimitives(type: MTLPrimitiveType.triangleStrip, vertexStart: 0, vertexCount: 4)
+            visEnc.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
             
             // Shadow
-            viewport = MTLViewport(originX: 0.0,
-                                   originY: Double(frame.height)*0.5,
-                                   width: Double(frame.width)*0.5,
-                                   height: Double(frame.height)*0.5,
+            viewport = Viewport(originX: 0.0,
+                                   originY: Double(engine.config.renderer.height)*0.5,
+                                   width: Double(engine.config.renderer.width)*0.5,
+                                   height: Double(engine.config.renderer.height)*0.5,
                                    znear: 0.0, zfar: 1.0)
             
             visEnc.setViewport(viewport)
             
             visEnc.setFragmentTexture(shadowMap, at: 0)
-            visEnc.drawPrimitives(type: MTLPrimitiveType.triangleStrip, vertexStart: 0, vertexCount: 4)
+            visEnc.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
             
             visEnc.endEncoding()
         }
         else {
             // Draws the main pass
-            let finalEnc = mainCommandBuffer.makeRenderCommandEncoder(descriptor: rpDesc)
+            let finalEnc = mainCommandBuffer.makeRenderCommandEncoder(handle: finalRP, framebuffer: finalFrame)
             
-            finalEnc.setRenderPipelineState(texQuadVisPipeline!)
+            finalEnc.setRenderPipelineState(texQuadVisPipeline)
             finalEnc.setFragmentTexture(mainPassFramebuffer, at: 0)
             
             finalEnc.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
@@ -677,23 +845,23 @@ public final class Game : EngineListener {
             finalEnc.endEncoding()
         }
         
-        mainCommandBuffer.present(currentDrawable)
+        engine.present(commandBuffer: mainCommandBuffer, renderTarget: currentDrawable)
         
-        mainCommandBuffer.addScheduledHandler { scheduledCommandBuffer in
-            self.gpuTiming[Int(currentFrame % 3)] = mach_absolute_time()
-        }
+//        mainCommandBuffer.addScheduledHandler { scheduledCommandBuffer in
+//            self.gpuTiming[Int(currentFrame % 3)] = mach_absolute_time()
+//        }
         
-        mainCommandBuffer.addCompletedHandler { completedCommandBuffer in
-            
-            let end = mach_absolute_time()
-            self.gpuTiming[Int(currentFrame % 3)] = end - self.gpuTiming[Int(currentFrame % 3)]
-            
-            let seconds = self.machToMilliseconds * Double(self.gpuTiming[Int(currentFrame % 3)])
-            
-            self.runningAverageGPU = (self.runningAverageGPU * Double(currentFrame-1) + seconds) / Double(currentFrame)
-            
-            self.semaphore.signal()
-        }
+//        mainCommandBuffer.addCompletedHandler { completedCommandBuffer in
+//            
+//            let end = mach_absolute_time()
+//            self.gpuTiming[Int(currentFrame % 3)] = end - self.gpuTiming[Int(currentFrame % 3)]
+//            
+//            let seconds = self.machToMilliseconds * Double(self.gpuTiming[Int(currentFrame % 3)])
+//            
+//            self.runningAverageGPU = (self.runningAverageGPU * Double(currentFrame-1) + seconds) / Double(currentFrame)
+//            
+//            self.semaphore.signal()
+//        }
         
         mainCommandBuffer.commit()
     }

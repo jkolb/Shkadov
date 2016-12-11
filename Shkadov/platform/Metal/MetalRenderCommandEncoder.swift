@@ -86,6 +86,10 @@ public final class MetalRenderCommandEncoder : RenderCommandEncoder {
         instance.setTriangleFillMode(MetalDataTypes.map(descriptor.fillMode))
     }
     
+    public func setViewport(_ viewport: Viewport) {
+        instance.setViewport(MetalDataTypes.map(viewport))
+    }
+
     public func setDepthStencilState(_ handle: DepthStencilStateHandle) {
         if handle == lastDepthStencilState { return }
         
