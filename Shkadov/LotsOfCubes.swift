@@ -515,7 +515,75 @@ public final class LotsOfCubes : EngineListener {
     }
 
     public  func received(input: RawInput) {
-        logger.debug("\(#function) \(input)")
+        switch input {
+        case .mouseButtonDown(let buttonCode, let position):
+            logger.debug("\(#function) \(input) \(buttonCode) \(position)")
+            mouseDownPoint = position
+            mouseDown = true
+        case .mouseButtonUp(let buttonCode, let position):
+            logger.debug("\(#function) \(input) \(buttonCode) \(position)")
+            mouseDown = false
+        case .joystickButtonDown(let buttonCode):
+            logger.debug("\(#function) \(input) \(buttonCode)")
+        case .joystickButtonUp(let buttonCode):
+            logger.debug("\(#function) \(input) \(buttonCode)")
+        case .joystickAxis(let axis):
+            logger.debug("\(#function) \(input) \(axis)")
+        case .keyDown(let keyCode):
+            logger.debug("\(#function) \(input) \(keyCode)")
+            if keyCode == .w {
+                moveForward = true
+            }
+            
+            if keyCode == .a {
+                moveLeft = true
+            }
+            
+            if keyCode == .s {
+                moveBackward = true
+            }
+            
+            if keyCode == .d {
+                moveRight = true
+            }
+        case .keyUp(let keyCode):
+            logger.debug("\(#function) \(input) \(keyCode)")
+            if keyCode == .w {
+                moveForward = false
+            }
+            
+            if keyCode == .a {
+                moveLeft = false
+            }
+            
+            if keyCode == .s {
+                moveBackward = false
+            }
+            
+            if keyCode == .d {
+                moveRight = false
+            }
+            
+            if keyCode == .seven {
+                objectsToRender = max(objectsToRender/2, 10)
+            }
+            
+            if keyCode == .eight {
+                objectsToRender = min(objectsToRender*2,OBJECT_COUNT)
+            }
+        case .mousePosition(let position):
+            logger.debug("\(#function) \(input) \(position)")
+            if mouseDown {
+                let delta = position - mouseDownPoint
+                orbit.x = delta.x
+                orbit.y = delta.y
+                mouseDownPoint = position
+            }
+        case .mouseDelta(let delta):
+            logger.debug("\(#function) \(input) \(delta)")
+        case .scrollDelta(let delta):
+            logger.debug("\(#function) \(input) \(delta)")
+        }
     }
     
     public func processFrame() {

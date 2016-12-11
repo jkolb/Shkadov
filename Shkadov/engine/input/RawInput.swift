@@ -25,8 +25,10 @@
 import Swiftish
 
 public enum RawInput {
-    case buttonDown(RawInputButtonCode)
-    case buttonUp(RawInputButtonCode)
+    case mouseButtonDown(RawInputButtonCode, Vector2<Float>)
+    case mouseButtonUp(RawInputButtonCode, Vector2<Float>)
+    case joystickButtonDown(RawInputButtonCode)
+    case joystickButtonUp(RawInputButtonCode)
     case joystickAxis(Vector2<Float>)
     case keyDown(RawInputKeyCode)
     case keyUp(RawInputKeyCode)

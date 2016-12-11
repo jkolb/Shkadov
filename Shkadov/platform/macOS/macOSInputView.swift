@@ -31,7 +31,7 @@ typealias NSEventKeyCodeType = UInt16
 public class macOSInputView : NSView, macOSMouseCursorListener {
     private let logger: Logger
     internal weak var listener: RawInputListener?
-    private var followsMouse = false
+    private var followsMouse = true
     private var ignoreFirstDelta = false
     private var currentDownModifierKeyCodes = Set<NSEventKeyCodeType>()
     private var startingEventModifierFlags = NSEvent.modifierFlags().intersection([.deviceIndependentFlagsMask])
@@ -60,7 +60,7 @@ public class macOSInputView : NSView, macOSMouseCursorListener {
     }
     
     public override func keyDown(with theEvent: NSEvent) {
-        logger.trace("KEY DOWN: \(theEvent)")
+        logger.debug("KEY DOWN: \(theEvent)")
         postKeyDownEvent(theEvent)
     }
     
@@ -182,8 +182,8 @@ public class macOSInputView : NSView, macOSMouseCursorListener {
         return !currentDownEventModifierFlags.subtracting(startingEventModifierFlags).isEmpty
     }
     
-    private func transformButtonNumber(_ buttonNumber: NSEventButtonNumberType) -> RawInputButtonCode {
-        return buttonMap[buttonNumber] ?? .unknown
+    private func transformMouseButtonNumber(_ buttonNumber: NSEventButtonNumberType) -> RawInputButtonCode {
+        return mouseButtonMap[buttonNumber] ?? .unknown
     }
     
     private func transformKeyCode(_ keyCode: NSEventKeyCodeType) -> RawInputKeyCode {
@@ -191,15 +191,19 @@ public class macOSInputView : NSView, macOSMouseCursorListener {
     }
     
     private func postButtonDownEvent(_ event: NSEvent) {
-        let rawButtonCode = transformButtonNumber(event.buttonNumber)
+        let rawButtonCode = transformMouseButtonNumber(event.buttonNumber)
         if rawButtonCode == .unknown { return }
-        listener?.received(input: .buttonDown(rawButtonCode))
+        let contentPoint = convert(event.locationInWindow, from: nil)
+        let position = Vector2<Float>(Float(contentPoint.x), Float(contentPoint.y))
+        listener?.received(input: .mouseButtonDown(rawButtonCode, position))
     }
     
     private func postButtonUpEvent(_ event: NSEvent) {
-        let rawButtonCode = transformButtonNumber(event.buttonNumber)
+        let rawButtonCode = transformMouseButtonNumber(event.buttonNumber)
         if rawButtonCode == .unknown { return }
-        listener?.received(input: .buttonUp(rawButtonCode))
+        let contentPoint = convert(event.locationInWindow, from: nil)
+        let position = Vector2<Float>(Float(contentPoint.x), Float(contentPoint.y))
+        listener?.received(input: .mouseButtonUp(rawButtonCode, position))
     }
     
     private func postKeyDownEvent(_ event: NSEvent) {
@@ -240,23 +244,23 @@ public class macOSInputView : NSView, macOSMouseCursorListener {
         }
     }
     
-    private let buttonMap: [NSEventButtonNumberType : RawInputButtonCode] = [
-        0: .mouse0,
-        1: .mouse1,
-        2: .mouse2,
-        3: .mouse3,
-        4: .mouse4,
-        5: .mouse5,
-        6: .mouse6,
-        7: .mouse7,
-        8: .mouse8,
-        9: .mouse9,
-        10: .mouse10,
-        11: .mouse11,
-        12: .mouse12,
-        13: .mouse13,
-        14: .mouse14,
-        15: .mouse15,
+    private let mouseButtonMap: [NSEventButtonNumberType : RawInputButtonCode] = [
+        0: .button0,
+        1: .button1,
+        2: .button2,
+        3: .button3,
+        4: .button4,
+        5: .button5,
+        6: .button6,
+        7: .button7,
+        8: .button8,
+        9: .button9,
+        10: .button10,
+        11: .button11,
+        12: .button12,
+        13: .button13,
+        14: .button14,
+        15: .button15,
         ]
     private let keyMap: [NSEventKeyCodeType : RawInputKeyCode] = [
         0: .a,
@@ -277,10 +281,40 @@ public class macOSInputView : NSView, macOSMouseCursorListener {
         15: .r,
         16: .y,
         17: .t,
+        18: .one,
+        19: .two,
+        20: .three,
+        21: .four,
+        22: .six,
+        23: .five,
+        24: .equals,
+        25: .nine,
+        26: .seven,
+        27: .minus,
+        28: .eight,
+        29: .zero,
+        30: .rbracket,
+        31: .o,
+        32: .u,
+        33: .lbracket,
+        34: .i,
+        35: .p,
         36: .return,
+        37: .l,
+        38: .j,
+        39: .apostrophe,
+        40: .k,
+        41: .semicolon,
+        42: .backslash,
+        43: .comma,
+        44: .slash,
+        45: .n,
         46: .m,
+        47: .period,
         48: .tab,
         49: .space,
+        50: .grave,
+        51: .backspace,
         53: .escape,
         54: .rmeta,
         55: .lmeta,
