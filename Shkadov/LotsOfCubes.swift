@@ -145,7 +145,7 @@ public final class LotsOfCubes : EngineListener {
     var drawShadowsOnCubes = false
     var multithreadedUpdate = false
     var multithreadedRender = false
-    var objectsToRender = 10000
+    var objectsToRender = 2000
     
     // Render modes
     var depthTest = true

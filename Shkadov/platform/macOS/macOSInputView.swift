@@ -60,7 +60,7 @@ public class macOSInputView : NSView, macOSMouseCursorListener {
     }
     
     public override func keyDown(with theEvent: NSEvent) {
-        logger.debug("KEY DOWN: \(theEvent)")
+        logger.trace("KEY DOWN: \(theEvent)")
         postKeyDownEvent(theEvent)
     }
     
@@ -315,7 +315,7 @@ public class macOSInputView : NSView, macOSMouseCursorListener {
         49: .space,
         50: .grave,
         51: .backspace, // Delete
-        52: .unknown,
+        // 52 none?
         53: .escape,
         54: .rmeta, // Command
         55: .lmeta, // Command
