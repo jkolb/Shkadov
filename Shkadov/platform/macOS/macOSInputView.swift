@@ -273,7 +273,7 @@ public class macOSInputView : NSView, macOSMouseCursorListener {
         7: .x,
         8: .c,
         9: .v,
-        10: .unknown,
+        10: .unknown, // ISO_Section
         11: .b,
         12: .q,
         13: .w,
@@ -287,7 +287,7 @@ public class macOSInputView : NSView, macOSMouseCursorListener {
         21: .four,
         22: .six,
         23: .five,
-        24: .equals,
+        24: .equals, // equal
         25: .nine,
         26: .seven,
         27: .minus,
@@ -302,7 +302,7 @@ public class macOSInputView : NSView, macOSMouseCursorListener {
         36: .return,
         37: .l,
         38: .j,
-        39: .apostrophe,
+        39: .apostrophe, // quote
         40: .k,
         41: .semicolon,
         42: .backslash,
@@ -314,16 +314,80 @@ public class macOSInputView : NSView, macOSMouseCursorListener {
         48: .tab,
         49: .space,
         50: .grave,
-        51: .backspace,
+        51: .backspace, // Delete
+        52: .unknown,
         53: .escape,
-        54: .rmeta,
-        55: .lmeta,
+        54: .rmeta, // Command
+        55: .lmeta, // Command
         56: .lshift,
         57: .capslock,
-        58: .lalt,
+        58: .lalt, // Option
         59: .lcontrol,
         60: .rshift,
-        61: .ralt,
+        61: .ralt, // Option
         62: .rcontrol,
+        63: .insert, // Function
+        64: .f17,
+        65: .numpad_DECIMAL,
+        // 66 none?
+        67: .numpad_MULTIPLY,
+        // 68 none?
+        69: .numpad_ADD, // Plus
+        71: .numlock, // Clear
+        72: .unknown, // Volume Up
+        73: .unknown, // Volumn Down
+        74: .unknown, // Mute
+        75: .numpad_DIVIDE,
+        76: .numpad_ENTER,
+        // 77 none?
+        78: .numpad_SUBTRACT, // Minus
+        79: .f18,
+        80: .f19,
+        81: .numpad_EQUALS,
+        82: .numpad_ZERO,
+        83: .numpad_ONE,
+        84: .numpad_TWO,
+        85: .numpad_THREE,
+        86: .numpad_FOUR,
+        87: .numpad_FIVE,
+        88: .numpad_SIX,
+        89: .numpad_SEVEN,
+        90: .f20,
+        91: .numpad_EIGHT,
+        92: .numpad_NINE,
+        93: .unknown, // JIS_Yen
+        94: .unknown, // JIS_Underscore
+        95: .unknown, // JIS_KeyPadComma
+        96: .f5,
+        97: .f6,
+        98: .f7,
+        99: .f3,
+        100: .f8,
+        101: .f9,
+        102: .unknown, // JIS_Eisu
+        103: .f11,
+        104: .unknown, // JIS_Kana
+        105: .f13,
+        106: .f16,
+        107: .f14,
+        // 108 none?
+        109: .f10,
+        // 110 none?
+        111: .f12,
+        // 112 none?
+        113: .f15,
+        114: .unknown, // Help
+        115: .home,
+        116: .pageup,
+        117: .delete, // Forward Delete
+        118: .f4,
+        119: .end,
+        120: .f2,
+        121: .pagedown,
+        122: .f1,
+        123: .left,
+        124: .right,
+        125: .down,
+        126: .up,
         ]
 }
