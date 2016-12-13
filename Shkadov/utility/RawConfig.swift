@@ -22,8 +22,13 @@
  SOFTWARE.
  */
 
+public enum RawConfigValue {
+    case double(Double)
+    case string(String)
+}
+
 public final class RawConfig {
-    private var config: [String:[String:Any]]
+    private var config: [String:[String:RawConfigValue]]
     
     public init() {
         self.config = [:]
@@ -42,62 +47,86 @@ public final class RawConfig {
     }
     
     public func getBool(section: String, name: String) -> Bool? {
-        return getValue(section: section, name: name)
-    }
-    
-    public func getFloat(section: String, name: String) -> Float? {
-        return getValue(section: section, name: name)
+        return getDouble(section: section, name: name) != 0.0
     }
     
     public func getInt(section: String, name: String) -> Int? {
-        return getValue(section: section, name: name)
+        if let doubleValue = getDouble(section: section, name: name) {
+            return Int(doubleValue)
+        }
+        else {
+            return nil
+        }
+        
     }
     
-    public func getString(section: String, name: String) -> String? {
-        return getValue(section: section, name: name)
+    public func getFloat(section: String, name: String) -> Float? {
+        if let doubleValue = getDouble(section: section, name: name) {
+            return Float(doubleValue)
+        }
+        else {
+            return nil
+        }
+        
     }
     
-    public func getAny(section: String, name: String) -> Any? {
-        return getValue(section: section, name: name)
-    }
-    
-    public func putBool(value: Bool, section: String, name: String) {
-        putValue(value: value, section: section, name: name)
-    }
-    
-    public func putFloat(value: Float, section: String, name: String) {
-        putValue(value: value, section: section, name: name)
-    }
-    
-    public func putInt(value: Int, section: String, name: String) {
-        putValue(value: value, section: section, name: name)
-    }
-    
-    public func putString(value: String, section: String, name: String) {
-        putValue(value: value, section: section, name: name)
-    }
-    
-    public func removeValue(section: String, name: String) {
-        let _ = config[section]?.removeValue(forKey: name)
-    }
-    
-    private func getValue<T>(section: String, name: String) -> T? {
+    public func getDouble(section: String, name: String) -> Double? {
         guard let values = config[section] else { return nil }
         guard let value = values[name] else { return nil }
         
         switch value {
-        case let typedValue as T:
-            return typedValue
+        case .double(let doubleValue):
+            return doubleValue
         default:
             return nil
         }
     }
     
-    private func putValue<T>(value: T, section: String, name: String) {
+    public func getString(section: String, name: String) -> String? {
+        guard let values = config[section] else { return nil }
+        guard let value = values[name] else { return nil }
+        
+        switch value {
+        case .string(let stringValue):
+            return stringValue
+        default:
+            return nil
+        }
+    }
+    
+    public func getRawValue(section: String, name: String) -> RawConfigValue? {
+        return config[section]?[name]
+    }
+    
+    public func putBool(value: Bool, section: String, name: String) {
+        putDouble(value: value ? 1.0 : 0.0, section: section, name: name)
+    }
+    
+    public func putInt(value: Int, section: String, name: String) {
+        putDouble(value: Double(value), section: section, name: name)
+    }
+    
+    public func putFloat(value: Float, section: String, name: String) {
+        putDouble(value: Double(value), section: section, name: name)
+    }
+    
+    public func putDouble(value: Double, section: String, name: String) {
         if config[section] == nil {
             config[section] = [:]
         }
         
-        config[section]![name] = value
+        config[section]![name] = .double(value)
+    }
+    
+    public func putString(value: String, section: String, name: String) {
+        if config[section] == nil {
+            config[section] = [:]
+        }
+        
+        config[section]![name] = .string(value)
+    }
+    
+    public func removeValue(section: String, name: String) {
+        let _ = config[section]?.removeValue(forKey: name)
     }
 }

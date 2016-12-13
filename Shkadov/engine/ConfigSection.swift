@@ -33,6 +33,10 @@ extension RawConfig {
         return getBool(section: section.rawValue, name: name)
     }
     
+    public func getDouble(section: ConfigSection, name: String) -> Double? {
+        return getDouble(section: section.rawValue, name: name)
+    }
+    
     public func getFloat(section: ConfigSection, name: String) -> Float? {
         return getFloat(section: section.rawValue, name: name)
     }
@@ -47,6 +51,10 @@ extension RawConfig {
     
     public func putBool(value: Bool, section: ConfigSection, name: String) {
         putBool(value: value, section: section.rawValue, name: name)
+    }
+    
+    public func putDouble(value: Double, section: ConfigSection, name: String) {
+        putDouble(value: value, section: section.rawValue, name: name)
     }
     
     public func putFloat(value: Float, section: ConfigSection, name: String) {

@@ -35,12 +35,8 @@ public final class FoundationRawConfigReader : RawConfigReader {
                 if let values = sectionObject as? [String:Any] {
                     for (name, valueObject) in values {
                         switch valueObject {
-                        case let value as Bool:
-                            config.putBool(value: value, section: section, name: name)
-                        case let value as Float:
-                            config.putFloat(value: value, section: section, name: name)
-                        case let value as Int:
-                            config.putInt(value: value, section: section, name: name)
+                        case let value as NSNumber:
+                            config.putDouble(value: value.doubleValue, section: section, name: name)
                         case let value as String:
                             config.putString(value: value, section: section, name: name)
                         default:

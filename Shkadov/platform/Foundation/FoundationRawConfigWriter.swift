@@ -30,12 +30,22 @@ public final class FoundationRawConfigWriter : RawConfigWriter {
         
         for section in config.sections {
             for name in config.names(section: section) {
-                if let value = config.getAny(section: section, name: name) {
-                    if object[section] == nil {
-                        object[section] = [name: value]
-                    }
-                    else {
-                        object[section]![name] = value
+                if let rawValue = config.getRawValue(section: section, name: name) {
+                    switch rawValue {
+                    case .double(let doubleValue):
+                        if object[section] == nil {
+                            object[section] = [name: doubleValue]
+                        }
+                        else {
+                            object[section]![name] = doubleValue
+                        }
+                    case .string(let stringValue):
+                        if object[section] == nil {
+                            object[section] = [name: stringValue]
+                        }
+                        else {
+                            object[section]![name] = stringValue
+                        }
                     }
                 }
             }
