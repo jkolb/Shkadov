@@ -24,7 +24,7 @@
 
 import Swiftish
 
-public final class Engine {
+public final class Engine : PlatformListener {
     public static let minimumWidth: Int = 640
     public static let minimumHeight: Int = 360
     public static let defaultFOVY: Float = 30.0
@@ -50,6 +50,47 @@ public final class Engine {
         self.configWriter = configWriter
     }
     
+    public func didStartup() {
+        listener?.didStartup()
+        renderer.startup()
+    }
+    
+    public func willShutdown() {
+        listener?.willShutdown()
+    }
+    
+    public func willResizeScreen(size: Vector2<Int>) -> Vector2<Int> {
+        return listener?.willResizeScreen(size: size) ?? size
+    }
+    
+    public func didResizeScreen() {
+        listener?.didResizeScreen()
+    }
+    
+    public func willMoveScreen() {
+        listener?.willMoveScreen()
+    }
+    
+    public func didMoveScreen() {
+        listener?.didMoveScreen()
+    }
+    
+    public func willEnterFullScreen() {
+        listener?.willEnterFullScreen()
+    }
+    
+    public func didEnterFullScreen() {
+        listener?.didEnterFullScreen()
+    }
+    
+    public func willExitFullScreen() {
+        listener?.willExitFullScreen()
+    }
+    
+    public func didExitFullScreen() {
+        listener?.didExitFullScreen()
+    }
+
     public var screensSize: Vector2<Int> {
         return platform.screensSize
     }

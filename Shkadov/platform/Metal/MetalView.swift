@@ -27,6 +27,15 @@ import MetalKit
 public class MetalView : MTKView {
     internal weak var listener: RendererListener?
     
+    public override init(frame frameRect: CGRect, device: MTLDevice?) {
+        super.init(frame: frameRect, device: device)
+        isPaused = true
+    }
+    
+    public required init(coder: NSCoder) {
+        fatalError("No NIBs!")
+    }
+    
     public override func draw(_ rect: CGRect) {
         listener?.processFrame()
     }

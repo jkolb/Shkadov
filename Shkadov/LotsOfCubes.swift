@@ -835,7 +835,7 @@ public final class LotsOfCubes : EngineListener {
     }
     
     func drawMainPass(_ mainCommandBuffer: CommandBuffer, constantBuffer: GPUBufferHandle, mainPassOffset: Int, objectDataOffset: Int) {
-        let currentFrame = frameCounter
+//        let currentFrame = frameCounter
         let mainRPDesc: RenderPassHandle
         
         if showDepthAndShadow {

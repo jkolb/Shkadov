@@ -128,7 +128,7 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
         return scoped(
             macOSPlatform(config: config().window, contentView: contentView(), logger: makeLogger()),
             configure: { (instance) in
-                instance.listener = self.engineListener()
+                instance.listener = self.engine()
             }
         )
     }
@@ -169,6 +169,7 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
                 instance.listener = self.engineListener()
                 
                 let parentView = self.contentView()
+                instance.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
                 instance.frame = parentView.bounds
                 parentView.addSubview(instance)
             }

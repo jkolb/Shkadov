@@ -69,6 +69,10 @@ public final class MetalRenderer : Renderer {
         return false
     }
 
+    public func startup() {
+        view.isPaused = false
+    }
+
     public func makeCommandQueue() -> CommandQueue {
         return MetalCommandQueue(instance: device.makeCommandQueue(), bufferOwner: bufferOwner, textureOwner: textureOwner, samplerOwner: samplerOwner, renderPipelineStateOwner: renderPipelineStateOwner, rasterizerStateOwner: rasterizerStateOwner, depthStencilStateOwner: depthStencilStateOwner, renderPassOwner: renderPassOwner)
     }

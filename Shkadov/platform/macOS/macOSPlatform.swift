@@ -46,6 +46,7 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
         window.title = config.title
         window.collectionBehavior = .fullScreenPrimary
         window.contentView = contentView
+        window.backgroundColor = NSColor.black
         window.delegate = self
         window.center()
     }
@@ -74,7 +75,7 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     
     public func exitFullScreen() {
         if !isFullScreen { return }
-        
+
         toggleFullScreen()
     }
     

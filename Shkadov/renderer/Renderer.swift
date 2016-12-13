@@ -24,6 +24,8 @@
 
 public protocol Renderer : GPUBufferOwner, ModuleOwner, TextureOwner, SamplerOwner, RenderPipelineStateOwner, RasterizerStateOwner, RenderPassOwner, DepthStencilStateOwner, SwapChain {
     
+    func startup()
+    
     func makeCommandQueue() -> CommandQueue
     
     func waitForGPUIfNeeded()
