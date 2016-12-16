@@ -221,6 +221,10 @@ public final class OneTriangle : EngineListener {
         logger.debug("\(#function) \(input)")
     }
     
+    public func screensChanged() {
+        logger.debug("\(#function)")
+    }
+
     public func processFrame() {
         logger.trace("\(#function)")
         

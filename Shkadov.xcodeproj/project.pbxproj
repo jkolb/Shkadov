@@ -10,7 +10,7 @@
 		0924E21F1DF6F48300795EAC /* RenderableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0924E21E1DF6F48300795EAC /* RenderableObject.swift */; };
 		09428F7D1DF649830096612A /* Visualize.metal in Sources */ = {isa = PBXBuildFile; fileRef = 09428F7C1DF649830096612A /* Visualize.metal */; };
 		099A85CC1DFAE60F00336188 /* Framebuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099A85CB1DFAE60F00336188 /* Framebuffer.swift */; };
-		09C2B85E1DF114DE0098B147 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C2B85D1DF114DE0098B147 /* Screen.swift */; };
+		09C2B85E1DF114DE0098B147 /* DisplaySystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C2B85D1DF114DE0098B147 /* DisplaySystem.swift */; };
 		E55606741DEA68F100D9F1F8 /* ShkadovTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55606731DEA68F100D9F1F8 /* ShkadovTests.swift */; };
 		E55606A21DEA6F4900D9F1F8 /* FieryCrucible.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55606841DEA6F2500D9F1F8 /* FieryCrucible.framework */; };
 		E55606A31DEA6F4900D9F1F8 /* FranticApparatus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E556068D1DEA6F2C00D9F1F8 /* FranticApparatus.framework */; };
@@ -60,6 +60,9 @@
 		E579BA711DF334EA007DC0FE /* macOSInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA701DF334EA007DC0FE /* macOSInputView.swift */; };
 		E579BA751DF3440D007DC0FE /* MetalRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BA741DF3440D007DC0FE /* MetalRenderer.swift */; };
 		E579BAAC1DF349DB007DC0FE /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579BAAB1DF349DB007DC0FE /* MetalView.swift */; };
+		E59DEFB11E00322D00492EB6 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59DEFB01E00322D00492EB6 /* Window.swift */; };
+		E59DEFBB1E00353E00492EB6 /* macOSWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59DEFBA1E00353E00492EB6 /* macOSWindow.swift */; };
+		E59DEFBD1E00DEE400492EB6 /* macOSDisplaySystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59DEFBC1E00DEE400492EB6 /* macOSDisplaySystem.swift */; };
 		E5E14D8C1DF360B500D08AAD /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14D8B1DF360B500D08AAD /* Material.swift */; };
 		E5E14D8E1DF360FF00D08AAD /* MaterialProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14D8D1DF360FF00D08AAD /* MaterialProperty.swift */; };
 		E5E14D961DF3634300D08AAD /* Handle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E14D951DF3634300D08AAD /* Handle.swift */; };
@@ -179,7 +182,7 @@
 		0924E21E1DF6F48300795EAC /* RenderableObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderableObject.swift; sourceTree = "<group>"; };
 		09428F7C1DF649830096612A /* Visualize.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Visualize.metal; sourceTree = "<group>"; };
 		099A85CB1DFAE60F00336188 /* Framebuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Framebuffer.swift; sourceTree = "<group>"; };
-		09C2B85D1DF114DE0098B147 /* Screen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
+		09C2B85D1DF114DE0098B147 /* DisplaySystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplaySystem.swift; sourceTree = "<group>"; };
 		E556065C1DEA68F000D9F1F8 /* Shkadov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shkadov.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E556066A1DEA68F100D9F1F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E556066F1DEA68F100D9F1F8 /* ShkadovTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShkadovTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -240,6 +243,9 @@
 		E579BA701DF334EA007DC0FE /* macOSInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSInputView.swift; sourceTree = "<group>"; };
 		E579BA741DF3440D007DC0FE /* MetalRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalRenderer.swift; sourceTree = "<group>"; };
 		E579BAAB1DF349DB007DC0FE /* MetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
+		E59DEFB01E00322D00492EB6 /* Window.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
+		E59DEFBA1E00353E00492EB6 /* macOSWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSWindow.swift; sourceTree = "<group>"; };
+		E59DEFBC1E00DEE400492EB6 /* macOSDisplaySystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = macOSDisplaySystem.swift; sourceTree = "<group>"; };
 		E5E14D8B1DF360B500D08AAD /* Material.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
 		E5E14D8D1DF360FF00D08AAD /* MaterialProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaterialProperty.swift; sourceTree = "<group>"; };
 		E5E14D951DF3634300D08AAD /* Handle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Handle.swift; sourceTree = "<group>"; };
@@ -407,12 +413,13 @@
 				E579BA5E1DEE957A007DC0FE /* Bootstrap.swift */,
 				E55606A71DEA71EB00D9F1F8 /* Camera.swift */,
 				E556070E1DEB820B00D9F1F8 /* ConfigSection.swift */,
+				09C2B85D1DF114DE0098B147 /* DisplaySystem.swift */,
 				E55606A81DEA71EB00D9F1F8 /* Engine.swift */,
 				E55607271DECFE7900D9F1F8 /* EngineConfig.swift */,
 				E55607361DED351100D9F1F8 /* EngineListener.swift */,
 				E55607211DECEF1600D9F1F8 /* Platform.swift */,
 				E579BA601DEE997C007DC0FE /* PlatformListener.swift */,
-				09C2B85D1DF114DE0098B147 /* Screen.swift */,
+				E59DEFB01E00322D00492EB6 /* Window.swift */,
 				E55607251DECF65000D9F1F8 /* WindowConfig.swift */,
 			);
 			path = engine;
@@ -448,9 +455,11 @@
 			isa = PBXGroup;
 			children = (
 				E55606B21DEA71EB00D9F1F8 /* macOSBootstrap.swift */,
+				E59DEFBC1E00DEE400492EB6 /* macOSDisplaySystem.swift */,
 				E579BA701DF334EA007DC0FE /* macOSInputView.swift */,
 				E55606B11DEA71EB00D9F1F8 /* macOSMouseCursor.swift */,
 				E55607231DECEF2900D9F1F8 /* macOSPlatform.swift */,
+				E59DEFBA1E00353E00492EB6 /* macOSWindow.swift */,
 			);
 			path = macOS;
 			sourceTree = "<group>";
@@ -832,6 +841,7 @@
 				E55607261DECF65000D9F1F8 /* WindowConfig.swift in Sources */,
 				E5F60C1D1DFC748600466C32 /* OneTriangle.swift in Sources */,
 				E5E14D961DF3634300D08AAD /* Handle.swift in Sources */,
+				E59DEFBB1E00353E00492EB6 /* macOSWindow.swift in Sources */,
 				E55606DA1DEA7B4E00D9F1F8 /* FoundationRawConfigWriter.swift in Sources */,
 				E5F60C291DFC860B00466C32 /* SwapChain.swift in Sources */,
 				E55606D31DEA7A9900D9F1F8 /* RawConfigReader.swift in Sources */,
@@ -854,7 +864,7 @@
 				E5E14E561DF38FAF00D08AAD /* MetalCommandQueue.swift in Sources */,
 				E55607371DED351100D9F1F8 /* EngineListener.swift in Sources */,
 				E55606DC1DEA7DF500D9F1F8 /* FilePaths.swift in Sources */,
-				09C2B85E1DF114DE0098B147 /* Screen.swift in Sources */,
+				09C2B85E1DF114DE0098B147 /* DisplaySystem.swift in Sources */,
 				E5E14E6C1DF38FAF00D08AAD /* MetalTexture.swift in Sources */,
 				099A85CC1DFAE60F00336188 /* Framebuffer.swift in Sources */,
 				E55606EA1DEB497B00D9F1F8 /* FoundationApplicationNameProvider.swift in Sources */,
@@ -896,9 +906,11 @@
 				E5E14E0F1DF38E4400D08AAD /* CommandQueue.swift in Sources */,
 				E5E14E621DF38FAF00D08AAD /* MetalRenderPass.swift in Sources */,
 				E579BAAC1DF349DB007DC0FE /* MetalView.swift in Sources */,
+				E59DEFBD1E00DEE400492EB6 /* macOSDisplaySystem.swift in Sources */,
 				E556070D1DEB819500D9F1F8 /* RendererConfig.swift in Sources */,
 				E55606FD1DEB674500D9F1F8 /* RendererType.swift in Sources */,
 				E5E14E0E1DF38E4400D08AAD /* CommandEncoder.swift in Sources */,
+				E59DEFB11E00322D00492EB6 /* Window.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -22,5 +22,27 @@
  SOFTWARE.
  */
 
-public protocol EngineListener : PlatformListener, DisplaySystemListener, RawInputListener, RendererListener {
+import Swiftish
+
+public protocol Window {
+    var handle: WindowHandle { get }
+    var screen: Screen? { get }
+    var region: Region2<Int> { get set }
+    var contentSize: Vector2<Int> { get set }
+}
+
+public protocol WindowOwner : class {
+    func createWindow(region: Region2<Int>) -> WindowHandle
+    func borrowWindow(handle: WindowHandle) -> Window
+    func destroyWindow(handle: WindowHandle)
+}
+
+public struct WindowHandle : Handle {
+    public let key: UInt8
+    
+    public init() { self.init(key: 0) }
+    
+    public init(key: UInt8) {
+        self.key = key
+    }
 }

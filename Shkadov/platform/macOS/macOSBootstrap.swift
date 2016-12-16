@@ -43,6 +43,7 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
                 config: config(),
                 platform: platform(),
                 timeSource: timeSource(),
+                displaySystem: displaySystem(),
                 renderer: renderer(),
                 mouseCursor: mouseCursor(),
                 logger: makeLogger(),
@@ -127,6 +128,15 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
     private func platform() -> Platform {
         return scoped(
             macOSPlatform(config: config().window, contentView: contentView(), logger: makeLogger()),
+            configure: { (instance) in
+                instance.listener = self.engine()
+            }
+        )
+    }
+    
+    private func displaySystem() -> DisplaySystem {
+        return scoped(
+            macOSDisplaySystem(),
             configure: { (instance) in
                 instance.listener = self.engine()
             }

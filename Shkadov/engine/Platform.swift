@@ -25,6 +25,9 @@
 import Swiftish
 
 public protocol Platform : class {
+    var windowPosition: Vector2<Int> { get }
+    var windowSize: Vector2<Int> { get }
+    var windowContentSize: Vector2<Int> { get }
     var screensSize: Vector2<Int> { get }
     var isFullScreen: Bool { get }
     func toggleFullScreen()

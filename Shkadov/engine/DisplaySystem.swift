@@ -24,7 +24,12 @@
 
 import Swiftish
 
-public protocol Screen : class {
+public protocol Screen {
+    var region: Region2<Int> { get }
     var size: Vector2<Int> { get }
     var scale: Float { get }
+}
+
+public protocol DisplaySystem : class {
+    func queryAvailableScreens() -> [Screen]
 }

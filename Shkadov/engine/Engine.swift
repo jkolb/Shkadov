@@ -24,7 +24,7 @@
 
 import Swiftish
 
-public final class Engine : PlatformListener {
+public final class Engine : PlatformListener, DisplaySystemListener {
     public static let minimumWidth: Int = 640
     public static let minimumHeight: Int = 360
     public static let defaultFOVY: Float = 30.0
@@ -34,16 +34,18 @@ public final class Engine : PlatformListener {
     public let config: EngineConfig
     private let platform: Platform
     private let timeSource: TimeSource
+    private let displaySystem: DisplaySystem
     private let renderer: Renderer
     private let mouseCursor: MouseCursor
     private let logger: Logger
     private let configWriter: RawConfigWriter
     
-    public init(rawConfig: RawConfig, config: EngineConfig, platform: Platform, timeSource: TimeSource, renderer: Renderer, mouseCursor: MouseCursor, logger: Logger, configWriter: RawConfigWriter) {
+    public init(rawConfig: RawConfig, config: EngineConfig, platform: Platform, timeSource: TimeSource, displaySystem: DisplaySystem, renderer: Renderer, mouseCursor: MouseCursor, logger: Logger, configWriter: RawConfigWriter) {
         self.rawConfig = rawConfig
         self.config = config
         self.platform = platform
         self.timeSource = timeSource
+        self.displaySystem = displaySystem
         self.renderer = renderer
         self.mouseCursor = mouseCursor
         self.logger = logger
@@ -89,6 +91,10 @@ public final class Engine : PlatformListener {
     
     public func didExitFullScreen() {
         listener?.didExitFullScreen()
+    }
+
+    public func screensChanged() {
+        listener?.screensChanged()
     }
 
     public var screensSize: Vector2<Int> {

@@ -513,6 +513,10 @@ public final class LotsOfCubes : EngineListener {
     public func didExitFullScreen() {
         logger.debug("\(#function)")
     }
+    
+    public func screensChanged() {
+        logger.debug("\(#function)")
+    }
 
     public  func received(input: RawInput) {
         switch input {

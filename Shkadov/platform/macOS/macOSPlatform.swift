@@ -40,7 +40,8 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
             contentRect: CGRect(x: 0, y: 0, width: config.width, height: config.height),
             styleMask: [.titled, .closable, .miniaturizable, .resizable],
             backing: .buffered,
-            defer: false
+            defer: false,
+            screen: nil
         )
         super.init()
         window.title = config.title
@@ -51,6 +52,20 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
         window.center()
     }
 
+    public var windowPosition: Vector2<Int> {
+        return window.frame.origin.toVector()
+    }
+    
+    public var windowSize: Vector2<Int> {
+        return window.frame.size.toVector()
+    }
+    
+    public var windowContentSize: Vector2<Int> {
+        let contentRect = window.contentRect(forFrameRect: window.frame)
+        
+        return contentRect.size.toVector()
+    }
+    
     public var screensSize: Vector2<Int> {
         if let screen = window.screen {
             return screen.frame.size.toVector()
@@ -278,13 +293,35 @@ public final class macOSPlatform : NSObject, Platform, NSApplicationDelegate, NS
     }
 }
 
+extension CGPoint {
+    public func toVector() -> Vector2<Int> {
+        return Vector2<Int>(Int(x), Int(y))
+    }
+}
+
 extension CGSize {
+    public static func fromVector(_ vector: Vector2<Int>) -> CGSize {
+        return CGSize(width: vector.width, height: vector.height)
+    }
+    
+    public func toRect() -> CGRect {
+        return CGRect(x: CGFloat(0.0), y: CGFloat(0.0), width: width, height: height)
+    }
+    
     public func toVector() -> Vector2<Int> {
         return Vector2<Int>(Int(width), Int(height))
     }
 }
 
 extension CGRect {
+    public static func fromRegion(_ region: Region2<Int>) -> CGRect {
+        return CGRect(x: region.origin.x, y: region.origin.y, width: region.size.width, height: region.size.height)
+    }
+    
+    public func toRegion() -> Region2<Int> {
+        return Region2<Int>(origin: origin.toVector(), size: size.toVector())
+    }
+    
     public static var engineMinimum: CGRect {
         return CGRect(x: 0, y: 0, width: Engine.minimumWidth, height: Engine.minimumHeight)
     }
