@@ -22,23 +22,9 @@
  SOFTWARE.
  */
 
-import Platform
 import ShkadovXCB
 
-public final class XCBPlatform {
-	let connection: OpaquePointer
-
-	public init(displayName: String? = nil) {
-		var screen: Int32 = 0
-
-		guard let connection = xcb_connect(displayName, &screen) else {
-			fatalError("Unable to create XCB connection to display name \(displayName)")
-		}
-
-		self.connection = connection
-	}
-
-	deinit {
-		xcb_disconnect(connection)
-	}
+public enum XCBError : Error {
+	case improbable
+	case generic(xcb_generic_error_t)
 }

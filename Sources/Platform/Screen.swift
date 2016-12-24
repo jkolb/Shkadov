@@ -22,23 +22,21 @@
  SOFTWARE.
  */
 
-import Platform
-import ShkadovXCB
+import Swiftish
+import Utility
 
-public final class XCBPlatform {
-	let connection: OpaquePointer
+public protocol Screen {
+    var handle: ScreenHandle { get }
+//    var region: Region2<Int> { get set }
+//    var contentSize: Vector2<Int> { get set }
+}
 
-	public init(displayName: String? = nil) {
-		var screen: Int32 = 0
-
-		guard let connection = xcb_connect(displayName, &screen) else {
-			fatalError("Unable to create XCB connection to display name \(displayName)")
-		}
-
-		self.connection = connection
-	}
-
-	deinit {
-		xcb_disconnect(connection)
-	}
+public struct ScreenHandle : Handle {
+    public let key: UInt8
+    
+    public init() { self.init(key: 0) }
+    
+    public init(key: UInt8) {
+        self.key = key
+    }
 }

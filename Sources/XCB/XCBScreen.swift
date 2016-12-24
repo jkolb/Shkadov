@@ -25,20 +25,12 @@
 import Platform
 import ShkadovXCB
 
-public final class XCBPlatform {
-	let connection: OpaquePointer
+public struct XCBScreen {
+	public let handle: ScreenHandle
+	private let instance: xcb_screen_t
 
-	public init(displayName: String? = nil) {
-		var screen: Int32 = 0
-
-		guard let connection = xcb_connect(displayName, &screen) else {
-			fatalError("Unable to create XCB connection to display name \(displayName)")
-		}
-
-		self.connection = connection
-	}
-
-	deinit {
-		xcb_disconnect(connection)
+	public init(handle: ScreenHandle, instance: xcb_screen_t) {
+		self.handle = handle
+		self.instance = instance
 	}
 }
