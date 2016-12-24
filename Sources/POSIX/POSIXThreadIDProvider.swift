@@ -32,12 +32,12 @@ import Platform
 
 public class POSIXThreadIDProvider : ThreadIDProvider {
     private var mutex = pthread_mutex_t()
-	private var threadIDs: [pthread_t]
+    private var threadIDs: [pthread_t]
 
-	public init() {
+    public init() {
         pthread_mutex_init(&mutex, nil)
-		self.threadIDs = []
-	}
+        self.threadIDs = []
+    }
 
     deinit {
         pthread_mutex_destroy(&mutex)
