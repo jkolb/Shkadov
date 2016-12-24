@@ -22,6 +22,22 @@
  SOFTWARE.
  */
 
-import XCB
-
-let platform = XCBPlatform(displayName: "abc")
+public struct LogRecord {
+    public let formattedTimestamp: String
+    public let level: LogLevel
+    public let name: String
+    public let threadID: UInt64
+    public let fileName: String
+    public let lineNumber: Int
+    public let message: String
+    
+    public init(formattedTimestamp: String, level: LogLevel, name: String, threadID: UInt64, fileName: String, lineNumber: Int, message: String) {
+        self.formattedTimestamp = formattedTimestamp
+        self.level = level
+        self.name = name
+        self.threadID = threadID
+        self.fileName = fileName
+        self.lineNumber = lineNumber
+        self.message = message
+    }
+}

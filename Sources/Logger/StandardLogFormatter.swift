@@ -22,6 +22,8 @@
  SOFTWARE.
  */
 
-import XCB
-
-let platform = XCBPlatform(displayName: "abc")
+public struct StandardLogFormatter : LogFormatter {
+    public func format(_ record: LogRecord) -> String {
+        return "\(record.formattedTimestamp) \(record.name)[\(record.threadID)] \(record.level.formatted) \(record.fileName):\(record.lineNumber) \(record.message)"
+    }
+}

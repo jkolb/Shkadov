@@ -22,6 +22,10 @@
  SOFTWARE.
  */
 
-import XCB
+public struct LinuxApplicationNameProvider {
+    let applicationName: String
 
-let platform = XCBPlatform(displayName: "abc")
+    public init() {
+    	self.applicationName = CommandLine.arguments.first!
+    }
+}

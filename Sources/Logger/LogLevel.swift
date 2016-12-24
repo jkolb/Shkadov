@@ -22,6 +22,28 @@
  SOFTWARE.
  */
 
-import XCB
-
-let platform = XCBPlatform(displayName: "abc")
+public enum LogLevel : UInt8, Comparable {
+    case none
+    case error
+    case warn
+    case info
+    case debug
+    case trace
+    
+    public var formatted: String {
+        switch self {
+        case .error:
+            fallthrough
+        case .debug:
+            fallthrough
+        case .trace:
+            return "\(self)".uppercased()
+        default:
+            return "\(self)".uppercased() + " "
+        }
+    }
+    
+    public static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+}

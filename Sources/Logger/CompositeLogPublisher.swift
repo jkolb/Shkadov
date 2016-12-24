@@ -22,6 +22,16 @@
  SOFTWARE.
  */
 
-import XCB
-
-let platform = XCBPlatform(displayName: "abc")
+public struct CompositeLogPublisher : LogPublisher {
+    private let publishers: [LogPublisher]
+    
+    public init(publishers: [LogPublisher]) {
+        self.publishers = publishers
+    }
+    
+    public func publish(_ record: LogRecord) {
+        for publisher in publishers {
+            publisher.publish(record)
+        }
+    }
+}

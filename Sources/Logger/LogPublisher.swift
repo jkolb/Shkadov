@@ -22,6 +22,6 @@
  SOFTWARE.
  */
 
-import XCB
-
-let platform = XCBPlatform(displayName: "abc")
+public protocol LogPublisher {
+    func publish(_ record: LogRecord)
+}

@@ -22,6 +22,13 @@
  SOFTWARE.
  */
 
-import XCB
+import Darwin.POSIX
+import Platform
 
-let platform = XCBPlatform(displayName: "abc")
+public struct DarwinThreadIDProvider : ThreadIDProvider {
+    public func currentThreadID() -> UInt64 {
+        var ID: UInt64 = 0
+        pthread_threadid_np(nil, &ID)
+        return ID
+    }
+}

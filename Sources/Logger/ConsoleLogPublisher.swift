@@ -22,6 +22,14 @@
  SOFTWARE.
  */
 
-import XCB
-
-let platform = XCBPlatform(displayName: "abc")
+public struct ConsoleLogPublisher : LogPublisher {
+    private let formatter: LogFormatter
+    
+    public init(formatter: LogFormatter = StandardLogFormatter()) {
+        self.formatter = formatter
+    }
+    
+    public func publish(_ record: LogRecord) {
+        print(formatter.format(record))
+    }
+}

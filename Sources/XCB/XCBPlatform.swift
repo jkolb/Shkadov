@@ -27,9 +27,13 @@ import ShkadovXCB
 public final class XCBPlatform {
 	let native: OpaquePointer
 
-	public init() {
+	public init(displayName: String? = nil) {
 		var screen: Int32 = 0
-		guard let native = xcb_connect(nil, &screen) else { fatalError("Unable to create XCB connection") }
+
+		guard let native = xcb_connect(displayName, &screen) else {
+			fatalError("Unable to create XCB connection to display name \(displayName)")
+		}
+
 		self.native = native
 	}
 
