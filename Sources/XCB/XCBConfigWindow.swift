@@ -22,26 +22,26 @@
  SOFTWARE.
  */
 
-import Platform
 import ShkadovXCB
-import Swiftish
 
-public struct XCBScreen : Screen {
-	unowned(unsafe) let displaySystem: XCBDisplaySystem
-	unowned(unsafe) let connection: XCBConnection
-	let instance: xcb_screen_t
+public struct XCBConfigWindow : OptionSet {
+	public let rawValue: UInt16
 
-	public init(displaySystem: XCBDisplaySystem, connection: XCBConnection, instance: xcb_screen_t) {
-		self.displaySystem = displaySystem
-		self.connection = connection
-		self.instance = instance
+	public init(rawValue: UInt16) {
+		self.rawValue = rawValue
 	}
 
-	public var region: Region2<Int> {
-		return try! connection.getGeometryReply(drawable: instance.root).region
-	}
+	public static var x = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_X.rawBits)
+	public static var y = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_Y.rawBits)
+	public static var width = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_WIDTH.rawBits)
+	public static var height = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_HEIGHT.rawBits)
+	public static var borderWidth = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_BORDER_WIDTH.rawBits)
+	public static var sibling = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_SIBLING.rawBits)
+	public static var stackMode = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_STACK_MODE.rawBits)
+}
 
-    public func createWindow(region: Region2<Int>) -> WindowHandle {
-    	return displaySystem.createWindow(region: region, screen: instance)
-    }
+public extension xcb_config_window_t {
+	public var rawBits: UInt16 {
+		return UInt16(truncatingBitPattern: rawValue)
+	}
 }

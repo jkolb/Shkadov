@@ -26,23 +26,28 @@ import Platform
 import ShkadovXCB
 import Swiftish
 
-public struct XCBWindow : Window {
+public struct XCBWindow : Window, XCBDrawable {
 	public let handle: WindowHandle
-	private let connection: OpaquePointer
-	private let instance: xcb_window_t
+	unowned(unsafe) let connection: XCBConnection
+	let windowID: xcb_window_t
 
-	public init(handle: WindowHandle, connection: OpaquePointer, instance: xcb_window_t) {
+	public init(handle: WindowHandle, connection: XCBConnection, windowID: xcb_window_t) {
 		self.handle = handle
 		self.connection = connection
-		self.instance = instance
+		self.windowID = windowID
+	}
+
+	var drawableID: xcb_drawable_t {
+		return windowID
 	}
 
 	public var region: Region2<Int> {
 		get {
-			return try! getGeometryReply().region
+			return try! connection.getGeometryReply(drawable: drawableID).region
 		}
 		set {
-			try! configureWindow(
+			try! connection.configure(
+				window: self,
 				valueMask: [.x, .y, .width, .height],
 				valueList: valueList(newValue)
 			)
@@ -50,77 +55,11 @@ public struct XCBWindow : Window {
 	}
 
 	private func valueList(_ region: Region2<Int>) -> [UInt32] {
-		return valueList([
+		return connection.valueList([
 					region.origin.x,
 					region.origin.y,
 					region.size.width,
 					region.size.height
 				])
-	}
-
-	private func valueList(_ values: [Int]) -> [UInt32] {
-		return values.map({ UInt32(truncatingBitPattern: $0) })
-	}
-
-	private func configureWindow(valueMask: XCBConfigWindow, valueList: [UInt32]) throws {
-		let cookie = xcb_configure_window_checked(connection, instance, valueMask.rawValue, valueList)
-
-		if let errorPointer = xcb_request_check(connection, cookie) {
-			throw XCBError.generic(unwrap(errorPointer))
-		}
-	}
-
-	private func getGeometryReply() throws -> xcb_get_geometry_reply_t {
-		let cookie = xcb_get_geometry(connection, instance)
-		var errorPointer: UnsafeMutablePointer<xcb_generic_error_t>?
-
-		if let replyPointer = xcb_get_geometry_reply(connection, cookie, &errorPointer) {
-			return unwrap(replyPointer)
-		}
-		else if let errorPointer = errorPointer {
-			throw XCBError.generic(unwrap(errorPointer))
-		}
-		else {
-			throw XCBError.improbable
-		}
-	}
-
-	private func unwrap<T>(_ pointer: UnsafeMutablePointer<T>) -> T {
-		let pointee = pointer.pointee
-		pointer.deinitialize(count: 1)
-		pointer.deallocate(capacity: 1)
-
-		return pointee
-	}
-}
-
-public struct XCBConfigWindow : OptionSet {
-	public let rawValue: UInt16
-
-	public init(rawValue: UInt16) {
-		self.rawValue = rawValue
-	}
-
-	public static var x = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_X.rawBits)
-	public static var y = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_Y.rawBits)
-	public static var width = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_WIDTH.rawBits)
-	public static var height = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_HEIGHT.rawBits)
-	public static var borderWidth = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_BORDER_WIDTH.rawBits)
-	public static var sibling = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_SIBLING.rawBits)
-	public static var stackMode = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_STACK_MODE.rawBits)
-}
-
-public extension xcb_get_geometry_reply_t {
-	public var region: Region2<Int> {
-		let origin = Vector2<Int>(Int(x), Int(y))
-		let size = Vector2<Int>(Int(width), Int(height))
-
-		return Region2<Int>(origin: origin, size: size)
-	}
-}
-
-public extension xcb_config_window_t {
-	public var rawBits: UInt16 {
-		return UInt16(truncatingBitPattern: rawValue)
 	}
 }

@@ -22,26 +22,12 @@
  SOFTWARE.
  */
 
-import Platform
-import ShkadovXCB
-import Swiftish
+import Utility
 
-public struct XCBScreen : Screen {
-	unowned(unsafe) let displaySystem: XCBDisplaySystem
-	unowned(unsafe) let connection: XCBConnection
-	let instance: xcb_screen_t
-
-	public init(displaySystem: XCBDisplaySystem, connection: XCBConnection, instance: xcb_screen_t) {
-		self.displaySystem = displaySystem
-		self.connection = connection
-		self.instance = instance
-	}
-
-	public var region: Region2<Int> {
-		return try! connection.getGeometryReply(drawable: instance.root).region
-	}
-
-    public func createWindow(region: Region2<Int>) -> WindowHandle {
-    	return displaySystem.createWindow(region: region, screen: instance)
+public struct WindowHandle : Handle {
+    public let key: UInt8
+    
+    public init(key: Int) {
+        self.key = UInt8(key)
     }
 }

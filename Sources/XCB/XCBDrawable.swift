@@ -22,23 +22,8 @@
  SOFTWARE.
  */
 
-import Platform
 import ShkadovXCB
 
-public final class XCBPlatform {
-	let connection: OpaquePointer
-
-	public init(displayName: String? = nil) {
-		var screen: Int32 = 0
-
-		guard let connection = xcb_connect(displayName, &screen) else {
-			fatalError("Unable to create XCB connection to display name \(displayName)")
-		}
-
-		self.connection = connection
-	}
-
-	deinit {
-		xcb_disconnect(connection)
-	}
+protocol XCBDrawable {
+	var drawableID: xcb_drawable_t { get }
 }

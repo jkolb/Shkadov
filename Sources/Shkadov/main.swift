@@ -24,4 +24,4 @@
 
 import XCB
 
-let platform = XCBPlatform(displayName: "abc")
+let platform = XCBDisplaySystem(displayName: "abc")

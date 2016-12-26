@@ -23,20 +23,9 @@
  */
 
 import Swiftish
-import Utility
 
 public protocol Screen {
-    var handle: ScreenHandle { get }
-//    var region: Region2<Int> { get set }
-//    var contentSize: Vector2<Int> { get set }
-}
-
-public struct ScreenHandle : Handle {
-    public let key: UInt8
+    var region: Region2<Int> { get }
     
-    public init() { self.init(key: 0) }
-    
-    public init(key: UInt8) {
-        self.key = key
-    }
+    func createWindow(region: Region2<Int>) -> WindowHandle
 }

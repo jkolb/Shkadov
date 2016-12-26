@@ -25,7 +25,6 @@
 public protocol Handle : Equatable, Hashable, CustomStringConvertible {
     associatedtype KeyType : UnsignedInteger
     var key: KeyType { get }
-    var isValid: Bool { get }
 }
 
 extension Handle {
@@ -41,11 +40,7 @@ extension Handle {
         return key.description
     }
     
-    public var isValid: Bool {
-        return key != KeyType.allZeros
-    }
-    
     public var index: Int {
-        return Int(key.toIntMax()) - 1
+        return Int(key.toIntMax())
     }
 }
