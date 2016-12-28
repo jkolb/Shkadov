@@ -24,7 +24,7 @@
 
 import ShkadovXCB
 
-public final class XCBConnection {
+public final class PlatformXCBConnection {
 	private let connection: OpaquePointer
 	private let primaryScreenNumber: Int32
 

@@ -24,24 +24,6 @@
 
 import ShkadovXCB
 
-public struct XCBConfigWindow : OptionSet {
-	public let rawValue: UInt16
-
-	public init(rawValue: UInt16) {
-		self.rawValue = rawValue
-	}
-
-	public static var x = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_X.rawBits)
-	public static var y = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_Y.rawBits)
-	public static var width = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_WIDTH.rawBits)
-	public static var height = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_HEIGHT.rawBits)
-	public static var borderWidth = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_BORDER_WIDTH.rawBits)
-	public static var sibling = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_SIBLING.rawBits)
-	public static var stackMode = XCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_STACK_MODE.rawBits)
-}
-
-public extension xcb_config_window_t {
-	public var rawBits: UInt16 {
-		return UInt16(truncatingBitPattern: rawValue)
-	}
+protocol PlatformXCBDrawable {
+	var drawableID: xcb_drawable_t { get }
 }

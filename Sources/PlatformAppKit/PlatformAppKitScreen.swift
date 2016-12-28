@@ -22,52 +22,24 @@
  SOFTWARE.
  */
 
-import Swiftish
+import AppKit
 import Platform
+import Swiftish
 
-#if os(macOS)
-import PlatformAppKit
-#elseif os(Linux)
-import PlatformXCB
-#endif
+public struct PlatformAppKitScreen : Screen {
+	unowned(unsafe) let displaySystem: PlatformAppKitDisplaySystem
+	let instance: NSScreen
 
-public final class Application : PlatformListener {
-	let platform: Platform
-	let displaySystem: DisplaySystem
-
-	public init() {
-		#if os(macOS)
-		self.platform = PlatformAppKit()
-		self.displaySystem = PlatformAppKitDisplaySystem()
-		#elseif os(Linux)
-		self.platform = PlatformXCB()
-		self.displaySystem = PlatformXCBDisplaySystem(displayName: nil)
-		#endif
-
-		platform.listener = self
+	public init(displaySystem: PlatformAppKitDisplaySystem, instance: NSScreen) {
+		self.displaySystem = displaySystem
+		self.instance = instance
 	}
 
-	public func run() {
-		platform.startup()
+	public var region: Region2<Int> {
+		return instance.frame.region
 	}
 
-	public func didStartup() {
-		guard let primaryScreen = displaySystem.primaryScreen else {
-			fatalError("No primary screen")
-		}
-
-		let origin = Vector2<Int>()
-		let size = Vector2<Int>(320, 200)
-		let region = Region2<Int>(origin: origin, size: size)
-		let windowHandle = primaryScreen.createWindow(region: region)
-		let window = displaySystem.borrowWindow(handle: windowHandle)
-		window.show()
-
-		#if os(Linux)
-		// Need an event loop
-		for _ in 0..<5000000 { print("Waiting") }
-		#endif
-	}
+    public func createWindow(region: Region2<Int>) -> WindowHandle {
+    	return displaySystem.createWindow(region: region, screen: instance)
+    }
 }
-
-Application().run()

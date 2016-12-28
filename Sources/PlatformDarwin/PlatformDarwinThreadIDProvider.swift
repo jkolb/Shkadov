@@ -22,9 +22,13 @@
  SOFTWARE.
  */
 
-import ShkadovXCB
+import Darwin
+import Platform
 
-public enum XCBError : Error {
-	case improbable
-	case generic(xcb_generic_error_t)
+public struct PlatformDarwinThreadIDProvider : ThreadIDProvider {
+    public func currentThreadID() -> UInt64 {
+        var ID: UInt64 = 0
+        pthread_threadid_np(nil, &ID)
+        return ID
+    }
 }

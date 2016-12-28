@@ -26,19 +26,19 @@ import Platform
 import ShkadovXCB
 import Swiftish
 
-public final class XCBDisplaySystem : DisplaySystem {
-	private let connection: XCBConnection
+public final class PlatformXCBDisplaySystem : DisplaySystem {
+	private let connection: PlatformXCBConnection
 	private var windows: [xcb_window_t?]
 
 	public init(displayName: String? = nil) {
-		self.connection = XCBConnection(displayName: displayName)
+		self.connection = PlatformXCBConnection(displayName: displayName)
 		self.windows = []
 	}
 
 	public var primaryScreen: Screen? {
 		do {
 			if let instance = try connection.primaryScreen() {
-				return XCBScreen(
+				return PlatformXCBScreen(
 					displaySystem: self, 
 					connection: connection, 
 					instance: instance
@@ -54,7 +54,7 @@ public final class XCBDisplaySystem : DisplaySystem {
 	}
 
 	public func withScreens<R>(_ body: ([Screen]) throws -> R) rethrows -> R {
-		let screens = connection.screens().map({ XCBScreen(displaySystem: self, connection: connection, instance: $0) })
+		let screens = connection.screens().map({ PlatformXCBScreen(displaySystem: self, connection: connection, instance: $0) })
 
 		return try body(screens)
 	}
@@ -79,7 +79,7 @@ public final class XCBDisplaySystem : DisplaySystem {
 		precondition(width > 0)
 		let height = UInt16(region.size.height)
 		precondition(height > 0)
-		let eventMask: XCBEventMask = [.keyRelease, .keyPress, .structureNotify, .pointerMotion, .buttonPress, .buttonRelease]
+		let eventMask: PlatformXCBEventMask = [.keyRelease, .keyPress, .structureNotify, .pointerMotion, .buttonPress, .buttonRelease]
 		do {
 	    	try connection.createWindow(
     			depth: screen.root_depth,
@@ -109,7 +109,7 @@ public final class XCBDisplaySystem : DisplaySystem {
     }
 
     public func borrowWindow(handle: WindowHandle) -> Window {
-    	return XCBWindow(handle: handle, connection: connection, windowID: self[handle])
+    	return PlatformXCBWindow(handle: handle, connection: connection, windowID: self[handle])
     }
 
     public func destroyWindow(handle: WindowHandle) {

@@ -23,47 +23,15 @@
  */
 
 import Platform
-import ShkadovXCB
-import Swiftish
 
-public struct XCBWindow : Window, XCBDrawable {
-	public let handle: WindowHandle
-	unowned(unsafe) let connection: XCBConnection
-	let windowID: xcb_window_t
-
-	public init(handle: WindowHandle, connection: XCBConnection, windowID: xcb_window_t) {
-		self.handle = handle
-		self.connection = connection
-		self.windowID = windowID
-	}
-
-	var drawableID: xcb_drawable_t {
-		return windowID
-	}
-
-	public var region: Region2<Int> {
-		get {
-			return try! connection.getGeometryReply(drawable: drawableID).region
-		}
-		set {
-			try! connection.configure(
-				window: windowID,
-				valueMask: [.x, .y, .width, .height],
-				valueList: valueList(newValue)
-			)
-		}
-	}
-
-	public func show() {
-		try! connection.mapWindow(window: windowID)
-	}
-
-	private func valueList(_ region: Region2<Int>) -> [UInt32] {
-		return connection.valueList([
-					region.origin.x,
-					region.origin.y,
-					region.size.width,
-					region.size.height
-				])
-	}
+public final class PlatformXCB : Platform {
+    public weak var listener: PlatformListener?
+    
+    public func startup() {
+    	didStartup()
+    }
+    
+    private func didStartup() {
+        listener?.didStartup()
+    }
 }

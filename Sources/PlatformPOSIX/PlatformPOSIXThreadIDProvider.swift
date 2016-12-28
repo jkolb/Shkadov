@@ -22,13 +22,58 @@
  SOFTWARE.
  */
 
-import Darwin.POSIX
+#if os(macOS)
+import Darwin
+#elseif os(Linux)
+import Glibc
+#endif
+
 import Platform
 
-public struct DarwinThreadIDProvider : ThreadIDProvider {
+public class PlatformPOSIXThreadIDProvider : ThreadIDProvider {
+    private var mutex = pthread_mutex_t()
+    private var threadIDs: [pthread_t]
+
+    public init() {
+        pthread_mutex_init(&mutex, nil)
+        self.threadIDs = []
+    }
+
+    deinit {
+        pthread_mutex_destroy(&mutex)
+    }
+
     public func currentThreadID() -> UInt64 {
-        var ID: UInt64 = 0
-        pthread_threadid_np(nil, &ID)
-        return ID
+    	let current = pthread_self()
+        let threadIDs = threadSafeThreadIDs
+
+        for (index, threadID) in threadIDs.enumerated() {
+            if pthread_equal(current, threadID) != 0 {
+                return UInt64(index)
+            }
+        }
+
+        let index = threadIDs.count
+
+        threadSafeThreadIDs = threadIDs + [current]
+
+        return UInt64(index)
+    }
+
+    private var threadSafeThreadIDs: [pthread_t] {
+        get {
+            pthread_mutex_lock(&mutex)
+            
+            defer {
+                pthread_mutex_unlock(&mutex)
+            }
+
+            return threadIDs
+        }
+        set {
+            pthread_mutex_lock(&mutex)
+            threadIDs = newValue
+            pthread_mutex_unlock(&mutex)
+        }
     }
 }

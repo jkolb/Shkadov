@@ -22,8 +22,29 @@
  SOFTWARE.
  */
 
-import ShkadovXCB
+import AppKit
+import Platform
+import Swiftish
 
-protocol XCBDrawable {
-	var drawableID: xcb_drawable_t { get }
+public struct PlatformAppKitWindow : Window {
+	public let handle: WindowHandle
+	unowned(unsafe) let instance: NSWindow
+
+	public init(handle: WindowHandle, instance: NSWindow) {
+		self.handle = handle
+		self.instance = instance
+	}
+
+	public var region: Region2<Int> {
+		get {
+			return instance.frame.region
+		}
+		set {
+			instance.setFrame(CGRect.makeRect(newValue), display: true, animate: true)
+		}
+	}
+
+	public func show() {
+		instance.makeKeyAndOrderFront(nil)
+	}
 }

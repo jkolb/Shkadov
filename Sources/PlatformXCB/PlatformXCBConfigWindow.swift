@@ -22,10 +22,26 @@
  SOFTWARE.
  */
 
-public struct LinuxApplicationNameProvider {
-    let applicationName: String
+import ShkadovXCB
 
-    public init() {
-    	self.applicationName = CommandLine.arguments.first!
-    }
+public struct PlatformXCBConfigWindow : OptionSet {
+	public let rawValue: UInt16
+
+	public init(rawValue: UInt16) {
+		self.rawValue = rawValue
+	}
+
+	public static var x = PlatformXCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_X.rawBits)
+	public static var y = PlatformXCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_Y.rawBits)
+	public static var width = PlatformXCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_WIDTH.rawBits)
+	public static var height = PlatformXCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_HEIGHT.rawBits)
+	public static var borderWidth = PlatformXCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_BORDER_WIDTH.rawBits)
+	public static var sibling = PlatformXCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_SIBLING.rawBits)
+	public static var stackMode = PlatformXCBConfigWindow(rawValue: XCB_CONFIG_WINDOW_STACK_MODE.rawBits)
+}
+
+public extension xcb_config_window_t {
+	public var rawBits: UInt16 {
+		return UInt16(truncatingBitPattern: rawValue)
+	}
 }
