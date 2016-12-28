@@ -63,7 +63,7 @@ public final class XCBConnection {
 			return iterator.data.pointee
 		}
 
-		for _ in 1...primaryScreenNumber {
+		for _ in 0..<primaryScreenNumber {
 			xcb_screen_next(&iterator)
 		}
 
@@ -83,16 +83,24 @@ public final class XCBConnection {
 		return screens
 	}
 
-	func createWindow(depth: UInt8, windowID: xcb_window_t, parent: xcb_window_t, x: Int16, y: Int16, width: UInt16, height: UInt16, borderWidth: UInt16, windowClass: UInt16, visual: xcb_visualid_t, valueMask: UInt32, valueList: [UInt32]) throws {
-		let cookie = xcb_create_window_checked(connection, depth, windowID, parent, x, y, width, height, borderWidth, windowClass, visual, valueMask, valueList)
+	func createWindow(depth: UInt8, window: xcb_window_t, parent: xcb_window_t, x: Int16, y: Int16, width: UInt16, height: UInt16, borderWidth: UInt16, windowClass: UInt16, visual: xcb_visualid_t, valueMask: XCBCreateWindow, valueList: [UInt32]) throws {
+		let cookie = xcb_create_window_checked(connection, depth, window, parent, x, y, width, height, borderWidth, windowClass, visual, valueMask.rawValue, valueList)
 
 		if let errorPointer = xcb_request_check(connection, cookie) {
 			throw XCBError.generic(unwrap(errorPointer))
 		}
 	}
 
-	func configure(window: XCBWindow, valueMask: XCBConfigWindow, valueList: [UInt32]) throws {
-		let cookie = xcb_configure_window_checked(connection, window.windowID, valueMask.rawValue, valueList)
+	func mapWindow(window: xcb_window_t) throws {
+		let cookie = xcb_map_window_checked(connection, window)
+
+		if let errorPointer = xcb_request_check(connection, cookie) {
+			throw XCBError.generic(unwrap(errorPointer))
+		}
+	}
+
+	func configure(window: xcb_window_t, valueMask: XCBConfigWindow, valueList: [UInt32]) throws {
+		let cookie = xcb_configure_window_checked(connection, window, valueMask.rawValue, valueList)
 
 		if let errorPointer = xcb_request_check(connection, cookie) {
 			throw XCBError.generic(unwrap(errorPointer))

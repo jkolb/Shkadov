@@ -23,5 +23,19 @@
  */
 
 import XCB
+import Swiftish
 
-let platform = XCBDisplaySystem(displayName: "abc")
+let displaySystem = XCBDisplaySystem(displayName: nil)
+
+guard let primaryScreen = displaySystem.primaryScreen else {
+	fatalError("No primary screen")
+}
+
+let origin = Vector2<Int>()
+let size = Vector2<Int>(320, 200)
+let region = Region2<Int>(origin: origin, size: size)
+let windowHandle = primaryScreen.createWindow(region: region)
+let window = displaySystem.borrowWindow(handle: windowHandle)
+window.show()
+
+for _ in 0..<5000000 { print("Waiting") }

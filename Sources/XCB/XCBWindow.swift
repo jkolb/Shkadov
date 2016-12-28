@@ -47,11 +47,15 @@ public struct XCBWindow : Window, XCBDrawable {
 		}
 		set {
 			try! connection.configure(
-				window: self,
+				window: windowID,
 				valueMask: [.x, .y, .width, .height],
 				valueList: valueList(newValue)
 			)
 		}
+	}
+
+	public func show() {
+		try! connection.mapWindow(window: windowID)
 	}
 
 	private func valueList(_ region: Region2<Int>) -> [UInt32] {

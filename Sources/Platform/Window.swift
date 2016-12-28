@@ -28,4 +28,6 @@ public protocol Window {
     var handle: WindowHandle { get }
 //    var screen: Screen? { get }
     var region: Region2<Int> { get set }
+
+    func show()
 }

@@ -75,22 +75,30 @@ public final class XCBDisplaySystem : DisplaySystem {
     	let windowID = connection.generateID()
 		let x = Int16(region.origin.x)
 		let y = Int16(region.origin.y)
-		let width = UInt16(region.origin.width)
-		let height = UInt16(region.origin.height)
-    	try! connection.createWindow(
-    		depth: screen.root_depth,
-    		windowID: windowID, 
-    		parent:  screen.root,
-    		x: x,
-    		y: y,
-    		width: width,
-    		height: height,
-    		borderWidth: 0,
-    		windowClass: UInt16(0),
-    		visual: screen.root_visual,
-    		valueMask: 0,
-    		valueList: []
-    	)
+		let width = UInt16(region.size.width)
+		precondition(width > 0)
+		let height = UInt16(region.size.height)
+		precondition(height > 0)
+		let eventMask: XCBEventMask = [.keyRelease, .keyPress, .structureNotify, .pointerMotion, .buttonPress, .buttonRelease]
+		do {
+	    	try connection.createWindow(
+    			depth: screen.root_depth,
+    			window: windowID, 
+    			parent: screen.root,
+	    		x: x,
+    			y: y,
+    			width: width,
+    			height: height,
+	    		borderWidth: 0,
+    			windowClass: UInt16(XCB_WINDOW_CLASS_INPUT_OUTPUT.rawValue),
+    			visual: screen.root_visual,
+    			valueMask: [.backPixel, .eventMask],
+	    		valueList: [screen.black_pixel, eventMask.rawValue]
+    		)
+		}
+		catch {
+			fatalError("XCB: Unable to create window \(error)")
+		}
     	return addWindow(windowID)
     }
 
