@@ -27,6 +27,9 @@ import Platform
 public final class PlatformXCB : Platform {
     public weak var listener: PlatformListener?
     
+    public init() {
+    }
+    
     public func startup() {
     	didStartup()
     }

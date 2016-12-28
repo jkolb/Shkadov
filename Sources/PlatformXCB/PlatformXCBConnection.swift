@@ -83,11 +83,11 @@ public final class PlatformXCBConnection {
 		return screens
 	}
 
-	func createWindow(depth: UInt8, window: xcb_window_t, parent: xcb_window_t, x: Int16, y: Int16, width: UInt16, height: UInt16, borderWidth: UInt16, windowClass: UInt16, visual: xcb_visualid_t, valueMask: XCBCreateWindow, valueList: [UInt32]) throws {
+	func createWindow(depth: UInt8, window: xcb_window_t, parent: xcb_window_t, x: Int16, y: Int16, width: UInt16, height: UInt16, borderWidth: UInt16, windowClass: UInt16, visual: xcb_visualid_t, valueMask: PlatformXCBCreateWindow, valueList: [UInt32]) throws {
 		let cookie = xcb_create_window_checked(connection, depth, window, parent, x, y, width, height, borderWidth, windowClass, visual, valueMask.rawValue, valueList)
 
 		if let errorPointer = xcb_request_check(connection, cookie) {
-			throw XCBError.generic(unwrap(errorPointer))
+			throw PlatformXCBError.generic(unwrap(errorPointer))
 		}
 	}
 
@@ -95,15 +95,15 @@ public final class PlatformXCBConnection {
 		let cookie = xcb_map_window_checked(connection, window)
 
 		if let errorPointer = xcb_request_check(connection, cookie) {
-			throw XCBError.generic(unwrap(errorPointer))
+			throw PlatformXCBError.generic(unwrap(errorPointer))
 		}
 	}
 
-	func configure(window: xcb_window_t, valueMask: XCBConfigWindow, valueList: [UInt32]) throws {
+	func configure(window: xcb_window_t, valueMask: PlatformXCBConfigWindow, valueList: [UInt32]) throws {
 		let cookie = xcb_configure_window_checked(connection, window, valueMask.rawValue, valueList)
 
 		if let errorPointer = xcb_request_check(connection, cookie) {
-			throw XCBError.generic(unwrap(errorPointer))
+			throw PlatformXCBError.generic(unwrap(errorPointer))
 		}
 	}
 
@@ -115,10 +115,10 @@ public final class PlatformXCBConnection {
 			return unwrap(replyPointer)
 		}
 		else if let errorPointer = errorPointer {
-			throw XCBError.generic(unwrap(errorPointer))
+			throw PlatformXCBError.generic(unwrap(errorPointer))
 		}
 		else {
-			throw XCBError.improbable
+			throw PlatformXCBError.improbable
 		}
 	}
 
