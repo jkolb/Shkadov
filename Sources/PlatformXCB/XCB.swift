@@ -22,7 +22,19 @@
  SOFTWARE.
  */
 
-public protocol DisplaySystem : WindowOwner {
-	var primaryScreen: Screen? { get }
-	func withScreens<R>(_ body: ([Screen]) throws -> R) throws -> R
+import Platform
+
+public final class XCB : Platform {
+    public weak var listener: PlatformListener?
+    
+    public init() {
+    }
+    
+    public func startup() {
+    	didStartup()
+    }
+    
+    private func didStartup() {
+        listener?.didStartup()
+    }
 }

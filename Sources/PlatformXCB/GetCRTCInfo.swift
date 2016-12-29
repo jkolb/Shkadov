@@ -22,19 +22,39 @@
  SOFTWARE.
  */
 
-import Platform
+import ShkadovXCB.RandR
 
-public final class PlatformXCB : Platform {
-    public weak var listener: PlatformListener?
-    
-    public init() {
-    }
-    
-    public func startup() {
-    	didStartup()
-    }
-    
-    private func didStartup() {
-        listener?.didStartup()
-    }
+public struct GetCRTCInfo {
+	private let connection: OpaquePointer
+	private let crtc: xcb_randr_crtc_t
+	private let timestamp: xcb_timestamp_t
+
+	init(connection: OpaquePointer, crtc: xcb_randr_crtc_t, timestamp: xcb_timestamp_t) {
+		self.connection = connection
+		self.crtc = crtc
+		self.timestamp = timestamp
+	}
+
+	public func withReply<R>(_ body: (CRTCInfo) throws -> R) throws -> R {
+		let cookie = xcb_randr_get_crtc_info(connection, crtc, timestamp)
+		var errorPointer: UnsafeMutablePointer<xcb_generic_error_t>?
+
+		if let replyPointer = xcb_randr_get_crtc_info_reply(connection, cookie, &errorPointer) {
+			defer {
+				free(replyPointer)
+			}
+
+			return try body(CRTCInfo(connection: connection, reply: replyPointer))
+		}
+		else if let errorPointer = errorPointer {
+			defer {
+				free(errorPointer)
+			}
+
+			throw XCBError.generic(errorPointer.pointee)
+		}
+		else {
+			throw XCBError.improbable
+		}
+	}
 }

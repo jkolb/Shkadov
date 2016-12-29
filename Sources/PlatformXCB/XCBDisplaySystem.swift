@@ -26,23 +26,27 @@ import Platform
 import ShkadovXCB
 import Swiftish
 
-public final class PlatformXCBDisplaySystem : DisplaySystem {
-	private let connection: PlatformXCBConnection
+public final class XCBDisplaySystem : DisplaySystem {
+	private let connection: XCBConnection
 	private var windows: [xcb_window_t?]
 
 	public init(displayName: String? = nil) {
-		self.connection = PlatformXCBConnection(displayName: displayName)
+		self.connection = XCBConnection(displayName: displayName)
 		self.windows = []
 	}
 
 	public var primaryScreen: Screen? {
 		do {
 			if let instance = try connection.primaryScreen() {
-				return PlatformXCBScreen(
-					displaySystem: self, 
-					connection: connection, 
-					instance: instance
-				)
+				let screens = try makeScreens(for: instance)
+
+				for screen in screens {
+					if screen.region.origin == Vector2<Int>() {
+						return screen
+					}
+				}
+
+				return nil
 			}
 			else {
 				return nil
@@ -53,10 +57,34 @@ public final class PlatformXCBDisplaySystem : DisplaySystem {
 		}
 	}
 
-	public func withScreens<R>(_ body: ([Screen]) throws -> R) rethrows -> R {
-		let screens = connection.screens().map({ PlatformXCBScreen(displaySystem: self, connection: connection, instance: $0) })
+	public func withScreens<R>(_ body: ([Screen]) throws -> R) throws -> R {
+		var screens = [Screen]()
+
+		for screen in connection.screens() {
+			screens.append(contentsOf: try makeScreens(for: screen))
+		}
 
 		return try body(screens)
+	}
+
+	private func makeScreens(for screen: xcb_screen_t) throws -> [Screen] {
+		var screens = [Screen]()
+
+		try connection.getScreenResources(window: screen.root).withReply { (screenResources) in
+			for crtc in screenResources.crtcs {
+				try crtc.getInfo().withReply { (crtcInfo) in
+					for output in crtcInfo.outputs {
+						try output.getInfo().withReply() { (outputInfo) in
+							if outputInfo.connected {
+								screens.append(XCBScreen(instance: screen, crtc: crtc.instance, output: output.instance, region: crtcInfo.region))
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return screens
 	}
 
 	private func nextWindowHandle() -> WindowHandle {
@@ -67,8 +95,10 @@ public final class PlatformXCBDisplaySystem : DisplaySystem {
         return windows[handle.index]!
     }
 
-    public func createWindow(region: Region2<Int>) -> WindowHandle {
-    	return createWindow(region: region, screen: try! connection.primaryScreen()!)
+    public func createWindow(region: Region2<Int>, screen: Screen) -> WindowHandle {
+    	let nativeScreen = screen as! XCBScreen
+
+    	return createWindow(region: region, screen: nativeScreen.instance)
     }
 
     func createWindow(region: Region2<Int>, screen: xcb_screen_t) -> WindowHandle {
@@ -79,7 +109,7 @@ public final class PlatformXCBDisplaySystem : DisplaySystem {
 		precondition(width > 0)
 		let height = UInt16(region.size.height)
 		precondition(height > 0)
-		let eventMask: PlatformXCBEventMask = [.keyRelease, .keyPress, .structureNotify, .pointerMotion, .buttonPress, .buttonRelease]
+		let eventMask: XCBEventMask = [.keyRelease, .keyPress, .structureNotify, .pointerMotion, .buttonPress, .buttonRelease]
 		do {
 	    	try connection.createWindow(
     			depth: screen.root_depth,
@@ -109,7 +139,7 @@ public final class PlatformXCBDisplaySystem : DisplaySystem {
     }
 
     public func borrowWindow(handle: WindowHandle) -> Window {
-    	return PlatformXCBWindow(handle: handle, connection: connection, windowID: self[handle])
+    	return XCBWindow(handle: handle, connection: connection, windowID: self[handle])
     }
 
     public func destroyWindow(handle: WindowHandle) {

@@ -25,7 +25,7 @@
 import Swiftish
 
 public protocol WindowOwner : class {
-    func createWindow(region: Region2<Int>) -> WindowHandle
+    func createWindow(region: Region2<Int>, screen: Screen) -> WindowHandle
     func borrowWindow(handle: WindowHandle) -> Window
     func destroyWindow(handle: WindowHandle)
 }

@@ -22,7 +22,20 @@
  SOFTWARE.
  */
 
-public protocol DisplaySystem : WindowOwner {
-	var primaryScreen: Screen? { get }
-	func withScreens<R>(_ body: ([Screen]) throws -> R) throws -> R
+import Platform
+import ShkadovXCB
+import Swiftish
+
+public struct XCBScreen : Screen {
+	let instance: xcb_screen_t
+	let crtc: xcb_randr_crtc_t
+	let output: xcb_randr_output_t
+	public let region: Region2<Int>
+
+	public init(instance: xcb_screen_t, crtc: xcb_randr_crtc_t, output: xcb_randr_output_t, region: Region2<Int>) {
+		self.instance = instance
+		self.crtc = crtc
+		self.output = output
+		self.region = region
+	}
 }

@@ -40,8 +40,8 @@ public final class Application : PlatformListener {
 		self.platform = PlatformAppKit()
 		self.displaySystem = PlatformAppKitDisplaySystem()
 		#elseif os(Linux)
-		self.platform = PlatformXCB()
-		self.displaySystem = PlatformXCBDisplaySystem(displayName: nil)
+		self.platform = XCB()
+		self.displaySystem = XCBDisplaySystem(displayName: nil)
 		#endif
 
 		platform.listener = self
@@ -59,7 +59,7 @@ public final class Application : PlatformListener {
 		let origin = Vector2<Int>()
 		let size = Vector2<Int>(320, 200)
 		let region = Region2<Int>(origin: origin, size: size)
-		let windowHandle = primaryScreen.createWindow(region: region)
+		let windowHandle = displaySystem.createWindow(region: region, screen: primaryScreen)
 		let window = displaySystem.borrowWindow(handle: windowHandle)
 		window.show()
 

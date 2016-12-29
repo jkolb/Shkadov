@@ -45,7 +45,7 @@ public final class PlatformAppKitDisplaySystem : DisplaySystem {
 		return PlatformAppKitScreen(displaySystem: self, instance: screens[0])
 	}
 
-	public func withScreens<R>(_ body: ([Screen]) throws -> R) rethrows -> R {
+	public func withScreens<R>(_ body: ([Screen]) throws -> R) throws -> R {
 		guard let screens = NSScreen.screens() else {
 			return try body([])
 		}
@@ -61,8 +61,10 @@ public final class PlatformAppKitDisplaySystem : DisplaySystem {
         return windows[handle.index]!
     }
 
-    public func createWindow(region: Region2<Int>) -> WindowHandle {
-    	return createWindow(region: region, screen: NSScreen.screens()?.first)
+    public func createWindow(region: Region2<Int>, screen: Screen) -> WindowHandle {
+    	let nativeScreen = screen as! PlatformAppKitScreen
+
+    	return createWindow(region: region, screen: nativeScreen.instance)
     }
 
     func createWindow(region: Region2<Int>, screen: NSScreen?) -> WindowHandle {

@@ -22,7 +22,18 @@
  SOFTWARE.
  */
 
-public protocol DisplaySystem : WindowOwner {
-	var primaryScreen: Screen? { get }
-	func withScreens<R>(_ body: ([Screen]) throws -> R) throws -> R
+import ShkadovXCB.RandR
+
+public struct CRTC {
+	private let connection: OpaquePointer
+	let instance: xcb_randr_crtc_t
+
+	init(connection: OpaquePointer, instance: xcb_randr_crtc_t) {
+		self.connection = connection
+		self.instance = instance
+	}
+
+	public func getInfo(timestamp: xcb_timestamp_t = xcb_timestamp_t(XCB_CURRENT_TIME)) -> GetCRTCInfo {
+		return GetCRTCInfo(connection: connection, crtc: instance, timestamp: timestamp)
+	}	
 }

@@ -22,7 +22,37 @@
  SOFTWARE.
  */
 
-public protocol DisplaySystem : WindowOwner {
-	var primaryScreen: Screen? { get }
-	func withScreens<R>(_ body: ([Screen]) throws -> R) throws -> R
+import ShkadovXCB
+
+public struct GetGeometry {
+	private let connection: OpaquePointer
+	private let drawable: xcb_drawable_t
+
+	init(connection: OpaquePointer, drawable: xcb_drawable_t) {
+		self.connection = connection
+		self.drawable = drawable
+	}
+
+	public func reply() throws -> xcb_get_geometry_reply_t {
+		let cookie = xcb_get_geometry(connection, drawable)
+		var errorPointer: UnsafeMutablePointer<xcb_generic_error_t>?
+
+		if let replyPointer = xcb_get_geometry_reply(connection, cookie, &errorPointer) {
+			defer {
+				free(replyPointer)
+			}
+
+			return replyPointer.pointee
+		}
+		else if let errorPointer = errorPointer {
+			defer {
+				free(errorPointer)
+			}
+
+			throw XCBError.generic(errorPointer.pointee)
+		}
+		else {
+			throw XCBError.improbable
+		}
+	}
 }

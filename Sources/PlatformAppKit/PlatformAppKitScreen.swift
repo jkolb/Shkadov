@@ -27,19 +27,13 @@ import Platform
 import Swiftish
 
 public struct PlatformAppKitScreen : Screen {
-	unowned(unsafe) let displaySystem: PlatformAppKitDisplaySystem
 	let instance: NSScreen
 
-	public init(displaySystem: PlatformAppKitDisplaySystem, instance: NSScreen) {
-		self.displaySystem = displaySystem
+	public init(instance: NSScreen) {
 		self.instance = instance
 	}
 
 	public var region: Region2<Int> {
 		return instance.frame.region
 	}
-
-    public func createWindow(region: Region2<Int>) -> WindowHandle {
-    	return displaySystem.createWindow(region: region, screen: instance)
-    }
 }

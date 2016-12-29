@@ -22,7 +22,38 @@
  SOFTWARE.
  */
 
-public protocol DisplaySystem : WindowOwner {
-	var primaryScreen: Screen? { get }
-	func withScreens<R>(_ body: ([Screen]) throws -> R) throws -> R
+import ShkadovXCB.RandR
+import Swiftish
+
+public struct CRTCInfo {
+	private let connection: OpaquePointer
+	private let reply: UnsafePointer<xcb_randr_get_crtc_info_reply_t>
+
+	init(connection: OpaquePointer, reply: UnsafePointer<xcb_randr_get_crtc_info_reply_t>) {
+		self.connection = connection
+		self.reply = reply
+	}
+
+	public var region: Region2<Int> {
+		let info = reply.pointee
+		let origin = Vector2<Int>(Int(info.x), Int(info.y))
+		let size = Vector2<Int>(Int(info.width), Int(info.height))
+		return Region2<Int>(origin: origin, size: size)
+	}
+
+	public var outputs: [Output] {
+		let count = Int(xcb_randr_get_crtc_info_outputs_length(reply))
+		guard let pointer = xcb_randr_get_crtc_info_outputs(reply) else {
+			return []
+		}
+
+		var values = [Output]()
+		values.reserveCapacity(count)
+
+		for index in 0..<count {
+			values.append(Output(connection: connection, instance: pointer[index]))
+		}
+
+		return values
+	}
 }

@@ -22,9 +22,18 @@
  SOFTWARE.
  */
 
-import ShkadovXCB
+import ShkadovXCB.RandR
 
-public enum PlatformXCBError : Error {
-	case improbable
-	case generic(xcb_generic_error_t)
+public struct Output {
+	private let connection: OpaquePointer
+	let instance: xcb_randr_output_t
+
+	init(connection: OpaquePointer, instance: xcb_randr_output_t) {
+		self.connection = connection
+		self.instance = instance
+	}
+
+	public func getInfo(timestamp: xcb_timestamp_t = xcb_timestamp_t(XCB_CURRENT_TIME)) -> GetOutputInfo {
+		return GetOutputInfo(connection: connection, output: instance, timestamp: timestamp)
+	}	
 }

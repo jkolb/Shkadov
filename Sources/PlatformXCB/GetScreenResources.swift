@@ -22,8 +22,37 @@
  SOFTWARE.
  */
 
-import ShkadovXCB
+import ShkadovXCB.RandR
 
-protocol PlatformXCBDrawable {
-	var drawableID: xcb_drawable_t { get }
+public struct GetScreenResources {
+	private let connection: OpaquePointer
+	private let window: xcb_window_t
+
+	init(connection: OpaquePointer, window: xcb_window_t) {
+		self.connection = connection
+		self.window = window
+	}
+
+	public func withReply<R>(_ body: (ScreenResources) throws -> R) throws -> R {
+		let cookie = xcb_randr_get_screen_resources(connection, window)
+		var errorPointer: UnsafeMutablePointer<xcb_generic_error_t>?
+
+		if let replyPointer = xcb_randr_get_screen_resources_reply(connection, cookie, &errorPointer) {
+			defer {
+				free(replyPointer)
+			}
+
+			return try body(ScreenResources(connection: connection, reply: replyPointer))
+		}
+		else if let errorPointer = errorPointer {
+			defer {
+				free(errorPointer)
+			}
+
+			throw XCBError.generic(errorPointer.pointee)
+		}
+		else {
+			throw XCBError.improbable
+		}
+	}
 }

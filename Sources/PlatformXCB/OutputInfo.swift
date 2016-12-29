@@ -22,26 +22,16 @@
  SOFTWARE.
  */
 
-import Platform
-import ShkadovXCB
-import Swiftish
+import ShkadovXCB.RandR
 
-public struct PlatformXCBScreen : Screen {
-	unowned(unsafe) let displaySystem: PlatformXCBDisplaySystem
-	unowned(unsafe) let connection: PlatformXCBConnection
-	let instance: xcb_screen_t
+public struct OutputInfo {
+	private let reply: UnsafePointer<xcb_randr_get_output_info_reply_t>
 
-	public init(displaySystem: PlatformXCBDisplaySystem, connection: PlatformXCBConnection, instance: xcb_screen_t) {
-		self.displaySystem = displaySystem
-		self.connection = connection
-		self.instance = instance
+	init(reply: UnsafePointer<xcb_randr_get_output_info_reply_t>) {
+		self.reply = reply
 	}
 
-	public var region: Region2<Int> {
-		return try! connection.getGeometryReply(drawable: instance.root).region
+	public var connected: Bool {
+		return reply.pointee.connection == UInt8(XCB_RANDR_CONNECTION_CONNECTED.rawValue)
 	}
-
-    public func createWindow(region: Region2<Int>) -> WindowHandle {
-    	return displaySystem.createWindow(region: region, screen: instance)
-    }
 }

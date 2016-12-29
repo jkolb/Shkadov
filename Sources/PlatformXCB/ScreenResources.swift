@@ -22,7 +22,30 @@
  SOFTWARE.
  */
 
-public protocol DisplaySystem : WindowOwner {
-	var primaryScreen: Screen? { get }
-	func withScreens<R>(_ body: ([Screen]) throws -> R) throws -> R
+import ShkadovXCB.RandR
+
+public struct ScreenResources {
+	private let connection: OpaquePointer
+	private let reply: UnsafePointer<xcb_randr_get_screen_resources_reply_t>
+
+	init(connection: OpaquePointer, reply: UnsafePointer<xcb_randr_get_screen_resources_reply_t>) {
+		self.connection = connection
+		self.reply = reply
+	}
+
+	public var crtcs: [CRTC] {
+		let count = Int(xcb_randr_get_screen_resources_crtcs_length(reply))
+		guard let pointer = xcb_randr_get_screen_resources_crtcs(reply) else {
+			return []
+		}
+
+		var values = [CRTC]()
+		values.reserveCapacity(count)
+
+		for index in 0..<count {
+			values.append(CRTC(connection: connection, instance: pointer[index]))
+		}
+
+		return values
+	}
 }

@@ -22,7 +22,39 @@
  SOFTWARE.
  */
 
-public protocol DisplaySystem : WindowOwner {
-	var primaryScreen: Screen? { get }
-	func withScreens<R>(_ body: ([Screen]) throws -> R) throws -> R
+import ShkadovXCB.RandR
+
+public struct GetOutputInfo {
+	private let connection: OpaquePointer
+	private let output: xcb_randr_output_t
+	private let timestamp: xcb_timestamp_t
+
+	init(connection: OpaquePointer, output: xcb_randr_output_t, timestamp: xcb_timestamp_t) {
+		self.connection = connection
+		self.output = output
+		self.timestamp = timestamp
+	}
+
+	public func withReply<R>(_ body: (OutputInfo) throws -> R) throws -> R {
+		let cookie = xcb_randr_get_output_info(connection, output, timestamp)
+		var errorPointer: UnsafeMutablePointer<xcb_generic_error_t>?
+
+		if let replyPointer = xcb_randr_get_output_info_reply(connection, cookie, &errorPointer) {
+			defer {
+				free(replyPointer)
+			}
+
+			return try body(OutputInfo(reply: replyPointer))
+		}
+		else if let errorPointer = errorPointer {
+			defer {
+				free(errorPointer)
+			}
+
+			throw XCBError.generic(errorPointer.pointee)
+		}
+		else {
+			throw XCBError.improbable
+		}
+	}
 }

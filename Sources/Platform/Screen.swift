@@ -26,6 +26,4 @@ import Swiftish
 
 public protocol Screen {
     var region: Region2<Int> { get }
-    
-    func createWindow(region: Region2<Int>) -> WindowHandle
 }
