@@ -38,7 +38,7 @@ public final class Application : PlatformListener {
 	public init() {
 		#if os(macOS)
 		self.platform = PlatformAppKit()
-		self.displaySystem = PlatformAppKitDisplaySystem()
+		self.displaySystem = AppKitDisplaySystem()
 		#elseif os(Linux)
 		self.platform = XCB()
 		self.displaySystem = XCBDisplaySystem(displayName: nil)

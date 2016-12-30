@@ -26,7 +26,7 @@ import AppKit
 import Platform
 import Swiftish
 
-public final class PlatformAppKitDisplaySystem : DisplaySystem {
+public final class AppKitDisplaySystem : DisplaySystem {
 	private var windows: [NSWindow?]
 
 	public init() {
@@ -42,7 +42,7 @@ public final class PlatformAppKitDisplaySystem : DisplaySystem {
 			return nil
 		}
 
-		return PlatformAppKitScreen(displaySystem: self, instance: screens[0])
+		return AppKitScreen(instance: screens[0])
 	}
 
 	public func withScreens<R>(_ body: ([Screen]) throws -> R) throws -> R {
@@ -50,7 +50,7 @@ public final class PlatformAppKitDisplaySystem : DisplaySystem {
 			return try body([])
 		}
 
-		return try body(screens.map({ PlatformAppKitScreen(displaySystem: self, instance: $0) }))
+		return try body(screens.map({ AppKitScreen(instance: $0) }))
 	}
 
 	private func nextWindowHandle() -> WindowHandle {
@@ -62,7 +62,7 @@ public final class PlatformAppKitDisplaySystem : DisplaySystem {
     }
 
     public func createWindow(region: Region2<Int>, screen: Screen) -> WindowHandle {
-    	let nativeScreen = screen as! PlatformAppKitScreen
+    	let nativeScreen = screen as! AppKitScreen
 
     	return createWindow(region: region, screen: nativeScreen.instance)
     }
@@ -87,7 +87,7 @@ public final class PlatformAppKitDisplaySystem : DisplaySystem {
     }
 
     public func borrowWindow(handle: WindowHandle) -> Window {
-    	return PlatformAppKitWindow(handle: handle, instance: self[handle])
+    	return AppKitWindow(handle: handle, instance: self[handle])
     }
 
     public func destroyWindow(handle: WindowHandle) {

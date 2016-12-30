@@ -26,7 +26,7 @@ import AppKit
 import Platform
 import Swiftish
 
-public struct PlatformAppKitScreen : Screen {
+public struct AppKitScreen : Screen {
 	let instance: NSScreen
 
 	public init(instance: NSScreen) {

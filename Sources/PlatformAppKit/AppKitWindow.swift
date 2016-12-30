@@ -26,7 +26,7 @@ import AppKit
 import Platform
 import Swiftish
 
-public struct PlatformAppKitWindow : Window {
+public struct AppKitWindow : Window {
 	public let handle: WindowHandle
 	unowned(unsafe) let instance: NSWindow
 
