@@ -22,52 +22,14 @@
  SOFTWARE.
  */
 
-public final class XCBApplication {
-	public weak var delegate: XCBApplicationDelegate?
-	private unowned(unsafe) let connection: XCBConnection
-	public private(set) var isRunning: Bool
+import ShkadovXCB
 
-	init(connection: XCBConnection) {
-		self.connection = connection
-		self.isRunning = false
+public struct XCBKeyEvent {
+	private let instance: xcb_key_press_event_t
+	private let pressed: Bool
+
+	init(instance: xcb_key_press_event_t, pressed: Bool) {
+		self.instance = instance
+		self.pressed = pressed
 	}
-
-	public func run() {
-		isRunning = true
-		delegate?.applicationDidFinishLaunching(self)
-
-		while isRunning {
-			handleEvents()
-		}
-	}
-
-	private func handleEvents() {
-		while let event = connection.pollForEvent() {
-			if event.isKeyEvent {
-				handle(keyEvent: event.asKeyEvent())
-			}
-			else if event.isButtonEvent {
-				handle(buttonEvent: event.asButtonEvent())
-			}
-			else if event.isMotionEvent {
-				handle(motionEvent: event.asMotionEvent())
-			}
-		}
-	}
-
-	private func handle(keyEvent: XCBKeyEvent) {
-		print("\(keyEvent)")
-	}
-
-	private func handle(buttonEvent: XCBButtonEvent) {
-		print("\(buttonEvent)")
-	}
-
-	private func handle(motionEvent: XCBMotionEvent) {
-		print("\(motionEvent)")
-	}
-}
-
-public protocol XCBApplicationDelegate : class {
-	func applicationDidFinishLaunching(_ application: XCBApplication)
 }

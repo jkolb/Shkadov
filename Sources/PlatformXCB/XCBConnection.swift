@@ -51,6 +51,18 @@ public final class XCBConnection {
 		return xcb_generate_id(connection)
 	}
 
+	func getFileDescriptor() -> Int32 {
+		return xcb_get_file_descriptor(connection)
+	}
+
+	func pollForEvent() -> XCBGenericEvent? {
+		guard let pointer = xcb_poll_for_event(connection) else {
+			return nil
+		}
+
+		return XCBGenericEvent(pointer: pointer)
+	}
+
 	func primaryScreen() throws -> xcb_screen_t? {
 		var iterator = xcb_setup_roots_iterator(xcb_get_setup(connection))
 

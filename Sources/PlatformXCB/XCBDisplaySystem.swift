@@ -123,6 +123,7 @@ public final class XCBDisplaySystem : DisplaySystem {
     			windowClass: UInt16(XCB_WINDOW_CLASS_INPUT_OUTPUT.rawValue),
     			visual: screen.root_visual,
     			valueMask: [.backPixel, .eventMask],
+    			// Warning values with a lower bit must come before ones with a higher bit
 	    		valueList: [screen.black_pixel, eventMask.rawValue]
     		)
 		}
