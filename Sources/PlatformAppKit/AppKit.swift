@@ -25,7 +25,7 @@
 import AppKit
 import Platform
 
-public final class PlatformAppKit : NSObject, Platform, NSApplicationDelegate {
+public final class AppKit : NSObject, Platform, NSApplicationDelegate {
     public weak var listener: PlatformListener?
 
     public func startup() {
