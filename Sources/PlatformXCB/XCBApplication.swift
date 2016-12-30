@@ -22,47 +22,26 @@
  SOFTWARE.
  */
 
-import Swiftish
-import Platform
+public final class XCBApplication {
+	public weak var delegate: XCBApplicationDelegate?
+	public private(set) var isRunning: Bool
 
-#if os(macOS)
-import PlatformAppKit
-#elseif os(Linux)
-import PlatformXCB
-#endif
-
-public final class Application : PlatformListener {
-	let platform: Platform
-	let displaySystem: DisplaySystem
-
-	public init() {
-		#if os(macOS)
-		self.platform = AppKit()
-		self.displaySystem = AppKitDisplaySystem()
-		#elseif os(Linux)
-		self.platform = XCB()
-		self.displaySystem = XCBDisplaySystem(displayName: nil)
-		#endif
-
-		platform.listener = self
+	private init() {
+		self.isRunning = false
 	}
+
+	public static let shared = XCBApplication()
 
 	public func run() {
-		platform.startup()
-	}
+		isRunning = true
+		delegate?.applicationDidFinishLaunching(self)
 
-	public func didStartup() {
-		guard let primaryScreen = displaySystem.primaryScreen else {
-			fatalError("No primary screen")
+		while isRunning {
+
 		}
-
-		let origin = Vector2<Int>()
-		let size = Vector2<Int>(320, 200)
-		let region = Region2<Int>(origin: origin, size: size)
-		let windowHandle = displaySystem.createWindow(region: region, screen: primaryScreen)
-		let window = displaySystem.borrowWindow(handle: windowHandle)
-		window.show()
 	}
 }
 
-Application().run()
+public protocol XCBApplicationDelegate : class {
+	func applicationDidFinishLaunching(_ application: XCBApplication)
+}

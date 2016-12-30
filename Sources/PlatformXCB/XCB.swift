@@ -24,17 +24,23 @@
 
 import Platform
 
-public final class XCB : Platform {
+public final class XCB : Platform, XCBApplicationDelegate {
     public weak var listener: PlatformListener?
     
     public init() {
     }
     
     public func startup() {
-    	didStartup()
+    	let application = XCBApplication.shared
+    	application.delegate = self
+    	application.run()
     }
     
     private func didStartup() {
         listener?.didStartup()
+    }
+    
+    public func applicationDidFinishLaunching(_ application: XCBApplication) {
+        didStartup()
     }
 }
