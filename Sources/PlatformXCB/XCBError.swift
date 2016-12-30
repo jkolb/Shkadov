@@ -27,4 +27,5 @@ import ShkadovXCB
 public enum XCBError : Error {
 	case improbable
 	case generic(xcb_generic_error_t)
+	case noConnection(String?)
 }

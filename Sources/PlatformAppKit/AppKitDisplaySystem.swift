@@ -29,7 +29,7 @@ import Swiftish
 public final class AppKitDisplaySystem : DisplaySystem {
 	private var windows: [NSWindow?]
 
-	public init() {
+	init() {
 		self.windows = []
 	}
 

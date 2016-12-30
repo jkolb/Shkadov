@@ -24,13 +24,13 @@
 
 public final class XCBApplication {
 	public weak var delegate: XCBApplicationDelegate?
+	private unowned(unsafe) let connection: XCBConnection
 	public private(set) var isRunning: Bool
 
-	private init() {
+	init(connection: XCBConnection) {
+		self.connection = connection
 		self.isRunning = false
 	}
-
-	public static let shared = XCBApplication()
 
 	public func run() {
 		isRunning = true

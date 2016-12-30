@@ -26,12 +26,21 @@ import Platform
 
 public final class XCB : Platform, XCBApplicationDelegate {
     public weak var listener: PlatformListener?
-    
-    public init() {
+    private let connection: XCBConnection
+    private let application: XCBApplication
+    private let nativeDisplaySystem: XCBDisplaySystem
+
+    public init(displayName: String? = nil) {
+        self.connection = try! XCBConnection(displayName: displayName)
+        self.application = XCBApplication(connection: connection)
+        self.nativeDisplaySystem = XCBDisplaySystem(connection: connection)
     }
     
+    public var displaySystem: DisplaySystem {
+        return nativeDisplaySystem
+    }
+
     public func startup() {
-    	let application = XCBApplication.shared
     	application.delegate = self
     	application.run()
     }

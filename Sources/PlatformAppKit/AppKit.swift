@@ -27,6 +27,15 @@ import Platform
 
 public final class AppKit : NSObject, Platform, NSApplicationDelegate {
     public weak var listener: PlatformListener?
+    private let nativeDisplaySystem: AppKitDisplaySystem
+
+    public init() {
+        self.nativeDisplaySystem = AppKitDisplaySystem()
+    }
+
+    public var displaySystem: DisplaySystem {
+        return nativeDisplaySystem
+    }
 
     public func startup() {
         let application = NSApplication.shared()

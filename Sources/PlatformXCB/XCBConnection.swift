@@ -28,11 +28,11 @@ public final class XCBConnection {
 	private let connection: OpaquePointer
 	private let primaryScreenNumber: Int32
 
-	init(displayName: String?) {
+	init(displayName: String?) throws {
 		var screenNumber: Int32 = 0
 
 		guard let connection = xcb_connect(displayName, &screenNumber) else {
-			fatalError("Unable to create XCB connection to display name \(displayName)")
+			throw XCBError.noConnection(displayName)
 		}
 
 		self.connection = connection

@@ -27,11 +27,11 @@ import ShkadovXCB
 import Swiftish
 
 public final class XCBDisplaySystem : DisplaySystem {
-	private let connection: XCBConnection
+	private unowned(unsafe) let connection: XCBConnection
 	private var windows: [xcb_window_t?]
 
-	public init(displayName: String? = nil) {
-		self.connection = XCBConnection(displayName: displayName)
+	init(connection: XCBConnection) {
+		self.connection = connection
 		self.windows = []
 	}
 

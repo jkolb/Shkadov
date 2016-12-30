@@ -25,6 +25,8 @@
 public protocol Platform : class {
     weak var listener: PlatformListener? { get set }
 
+    var displaySystem: DisplaySystem { get }
+    
     func startup()
 }
 
