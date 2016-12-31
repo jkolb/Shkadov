@@ -22,12 +22,6 @@
  SOFTWARE.
  */
 
-#if os(macOS)
-import PlatformAppKit
-let bootstrap = macOSBootstrap()
-#elseif os(Linux)
-import PlatformXCB
-let bootstrap = LinuxBootstrap()
-#endif
-
-Application(bootstrap: bootstrap).run()
+public protocol Bootstrap {
+	func makePlatform() -> Platform
+}

@@ -22,12 +22,34 @@
  SOFTWARE.
  */
 
-#if os(macOS)
-import PlatformAppKit
-let bootstrap = macOSBootstrap()
-#elseif os(Linux)
-import PlatformXCB
-let bootstrap = LinuxBootstrap()
-#endif
+import Swiftish
+import Platform
 
-Application(bootstrap: bootstrap).run()
+public final class Application : PlatformListener {
+	let platform: Platform
+	let displaySystem: DisplaySystem
+
+	public init(bootstrap: Bootstrap) {
+		self.platform = bootstrap.makePlatform()
+
+		self.displaySystem = platform.displaySystem
+		platform.listener = self
+	}
+
+	public func run() {
+		platform.startup()
+	}
+
+	public func didStartup() {
+		guard let primaryScreen = displaySystem.primaryScreen else {
+			fatalError("No primary screen")
+		}
+
+		let origin = Vector2<Int>()
+		let size = Vector2<Int>(320, 200)
+		let region = Region2<Int>(origin: origin, size: size)
+		let windowHandle = displaySystem.createWindow(region: region, screen: primaryScreen)
+		let window = displaySystem.borrowWindow(handle: windowHandle)
+		window.show()
+	}
+}

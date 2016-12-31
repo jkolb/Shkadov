@@ -21,6 +21,7 @@ let package = Package(
 	package.targets.append(Target(name: "PlatformPOSIX", dependencies: ["Platform"]))
 	package.targets.append(Target(name: "Shkadov", dependencies: ["Platform", "PlatformAppKit"]))
 	package.exclude.append("Sources/PlatformXCB")
+    package.exclude.append("Sources/Shkadov/LinuxBootstrap.swift")
 #elseif os(Linux)
 	package.targets.append(Target(name: "PlatformPOSIX", dependencies: ["Platform"]))
 	package.targets.append(Target(name: "PlatformXCB", dependencies: ["Platform"]))
@@ -28,4 +29,5 @@ let package = Package(
 	package.dependencies.append(.Package(url: "https://github.com/jkolb/ShkadovXCB", majorVersion: 1))
     package.exclude.append("Sources/PlatformAppKit")
 	package.exclude.append("Sources/PlatformDarwin")
+    package.exclude.append("Sources/Shkadov/macOSBootstrap.swift")
 #endif

@@ -22,12 +22,11 @@
  SOFTWARE.
  */
 
-#if os(macOS)
+import Platform
 import PlatformAppKit
-let bootstrap = macOSBootstrap()
-#elseif os(Linux)
-import PlatformXCB
-let bootstrap = LinuxBootstrap()
-#endif
 
-Application(bootstrap: bootstrap).run()
+public final class macOSBootstrap : Bootstrap {
+	public func makePlatform() -> Platform {
+		return AppKit()
+	}
+}
