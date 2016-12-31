@@ -54,7 +54,7 @@ public final class POSIXFormattedTimestampProvider : FormattedTimestampProvider 
         let pointer = buffer.bytes.assumingMemoryBound(to: CChar.self)
         strftime(pointer, buffer.count, "%Y-%m-%d %H:%M:%S.000", localTime)
         withVaList([milliseconds]) {
-	        vsprintf(pointer.advanced(by: 19), ".%03ld", $0)
+	        vsnprintf(pointer.advanced(by: 20), 4, "%03ld", $0)
 	        return
         }
         let timestamp = UnsafeOrderedBuffer<LittleEndian>(buffer: buffer).getUTF8(length: buffer.count - 1)

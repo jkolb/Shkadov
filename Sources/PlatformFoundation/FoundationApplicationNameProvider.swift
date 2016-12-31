@@ -22,16 +22,14 @@
  SOFTWARE.
  */
 
-import Darwin
+import Foundation
 import Platform
 
-public struct DarwinThreadIDProvider : ThreadIDProvider {
+public final class FoundationApplicationNameProvider : ApplicationNameProvider {
     public init() {
     }
     
-    public func currentThreadID() -> UInt64 {
-        var ID: UInt64 = 0
-        pthread_threadid_np(nil, &ID)
-        return ID
+    public var applicationName: String {
+        return ProcessInfo.processInfo.processName
     }
 }

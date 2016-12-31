@@ -26,13 +26,14 @@ import Platform
 import PlatformAppKit
 import PlatformDarwin
 import PlatformFoundation
+import PlatformPOSIX
 import FieryCrucible
 import Logger
 
-public final class macOSBootstrap : DepencencyFactory, Bootstrap {
+public final class macOSBootstrap : DependencyFactory, Bootstrap {
 	public func makePlatform() -> Platform {
 		return scoped(
-			AppKit(loggerFactory: LoggerFactory)
+			AppKit(loggerFactory: loggerFactory())
 		)
 	}
     
@@ -57,6 +58,7 @@ public final class macOSBootstrap : DepencencyFactory, Bootstrap {
     
     private func formattedTimestampProvider() -> FormattedTimestampProvider {
         return scoped(FoundationFormattedTimestampProvider())
+        //return scoped(POSIXFormattedTimestampProvider())
     }
     
     private func applicationNameProvider() -> ApplicationNameProvider {
