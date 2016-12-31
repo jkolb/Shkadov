@@ -22,10 +22,43 @@
  SOFTWARE.
  */
 
-public struct PlatformLinuxApplicationNameProvider {
-    let applicationName: String
+#if os(macOS)
+import Darwin
+#elseif os(Linux)
+import Glibc
+#endif
 
-    public init() {
-    	self.applicationName = CommandLine.arguments.first!
-    }
+import Platform
+import Lilliput
+
+public final class POSIXFormattedTimestampProvider : FormattedTimestampProvider {
+    private var mutex = pthread_mutex_t()
+	private let buffer: UnsafeBuffer
+
+	public init() {
+        pthread_mutex_init(&mutex, nil)
+		self.buffer = POSIXMemory().bufferWithSize(24)
+	}
+
+	deinit {
+        pthread_mutex_destroy(&mutex)
+	}
+
+	public var currentFormattedTimestamp: String {
+		var timeVal = timeval()
+		gettimeofday(&timeVal, nil)
+		let localTime = localtime(&timeVal.tv_sec)
+		let milliseconds = timeVal.tv_usec / 1000
+
+        pthread_mutex_lock(&mutex)
+        let pointer = buffer.bytes.assumingMemoryBound(to: CChar.self)
+        strftime(pointer, buffer.count, "%Y-%m-%d %H:%M:%S.000", localTime)
+        withVaList([milliseconds]) {
+	        vsprintf(pointer.advanced(by: 19), ".%03ld", $0)
+	        return
+        }
+        let timestamp = UnsafeOrderedBuffer<LittleEndian>(buffer: buffer).getUTF8(length: buffer.count - 1)
+        pthread_mutex_unlock(&mutex)
+		return timestamp
+	}
 }
