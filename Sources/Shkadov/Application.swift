@@ -22,14 +22,17 @@
  SOFTWARE.
  */
 
-import Swiftish
+import Logger
 import Platform
+import Swiftish
 
 public final class Application : PlatformListener {
+	let logger: Logger
 	let platform: Platform
 	let displaySystem: DisplaySystem
 
 	public init(bootstrap: Bootstrap) {
+		self.logger = bootstrap.makeLogger()
 		self.platform = bootstrap.makePlatform()
 
 		self.displaySystem = platform.displaySystem
@@ -45,6 +48,8 @@ public final class Application : PlatformListener {
 			fatalError("No primary screen")
 		}
 
+		logger.debug("\(primaryScreen.region)")
+		
 		let origin = Vector2<Int>()
 		let size = Vector2<Int>(320, 200)
 		let region = Region2<Int>(origin: origin, size: size)

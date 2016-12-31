@@ -28,6 +28,6 @@ public struct POSIXApplicationNameProvider : ApplicationNameProvider {
     public let applicationName: String
 
     public init() {
-    	self.applicationName = CommandLine.arguments.first!
+    	self.applicationName = CommandLine.arguments.first!.characters.split(separator: "/".characters.first!).map(String.init).last ?? "Unknown"
     }
 }

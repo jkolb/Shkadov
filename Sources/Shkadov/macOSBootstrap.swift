@@ -24,9 +24,42 @@
 
 import Platform
 import PlatformAppKit
+import PlatformDarwin
+import PlatformFoundation
+import FieryCrucible
+import Logger
 
-public final class macOSBootstrap : Bootstrap {
+public final class macOSBootstrap : DepencencyFactory, Bootstrap {
 	public func makePlatform() -> Platform {
-		return AppKit()
+		return scoped(
+			AppKit(loggerFactory: LoggerFactory)
+		)
 	}
+    
+    public func makeLogger() -> Logger {
+        return loggerFactory().makeLogger()
+    }
+
+    private func loggerFactory() -> LoggerFactory {
+        return scoped(
+            LoggerFactory(
+                applicationNameProvider: applicationNameProvider(),
+                threadIDProvider: threadIDProvider(),
+                formattedTimestampProvider: formattedTimestampProvider(),
+            	pathSeparator: "/"
+            )
+        )
+    }
+    
+    private func threadIDProvider() -> ThreadIDProvider {
+        return scoped(DarwinThreadIDProvider())
+    }
+    
+    private func formattedTimestampProvider() -> FormattedTimestampProvider {
+        return scoped(FoundationFormattedTimestampProvider())
+    }
+    
+    private func applicationNameProvider() -> ApplicationNameProvider {
+        return scoped(FoundationApplicationNameProvider())
+    }
 }

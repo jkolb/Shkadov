@@ -24,9 +24,41 @@
 
 import Platform
 import PlatformXCB
+import PlatformPOSIX
+import FieryCrucible
+import Logger
 
-public final class LinuxBootstrap : Bootstrap {
+public final class LinuxBootstrap : DependencyFactory, Bootstrap {
 	public func makePlatform() -> Platform {
-		return XCB()
+		return scoped(
+			XCB(displayName: nil, loggerFactory: loggerFactory())
+		)
 	}
+
+    public func makeLogger() -> Logger {
+        return loggerFactory().makeLogger()
+    }
+    
+    public func loggerFactory() -> LoggerFactory {
+        return scoped(
+            LoggerFactory(
+                applicationNameProvider: applicationNameProvider(),
+                threadIDProvider: threadIDProvider(),
+                formattedTimestampProvider: formattedTimestampProvider(),
+                pathSeparator: "/"
+            )
+        )
+    }
+    
+    private func threadIDProvider() -> ThreadIDProvider {
+        return scoped(POSIXThreadIDProvider())
+    }
+    
+    private func formattedTimestampProvider() -> FormattedTimestampProvider {
+        return scoped(POSIXFormattedTimestampProvider())
+    }
+    
+    private func applicationNameProvider() -> ApplicationNameProvider {
+        return scoped(POSIXApplicationNameProvider())
+    }
 }

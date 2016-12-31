@@ -24,12 +24,13 @@
 
 import AppKit
 import Platform
+import Logger
 
 public final class AppKit : NSObject, Platform, NSApplicationDelegate {
     public weak var listener: PlatformListener?
     private let nativeDisplaySystem: AppKitDisplaySystem
 
-    public init() {
+    public init(loggerFactory: LoggerFactory) {
         self.nativeDisplaySystem = AppKitDisplaySystem()
     }
 

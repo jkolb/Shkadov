@@ -22,6 +22,27 @@
  SOFTWARE.
  */
 
-public protocol Bootstrap {
-	func makePlatform() -> Platform
+import Platform
+
+public final class LoggerFactory {
+    private let applicationNameProvider: ApplicationNameProvider
+    private let threadIDProvider: ThreadIDProvider
+    private let formattedTimestampProvider: FormattedTimestampProvider
+    private let pathSeparator: String
+
+    public init(applicationNameProvider: ApplicationNameProvider, threadIDProvider: ThreadIDProvider, formattedTimestampProvider: FormattedTimestampProvider, pathSeparator: String) {
+        self.applicationNameProvider = applicationNameProvider
+        self.threadIDProvider = threadIDProvider
+        self.formattedTimestampProvider = formattedTimestampProvider
+        self.pathSeparator = pathSeparator
+    }
+    
+    public func makeLogger() -> Logger {
+        return Logger(
+            name: applicationNameProvider.applicationName,
+            threadIDProvider: threadIDProvider,
+            formattedTimestampProvider: formattedTimestampProvider,
+            pathSeparator: pathSeparator
+        )
+    }
 }
