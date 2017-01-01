@@ -23,11 +23,16 @@
  */
 
 import ShkadovXCB
+import Swiftish
 
 public struct XCBMotionEvent {
 	private let instance: xcb_motion_notify_event_t
 
 	init(instance: xcb_motion_notify_event_t) {
 		self.instance = instance
+	}
+
+	public var position: Vector2<Float> {
+		return Vector2<Float>(Float(instance.root_x), Float(instance.root_y))
 	}
 }

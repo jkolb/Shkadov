@@ -90,6 +90,13 @@ public final class XCB : Platform {
 
     private func handle(motionEvent: XCBMotionEvent) {
         logger.debug("\(motionEvent)")
+        if cursorFollowsMouse {
+            listener?.received(input: .mousePosition(motionEvent.position))
+        }
+        else {
+            let delta = Vector2<Float>()
+            listener?.received(input: .mouseDelta(delta))
+        }
     }
 
     public var primaryScreen: Screen? {
