@@ -29,13 +29,11 @@ import Swiftish
 public final class Application : PlatformListener {
 	let logger: Logger
 	let platform: Platform
-	let displaySystem: DisplaySystem
 
 	public init(bootstrap: Bootstrap) {
 		self.logger = bootstrap.makeLogger()
 		self.platform = bootstrap.makePlatform()
 
-		self.displaySystem = platform.displaySystem
 		platform.listener = self
 	}
 
@@ -44,7 +42,7 @@ public final class Application : PlatformListener {
 	}
 
 	public func didStartup() {
-		guard let primaryScreen = displaySystem.primaryScreen else {
+		guard let primaryScreen = platform.primaryScreen else {
 			fatalError("No primary screen")
 		}
 
@@ -53,8 +51,8 @@ public final class Application : PlatformListener {
 		let origin = Vector2<Int>()
 		let size = Vector2<Int>(320, 200)
 		let region = Region2<Int>(origin: origin, size: size)
-		let windowHandle = displaySystem.createWindow(region: region, screen: primaryScreen)
-		let window = displaySystem.borrowWindow(handle: windowHandle)
+		let windowHandle = platform.createWindow(region: region, screen: primaryScreen)
+		let window = platform.borrowWindow(handle: windowHandle)
 		window.show()
 	}
 

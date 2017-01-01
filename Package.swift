@@ -16,10 +16,10 @@ let package = Package(
 )
 
 #if os(macOS)
-    package.targets.append(Target(name: "PlatformAppKit", dependencies: ["Platform"]))
+    package.targets.append(Target(name: "PlatformAppKit", dependencies: ["Platform", "PlatformMachO"]))
 	package.targets.append(Target(name: "PlatformDarwin", dependencies: ["Platform"]))
 	package.targets.append(Target(name: "PlatformFoundation", dependencies: ["Platform"]))
-    package.targets.append(Target(name: "PlatformMachO", dependencies: ["Platform"]))
+    package.targets.append(Target(name: "PlatformMachO", dependencies: ["Utility"]))
     package.targets.append(Target(name: "PlatformPOSIX", dependencies: ["Platform"]))
 	package.targets.append(Target(name: "Shkadov", dependencies: ["Platform", "PlatformAppKit", "PlatformDarwin", "PlatformFoundation", "PlatformPOSIX", "Logger"]))
 	package.exclude.append("Sources/PlatformXCB")

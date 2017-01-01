@@ -58,7 +58,6 @@ public final class macOSBootstrap : DependencyFactory, Bootstrap {
     
     private func formattedTimestampProvider() -> FormattedTimestampProvider {
         return scoped(FoundationFormattedTimestampProvider())
-        //return scoped(POSIXFormattedTimestampProvider())
     }
     
     private func applicationNameProvider() -> ApplicationNameProvider {

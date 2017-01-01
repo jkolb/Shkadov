@@ -22,13 +22,6 @@
  SOFTWARE.
  */
 
-import AppKit
-
-public final class AppKitNativeWindow : NSWindow {
-	private unowned(unsafe) let displaySystem: AppKitDisplaySystem
-
-	
-	public override func sendEvent(_ event: NSEvent) {
-
-	}
+public protocol TimeSource : class {
+    var currentTime: Time { get }
 }

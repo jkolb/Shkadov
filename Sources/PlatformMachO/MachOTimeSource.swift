@@ -23,10 +23,11 @@
  */
 
 import MachO
+import Utility
 
 public final class MachOTimeSource : TimeSource {
-    fileprivate let timeBaseNumerator: TimeType
-    fileprivate let timeBaseDenominator: TimeType
+    private let timeBaseNumerator: TimeType
+    private let timeBaseDenominator: TimeType
     
     public init() {
         var timeBaseInfo = mach_timebase_info_data_t()

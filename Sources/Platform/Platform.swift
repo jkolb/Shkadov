@@ -22,10 +22,24 @@
  SOFTWARE.
  */
 
+import Utility
+import Swiftish
+
 public protocol Platform : class {
     weak var listener: PlatformListener? { get set }
-
-    var displaySystem: DisplaySystem { get }
     
     func startup()
+
+    var currentTime: Time { get }
+
+	var primaryScreen: Screen? { get }
+	func withScreens<R>(_ body: ([Screen]) throws -> R) throws -> R
+
+    var cursorHidden: Bool { get set }
+    var cursorFollowsMouse: Bool { get set }
+    func moveCursor(to point: Vector2<Float>)
+
+    func createWindow(region: Region2<Int>, screen: Screen) -> WindowHandle
+    func borrowWindow(handle: WindowHandle) -> Window
+    func destroyWindow(handle: WindowHandle)
 }
