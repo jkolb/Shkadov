@@ -24,45 +24,191 @@
 
 import Platform
 import Logger
+import ShkadovXCB
+import Swiftish
+import Utility
 
-public final class XCB : Platform, XCBApplicationDelegate {
+public final class XCB : Platform {
     public weak var listener: PlatformListener?
+    private let logger: Logger
     private let connection: XCBConnection
-    private let application: XCBApplication
-    private let nativeDisplaySystem: XCBDisplaySystem
+    private var running: Bool
+    private var windows: [xcb_window_t?]
 
     public init(displayName: String?, loggerFactory: LoggerFactory) {
+        self.logger = loggerFactory.makeLogger()
         self.connection = try! XCBConnection(displayName: displayName)
-        self.application = XCBApplication(connection: connection)
-        self.nativeDisplaySystem = XCBDisplaySystem(connection: connection)
-    }
-    
-    public var displaySystem: DisplaySystem {
-        return nativeDisplaySystem
+        self.windows = []
+        self.running = false
     }
 
     public func startup() {
-    	application.delegate = self
-    	application.run()
+        running = true
+        didStartup()
+
+        while running {
+            handleEvents()
+        }
     }
     
     private func didStartup() {
         listener?.didStartup()
     }
-    
-    public func applicationDidFinishLaunching(_ application: XCBApplication) {
-        didStartup()
+
+    public var currentTime: Time {
+        return Time.zero
     }
 
-    public func application(_ application: XCBApplication, didReceiveKeyEvent keyEvent: XCBKeyEvent) {
+    public var cursorHidden: Bool = false
+    public var cursorFollowsMouse: Bool = true
+
+    public func moveCursor(to point: Vector2<Float>) {
 
     }
 
-    public func application(_ application: XCBApplication, didReceiveButtonEvent buttonEvent: XCBButtonEvent) {
-
+    private func handleEvents() {
+        while let event = connection.pollForEvent() {
+            if event.isKeyEvent {
+                handle(keyEvent: event.asKeyEvent())
+            }
+            else if event.isButtonEvent {
+                handle(buttonEvent: event.asButtonEvent())
+            }
+            else if event.isMotionEvent {
+                handle(motionEvent: event.asMotionEvent())
+            }
+        }
     }
 
-    public func application(_ application: XCBApplication, didReceiveMotionEvent motionEvent: XCBMotionEvent) {
-    
+    private func handle(keyEvent: XCBKeyEvent) {
+        logger.debug("\(keyEvent)")
+    }
+
+    private func handle(buttonEvent: XCBButtonEvent) {
+        logger.debug("\(buttonEvent)")
+    }
+
+    private func handle(motionEvent: XCBMotionEvent) {
+        logger.debug("\(motionEvent)")
+    }
+
+    public var primaryScreen: Screen? {
+        do {
+            if let instance = try connection.primaryScreen() {
+                let screens = try makeScreens(for: instance)
+
+                for screen in screens {
+                    if screen.region.origin == Vector2<Int>() {
+                        return screen
+                    }
+                }
+
+                return nil
+            }
+            else {
+                return nil
+            }
+        }
+        catch {
+            return nil
+        }
+    }
+
+    public func withScreens<R>(_ body: ([Screen]) throws -> R) throws -> R {
+        var screens = [Screen]()
+
+        for screen in connection.screens() {
+            screens.append(contentsOf: try makeScreens(for: screen))
+        }
+
+        return try body(screens)
+    }
+
+    private func makeScreens(for screen: xcb_screen_t) throws -> [Screen] {
+        var screens = [Screen]()
+
+        try connection.getScreenResources(window: screen.root).withReply { (screenResources) in
+            for crtc in screenResources.crtcs {
+                try crtc.getInfo().withReply { (crtcInfo) in
+                    for output in crtcInfo.outputs {
+                        try output.getInfo().withReply() { (outputInfo) in
+                            if outputInfo.connected {
+                                screens.append(XCBScreen(instance: screen, crtc: crtc.instance, output: output.instance, region: crtcInfo.region))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return screens
+    }
+
+    private func nextWindowHandle() -> WindowHandle {
+        return WindowHandle(key: windows.count)
+    }
+
+    subscript (handle: WindowHandle) -> xcb_window_t {
+        return windows[handle.index]!
+    }
+
+    public func createWindow(region: Region2<Int>, screen: Screen) -> WindowHandle {
+        let nativeScreen = screen as! XCBScreen
+
+        return createWindow(region: region, screen: nativeScreen.instance)
+    }
+
+    func createWindow(region: Region2<Int>, screen: xcb_screen_t) -> WindowHandle {
+        let windowID = connection.generateID()
+        let x = Int16(region.origin.x)
+        let y = Int16(region.origin.y)
+        let width = UInt16(region.size.width)
+        precondition(width > 0)
+        let height = UInt16(region.size.height)
+        precondition(height > 0)
+        let eventMask: XCBEventMask = [.keyRelease, .keyPress, .structureNotify, .pointerMotion, .buttonPress, .buttonRelease]
+        do {
+            try connection.createWindow(
+                depth: screen.root_depth,
+                window: windowID, 
+                parent: screen.root,
+                x: x,
+                y: y,
+                width: width,
+                height: height,
+                borderWidth: 0,
+                windowClass: UInt16(XCB_WINDOW_CLASS_INPUT_OUTPUT.rawValue),
+                visual: screen.root_visual,
+                valueMask: [.backPixel, .eventMask],
+                // Warning values with a lower bit must come before ones with a higher bit
+                valueList: [screen.black_pixel, eventMask.rawValue]
+            )
+        }
+        catch {
+            fatalError("XCB: Unable to create window \(error)")
+        }
+        return addWindow(windowID)
+    }
+
+    private func addWindow(_ windowID: xcb_window_t) -> WindowHandle {
+        let handle = nextWindowHandle()
+        windows.insert(windowID, at: handle.index)
+        return handle
+    }
+
+    public func borrowWindow(handle: WindowHandle) -> Window {
+        return XCBWindow(handle: handle, connection: connection, windowID: self[handle])
+    }
+
+    public func destroyWindow(handle: WindowHandle) {
+    }
+}
+
+public extension xcb_get_geometry_reply_t {
+    public var region: Region2<Int> {
+        let origin = Vector2<Int>(Int(x), Int(y))
+        let size = Vector2<Int>(Int(width), Int(height))
+
+        return Region2<Int>(origin: origin, size: size)
     }
 }
