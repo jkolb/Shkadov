@@ -22,10 +22,9 @@
  SOFTWARE.
  */
 
-public protocol Platform : class {
-    weak var listener: PlatformListener? { get set }
-
-    var displaySystem: DisplaySystem { get }
-    
-    func startup()
+public protocol XCBApplicationDelegate : class {
+	func applicationDidFinishLaunching(_ application: XCBApplication)
+	func application(_ application: XCBApplication, didReceiveKeyEvent keyEvent: XCBKeyEvent)
+	func application(_ application: XCBApplication, didReceiveButtonEvent buttonEvent: XCBButtonEvent)
+	func application(_ application: XCBApplication, didReceiveMotionEvent motionEvent: XCBMotionEvent)
 }

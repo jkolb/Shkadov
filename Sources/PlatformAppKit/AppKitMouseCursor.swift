@@ -22,10 +22,44 @@
  SOFTWARE.
  */
 
-public protocol Platform : class {
-    weak var listener: PlatformListener? { get set }
+import CoreGraphics
+import Swiftish
 
-    var displaySystem: DisplaySystem { get }
+public final class AppKitMouseCursor : MouseCursor {
+    public weak var listener: AppKitMouseCursorListener?
+    public var hidden: Bool {
+        didSet {
+            if hidden {
+                CGDisplayHideCursor(CGMainDisplayID())
+            }
+            else {
+                CGDisplayShowCursor(CGMainDisplayID())
+            }
+        }
+    }
+    public var followsMouse: Bool {
+        didSet {
+            if followsMouse {
+                CGAssociateMouseAndMouseCursorPosition(1)
+            }
+            else {
+                CGAssociateMouseAndMouseCursorPosition(0)
+            }
+            
+            listener?.updated(followsMouse: followsMouse)
+        }
+    }
     
-    func startup()
+    public func move(to point: Vector2<Float>) {
+        CGWarpMouseCursorPosition(CGPoint(x: CGFloat(point.x), y: CGFloat(point.y)))
+    }
+    
+    public init() {
+        self.hidden = false
+        self.followsMouse = true
+    }
+}
+
+public protocol AppKitMouseCursorListener : class {
+    func updated(followsMouse: Bool)
 }

@@ -22,10 +22,17 @@
  SOFTWARE.
  */
 
-public protocol Platform : class {
-    weak var listener: PlatformListener? { get set }
+import Swiftish
 
-    var displaySystem: DisplaySystem { get }
-    
-    func startup()
+public enum RawInput {
+    case mouseButtonDown(RawInputButtonCode, Vector2<Float>)
+    case mouseButtonUp(RawInputButtonCode, Vector2<Float>)
+    case joystickButtonDown(RawInputButtonCode)
+    case joystickButtonUp(RawInputButtonCode)
+    case joystickAxis(Vector2<Float>)
+    case keyDown(RawInputKeyCode)
+    case keyUp(RawInputKeyCode)
+    case mousePosition(Vector2<Float>)
+    case mouseDelta(Vector2<Float>)
+    case scrollDelta(Vector2<Float>)
 }

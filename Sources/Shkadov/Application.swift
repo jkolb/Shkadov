@@ -57,4 +57,8 @@ public final class Application : PlatformListener {
 		let window = displaySystem.borrowWindow(handle: windowHandle)
 		window.show()
 	}
+
+	public func received(input: RawInput) {
+		logger.debug("\(input)")
+	}
 }

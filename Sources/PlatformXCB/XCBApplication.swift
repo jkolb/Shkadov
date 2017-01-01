@@ -56,18 +56,14 @@ public final class XCBApplication {
 	}
 
 	private func handle(keyEvent: XCBKeyEvent) {
-		print("\(keyEvent)")
+		delegate?.application(self, didReceiveKeyEvent: keyEvent)
 	}
 
 	private func handle(buttonEvent: XCBButtonEvent) {
-		print("\(buttonEvent)")
+		delegate?.application(self, didReceiveButtonEvent: buttonEvent)
 	}
 
 	private func handle(motionEvent: XCBMotionEvent) {
-		print("\(motionEvent)")
+		delegate?.application(self, didReceiveMotionEvent: motionEvent)
 	}
-}
-
-public protocol XCBApplicationDelegate : class {
-	func applicationDidFinishLaunching(_ application: XCBApplication)
 }

@@ -22,10 +22,13 @@
  SOFTWARE.
  */
 
-public protocol Platform : class {
-    weak var listener: PlatformListener? { get set }
+import AppKit
 
-    var displaySystem: DisplaySystem { get }
-    
-    func startup()
+public final class AppKitNativeWindow : NSWindow {
+	private unowned(unsafe) let displaySystem: AppKitDisplaySystem
+
+	
+	public override func sendEvent(_ event: NSEvent) {
+
+	}
 }

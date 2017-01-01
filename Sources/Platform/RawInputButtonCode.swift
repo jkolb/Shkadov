@@ -22,10 +22,25 @@
  SOFTWARE.
  */
 
-public protocol Platform : class {
-    weak var listener: PlatformListener? { get set }
-
-    var displaySystem: DisplaySystem { get }
+public enum RawInputButtonCode : UInt8 {
+    case invalid = 0
     
-    func startup()
+    case button0  = 1
+    case button1  = 2
+    case button2  = 3
+    case button3  = 4
+    case button4  = 5
+    case button5  = 6
+    case button6  = 7
+    case button7  = 8
+    case button8  = 9
+    case button9  = 10
+    case button10 = 11
+    case button11 = 12
+    case button12 = 13
+    case button13 = 14
+    case button14 = 15
+    case button15 = 16
+    
+    case unknown = 255
 }

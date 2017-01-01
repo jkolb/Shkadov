@@ -22,10 +22,20 @@
  SOFTWARE.
  */
 
-public protocol Platform : class {
-    weak var listener: PlatformListener? { get set }
+import MachO
 
-    var displaySystem: DisplaySystem { get }
+public final class MachOTimeSource : TimeSource {
+    fileprivate let timeBaseNumerator: TimeType
+    fileprivate let timeBaseDenominator: TimeType
     
-    func startup()
+    public init() {
+        var timeBaseInfo = mach_timebase_info_data_t()
+        mach_timebase_info(&timeBaseInfo)
+        self.timeBaseNumerator = TimeType(timeBaseInfo.numer)
+        self.timeBaseDenominator = TimeType(timeBaseInfo.denom)
+    }
+    
+    public var currentTime: Time {
+        return Time(nanoseconds: mach_absolute_time() * timeBaseNumerator / timeBaseDenominator)
+    }
 }

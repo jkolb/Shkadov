@@ -22,10 +22,11 @@
  SOFTWARE.
  */
 
-public protocol Platform : class {
-    weak var listener: PlatformListener? { get set }
+import Swiftish
 
-    var displaySystem: DisplaySystem { get }
+public protocol MouseCursor : class {
+    var hidden: Bool { get set }
+    var followsMouse: Bool { get set }
     
-    func startup()
+    func move(to point: Vector2<Float>)
 }

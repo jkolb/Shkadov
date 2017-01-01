@@ -19,6 +19,7 @@ let package = Package(
     package.targets.append(Target(name: "PlatformAppKit", dependencies: ["Platform"]))
 	package.targets.append(Target(name: "PlatformDarwin", dependencies: ["Platform"]))
 	package.targets.append(Target(name: "PlatformFoundation", dependencies: ["Platform"]))
+    package.targets.append(Target(name: "PlatformMachO", dependencies: ["Platform"]))
     package.targets.append(Target(name: "PlatformPOSIX", dependencies: ["Platform"]))
 	package.targets.append(Target(name: "Shkadov", dependencies: ["Platform", "PlatformAppKit", "PlatformDarwin", "PlatformFoundation", "PlatformPOSIX", "Logger"]))
 	package.exclude.append("Sources/PlatformXCB")
@@ -30,5 +31,6 @@ let package = Package(
 	package.dependencies.append(.Package(url: "https://github.com/jkolb/ShkadovXCB", majorVersion: 1))
     package.exclude.append("Sources/PlatformAppKit")
 	package.exclude.append("Sources/PlatformDarwin")
+    package.exclude.append("Sources/PlatformMachO")
     package.exclude.append("Sources/Shkadov/macOSBootstrap.swift")
 #endif

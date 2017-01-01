@@ -53,4 +53,16 @@ public final class XCB : Platform, XCBApplicationDelegate {
     public func applicationDidFinishLaunching(_ application: XCBApplication) {
         didStartup()
     }
+
+    public func application(_ application: XCBApplication, didReceiveKeyEvent keyEvent: XCBKeyEvent) {
+
+    }
+
+    public func application(_ application: XCBApplication, didReceiveButtonEvent buttonEvent: XCBButtonEvent) {
+
+    }
+
+    public func application(_ application: XCBApplication, didReceiveMotionEvent motionEvent: XCBMotionEvent) {
+    
+    }
 }

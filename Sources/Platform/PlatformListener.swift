@@ -22,10 +22,7 @@
  SOFTWARE.
  */
 
-public protocol Platform : class {
-    weak var listener: PlatformListener? { get set }
-
-    var displaySystem: DisplaySystem { get }
-    
-    func startup()
+public protocol PlatformListener : class {
+    func didStartup()
+    func received(input: RawInput)
 }
